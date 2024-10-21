@@ -1,0 +1,771 @@
+\documentclass[12pt]{article}
+
+\usepackage{ishn}
+
+\makeindex[intoc]
+
+\begin{document}
+
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+	\begin{center}
+		\vspace*{1em}
+		\Huge
+		\textbf{III Statistical Field Theory}
+
+		\vspace{1em}
+		\large
+		Ishan Nath, Michaelmas 2024
+
+		\vspace{1.5em}
+
+		\Large
+
+		Based on Lectures by Prof. Harvey Reall
+
+		\vspace{1em}
+
+		\large
+		\today
+	\end{center}
+	
+\end{titlepage}
+\hypersetup{pageanchor=true}
+
+\tableofcontents
+
+\newpage
+
+% lecture 1
+
+\setcounter{section}{-1}
+
+\section{Introduction}%
+\label{sec:intro}
+
+Office hours: Friday 2-3pm, in B2.09. We are following Tong's notes and example sheets.
+
+Books include the one by Goldenfeld, and Kardar.
+
+\subsection{Motivation}%
+\label{sub:motive}
+
+\emph{Universality}: sometimes very different physical systems exhibit the same behaviour, for example a liquid-gas system.
+
+\begin{center}
+	
+\begin{tikzpicture}[scale=1.2, every node/.style={font=\small}]
+
+    % Axes
+    \draw[->] (0,0) -- (8,0) node[below] {Temp $T$};
+    \draw[->] (0,0) -- (0,6) node[left] {Pressure $p$};
+    
+    % Labels for phases
+    % \node at (1.5,4) {Solid};
+    \node at (5,1.5) {Gas};
+    \node at (2.5,5) {Liquid};
+    
+    % Critical point
+    \filldraw (6,3.5) circle (2pt) node[right] {Critical point};
+    
+    % Coexistence curve
+    \draw[thick] (0.8,5) .. controls (2,3.5) and (5,2) .. (6,3.5);
+    
+    % Triple point
+    \filldraw (0.8,5) circle (2pt);
+    
+    % Dashed line to separate liquid and solid
+    \draw[dashed] (0.8,5) -- (0.8,0) node[below] {Melting/Freezing line};
+    
+    % Saturation line
+    \draw[dotted, thick] (6,3.5) -- (6,0) node[below] {Critical Temp};
+
+    % Pressure and Temperature labels (optional customization)
+    %\node at (7.8,-0.3) {T};
+    %\node at (-0.3,5.8) {P};
+
+\end{tikzpicture}
+\end{center}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.2, every node/.style={font=\small}]
+
+    % Axes
+    \draw[->] (0,0) -- (8,0) node[below] {Density $\rho$};
+    \draw[->] (0,0) -- (0,6) node[left] {Temperature $T$};
+    
+    % Labels for phases
+    \node at (6.5,4.5) {Liquid};
+    \node at (1.5,4.5) {Gas};
+    \node at (4,1) {Coexistence Region};
+    
+    % Critical point
+    \filldraw (4,5) circle (2pt) node[right] {Critical point};
+    
+    % Coexistence curve (binodal)
+    \draw[thick] (1,0.5) .. controls (1.5,2.5) and (2.5,4.5) .. (4,5);
+    \draw[thick] (4,5) .. controls (5.5,4.5) and (6.5,2.5) .. (7,0.5);
+    
+    % Dotted line at critical temperature
+    \draw[dotted] (4,5) -- (4,0) node[below] {Critical Density};
+    
+    % Temperature and Density labels (optional customization)
+    %\node at (7.8,-0.3) {$\rho$};
+    %\node at (-0.3,5.8) {$T$};
+
+    % Saturation lines (isotherms below critical temperature)
+    \draw[dashed] (1.3,3.5) -- (6.7,3.5) node[right] {Isotherms};
+
+\end{tikzpicture}
+\end{center}
+
+Experimentally,
+\[
+|\rho_t - \rho_c| \propto |T - T_c|^\beta,
+\]
+for $\beta \simeq 0.327$.
+
+Now consider a ferromagnet, where $T_c$ is the Curie temperature. For $T > T_c$, the magnetization is $M = 0$, however for $T < T_c$, $T \sim T_c$, we find
+\[
+M \propto (T_c - T)^\beta,
+\]
+where the coefficient $\beta$ is experimentally also $0.327$. We want to know why this is, and also why $\beta$ is this constant.
+
+In this course, we are looking at the classical statistical mechanics of fields.
+
+\newpage
+
+\section{From Spins to Fields}%
+\label{sec:spin2field}
+
+\subsection{The Ising Model}%
+\label{sub:ising}
+
+This is a simple model for a magnet. In $d$ spatial dimensions, consider a lattice with $N$ sites. On the $i$'th site, we have a `spin' $s_i \in \{-1, 1\}$.
+
+A configuration of spins $\{s_i\}$ has energy
+\[
+E = - B \sum_i s_i - J \sum_{\langle i, j\rangle} s_i s_j.
+\]
+An important question is, how does the physics depend on the parameters $B, J$ and $T$?
+
+If $J > 0$, then the spins prefer to align, as $\uparrow \uparrow$ or $\downarrow \downarrow$. This is a ferromagnet. If $J < 0$, the spins prefer to antialign, as $\uparrow \downarrow$ or $\downarrow \uparrow$. This is an antiferromagnet.
+
+Assume that $J > 0$. If $B > 0$, then the spins prefer to be $\uparrow$, and for $B < 0$, the spins prefer to be $\downarrow$.
+
+Now let's consider changing temperature. Intuitively, for low temperature $T$, the system prefers to minimize $E$, which gives an ordered state. For high $T$, we want to maximize $S$, the entropy, which gives a disordered state.
+
+In the canonical ensemble, we have
+\[
+	p[s_i] = \frac{e^{-\beta E[s_i]}}{Z},
+\]
+where we recall $\beta = 1/T$. Moreover we always assume $k_B = 1$. Here $Z$ is the partition function
+\[
+	Z(T, B) = \sum_{\{s_i\}} e^{-\beta E[s_i]}.
+\]
+The \emph{thermodynamic free energy}\index{thermodynamic free energy} is
+\[
+F_{\mathrm{thermo}}(T, B) = \langle E \rangle - TS = - T \log Z.
+\]
+Another observable is the \emph{magnetization}\index{magnetization}
+\[
+	m = \frac{1}{N} \left\langle \sum_{i = 1}^n s_i \right \rangle \in [-1, 1].
+\]
+This distinguishes ordered phases, where $m \neq 0$, and disordered phases, where $m = 0$. Using the partition function,
+\[
+	m = \sum_{\{s_i\}} \frac{e^{-\beta[s_i]}}{Z} \cdot \frac{1}{N} \sum_i s_i = \frac{1}{N \beta} \frac{\partial}{\partial B} \log Z.
+\]
+Therefore it suffices to find the partition function. For $d = 1$, this is easy. For $d = 2$ there is no analytic solution except for the square lattice with $B = 0$.
+
+For the other cases there is no exact solution. Our aim is to approximate in a way that correctly captures long-distance behaviour. We define $m$ for any $\{s_i\}$ by
+\[
+m = \frac{1}{N} \sum s_i.
+\]
+Then write
+\[
+	Z = \sum_m \sum_{\{s_i\} \mid m} e^{-\beta E[s_i]} := \sum_m e^{-\beta F(m)}.
+\]
+Notice changing $s_i$ changes $m$ by $2/N$ so $m$ is quantized into distances of $2/N$. For large $N$, we can approximate this as continuous, so
+\[
+	Z \approx \frac{N}{2} \int_{-1}^1 \diff m \, e^{-\beta F(m)}.
+\]
+$F(m)$ is the \emph{effective free energy}\index{effective free energy}. This depends on $T, B$ and $m$. It contains more information than $F_{\mathrm{thermo}}$. If $f(m) = F(m)/N$, then
+\[
+Z \propto \int_{-1}^1 \diff m \, e^{-\beta N f(m)}.
+\]
+For $N$ large, $\beta f(m) = \mathcal{O}(1)$, as it is intensive, so this integral will be dominated by the minimum of $f$, where
+\[
+\frac{\partial f}{\partial m} \biggr|_{m = m_{\mathrm{min}}} = 0.
+\]
+Here $m_{\mathrm{min}}$ is the equilibrium value of the magnetization. By the saddle-point approximation,
+\[
+Z \propto e^{-\beta N f(m_{\mathrm{min}})} = e^{-\beta F(m_{\mathrm{min}})}.
+\]
+Thus,
+\[
+F_{\mathrm{thermo}}(T, B) = F(m_{\mathrm{min}}(T, B), T, B).
+\]
+However computing $F(m)$ is hard. For a first attempt, we use the ``mean field approximation''. Here we replace $s_i$ with $m$, so
+\[
+E = - B \sum_i m - J \sum_{\langle i, j \rangle} m^2 = - B N m - \frac{1}{2}N J q m^2.
+\]
+In this, $q$ is the number of nearest neighbours. For $d = 1$, $q = 2$. In general it is $2d$. In this approximation,
+\[
+	Z \approx \sum_m \Omega(m) e^{-\beta E[m]},
+\]
+where $\Omega(m)$ is the number of configurations with average value $m$.
+
+% lecture 2
+
+Let $N_\uparrow$ be the number of up spins, and $N_\downarrow = N - N_\uparrow$ the number of down spins. Then,
+\[
+m = \frac{N_\uparrow - N_\downarrow}{N} = \frac{2N_\uparrow - N}{N},
+\]
+so
+\[
+\Omega(m) = \frac{N!}{N_\uparrow!(N - N_\uparrow)!} = \frac{N!}{N_\uparrow! N_\downarrow!}.
+\]
+By Stirling's approximation,
+\[
+\log n! = n \log n - n
+\]
+for large $n$, so
+\[
+\log \Omega \approx N \log N - N_\uparrow \log N_\uparrow - N_\downarrow \log N_\downarrow.
+\]
+Dividing by $N$ and substituting in $m$ for $N_\uparrow, N_\downarrow$,
+\[
+\frac{\log \Omega}{N} \approx \log 2 - \frac{1}{2} (1 + m) \log(1 + m) - \frac{1}{2} (1 - m) \log(1 - m).
+\]
+Since
+\[
+e^{-\beta N f(m)} = \Omega(m) e^{-\beta E(m)}
+\]
+in the mean field approximation, taking the logarithm we find
+\[
+	f(m) = - B m - \frac{1}{2} J q m^2 - T \left[ \log 2 - \frac{1}{2}(1 + m) \log(1 + m) - \frac{1}{2} (1 - m) \log(1 - m) \right].
+\]
+We minimize
+\begin{align*}
+	\frac{\partial f}{\partial m} = 0 &\implies \beta(B + J qm) = \frac{1}{2} \log \left( \frac{1 + m}{1 - m} \right) \\
+					  &\implies m = \tanh[\beta(B + Jqm)],
+\end{align*}
+where $B_{\mathrm{eff}} = B + Jqm$. The intuition is that each spin feels an effective magnetic field, given by the actual magnetic field, and the overall spin.
+
+\subsection{Landau Theory of Phase Transitions}%
+\label{sub:pt}
+
+At a phase transition, some quantity (an \emph{order parameter}\index{order parameter}) is not smooth. For us, this is $m$. For small $m$,
+\[
+f(m) \approx -T \log 2 - B m + \frac{1}{2} (T - Jq)m^2 + \frac{1}{12} Tm^4 + \cdots.
+\]
+In equilibrium, $m = m_{\mathrm{min}}$: how does this behave as we vary $T$ and $B$?
+
+First we look at $B = 0$. Note the first part does not change the minimization, so
+\[
+f(m) \approx \frac{1}{2} (T - T_c)m^2 + \frac{1}{12} Tm^4 + \cdots,
+\]
+where $T_c = Jq$.
+
+\begin{tikzpicture}
+
+% First plot: T > T_c
+\begin{axis}[
+    width=7cm,
+    title={$T > T_c$},
+    axis lines = middle,
+    xlabel = {$m$},
+    ylabel = {$f(m)$},
+    samples=100,
+    domain=-3:3,
+    xmin=-3, xmax=3,
+    ymin=-1, ymax=4,
+    smooth,
+    thick
+]
+% Free energy function for T > T_c
+\addplot[
+    blue,
+    thick,
+] {0.5*(1)*x^2 + (1/12)*x^4}; % f(m) = 1/2(T-T_c)m^2 + 1/12Tm^4 for T > T_c
+\end{axis}
+
+% Second plot: T < T_c (next to the first)
+\begin{axis}[
+    width=7cm,
+    xshift=8cm, % Shift second plot horizontally
+    title={$T < T_c$},
+    axis lines = middle,
+    xlabel = {$m$},
+    ylabel = {$f(m)$},
+    samples=100,
+    domain=-3:3,
+    xmin=-3, xmax=3,
+    ymin=-1, ymax=2,
+    smooth,
+    thick
+]
+% Free energy function for T < T_c
+\addplot[
+    blue,
+    thick,
+] {0.5*(-1)*x^2 + (1/12)*x^4}; % f(m) = 1/2(T-T_c)m^2 + 1/12Tm^4 for T < T_c
+\end{axis}
+
+\end{tikzpicture}
+
+For $T < T_c$, $m_{\mathrm{min}} = 0$. For $ < T_c$, $m_{\mathrm{min}} = \pm m_0$, where
+\[
+	m_0 = \sqrt{\frac{3 (T_c - T)}{T}}.
+\]
+Hence here is a phase transition at $T = T_c$. For $T > T_c$, we have $m =  0$, which is a disordered phase, and for $T < T_c$, $m \neq 0$, giving an ordered phase.
+
+
+\begin{center}
+\begin{tikzpicture}
+
+\begin{axis}[
+    axis lines = middle,
+    xlabel = {$T$},
+    ylabel = {$m$},
+    samples=100,
+    domain=-1:2,
+    xmin=0, xmax=2,
+    ymin=-1.5, ymax=1.5,
+    xtick={1},
+    xticklabels={$T_c$},
+    xticklabel style = {xshift=5pt},
+    ytick={0},
+    smooth,
+    thick
+]
+
+% Plot the bifurcation diagram
+\addplot[
+    blue,
+    ultra thick,
+] {-sqrt(1-x)};  % Lower branch for T < T_c (m < 0)
+\addplot[
+    blue,
+    ultra thick,
+] {sqrt(1-x)};   % Upper branch for T < T_c (m > 0)
+\addplot[
+    blue,
+    ultra thick,
+    domain=1:2
+] {0};           % m = 0 for T >= T_c
+
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+Here, $m$ is continuous at $T = T_c$, giving a continuous phase transition, or second order phase transition.
+
+Note that $F$ is invariant under $\mathbb{Z}_2$ symmetry: if we swap $m \to -m$, and $B \to -B$. For $T < T_c$, either $m = +m_0$ or $m = -m_0$, the $\mathbb{Z}_2$ symmetry does not preserve the ground state, known as `spontaneous symmetry breaking' (SSB).
+
+At finite $N$, $Z$ is \emph{analytic} in $T, B$. Therefore the phase transition only occurs for $N \to \infty$, and SSB also only occurs for $N \to \infty$: in this case
+\[
+m = \lim_{B \to 0} \lim_{N \to \infty} \frac{1}{N} \sum \langle s_i \rangle.
+\]
+Note the order of the limits are important, otherwise we get 0.
+
+For finite $N$, the $\mathbb{Z}_2$ symmetry tells us $F_{\mathrm{thermo}}$ is even in $B$, so
+\[
+	\langle m \rangle = - \frac{1}{N} \frac{\partial F_{\mathrm{thermo}}}{\partial B} \biggr|_{B= 0} = 0.
+\]
+The heat capacity is
+\[
+C = \frac{\partial \langle E \rangle}{\partial T}, \qquad \braket E = - \frac{\partial \log Z}{\partial \beta}.
+\]
+Thus we find
+\[
+C = \beta^2 \frac{\partial^2 \log Z}{\partial \beta^2},
+\]
+and notice that
+\[
+\log Z = - \beta N f(m_{\mathrm{min}}) = 
+\begin{cases}
+	\text{const} & T > T_c, \\
+	\frac{3N}{4} \frac{(T_c - T)^2}{T^2} + \text{const} & T< T_c,
+\end{cases}
+\]
+so
+\[
+c = \frac{C}{N} \to
+\begin{cases}
+	0 & T \to T_c^+, \\
+	3/2 & T \to T_c^-.
+\end{cases}
+\]
+Therefore $c$ is discontinuous at $T = T_c$.
+
+For $B > 0$, we find
+\[
+f(m) = -Bm + \frac{1}{2}(T - T_c)m^2 + \frac{1}{12} Tm^4 + \cdots
+\]
+
+\begin{tikzpicture}
+
+% First plot: T > T_c
+\begin{axis}[
+    width=7cm,
+    title={$T > T_c$},
+    axis lines = middle,
+    xlabel = {$m$},
+    ylabel = {$f(m)$},
+    samples=100,
+    domain=-3:3,
+    xmin=-3, xmax=3,
+    ymin=-1, ymax=4,
+    smooth,
+    thick
+]
+% Free energy function for T > T_c
+\addplot[
+    blue,
+    thick,
+] {-x + 0.5*(1)*x^2 + (1/12)*x^4}; % f(m) = 1/2(T-T_c)m^2 + 1/12Tm^4 for T > T_c
+\end{axis}
+
+% Second plot: T < T_c (next to the first)
+\begin{axis}[
+    width=7cm,
+    xshift=8cm, % Shift second plot horizontally
+    title={$T < T_c$},
+    axis lines = middle,
+    xlabel = {$m$},
+    ylabel = {$f(m)$},
+    samples=100,
+    domain=-3:3,
+    xmin=-3, xmax=3,
+    ymin=-1.5, ymax=2,
+    smooth,
+    thick
+]
+% Free energy function for T < T_c
+\addplot[
+    blue,
+    thick,
+] {-0.2*x + 0.5*(-1)*x^2 + (1/12)*x^4}; % f(m) = 1/2(T-T_c)m^2 + 1/12Tm^4 for T < T_c
+\end{axis}
+\end{tikzpicture}
+
+In this case,
+\[
+m_{\mathrm{min}} = \frac{B}{T},
+\]
+for $T \to \infty$.
+
+In this case $m_{\mathrm{min}}$ depends smoothly on $T$, so there is no phase transition if $T$ is varied at fixed $B \neq 0$.
+
+\begin{center}
+\begin{tikzpicture}
+
+\begin{axis}[
+    axis lines = middle,
+    xlabel = {$T$},
+    ylabel = {$m$},
+    samples=100,
+    domain=-1:2,
+    xmin=0, xmax=2,
+    ymin=-1.5, ymax=1.5,
+    xtick={1},
+    xticklabels={},
+    ytick={0},
+    smooth,
+    thick
+]
+
+% Plot the bifurcation diagram
+\addplot[
+    blue,
+    ultra thick,
+] {1 / (1 + 10 * x)};  % Lower branch for T < T_c (m < 0)
+\addplot[
+    blue,
+    ultra thick,
+] {-1 / (1 + 10 * x)};   % Upper branch for T < T_c (m > 0)
+
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+But, if we vary $B$ at fixed $T < T_c$, then $m$ jumps discontinuously from $m_0$ to $-m_0$ as $B$ decreases from positive to negative, which is an example of a first order phase transition.
+
+\begin{tikzpicture}
+
+\begin{axis}[
+    width=5cm,
+    xshift=-5cm,
+    title={$B < 0$},
+    axis lines = middle,
+    xlabel = {$m$},
+    ylabel = {$f(m)$},
+    samples=100,
+    domain=-3:3,
+    xmin=-3, xmax=3,
+    ymin=-1.5, ymax=2,
+    smooth,
+    thick
+]
+% Free energy function for T > T_c
+\addplot[
+    blue,
+    thick,
+] {0.2 * x + 0.5*(-1)*x^2 + (1/12)*x^4}; % f(m) = 1/2(T-T_c)m^2 + 1/12Tm^4 for T > T_c
+\end{axis}
+
+\begin{axis}[
+    width=5cm,
+    title={$B = 0$},
+    axis lines = middle,
+    xlabel = {$m$},
+    ylabel = {$f(m)$},
+    samples=100,
+    domain=-3:3,
+    xmin=-3, xmax=3,
+    ymin=-1.5, ymax=2,
+    smooth,
+    thick,
+]
+% Free energy function for T > T_c
+\addplot[
+    blue,
+    thick,
+] {0.5*(-1)*x^2 + (1/12)*x^4}; % f(m) = 1/2(T-T_c)m^2 + 1/12Tm^4 for T > T_c
+\end{axis}
+
+% Second plot: T < T_c (next to the first)
+\begin{axis}[
+    width=5cm,
+    xshift=5cm, % Shift second plot horizontally
+    title={$B > 0$},
+    axis lines = middle,
+    xlabel = {$m$},
+    ylabel = {$f(m)$},
+    samples=100,
+    domain=-3:3,
+    xmin=-3, xmax=3,
+    ymin=-1.5, ymax=2,
+    smooth,
+    thick
+]
+% Free energy function for T < T_c
+\addplot[
+    blue,
+    thick,
+] {-0.2*x + 0.5*(-1)*x^2 + (1/12)*x^4}; % f(m) = 1/2(T-T_c)m^2 + 1/12Tm^4 for T < T_c
+\end{axis}
+\end{tikzpicture}
+
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    axis lines = middle,
+    xlabel = {$T$},
+    ylabel = {$B$},
+    xmin=0, xmax=2,
+    ymin=-1.5, ymax=1.5,
+    xtick={1},
+    xticklabels={$T_c$},
+    ytick={0},
+    samples=100,
+    smooth,
+    thick
+]
+
+% Plot the critical isothermal line at T = T_c
+\addplot[
+    domain=0:1,
+    ultra thick,
+    red
+] (x,0);  % Critical isothermal line at T = T_c
+
+
+% Critical point at (T_c, 0)
+\node[red, fill=red, circle, inner sep=2pt] at (axis cs:1,0) {};
+
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+We can draw the phase transition points as above.
+
+% lecture 3
+
+Consider the behaviour near the critical point. If we fix $T = T_c$, then
+\[
+f \approx - B m + \frac{1}{12} Tm^4 + \cdots,
+\]
+so minimizing, we see that $m^3 \sim B$, and $m \sim B^{1/3}$.
+
+We can also define the \emph{magnetic susceptibility}\index{magnetic susceptibility} as
+\[
+\chi = \left( \frac{\partial m}{\partial B} \right)_T.
+\]
+For $T > T_c$,
+\[
+f(m) = - Bm + \frac{1}{2} (T - T_c)m^2 + \cdots,
+\]
+so
+\[
+m \approx \frac{B}{T - T_c} \implies \chi = \frac{1}{T - T_c}.
+\]
+For $T < T_c$, we write $m = m_0 + \delta m$, and solving for $\delta m$ to leading order, we find
+\[
+m = m_0 + \frac{B}{2(T_c - T)} \implies \chi = \frac{1}{2(T_c - T)}.
+\]
+Hence,
+\[
+\chi \sim \frac{1}{|T-T_c|}.
+\]
+
+We have been using the MFT approximation. Does this give the correct results?
+\begin{itemize}
+	\item $d=1$. No, there is no phase transition.
+	\item $d = 2, 3$. The phase diagram is qualitatively correct, but the qualitative predictions at the critical point are incorrect.
+	\item $d \geq 4$. Yes.
+\end{itemize}
+
+Similarly for other systems, MFT gets the phase structure wrong for $d \leq d_l$, the `lower critical dimension', and correct for $d \geq d_c$, the `upper critical dimension'. In the Ising model, $d_l = 1$ and $d_c = 4$.
+
+For $d_l < d < d_c$, the theory is interesting.
+
+\subsection{Critical Exponents}%
+\label{sub:ce}
+
+Near the critical point, MFT predicts the following:
+\begin{itemize}
+	\item If $B = 0$, then as $T \to T_c^{-}$,
+		\begin{align*}
+			m &\sim (T_c - T)^\beta & \text{with } &\beta = \frac{1}{2}, \\
+			c &\sim c_{\pm} |T - T_c|^{-\alpha} & \text{with } &\alpha = 0, \\
+			\chi &\sim \frac{1}{|T - T_c|^\gamma} & \text{with } &\gamma = 1.
+		\end{align*}
+	\item As $B \to 0$,
+		\[
+			m \sim B^{1/\delta} \qquad \text{with } \delta = 3.
+		\]
+\end{itemize}
+
+Here, $\alpha, \beta, \gamma, \delta$ are the \emph{critical exponents}\index{critical exponents}.
+
+These values are not correct for small $d$.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{c|ccc}
+	& MFT & $d = 2$ & $d = 3$ \\
+\hline
+	$\alpha$ & $0$ (disc) & $0$ (log) & 0.1101.. \\
+	$\beta$ & $\frac{1}{2}$ & $\frac{1}{8}$ & 0.3264.. \\
+	$\gamma$ & $1$ & $\frac{7}{4}$ & 1.2371..\\
+	$\delta$ & $3$ & $15$ & 4.7898..
+\end{tabular}
+\caption{Predictions and Theoretical Critical Exponents}
+\end{table}
+
+\subsection{Universality}%
+\label{sub:univ}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    width=10cm,
+    %title={$B = 0$},
+    axis lines = middle,
+    xlabel = {$T$},
+    ylabel = {$p$},
+    samples=100,
+    domain=0:4,
+    xmin=0, xmax=4,
+    ymin=0, ymax=1.5,
+    xtick = {0},
+    ytick = {0},
+    smooth,
+    thick
+]
+% Free energy function for T > T_c
+\addplot[
+    blue,
+    thick,
+    ] {x^3 * 0.1 - x^4 * 0.02};
+
+\addplot[
+    blue,
+    thick,
+    domain = 2:3.5
+    ] {x * 0.24};
+
+\node[red, fill=blue, circle, inner sep=2pt] at (axis cs:3.5,3.5*0.24) {};
+
+\node at (axis cs:1,0.75) {Solid};
+\node at (axis cs:3,0.86) {Liquid};
+\node at (axis cs:3,0.5) {Gas};
+
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+In a normal material, we have liquid-gas phase transition similar to the Ising model; a line of first order phase transitions, ending at a critical point.
+
+If we replace $B$ with $p$ the pressure, and $m$ with $v = V/N$ as our orde parameter, then using an equation of state (e.g. the van der Waals) to calculate the behaviour near the critical point:
+\begin{itemize}
+	\item As $T \to T_c$,
+		\[
+			v_{\mathrm{gas}} - v_{\mathrm{liquid}} \sim (T_c - T)^\beta \qquad \text{where } \beta = \frac{1}{2}.
+		\]
+	\item If $T = T_c$ is fixed, and $p \to p_c$,
+		\[
+			v_{\mathrm{gas}} - v_{\mathrm{liquid}} \sim (p - p_c)^{1/\delta} \qquad \text{where } \delta = 3.
+		\]
+	\item The isothermal compatibility is
+		\[
+			\kappa = - \frac{1}{v} \left( \frac{\partial v}{\partial p} \right)_T \sim \frac{1}{|T - T_c|\gamma} \qquad \text{where } \gamma = 1.
+		\]
+	\item The heat capacity is
+		\[
+			c_v \sim c_{\pm} |T - T_c|^{-\alpha} \qquad \text{where }\alpha = 0,
+		\]
+		i.e. the heat capacity is discontinuous.
+\end{itemize}
+
+These are the same predictions as for MFT for the Ising model. As is probably is expected, these are incorrect; but the correct values are the same as the correct values for $d = 3$ Ising model!
+
+This is an example of \emph{universality}\index{universality}: different physical systems can exhibit the same behaviour at the critical points.
+
+This suggests that the microscopic physics is unimportant at a critical point. Systems governed by the same critical point belong to the same \emph{universality class}\index{universality class}.
+
+\subsection{Landau-Ginzberg Theory}%
+\label{sub:lgt}
+
+Our aim is to find a model that correctly describes long-distance physics near the critical point, which can be used to calculate critical exponents for all theories in the same universality class.
+
+LG theory generalizes MFT, to allow for spatial variation in $m$.
+
+Here, $m(\mathbf{x})$ is a field, produced from a microscopic model by coarse-graining. In the Ising model, we divide the lattice into boxes, each with $N' \ll N$ sites, with size $a$. Then we can define
+\[
+	m(\mathbf{x}) = \text{average of spins in box with centre } \mathbf{x}.
+\]
+Take $N' \gg 1$ the discreteness of $m(\mathbf{x})$ can be ignored, and $m \in [-1, 1]$.
+
+Assume that $a \ll \xi$, the length scale over which the physics varies. Treat $m(\mathbf{x})$ as a smooth function, which does not vary on scales less than $a$. Then,
+\[
+	Z = \sum_{m(\mathbf{x})} \sum_{\{s_i\} | m(\mathbf{x})} e^{-\beta E[s_i]} = \sum_{m (\mathbf{x})} e^{-\beta F[m(\mathbf{x})]}.
+\]
+Here, $F[m(\mathbf{x})]$ is a \emph{functional}, which depends on a functional. This is the \emph{Landau-Ginzberg free energy}\index{Landau-Ginzberg free energy}.
+
+We write
+\[
+	Z = \int \mathcal{D} m(\mathbf{x}) \, e^{-\beta F[m(\mathbf{x})]},
+\]
+which is a \emph{functional integral}\index{functional integral}, a sum over all $m(\mathbf{x})$ that do not vary on scales less than $a$.
+
+% lecture 4
+
+\newpage
+
+\printindex
+
+\end{document}

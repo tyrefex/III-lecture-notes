@@ -1,0 +1,680 @@
+\documentclass[12pt]{article}
+
+\usepackage{ishn}
+
+\makeindex[intoc]
+
+\begin{document}
+
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+	\begin{center}
+		\vspace*{1em}
+		\Huge
+		\textbf{III Analysis of PDEs}
+
+		\vspace{1em}
+		\large
+		Ishan Nath, Michaelmas 2024
+
+		\vspace{1.5em}
+
+		\Large
+
+		Based on Lectures by Prof. Cl\'ement Mouhot
+
+		\vspace{1em}
+
+		\large
+		\today
+	\end{center}
+	
+\end{titlepage}
+\hypersetup{pageanchor=true}
+
+\tableofcontents
+
+\newpage
+
+% lecture 1
+
+\setcounter{section}{-1}
+
+\section{Introduction}%
+\label{sec:intro}
+
+Email cm612, in E1.12. Notes are on wordpress, or by Warnick typed by Minter.
+
+Books include Evans, Br\'ezis, John and Lieb-Loss.
+
+\subsection{Overview}%
+\label{sub:over}
+
+The field proceeds from works on differential calculus, and trying to turn laws of physics into equations.
+
+We are focused on the modern approach: finding estimates, limits and the function space (using topology). We are not looking at finding explicit formulas.
+
+The course is structured as follows.
+\begin{enumerate}[label=Chapter \arabic*.]
+	\item Introduction (2 lectures). This is focused on turning an ODE into a PDE.
+	\item The Cauchy Kovalevskoya Theory (4-5 lectures). Here we look at a PDE with analytic function, where we want to solve for analytic solutions. This lets us construct locally a solution.
+	\item Functional toolbox (4 lectures). Here we introduce H\"older and Lebesgue spaces, as well as weak derivatives, Sobolev spaces, inequalities, approximations by convolution, and extensions or traces of functions.
+	\item Elliptic PDEs (6-7 lectures). Here we look at the Laplace equation and its variants $\Delta u = 0$ on $U$, and $u |_{\partial U} = g$. We are most interested in Lax-Milgram theory, and may look at Fredholm theory, and spectral theory.
+	\item Hyperbolic PDEs (7 lectures). The main equations are the scalar transport equation (where we look at the Burgers equation), and the wave equation.
+\end{enumerate}
+
+\newpage
+
+\section{From ODEs to PDEs}%
+\label{sec:ode2pde}
+
+In \emph{differential equations}\index{differential equation}, the unknown is a function. In an ODE (ordinary differential equation), we first fix a function
+\[
+F = F(x, y_1, \ldots, y_{k+1}).
+\]
+Here $k \geq 1$. We solve for $u : U \subseteq \mathbb{R} \to \mathbb{R}$ the relation, for all $x \in U$,
+\[
+F(x, u(x), u'(x), \ldots, u^{(k)}(x)) = 0. \tag{$\ast$}
+\]
+Here the domain $U$ is an open, connected, regular set in $\mathbb{R}$.
+
+\begin{exbox}
+	Consider
+	\[
+	F = F(x, z, y) = f(x, z) - y.
+	\]
+	Then the equation $(\ast)$ becomes
+	\[
+	u'(x) = f(x, u(x)).
+	\]
+	This can be solved by Picard-Lindel\"of, with certain restrictions on $f$.
+\end{exbox}
+
+In a PDE, we no loner have $x$ in $\mathbb{R}$, but in $\mathbb{R}^n$. Therefore the relation $(\ast)$ must be modified to include:
+\begin{align*}
+	u(x) = u(x_1, \ldots, x_n), \qquad \frac{\partial u}{\partial x_i} (x), \qquad \frac{\partial^2 u}{\partial x_i \partial x_j} (x), \qquad \ldots
+\end{align*}
+
+\begin{definition}
+	Give $n \geq 2$, $U \subseteq \mathbb{R}^n$ a domain, a \emph{partial differential equation}\index{partial differential equation} of rank or order $k \geq 1$ is a relation of the form, for all $x \in U$,
+	\[
+		F(x, u(x), Du(x), \ldots, D^k u(x)) = 0 \tag{$\ast\ast$},
+	\]
+	where $F : \mathbb{R}^n \times \mathbb{R} \times \mathbb{R}^n \times \mathbb{R}^{n^2} \times \cdots \times \mathbb{R}^{n^k} \to \mathbb{R}$.
+
+	We solve for $u : U \subseteq \mathbb{R}^n \to \mathbb{R}$. If $u \in C^k(U)$, and satisfies $(\ast\ast)$ identically as an equality between continuous functions, we say that $u$ is a \emph{classical solution}\index{classical solution} to the PDE.
+\end{definition}
+
+\begin{remark}
+	\begin{enumerate}[1.]
+		\item[]
+		\item When possible (but not for elliptic PDEs) it is useful to identify one of the components of $x$, say $x_1$, as a time $x_1 = t$. We then say that the PDE takes the form of an \emph{evolution problem}\index{evolution problem}.
+
+			Finding such a `time variable' can be a difficulty in itself.
+		\item We can also consider the more general case $u(x) \in \mathbb{R}^m$, for $m \geq 1$, and $F$ values in $\mathbb{R}^N$, for $N \geq 1$. When $m \geq 2$, we say it is a \emph{system} of PDEs.
+		\item Can we consider a PDE as yet another ODE but in infinite dimensions, at least when it is in the form
+			\[
+			\frac{\partial u}{\partial t} = G \left( \left( \frac{\partial u}{\partial x_i} \right)_{i = 2}^n, \left( \frac{\partial^2 u}{\partial x_i \partial x_j} \right)_{i, j = 2} ^n , \ldots \right).
+			\]
+			No. First, losing the total order on the parameter $x$ leads to some geometric phenomena. This is repsonsible for some differences (reversibility, or whether it is an evolution problem).
+
+Second, if we interpret this is an ODE $u'(t) = g(u)$, then $u$ lives in functional space which is infinite-dimensional, whereas in an ODE we have a trajectory in $\mathbb{R}^N$. Even at a linear level, operators can be unbounded, and the topologies are no longer equivalent.
+%lecture 2
+\item We also have boundary conditions. We know that just the condition $u'(t) = f(t, u(t))$ is not enough; we also need to specify, for example, $f(0) = u_0$.
+
+	For PDEs in evolution form $\partial_t u = G$, then our boundary condition becomes $u(0, \cdot) = u_0(\cdot)$, where this is now a function. Moreover, we can consider boundary conditions on other variables.
+\item Also PDEs come in so many different forms, that each structure must be understood.
+	\end{enumerate}
+	
+\end{remark}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.5]
+
+    % Draw the cylinder (vertical)
+    \draw[thick] (0,0) ellipse (1.5 and 0.5);  % Bottom ellipse (S^1)
+    \draw[thick] (0,3) ellipse (1.5 and 0.5);  % Top ellipse (S^1)
+
+    \draw[thick] (-1.5,0) -- (-1.5,3);  % Left boundary
+    \draw[thick] (1.5,0) -- (1.5,3);    % Right boundary
+
+    % Shade the bottom of the cylinder
+    %\fill[gray, opacity=0.3] (-1.5,0) arc[start angle=180, end angle=0, radius=1.5 and 0.5] -- (1.5,0) -- (-1.5,0);
+
+	% Shade the bottom ellipse (circular base of the cylinder) with gray and crosshatch
+    \fill[pattern = crosshatch, pattern color=gray] (0,0) ellipse (1.5 and 0.5);
+
+    % Boundary conditions at the base
+    \node at (0,-0.8) {Boundary condition at time $t=0$};
+    \node at (-1.8,0) {}; % Adjust spacing for base text
+
+    % Boundary conditions at the boundary of the cylinder
+    %\node at (2.8,1.5) {Boundary condition on boundary};
+
+    % Time arrow
+    \draw[->, thick] (2,0) -- (2,3.5) node[right] {Time};
+    
+    % Time progression arrow
+    \node at (2,3.5) {};  % Empty node to ensure arrow placement 
+
+\end{tikzpicture}
+\end{center}
+
+\newpage
+
+\section{The Cauchy Problem}%
+\label{sec:cauchy}
+
+A basic question of mathematical analysis is to solve
+\[
+u'(t) = F(t).
+\]
+If $F$ is continuous, then by FTC we get
+\[
+u(t) = u(t_0) + \int_{t_0}^t F(z) \diff z.
+\]
+This is solved. We have shown there exists solutions, and there's a unique solution given $u(t_0) = u_0$, that depends continuously on boundary data $u_0$.
+
+A more complicated ODE is where $F = F(t, u(t))$, so
+\[
+u'(t) = F(t, u(t)), \qquad u(t_0) = u_0.
+\]
+There are three main results for functions of this form:
+\begin{enumerate}[Result 1.]
+	\item Cauchy-Kovalevskaya for ODEs. In the open region where $F$ is real analytic (locally the sum of a Taylor series), there exists a unique local analytic solution: given $(t_0, u_0)$ in this region, there is a neighbourhood around it so that a unique analytical solution $u$ exists.
+\end{enumerate}
+
+This has limited use: it is only for $F$ analytic, it does not cover all PDEs, and it is rare to be able to continue the solution.
+
+We can extend this to PDEs.
+
+\begin{enumerate}[resume*]
+	\item Picard-Lindel\"of. In the region where $f'$ is continuous and Lipschitz in the second variable, there exist a local, unique solution $C^1$ solution $u$, which depends continuously on $u_0$.
+\end{enumerate}
+
+This inspired the Cauchy problem and well-posedness. We can extend this to linear PDEs, known as Hille-Yosida theorem.
+
+\begin{enumerate}[resume*]
+	\item Cauchy-Peano. In the region where $f$ is merely continuous, there exists locally a $C^1$ solution $u$. In general, it is not unique.
+\end{enumerate}
+
+This is done through an iterative scheme and compactness, and is the inspiration for theories of weak solutions in PDEs.
+
+Note that in a larger space, existence is easier, but uniqueness is harder, and vice versa. Hence finding a sweet-spot is critical.
+
+\begin{exbox}
+	The ODE
+	\[
+		u'(t) = \sqrt{u(t)}, \qquad u(0) = 0
+	\]
+	has a solution which exists by Cauchy-Peano, but is not unique. Another example is
+	\[
+	u'(t) = \frac{4u(t)t}{u(t)^2 + t^2}, \qquad u(0) = 0.
+	\]
+\end{exbox}
+
+Another key question is local versus global solutions, i.e. finding a global solution to
+\[
+u'(t) = F(t, u(t)), \qquad u(0) = u_0,
+\]
+for all $t \geq 0$. We have a few criterion for when global solutions exist.
+\begin{enumerate}[label = Criterion \arabic*.]
+	\item $F$ is uniform Lipschitz.
+\end{enumerate}
+Here we can just apply Picard-Lindel\"of to continue a solution. It is not easy to export this to PDEs.
+
+\begin{enumerate}[resume*]
+	\item Assume the hypothesis of Picard-Lindel\"of, as well as a growth condition on $F$:
+		\[
+		|F(t, u)| \leq C(1 + |u|).
+		\]
+		Then the solution can be continued globally.
+\end{enumerate}
+The idea behind this is that, a priori, a solution $C^1$ has to satisfy
+\begin{align*}
+	\frac{\diff}{\diff t} |u(t)|^2 &\leq 2 C (1 + |u(t)|^2), \\
+	u'(t) &= F(t, u(t)).
+\end{align*}
+This is similar to what we call an energy estimate in PDEs.
+
+\begin{exbox}
+	The ODE
+	\[
+	u'(t) = u(t)^2, \qquad u(t_0) = u_0 > 0
+	\]
+	has no global solutions. This is because when you square a big number it gets bigger. However if we swap the sign, the solution is global. This is because when you square a small number, it gets smaller.
+
+	The ODE
+	\[
+	u'(t) = \sin(u(t)), \qquad u(0) = u_0
+	\]
+	has global solutions, by criterion 1. Similarly,
+	\[
+	u'(t) = \sin (u(t)^2), \qquad u(0) = u_0
+	\]
+	has global solutions, this time by criterion 2.
+\end{exbox}
+
+\subsection{Well-posedness for PDEs}%
+\label{sub:well_posed}
+
+Sometimes there is no explicit formula or even series for a solution to a PDE. In these cases we need to construct solutions abstractly.
+
+Two breakthroughs happened when looking at when PDEs have solutions. The first is the definition of a Cauchy problem, and the second is looking at well-posedness.
+
+\begin{definition}
+	A \emph{Cauchy problem}\index{Cauchy problem} is the combination of a PDE, and some boundary data; prescribing values of the unknown $u$, and possibly its derivatives, on parts of the domain.
+
+	Such a problem is said to be \emph{well-posed}\index{well-posed} if:
+	\begin{itemize}
+		\item A solution exists (in some function space, e.g. $C^k(U), H^k(U)$, at least locally).
+		\item The solution is unique among possible solutions in the function space.
+		\item The solutions depends continuously on the boundary data.
+	\end{itemize}
+	
+\end{definition}
+
+% lecture 3
+
+\subsection{Terminology and Examples}%
+\label{sub:termex}
+
+\begin{definition}
+	A PDE with vector field $F$ is \emph{linear}\index{linear PDE} if $F$ is a linear function of $u$ and its derivative. So,
+	\[
+	\sum_{|\alpha| \leq k} a_\alpha(x) \partial^\alpha u(x) = f(x).
+	\]
+	Here $f(x)$ is the \emph{source}\index{source}, or the RHS.
+
+	A PDE is \emph{semilinear}\index{semilinear} when $F$ is linear in the highest-order derivatives of $u$:
+	\[
+		\sum_{|\alpha| = k} a_\alpha(x) \partial^\alpha u + a_0[x, u(x), Du(x), \ldots, D^{k-1}u] = 0.
+	\]
+	A PDE is \emph{quasilinear}\index{quasilinear} if $F$ is linear in highest-order deriatives of $u$, but can depend nonlinearly on the lower-order derivatives:
+	\[
+		\sum_{|\alpha| = k} a_\alpha[x, u(x), Du(x), \ldots, D^{k-1}u] \partial^\alpha u(x) + a_0[x, u(x), Du(x), \ldots, D^{k-1}u] = 0.
+	\]
+	A PDE is \emph{fully nonlinear}\index{fully nonlinear} if it is none of the types above.
+\end{definition}
+
+\begin{exbox}
+	\begin{itemize}
+		\item Linear PDE: Take the Laplace,
+			\[
+			\Delta u = \sum_{i = 1}^n \frac{\partial^2 u}{\partial x_i^2} = 0.
+			\]
+		\item Semilinear PDE:
+			\[
+			\Delta u = \left( \frac{\partial u}{\partial x_1} \right)^2.
+			\]
+		\item Quasilinear PDE:
+			\[
+				u \frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 u}{\partial y^2} = \frac{\partial u}{\partial x} \text{ on } \mathbb{R}^2.
+			\]
+		\item Fully nonlinear:
+			\[
+			\frac{\partial^2 u}{\partial x^2} \frac{\partial^2 u}{\partial y^2} - \left( \frac{\partial^2 u}{\partial x\partial y} \right)^2 = 0.
+			\]
+	\end{itemize}
+	We also have some examples from physics:
+	\begin{itemize}
+		\item Newtons' equations.
+		\item Euler incompressibility equation.
+		\item Navier-Stokes equation.
+		\item Boltzmann equation.
+		\item Vlasov equation.
+		\item Schr\"odinger equation.
+		\item Einstein equations.
+		\item Dirac equation.
+	\end{itemize}
+	Moreover here are equations from math:
+	\begin{itemize}
+		\item Cauchy-Riemann equations.
+		\item Ricci flow. $\partial_t g_{ij} = -2 R_{ij}$.
+	\end{itemize}
+\end{exbox}
+
+\newpage
+
+\section{The Cauchy-Kovalevskaya Theory}%
+\label{sec:ck}
+
+This is the only ``general'' theorem that can be salvaged from ODEs. Some concepts that arise are:
+\begin{itemize}
+	\item Non-characteristic Cauchy data.
+	\item Principal symbols.
+	\item Basic classification of PDEs.
+\end{itemize}
+However the analyticity used in this theory is most often not satisfying, in the functional setting.
+
+\subsection{Real Analyticity}%
+\label{sub:ra}
+
+\begin{definition}
+	Given $U \subseteq \mathbb{R}^n$ open, a function $f : U \to \mathbb{R}$ is \emph{real analytic}\index{real analytic} near $\tilde x \in U$ if there is $r > 0$ and real constants $(f_\alpha)$ so that the series
+	\[
+	\sum_{\alpha \geq 0} f_\alpha(x - \tilde x)^\alpha
+	\]
+	converges for $x \in B(\tilde x, r)$ to $f(x)$.
+
+	If $f : U \to \mathbb{R}^n$, for $n \geq 2$, then it is real analytic if $f_i$ is real analytic for $i = 1, \ldots, n$.
+
+	$f$ is \emph{real analytic} in $U$ if it is real analytic near each point of $U$. This is sometimes denoted as
+	\[
+	f \in C^\omega (U).
+	\]
+\end{definition}
+
+\begin{exbox}
+	Simple examples of real analytic functions include polynomials, exponential functions, trigonometric functions.
+
+	The map $z \mapsto \overline{z}$, i.e. conjugation, is not $\mathbb{C}$-differentiable, but it is real analytic in $\mathbb{R}^2$.
+
+	The function
+	\[
+	f(x) =
+	\begin{cases}
+		e^{-1/x^2} & x \neq 0, \\
+		0 & x = 0
+	\end{cases}
+	\]
+	is $C^\infty$, but not real analytic. In fact any $C_c^\infty$ function cannot be real analytic.
+
+	Liouville's theorem does not hold, by either $\sin$ or $1/(1 + x^2)$.
+\end{exbox}
+
+Real analyticity is local, meaning if $f$ is real analytic near $\tilde x$, then $f$ is real analytic in $B(\tilde x, r) \subseteq U$ for some $r > 0$.
+
+\begin{proposition}
+	Given $U \subseteq \mathbb{R}^n$ open and non-empty, then $f : U \to \mathbb{R}$ is real analytic on $U$ if and only if $f \in C^\infty$, and for any $K \subseteq U$ compact, there are $C(K)$, $r(K) > 0$ so that the following growth conditions holds: for all $x \in K$, $\alpha \in \mathbb{N}^n$,
+	\[
+	|\partial^\alpha f(x)| \leq C(K) \frac{\alpha!}{r(K)^{|\alpha|}}.
+	\]
+\end{proposition}
+
+\begin{remark}
+	\begin{itemize}
+		\item[]
+	\item When $U \subseteq \mathbb{R}$, another equivalent definition is, $f$ is real analytic on $U$ if it can be locally extended to a $\mathbb{C}$-differentiable function near each point of $U$.
+	\item When $U = \mathbb{R}^n$, real analyticity is also equivalent to exponential decay in the Fourier variables.
+	\end{itemize}
+\end{remark}
+
+% lecture 4
+
+\begin{proofbox}
+	Recall that, if
+	\[
+	\sum_{\alpha \geq 0} f_\alpha (x - \tilde x)^\alpha
+	\]
+	converges at $x$ such that $|x - \tilde x| = r$, then the general term is bounded by
+	\[
+	|f\alpha| \leq Cr^{-|\alpha|}.
+	\]
+	Hence for $|x - \tilde x| < r$, we have absolute convergence.
+
+	Recall for a function, the \emph{radius of convergence}\index{radius of convergence} is the largest $r \geq 0$ so that we have a point of convergence at a distance $r$.
+
+	The easy implication is the forwards. Suppose that in $B(\tilde x, r) \subseteq U$, we have the power series
+	\[
+	f(x) = \sum f_\alpha (x - \tilde x)^\alpha,
+	\]
+	with radius of convergence at least $r$. Then from a standard theorem, $f$ is smooth in $B(\tilde x, r)$ with
+	\[
+	\partial^\alpha f(\tilde x) = (f_\alpha) \alpha!.
+	\]
+	We know that $|f_\alpha| \leq C \bar r^{-|\alpha|}$, for some $\tilde r < \bar r < r$. Then for all $x \in \bar B(\tilde x, \tilde r)$, and $\beta \in \mathbb{N}^n$,
+	\begin{align*}
+	|\partial^\beta f(x)| &= \left|\partial^\beta  \left( \sum_{\alpha \geq 0} f_\alpha (x - \tilde x)^\alpha \right) \right| \\
+			      &\leq \sum_{\alpha \geq \beta} |f_\alpha| \frac{\alpha!}{(\alpha - \beta)!} |x - \tilde x|^{|\alpha - \beta|} \\
+			      &\leq C \sum_{\alpha \geq \beta} \bar r^{-|\alpha|} \frac{\alpha!}{(\alpha - \beta)!} \tilde r^{|\alpha - \beta|} \\
+			      &\leq C \bar r^{|\beta|} \sum_{\alpha \geq \beta} \left( \frac{\tilde r}{\bar r} \right)^{|\alpha - \beta|} \frac{\alpha!}{(\alpha - \beta)!}.
+	\end{align*}
+	Let $\lambda = \tilde r/ \bar r < 1$. Then by observation,
+	\[
+		(1 - \lambda)^{-1} = \sum_{j \geq 0} \lambda^{j}.
+	\]
+	Taking the $m$'th partial derivative,
+	\[
+	\frac{m!}{(1 - \lambda)^{m+1}} = \sum_{j \geq m} \frac{j!}{(j - m)!} \lambda^{j - m}.
+	\]
+	If we apply this, then
+	\begin{align*}
+		|\partial^\beta f(x)| & \leq C r^{|\beta|} \sum_{\alpha \geq \beta} \frac{\alpha!}{(\alpha - \beta)!} \lambda^{|\alpha - \beta|} \\
+				      &\leq C |r|^{|\beta|} \frac{\beta!}{(1 - \lambda)^{|\beta| + n}} \\
+				      &\leq \frac{C \beta!}{(1 - \lambda)^n} \left( \frac{r}{1 - \lambda} \right)^{|\beta|}.
+	\end{align*}
+	For the other direction, consider our assumption on $K = \bar B(\tilde x, r) \subseteq U$, there exists $\tilde C, \tilde r > 0$ such that for all $x \in K$, $\alpha \in \mathbb{N}^n$,
+	\[
+	|\partial^\alpha f(x)| \leq \tilde C \tilde r^{-|\alpha|} \alpha!.
+	\]
+	Choose $x \in B(\tilde x, \tilde r/2)$, and Taylor expand, so
+	\[
+	f(x) = \sum_{|\alpha| \leq k} \partial^\alpha f(x) \frac{(x - \tilde x)^\alpha}{\alpha!} + \sum_{|\alpha| = k + 1} R_\alpha(x) (x - \tilde x)^\alpha.
+	\]
+	If $n = 1$, we have
+	\[
+	R_\alpha(x) = \frac{|\alpha|}{\alpha!} \int_0^1 (1 - t)^{|\alpha| - 1} \partial^\alpha f( \tilde x + t (x - \tilde x)) \diff t.
+	\]
+	From the growth condition, the main part of the expansion is a partial sum of an absolute series, and
+	\begin{align*}
+		\left| \sum_{|\alpha| = k + 1} R_\alpha(x) (x - \tilde x)^\alpha \right| &\leq \sum_{|\alpha| = k+1} |R_\alpha(x)| \left( \frac{\tilde r}{2} \right)^{k + 1}, \\
+											|R_\alpha(x)| &\leq \tilde C \frac{|\alpha|}{\alpha!} \int_0^1 (1-t)^{|\alpha|-1} \tilde r^{-(k+1)} \diff t \\
+												      &\leq \tilde C \frac{\tilde r^{-(k+1)}}{\alpha!}.
+	\end{align*}
+	So,
+	\begin{align*}
+		I &= \left| \sum_{|\alpha| = k + 1} R_\alpha(x) (x - \tilde x)^\alpha \right| \leq \tilde C \tilde r^{-(k+1)} \left( \frac{\tilde r}{2} \right)^{k+1} \cdot \binom{k+n}{n-1} \\
+		  &\leq C' (k + n)^{n-1} 2^{-(k+1)} \to 0
+	\end{align*}
+	as $k \to \infty$, which shows the convergence of the Taylor series.
+\end{proofbox}
+
+\begin{definition}
+	Let
+	\[
+	f = \sum_{\alpha \geq 0} f_\alpha x^\alpha, \qquad g = \sum_{\alpha \geq 0} g_\alpha x^\alpha
+	\]
+	be two formal power series. Then $g$ \emph{majorizes}\index{majorization} $f$, or $g$ is a \emph{majorant} of $f$, written $g \gg f$ if $g_\alpha \geq |f_\alpha|$ for all $\alpha \in \mathbb{N}^\alpha$.
+
+	If $f, g$ are $\mathbb{R}^m$-valued, then each component $g_j \gg f_j$, for $j = 1, \ldots, m$.
+\end{definition}
+
+\begin{proposition}
+	Given $f, g$ formal power series:
+	\begin{enumerate}[\normalfont(i)]
+		\item If $g \gg f$ and $g$ converges for $\|x\| < r$, then $f$ converges for $\|x\| < r$ as well.
+		\item If $f$ converges for $\|x\| < r$, and $\tilde r \in (0, r/\sqrt n)$, there is a majorant $g \gg f$ which converges in $\|x\| < \tilde r$.
+	\end{enumerate}
+\end{proposition}
+
+\begin{proofbox}
+	
+
+	(i) Let $x \in B(0, r)$, then
+	\begin{align*}
+		\sum_{\alpha \leq k} |f_\alpha x^\alpha| &\leq \sum_{|\alpha| \leq k} |f_\alpha| |x_1|^{\alpha_1} \cdots |x_n|^{\alpha_n} \\
+							 &\leq \sum_{|\alpha| \leq k} g_\alpha |x_1|^{\alpha_1} \cdots |x_n|^{\alpha_n}.
+	\end{align*}
+	If $y = (|x_1|, \ldots, |x_n|)$, then $\|y\| = \|x\| < r$, and since $g$ converges for $\|x\| < r$ it converges for $y$.
+
+	(ii) Take $\tilde r \in (0, r/\sqrt n)$ and $y = (\tilde r, \ldots, \tilde r)$. Then $\|y\| = \sqrt n \tilde r < r$ 
+
+	Now $f$ converges on $y$, so the general term is bounded:
+	\[
+	|f_\alpha| \leq C \tilde r^{-|\alpha|}.
+	\]
+	Now consider
+	\[
+	\bar f(x) = \frac{C}{1 - (x_1 + \cdots + x_n)/\tilde r},
+	\]
+	for $x \in B(0, \tilde r/\sqrt n)$. Then
+	\begin{align*}
+		\bar f(x) &= C \sum_{k \geq 0} \tilde r^{-k} \left( \sum_{|\alpha| = k} \frac{|\alpha|!}{\alpha!} x^\alpha \right) \\
+			  &= C \sum_{\alpha \geq 0} \frac{\tilde r^{-|\alpha|} |\alpha|!}{\alpha!} x^\alpha.
+	\end{align*}
+	We can check that $\alpha! \leq |\alpha|!$, so $f \ll \bar f$.
+
+	Another majorant we can consider is
+	\begin{align*}
+		\bar f(x) &= C \prod_{i = 1}^n \left( \frac{1}{1 - (x_i/\tilde r)} \right) = C \prod_{\alpha \geq 0} \left( \frac{x}{\tilde r} \right)^{\alpha} \\
+			  &= C \sum_{\alpha \geq 0} \tilde r^{-|\alpha|} x^\alpha.
+	\end{align*}
+\end{proofbox}
+
+\newpage
+
+\section{Cauchy-Kovalevskaya for ODEs}%
+\label{sec:ck_ode}
+
+\begin{theorem}
+	Let $a, b > 0$, and $u_0 \in \mathbb{R}$. Consider $F : (u_0 - b, u_0 + b) \to \mathbb{R}$ real analytic, and $u : (-a, a) \to (u_0 - b, u_0 + b)$ a $C^1$ solution to
+	\[
+	u'(t) = F(u(t)).
+	\]
+	Then $u$ is real analytic on $(-a, a)$.
+\end{theorem}
+
+% lecture 5
+
+\begin{proofbox}
+	We prove this in many ways. The first is by Picard iteration.
+
+	Define
+	\begin{align*}
+		u_{l+1}(z) &= u_0 + \int_0^z F(u_l(z)) \diff z, \\
+		u_0(z) &= u_0,
+	\end{align*}
+	where we exited $F$ to be homomorphic near the origin. We may prove that $(u_l)$ is Cauchy in the $\|\cdot\|_\infty$ norm, on a small enough neighbourhood of $t = 0$. Here we use the bound on $F'$.
+
+	Now $u_l \to u$ converges uniform locally. By induction, we can show $u_l$ is $\mathbb{C}$-differentiable, so by Morera's theorem, $u$ is $\mathbb{C}$-differentiable.
+
+	The second proof is by separation of variables. If $F(0) = 0$, then $u = 0$, and there is nothing to prove.
+
+	Otherwise, $F \neq 0$ near $0$, and we may write
+	\[
+	G(y) = \int_0^y \frac{\diff x}{F(x)},
+	\]
+	for $y \in (-b', b')$ for some $0 < b' < b$ small enough. Then we find that
+	\[
+	\frac{\diff}{\diff t} G(u(t)) = \frac{F(u(t))}{F(u(t))} = 1.
+	\]
+	For $t \in (-a', a')$, $G(u(0)) = G(0) = 0$, and $G(u(t)) = t$, and
+	\[
+	G'(0) = \frac{1}{F(0)} \neq 0.
+	\]
+	So there exists a smaller $(-a'', a'') \subseteq (-a', a')$ such that $G^{-1}$ is defined, and $F$ is real analytic. Then since $G$ is real analytic, $G^{-1}$ is as well, so
+	\[
+	u(t) = G^{-1}(t)
+	\]
+	is real analytic on $(-a'', a'')$.
+
+	The third proof is by embedding the equation in a larger continuum of equations. For $z \in \mathbb{C}$, consider
+	\begin{align*}
+		u'_z(t) &= z F(u_z(t)), \\
+		u_1(0) &= 0,
+	\end{align*}
+	where the original equation is $z = 1$.
+
+	For $|z| < 2$, and $|t| < \eps$ small enough, Picard-Lindel\"of gives a solution uniformly in $|z| < 2$ by having Lipschitz constant on $zF$ uniformly in $|z| < 1$.
+
+	Defining
+	\[
+	\partial z = \left( \frac{\partial x - i \partial y}{2} \right), \qquad \partial \bar z = \left( \frac{\partial x + i \partial y}{2}\right),
+	\]
+	then a function $f$ is complex differentiable if and only if
+	\[
+	\partial \bar z(f) = 0,
+	\]
+	Taking our function to be $u_z'$, we find
+	 \[
+		 \partial t \partial \bar z [u_z(t)] = z F'(u_z(t)) \partial \bar z[u_z(t)].
+	\]
+	We can integrate this to find
+	\[
+		\partial \bar z[u_z(t)] = \exp \left[ \int_0^t z F'(u_z(s)) \diff s \right] \partial \bar z[u_z(0)],
+	\]
+	where the last term is 0, hence the entire thing is 0. So, for $|t|$ small enough and $|z| < 2$, $z \mapsto u_z(t)$ is $\mathbb{C}$-differentiable. Hence, we can write
+	\[
+	u_1(t) = \sum_{n = 0}^\infty \frac{1^n}{n!} \frac{\partial^n}{\partial z^n} [u_z(t)] \biggr|_{z = 0}.
+	\]
+	For $|z| < 2$ real,
+	\[
+		\frac{\partial^n}{\partial z^n} [u(zt)] = t^n u^{(n)}(0),
+	\]
+	where the latter is real differentiable. This implies convergence and equality,
+	\[
+	u(t) = u_1(t) = \sum_{n = 0}^{\infty} \frac{t^n}{n!} u^{(n)}(0).
+	\]
+
+	Another proof is by majorant. If $u, F$ are smooth with
+	\[
+	u'(t) = F(u(t)),
+	\]
+	then we will induct on $u \in C^k((-a, a))$, $k \geq 1$. Then note $F \circ u \in C^k(\cdot)$, so $u' \in C^k$, hence $u \in C^{k+1}$. For example,
+	\begin{align*}
+		u^{(1)}(t) &= F^{(0)}(u(t)), \\
+		u^{(2)}(t) &= F^{(1)}(u(t)) \times u^{(1)}(t) = F^{(1)}(u(t)) \times F^{(0)}(u(t)), \\
+		u^{(3)}(t) &= F^{(2)}(u(t)) \times F^{(0)}(u(t))^2 + F^{(1)}(u(t))^2 F^{(0)}(u(t)),
+	\end{align*}
+	and we can go on. By induction, we can show $u^{(k)}(t)$ is a polynomial in $F^{(0)}(u(t)), F^{(1)}(u(t)), \ldots, F^{(k-1)}(u(t))$, with non-negative integer coefficients, so write
+	\[
+	u^{(k)}(t) = p_k(F^{(0)}(u(t)), F^{(1)}(u(t)), \ldots, F^{(k)}(u(t))).
+	\]
+	For example,
+	\begin{align*}
+		p_1(x_1) &= x_1, \\
+		p_2(x_1, x_2) &= x_1 x_2, \\
+		p_3(x_1, x_2, x_3) &= x_1^2 x_3 + x_1x_2^2.
+	\end{align*}
+	These polynomials are universal; they do not depend on $F$. If $G \gg F$, then $|G^{(k)}(0)| > |F^{(k)}(0)|$ for all $k$, and so
+	\begin{align*}
+		p_k(F^{(0)}(0), \ldots, F^{(k-1)}(0)) &\leq p_k(|F^{(0)}(0)|, \ldots, |F^{(k-1)}(0)|) \\
+						      &\leq p_k(G^{(0)}(0), \ldots, G^{(k-1)}(0)).
+	\end{align*}
+	Assume that we have $G \gg F$, and that $v$ is a solution to
+	\begin{align*}
+		v'(t) &= G(v(t)), \\
+		v(0) &= 0,
+	\end{align*}
+	and $v$ is real analytic near $0$. Then,
+	\[
+	v^{(k)}(0) = p_k(G^{(0)}(0), \ldots, G^{(k-1)}(0)),
+	\]
+	so that $v^{(k)}(0) > |u^{(0)}(0)|$, for all $k \geq 0$. Since $v$ is real analytic,
+	\[
+	v(t) = \sum_{k \geq 0} v^{(k)}(0) \frac{t^k}{k!},
+	\]
+	which is absolutely convergent near $0$. Define
+	\[
+	\tilde u(t) = \sum_{k \geq 0} p_k(F^{(0)}(0), \ldots, F^{(k-1)}(0)) \frac{t^k}{k!},
+	\]
+	ons the same disc of convergence. This $\tilde u$ is real analytic near $0$, and since $\tilde u(t)$ and $F(\tilde u(t))$ are real analytic and all derivatives agree at $t = 0$, they are equal near $t = 0$.
+
+	Now all we need to do is construct $G$ and $v$. This is possible since
+	\[
+	|F^{(k)}(0)| \leq C k! r^{-k},
+	\]
+	for $k \geq 0$ and some $C, r > 0$. So we can define
+	\[
+	G(x) = \frac{Cr}{r - x},
+	\]
+	for $|x| < r$. Then the solution to
+	\begin{align*}
+		v'(t) &= G(v(t)), \\
+		v(0) &= 0
+	\end{align*}
+	is
+	\[
+		v(t) = r - r \sqrt{1 - \frac{2 C t}{r}}.
+	\]
+	This is real analytic for $|t| < r/2C$.
+\end{proofbox}
+
+% lecture 6
+
+\newpage
+
+\printindex
+
+\end{document}

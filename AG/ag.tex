@@ -1,0 +1,618 @@
+\documentclass[12pt]{article}
+
+\usepackage{ishn}
+
+\makeindex[intoc]
+
+\begin{document}
+
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+	\begin{center}
+		\vspace*{1em}
+		\Huge
+		\textbf{III Algebraic Geometry}
+
+		\vspace{1em}
+		\large
+		Ishan Nath, Michaelmas 2024
+
+		\vspace{1.5em}
+
+		\Large
+
+		Based on Lectures by Prof. Mark Gross
+
+		\vspace{1em}
+
+		\large
+		\today
+	\end{center}
+	
+\end{titlepage}
+\hypersetup{pageanchor=true}
+
+\tableofcontents
+
+\newpage
+
+% lecture 1
+
+\setcounter{section}{-1}
+
+\section{Introduction}%
+\label{sec:intro}
+
+Introductory reading by Hassett and Reid.
+
+More commutative algebra by Atiyah and Macdonald, and Matsumura.
+
+Standard AG texts by Hartshorne, G\"ortz-Wedhorn, and Ravi Vakil.
+
+\subsection{Recap}%
+\label{sub:recap}
+
+In undergraduate, we fix an algebraically closed field $K$, and define affine $n$-space $\mathbb{A}^n = K^n$, and for an ideal $I \subseteq K[x_1, \ldots, x_n]$ we define
+\[
+	Z(I) = \{(a_1, \ldots, a_n) \in \mathbb{A}^n \mid f(a_1, \ldots, a_n) = 0 \text{ for all } f \in I \} \subseteq \mathbb{A}^n.
+\]
+We can define a topology on $\mathbb{A}^n$ by taking the closed sets to be the sets of the form $Z(I)$.
+
+This turns out to be no good. We will instead introduce schemes. Natural questions are; why schemes, and why not varieties? Well,
+\begin{itemize}
+	\item With varieties, we always work with algebraically closed fields, to relate the algebra with the geometry. If $K = \mathbb{R}$, and $I = (x^2 + y^2 + 1) \subseteq K[x, y]$, then $Z(I) = \emptyset$, losing information about $I$.
+	\item We may be interested in Diophantine equations, where the natural space is $\mathbb{Z}$.
+	\item Even if $K$ is algebraically closed, we lose information passing from $I$ to $Z(I)$. For example if $I = (x^2)$, $Z = \{0\}$, then $I(Z(I)) = (x)$.
+
+		But it is natural to consider ideals like $(x^2)$, for example considering $(y-x^2, y - \alpha) \subseteq \mathbb{C}[x, y]$. This produces two points for $\alpha \neq 0$, but only one point if $\alpha = 0$, but with some multiplicity.
+\end{itemize}
+
+\subsection{Categorical Philosophy}%
+\label{sub:cat_phil}
+
+Let $\mathbf{Set}$ be the category of sets. $\mathbf{Set}$ is the category with objects being all sets with morphisms between objects being maps of sets. If $X, Y$ are sets, we write $\mathrm{Hom}(X, Y)$ for the set of maps between $X$ and $Y$.
+
+Note that there is a bijection $\mathrm{Hom}(\{\ast\}, X) \to X$ given by $(f : \{\ast\} \to X) \mapsto f(\ast)$.
+
+We can use this philosophy to understand points on affine algebraic varieties. Nota $\mathbb{A}^0$ is a point. If $X$ is an affine variety, then the points of $X$ should be in one-to-one correspondence with $\mathrm{Hom}(\mathbb{A}^0, X)$.
+
+Recall morphisms of affine varieties. Denote $A(X)$ by $K[x_1, \ldots, x_n]/I(X)$, where $I(X) = \{f \in K[x_1, \ldots, x_n] \mid f|_X = 0\}$. $A(X)$ is the \emph{coordinate ring} of $X$, a $K$-algebra.
+
+We showed that if $X, Y$ are affine varieties, then
+\[
+\mathrm{Hom}(X, Y) = \mathrm{Hom}(A(Y), A(X)).
+\]
+So,
+\[
+	\mathrm{Hom}(\mathbb{A}^0, X) = \mathrm{Hom}(K[x_1, \ldots, x_n]/I(X), K).
+\]
+Note giving a $K$-algebra homomorphism $K[x_1, \ldots, x_n]/I(X) \to K$ can be done by specifying the images of $x_1$, say $x_1 \mapsto a_1$, such that, for any $f \in I(X)$, $f(a_1, \ldots, a_n) = 0$. So there is a one-to-one correspondence between such $K$-algebra homomorphisms, and points of $X$.
+
+If $K$ is algebraically closed, the maximal ideals of $K[x_1, \ldots, x_n]$ are precisely ideals of the form $(x_1-a_1, \ldots, x_n-a_n)$ by Hilbert's Nullstellensatz. Similarly, for $A(X)$, the maximal ideals are $(x_1-a_1, \ldots, x_n-a_n)$ mod $I(X)$, with $(a_1, \ldots, a_n) \in X$.
+
+Thus there is a bijection between points on $X$, and the maximal ideals of $A(X)$. This gives three objects, $X$, the homomorphisms and the maximal ideals, which are all bijective.
+
+Now suppose $K$ is not algebraically closed. Consider the $K$-algebra homomorphisms $A(X) \to L$, where $L$ is an extension of $K$. If $x_i \mapsto a_i$, then $f(a_1, \ldots, a_n) = 0$ for all $f \in I(X)$. Thus,
+\[
+	\mathrm{Hom}_K(A(X), L) = \{(a_1, \ldots, a_n) \in \mathbb{A}^n \mid f(a_1, \ldots, a_n) = 0 \text{ for all } f \in I(X)\}.
+\]
+
+%lecture 2
+
+These correspond to $L$-valued points.
+
+We could also work over $\mathbb{Z}$. Take an ideal $I \subseteq \mathbb{Z}[x_1, \ldots, x_n]$, and $A = \mathbb{Z}[x_1, \ldots, x_n]/I$.
+
+Then ring homomorphisms $A \to \mathbb{Z}$ are in one-to-one correspondence with points $(a_1, \ldots, a_n) \in \mathbb{Z}^n$ such that $f(a_1, \ldots, a_n) = 0$ for all $f \in I$.
+
+Moreover maps $A \to \mathbb{F}_p$ give solutions mod $p$, and $A \to \mathbb{Q}$ give rational solutions.
+
+\subsection{What we want}%
+\label{sub:www}
+
+Given a ring $A$, we want to define a gadget
+\[
+X = \Spec A,
+\]
+and an $R$-valued point of $X$ is a ring-homomorphism $A \to R$. We write the set of $R$-valued points as
+\[
+X(R) = \Hom(A, R).
+\]
+Morphisms $\Spec B \to \Spec A$ should be the same as ring homomorphisms $A \to B$. In category theory,
+
+\begin{definition}
+	The category of affine schemes it the \emph{opposite category} of rings.
+\end{definition}
+
+\textbf{Reminder:} In this course, all of our rings are unital, are commutative, and ring homomorphism $\phi : A \to B$ satisfy $\phi(1) = 1$.
+
+\begin{definition}
+	A \emph{scheme}\index{scheme} is a geometric object which is locally an affine scheme.
+\end{definition}
+
+Currently this is a nonsensical definition, which we will be trying to make sense of. The motivating example is the manifold, which locally looks like an open subset of $\mathbb{R}^n$.
+
+\subsection{Introductory Definitions}%
+\label{sub:id}
+
+\begin{definition}\index{spectrum}
+	Let $A$ be a ring. Then,
+	\[
+		\Spec A = \{p \subseteq A \mid p \text{ is a prime ideal}\}.
+	\]
+\end{definition}
+
+In general, if we have an $L$-valued point of $X = Z(I) \subseteq \mathbb{A}^n$, we get a ring homomorphism $\phi : A(X) \to L$, which has image an integral subdomain of $L$, and so $\Ker \phi$ is prime.
+
+\begin{definition}
+	For $I \subseteq A$ an ideal, define
+	\[
+		V(I) = \{p \in \Spec A \mid p \supseteq I\}.
+	\]
+\end{definition}
+Again recall $p$ is no longer a point, but a prime ideal.
+
+\begin{proposition}
+	The sets $V(I)$ form the closed sets of a topology on $\Spec A$, the \emph{Zariski topology}\index{Zariski topology}.
+\end{proposition}
+
+\begin{proofbox}
+	Need to check a handful of things.
+	\begin{itemize}
+		\item $V(A) = \emptyset$, so $\emptyset$ is closed.
+		\item $V(0) = \Spec A$, so $\Spec A$ is closed.
+		\item If $\{I_j\}_{j \in J}$ is a collection of ideals, then note
+			\[
+			\bigcap_{j \in J} V(I_j)= V \left( \sum_{j \in J} I_j \right).
+			\]
+		\item We show that $V(I_1) \cup V(I_2) = V(I_1 \cap I_2)$. Indeed, if $p \supseteq I_1$ or $p \supseteq I_2$, then $p \supseteq I_1 \cap I_2$.
+
+			In the other direction, then $p \supseteq I_1 \cap I_2$, then $p \supseteq I_1$ or $p \supseteq I_2$. This was proven in Part II. Or see Atiyah + Macdonald.
+
+			This is easy: if $I_1, I_2 \not \subseteq p$, then there exists $i_1, i_2 \in I_1, I_2$ respectively that are not in $p$. But now $i_1 i_2 \in I_1 \cap I_2 \subseteq p$, so $i_1 i_2 \in p$.
+
+			However $p$ is prime, so either $i_1 \in p$ or $i_2 \in p$, contradiction.
+	\end{itemize}
+\end{proofbox}
+
+\begin{exbox}
+	Consider $A = K[x_1, \ldots, x_n]$ with $K$ algebraically closed. For $I \subseteq A$, the maximal ideals of $A$ corresponding to points of $Z(I)$ are precisely the maximal ideals containing $I$.
+\end{exbox}
+
+\newpage
+
+\section{Sheaves}%
+\label{sec:sheaf}
+
+Fix a topological space $X$.
+
+\begin{definition}
+	A \emph{presheaf}\index{presheaf} $\mathcal{F}$ on $X$ consists of data, such that:
+	\begin{itemize}
+			\item For every open set $U \subseteq X$, we have an abelian group $\mathcal{F}(U)$ (or more generally any element of a category).
+			\item Whenever $V \subseteq U \subseteq X$ is open, there is a \emph{restriction}\index{restriction} homomorphism
+				\[
+				\rho_{UV} : \mathcal{F}(U) \to \mathcal{F}(V),
+				\]
+				such that $\rho_{UU} = \id_{\mathcal{F}(U)}$, and if $W \subseteq V \subseteq U \subseteq X$, then
+				\[
+				\rho_{UW} = \rho_{VW} \circ \rho_{UV}.
+				\]
+	\end{itemize}	
+\end{definition}
+
+\begin{remark}
+	This is precisely a contravariant functor from the category of open sets to the category of abelian groups. As mentioned, we may replace the category of abelian groups with any category.
+\end{remark}
+
+\begin{definition}
+	If $\mathcal{F}, \mathcal{G}$ are presheaves on $X$, then a \emph{morphism}\index{morphism of presheaves} $f : \mathcal{F} \to \mathcal{G}$ is data for each $U \subseteq X$, a group homomorphism $f_U : \mathcal{F}(U) \to \mathcal{G}(U)$ such that whenever $V \subseteq U$, we have a commutative diagram
+	\[
+	\begin{tikzcd}
+		\mathcal{F}(U) \arrow[r, "f_U"] \arrow[d, "\rho_{UV}^{\mathcal{F}}"] & \mathcal{G}(U) \arrow[d, "\rho_{UV}^{\mathcal{G}}"] \\
+		\mathcal{F}(V) \arrow[r, "f_V"] & \mathcal{G}(V)
+	\end{tikzcd}
+	\]
+\end{definition}
+
+\begin{definition}
+	A presheaf $\mathcal{F}$ on $X$ is a \emph{sheaf}\index{sheaf} if it satisfies:
+	\begin{enumerate}
+		\item If $U \subseteq X$ is covered by $\{U_i\}$, and $s \in \mathcal{F}(U)$ such that $s|_{U_i} = \rho_{UU_i}(s) = 0$ for all $i$, then $s = 0$.
+		\item If $U, \{U_i\}$ are as in the above, and $s_i \in \mathcal{F}(U_i)$ for each $i$ such that
+			\[
+			s_i |_{U_i \cap U_j} = s_j|_{U_i \cap U_j}
+			\]
+			for all $i, j$, then there exists $s \in \mathcal{F}(U)$ such that
+			\[
+			s|_{U_i} = s_i
+			\]
+			for all $i$.
+	\end{enumerate}
+	
+\end{definition}
+
+% lecture 3
+
+\begin{remark}
+	\begin{itemize}
+		\item[]
+		\item If $\mathcal{F}$ is a sheaf, then $\mathcal{F}(\emptyset) = 0$, since the empty cover is a cover of $\emptyset$.
+		\item The two conditions together can be stated by saying
+			\[
+			\begin{tikzcd}
+				0 \arrow[r, ""] & \mathcal{F}(U) \arrow[r, "\alpha"] & \bigoplus_{i \in I} \mathcal{F}(U_i) \arrow[r, "\beta_1", shift left = 2pt] \arrow[r, "\beta_2"', shift right = 2pt] & \bigoplus_{i, j \in I} \mathcal{F}(U_i \cap U_j)
+			\end{tikzcd}
+			\]
+			is \emph{exact} for all $U \subseteq X$ open, and open covers $\{U_i\}$ of $U$. Here,
+			\begin{align*}
+				\alpha(s) &= (s|_{U_i})_{i \in I}, \\
+				\beta_1((s_i)_{i \in I}) &= (s_i|_{U_i \cap U_j} )_{i, j \in I}, \\
+				\beta_2((s_i)_{i \in I}) &= (s_j|_{U_i \cap U_j})_{i, j \in I}.
+			\end{align*}
+			In category theory, $\alpha$ is the \emph{equalizer}\index{equalizer} of $\beta_1, \beta_2$.
+
+			Exactness means that:
+			\begin{itemize}
+				\item $\alpha$ is injective (property 1).
+				\item $\beta_1 \circ \alpha = \beta_2 \circ \alpha$.
+				\item For any $(s_i) \in \bigoplus \mathcal{F}(U_i)$ with $\beta_1((s_i)) = \beta_2((s_i))$, there exists an  $s \in \mathcal{F}(U)$ with $\alpha(s) = (s_i)$ (property 2).
+			\end{itemize}
+			
+
+			This definition works even if $\mathcal{F}(U)$ is a set, rather than an abelian group.
+	\end{itemize}
+\end{remark}
+
+\begin{exbox}
+	\begin{enumerate}
+		\item For $X$ any topological space,
+			\[
+				\mathcal{F}(U) = \{ \text{continuous functions } f : U \to \mathbb{R}\}
+			\]
+			is a sheaf.
+		\item If $X = \mathbb{C}$ with the Euclidean topology, then
+			\[
+				\mathcal{F}(U) = \{f : U \to \mathbb{C} \mid f \text{ bounded and holomorphic}\}
+			\]
+			is not a sheaf, as gluing fails because it does not preserve boundedness.
+		\item Let $G$ be a group, and set $\mathcal{F}(U) = G$ for all $U \subseteq X$. Then $\rho_{UV} = \id$. This is a presheaf known as the \emph{constant presheaf}.
+
+			If we give $G$ the discrete topology, set
+			\[
+				\mathcal{F}(U) = \{f : U \to G \text{ continuous}\}.
+			\]
+			These are all locally constant functions, and is obviously a sheaf, called the \emph{constant sheaf}.
+		\item If $X$ is a variety, denote by $\mathcal{O}_X(U)$ the set of regular functions $f : U \to K$. Then $\mathcal{O}_X(U)$ is a sheaf, called the \emph{structure sheaf}\index{structure sheaf} of $X$.
+	\end{enumerate}
+\end{exbox}
+
+\begin{definition}
+	Let $\mathcal{F}$ be a presheaf in $X$, $p \in X$. Then the \emph{stalk}\index{stalk} of $\mathcal{F}$ at $p$ is
+	\[
+		\mathcal{F}_p = \{(U, s) \mid U \text{ an open neighbourhood of } p, s \in F(U)\}/ \cong,
+	\]
+	where $(U, s) \cong (V, t)$ if there exists $W \subseteq U \cap V$, a neighbourhood of $p$, such that
+	\[
+	s|_W = t|_W.
+	\]
+	The equivalence class of $(U, s) \in \mathcal{F}_p$ is written as $s_p$, and is the \emph{germ}\index{germ} of $s$ at $p$.
+\end{definition}
+
+So the stalk is the set of germs. The stalks should be thought of as the local information of the sheaf around $p$. Note that given a morphism $f : \mathcal{F} \to \mathcal{G}$, we obtain $f_p : \mathcal{F}_p \to \mathcal{G}_p$ by
+\[
+f_p(U, s) = (U, f_U(s)).
+\]
+
+\begin{proposition}
+	Let $f : \mathcal{F} \to \mathcal{G}$ be a morphism of sheaves (i.e. a morphism of presheaves). Then $f$ is an isomorphism if and only if $f_p$ is an isomorphism, for all $p \in X$.
+\end{proposition}
+
+\begin{proofbox}
+	The forward direction is obvious.
+
+	For the other direction, assume $f_p$ is an isomorphism for all $p$. We will show that $f(U) : \mathcal{F}(U) \to \mathcal{G}(U)$ is an isomorphism for all $U$, and then we can define the inverse to $f$ by $(f^{-1})_U = (f_U)^{-1}$.
+
+	First we show $f_U$ is injective. Suppose $s \in \mathcal{F}(U)$ is such that $f_U(s) = 0$. Then for all $p \in U$,
+	\[
+	f_p((U, s)) =  (U, f_U(s)) = (U, 0) = 0 \in \mathcal{G}_p.
+	\]
+	Thus $s_p = 0$ since $f_p$ is injective. So there is an open neighbourhood $V_p \subseteq U$ of $p$ such that $s|_{V_p} = 0$.
+
+	But $\{V_p\}$ covers $U$, so by property 1, $s = 0$.
+
+	Now we show $f_U$ is surjective. Let $t \in \mathcal{G}(U)$. Then for all $p \in U$, there exists $s_p \in \mathcal{F}_p$ such that $f_p(s_p) = t_p$, i.e. there exists an open neighbourhood $V_p$ at $p \in U$ and a germ $(V_p, \tilde s_p)$ representing $s_p$ such that
+	\[
+		(V_p, f_{V_p}(\tilde s_p)) \cong (U, t) = t_p.
+	\]
+	Shrinking $V_p$ if necessary, we can assume that $f_{V_p}(\tilde s_p) = t|_{V_p}$. Now on $V_p \cap V_q$,
+	\[
+	f_{V_p \cap V_q} (\tilde s_p |_{V_p \cap V_q} - \tilde s_q|_{V_p \cap V_q} ) = t|_{V_p \cap V_q} - t|_{V_p \cap V_q} = 0.
+	\]
+	Since we have shown that $f_{V_p \cap V_q}$ is injective, we get
+	\[
+	\tilde s_p |_{V_p \cap V_q} = \tilde s_q|_{V_p \cap V_q},
+	\]
+	and so by property 2, there exists $s \in \mathcal{F}(U)$ such that
+	\[
+	s|_{V_p} = \tilde s_p,
+	\]
+	for all $p$. Now,
+	\[
+	f_U(s)|_{V_p} = f_{V_p}(s|_{V_p}) = f_{V_p} (\tilde s_p) = t|_{V_p}.
+	\]
+	Therefore, $f_U(s) - t = 0$, so by property 1, $f_U(s) = t$. Hence $f_U$ is surjective.
+\end{proofbox}
+
+\begin{remark}
+	If $f_p : \mathcal{F}_p \to \mathcal{G}_p$ is injective for all $p$, then $f_U : \mathcal{F}(U) \to \mathcal{G}(U)$ is still injective.
+
+	But instead if $f_p : \mathcal{F}_p \to \mathcal{G}_p$ is surjective for all $p$, it need not be the case that $f_U : \mathcal{F}(U) \to \mathcal{G(U)}$ is surjective.
+\end{remark}
+
+\subsection{Sheafification}%
+\label{sub:sfc}
+
+Given a presheaf $\mathcal{F}$, there exists a sheaf $\mathcal{F}^+$ and a morphism $\theta : \mathcal{F} \to \mathcal{F}^+$, satisfying the following universal property:
+
+For any sheaf $\mathcal{G}$ and morphism $\phi : \mathcal{F} \to \mathcal{G}$, there exists a unique morphism $\phi^+ : \mathcal{F}^+ \to \mathcal{G}$ such that
+\[
+\begin{tikzcd}
+	\mathcal{F} \arrow[r, "\theta"] \arrow[dr, "\phi"] & \mathcal{F}^+ \arrow[d, "\phi^+"] \\
+							   & \mathcal{G}
+\end{tikzcd}
+\]
+commutes.
+
+The pair $(\mathcal{F}^+, \theta)$ is unique up to isomorphism. Also $\mathcal{F}_p \cong \mathcal{F}_p^+$ via $\theta_p$, for all $p \in X$.
+
+% lecture 4
+
+The sheafification is defined as follows: define $\mathcal{F}^+(U)$ to be the functions
+\[
+s : U \to \bigsqcup_{p \in U} \mathcal{F}_p
+\]
+such that:
+\begin{enumerate}[(i)]
+	\item $s(p) \in \mathcal{F}_p$ for all $p$,
+	\item for each $p \in U$, there exists an open neighbourhood $p \in V \subseteq U$ and an element $t \in \mathcal{F}(V)$ such that
+		\[
+			(V, t) = s(q),
+		\]
+		for all $q \in V$.
+\end{enumerate}
+We define $\theta : \mathcal{F} \to \mathcal{F}^+$ given by
+\[
+	\mathcal{F}(U) \ni s \mapsto (p \mapsto (U, s) \in \mathcal{F}_p).
+\]
+We can check that this satisfies the universal property stated previously.
+
+\begin{definition}
+	Let $f : \mathcal{F} \to \mathcal{G}$ be a morphism of presheaves. We define:
+	\begin{enumerate}
+		\item The \emph{presheaf kernel}\index{presheaf kernel} of $f$ as
+			\[
+				(\ker f)(U) = \ker (f_U : \mathcal{F}(U) \to \mathcal{G}(U)).
+			\]
+		\item The \emph{presheaf cokernel}\index{presheaf cokernel} of $f$ as
+			\[
+				(\coker f)(U) = \coker f_U.
+			\]
+		\item The \emph{presheaf image}\index{presheaf image} as
+			\[
+				(\img f)(U) = \img f_U.
+			\]
+	\end{enumerate}
+\end{definition}
+
+\begin{remark}
+	If $f : \mathcal{F}\to \mathcal{G}$ is a morphism of sheaves, then $\ker f$ is a sheaf. First note that any sub-presheaf of $\mathcal{F}$ satisfies property 1.
+
+	To check property 2, given $s_i \in (\ker f)(U_i) \subseteq \mathcal{F}(U_i)$ for $\{U_i\}$ an open cover of $U$, suppose $s_i |_{U_i \cap U_j} = s_j |_{U_i \cap U_j}$. Then the $s_i$'s glue to given an $s \in \mathcal{F}(U)$. Now,
+	\[
+	f_U(s) |_{U_i} = f_{U_i} (s_i) = 0,
+	\]
+	so by property 1, $f_U(s) = 0$. Hence $s \in (\ker f)(U)$.
+\end{remark}
+
+\begin{exbox}
+	Take $X = \mathbb{P}^1$, or the Riemann sphere, and let $P, Q \in X$ be distinct points.
+
+	Let $\mathcal{G}$ be the sheaf of regular functions on $X$ (or the holomorphic functions on $X$), and let $\mathcal{F}$ be the sheaf of regular functions on $X$ vanishing at $P$ and $Q$ (or the holomorphic functions vanishing at $P$, $Q$).
+
+	Note $\mathcal{F}(U) = \mathcal{G}(U)$ if $U \cap \{P, Q\} = \emptyset$. By Liouville's theorem, $\mathcal{G}(X) = K$, and $\mathcal{F}(X) = 0$.
+
+	Let $U = X \setminus \{P\}$, $V = X \setminus \{Q\}$, and $f : \mathcal{F} \to \mathcal{G}$ the obvious inclusion. Note $\mathcal{G}(U) = K[x]$ by affine geometry, $\mathcal{F}(U) = (x)$. So,
+	\begin{align*}
+		(\coker f)(X) &= \mathcal{G}(X) / \mathcal{F}(X) = K, \\
+		(\coker f)(U \cap V) &= \mathcal{G}(U \cap V) / \mathcal{F}(U \cap V) = 0, \\
+		(\coker f)(U) &= \mathcal{G} / \mathcal{F}(U)=  K[x]/(x) = K, \\
+		(\coker f)(V) &= K.
+	\end{align*}
+	Choose $s_U \in (\coker f)(U)$, $s_V \in (\coker f)(V)$. But now $s_U|_{U \cap V} = s_V|_{U \cap V} = 0$, and this would imply that if $\coker f$ were a sheaf, that
+	\[
+	K \oplus K \subseteq (\coker f)(X).
+	\]
+\end{exbox}
+
+\begin{remark}
+	This shows that $\coker f$ need not be a sheaf. The same is true of $\img f$.
+\end{remark}
+
+\begin{definition}
+	Let $f : \mathcal{F} \to \mathcal{G}$ be a morphism of sheaves. The \emph{sheaf kernel}\index{sheaf kernel} of $f$ is $\ker f$, the presheaf kernel.
+
+	The \emph{sheaf cokernel}\index{sheaf cokernel} of $f$ is the sheafification of the presheaf cokernel. We still write this as $\coker f$.
+\end{definition}
+
+Note that to show $\coker f$ is a presheaf, we need to use the third isomorphism theorem.
+
+We can also show that the sheaf image of $f$ is a subsheaf of $\mathcal{G}$ (prove this).
+
+We say that $f$ is \emph{injective} if $\ker f = 0$, and $f$ is \emph{surjective} if $\img f = \mathcal{G}$. We say that a sequence
+\[
+\begin{tikzcd}
+	\cdots \arrow[r, ""] & \mathcal{F}^{i-1} \arrow[r, "f^i"] & \mathcal{F}^i \arrow[r, "f^{i+1}"] & \mathcal{F}^{i+1} \arrow[r, ""] & \cdots
+\end{tikzcd}
+\]
+is \emph{exact}\index{exact} if $\ker f^{i+1} = \img f^{i}$.
+
+If $\mathcal{F}' \subseteq \mathcal{F}$ is a subsheaf, we write $\mathcal{F} / \mathcal{F}'$ for the sheaf associated to the presheaf
+\[
+U \mapsto \mathcal{F}(U) / \mathcal{F}'(U).
+\]
+This is $\coker (\iota : \mathcal{F}' \injto \mathcal{F})$, where $\iota$ is the inclusion.
+
+\begin{lemma}
+	Let $f : \mathcal{F} \to \mathcal{G}$ be a morphism of sheaves. Then,
+	\begin{align*}
+		(\ker f)_p &= \ker (f_p : \mathcal{F}_p \to \mathcal{G}_p), \\
+		(\img f)_p &= \img f_p.
+	\end{align*}
+\end{lemma}
+
+\begin{proofbox}
+	We have a map $(\ker f)_p \to \ker f_p$, defined as follows: if $(U, s) \in (\ker f)_p$, then $s \in (\ker f)(U)$, and $(U, s) \in \mathcal{F}_p$. So,
+	\[
+	f_p (U, s) = (U, f(s)) = (U, 0) = 0 \in \mathcal{G}_p,
+	\]
+	thus $(U, s) \in \ker f_p$.
+
+	It is easy to see this map is injective: if $(U, s) = 0$ in $\mathcal{F}_p$, then in some neighbourhood $s|_V = 0$. So $(U, s) \sim (V, s|_V) = 0$ in $(\ker f)_p$.
+
+	We now tackle surjectivity. If $(U, s) \in \ker f_p$, then $0 = f_p(U, s) = (U, f_U(s))$ in $\mathcal{G}_p$, so in some neighbourhood $V$, $f_U(s)|_V = 0$.
+
+	Thus $f_V(s|_V) = 0$, so $(U, s) \sim (V, s|_V)$, and $s|_V \in (\ker f)(V)$. Thus $(V, s|_V) \in (\ker f)_p$, which maps to $(U, s) \in \ker f_p$.
+
+	We now prove the appropriate theorem for images. Let $\img' f$ denote the presheaf image. Recall that if $\mathcal{F}$ is a presheaf, then $\mathcal{F}_p \cong \mathcal{F}_p^+$, via $\theta_p$. So it is enough to show there is an isomorphism
+	\[
+		(\img' f)_p \cong \img f_p.
+	\]
+% lecture 5
+
+	First, define
+	\begin{align*}
+		(\img' f)_p &\to \img f_p \\
+		(U, s) &\mapsto (U, s),
+	\end{align*}
+	with $s \in f_U(t)$ for some $t \in \mathcal{F}(U)$, which lives in $\img f_p$ since
+	\[
+	f_p(U, t) = (U, f_U(t)) = (U, s)
+	\]
+	First we show injectivity. If $(U, s) = 0$ in $\mathcal{G}_p$, then there exists $p \in V \subseteq U$ such that $s|_V = 0$. But then,
+	\[
+		(U, s) \sim (V, s|_V) = (V, 0) = 0
+	\]
+	in $(\img ' f)_p$.
+
+	To show surjectivity, we know that for $(U, s) \in \img f_p$, that there is $(V, t) \in \mathcal{F}_p$ with $f_p(V, t) \sim (U, s)$. We can replace $U$ with the smaller open set $V$, so can assume that $U = V$, and then
+	\[
+	f_p(U, t) = (U, f_U(t)) \sim (U, s)
+	\]
+	in $\mathcal{G}_p$. Shrinking $U$ further, we can assume $f_U(t) = s$, and hence
+	\[
+		(U, s) = (U, f_U(t)) \in (\img ' f)_p.
+	\]
+\end{proofbox}
+
+\begin{proposition}
+	$f : \mathcal{F} \to \mathcal{G}$ is injective if and only if $f_p : \mathcal{F}_p \to \mathcal{G}_p$ is injective for all $p$.
+
+	$f : \mathcal{F} \to \mathcal{G}$ is surjective if and only if $f_p : \mathcal{F}_p \to \mathcal{G}_p$ is surjective for all $p$.
+\end{proposition}
+
+\begin{proofbox}
+	We have
+	\begin{align*}
+		f_p \text{ is injective} &\iff \ker f_p = 0 & &\forall p\\
+					 &\iff (\ker f)_p = 0 & &\forall p \text{ by the lemma} \\
+					 &\iff \ker f = 0.
+	\end{align*}
+	Note this uses the easy fact that if $\mathcal{F}$ is a sheaf, and $\mathcal{F}_p = 0$ for all $p$, then $\mathcal{F} = 0$. Also,
+	\begin{align*}
+		f_p \text{ is surjective} &\iff \img f_p = \mathcal{G}_p & &\forall p \\
+					  &\iff (\img f)_p = \mathcal{G}_p & & \forall p \text{ by the lemma} \\
+					  &\iff \img f = \mathcal{G}.
+	\end{align*}
+	Hence if $\mathcal{F} \subseteq \mathcal{G}$ are sheaves with $\mathcal{F}_p = \mathcal{G}_p$, we can check that $\mathcal{F} = \mathcal{G}$.
+\end{proofbox}
+
+\subsection{Passing between Spaces}%
+\label{sub:pbs}
+
+Let $f : X \to Y$ be a continuous map of topological spaces.
+
+Let $\mathcal{F}$ be a sheaf in $X$. Define a sheaf $f_\ast \mathcal{F}$ on $Y$ by
+\[
+	(f_\ast \mathcal{F})(U) = \mathcal{F}(f^{-1}(U)).
+\]
+This is the \emph{push-forward}\index{push-forward} of $\mathcal{F}$. This can be checked to be a sheaf.
+
+If $\mathcal{G}$ is a sheaf on $Y$, define the \emph{pull-back}\index{pull-back} sheaf $f^{-1} \mathcal{G}$ to be the sheaf associated to the presheaf
+\[
+	U \mapsto \{(V, s) \mid V \subseteq f(U), V \text{ open}, s \in \mathcal{G}(V)\} / \sim,
+\]
+where $(V, s) \sim (V', s')$ if there exists $W$ with $f(U) \subseteq W \subseteq V \cap V'$ with $s|_W = s'|_W$.
+
+\begin{exbox}
+	If $f : \{p\} \injto Y$, then $f^{-1} \mathcal{G} = \mathcal{G}_p$, by identifying a sheaf $\mathcal{F}$ on a topological space $X$ with the group $\mathcal{F}(X)$.
+
+	More generally, if $\iota : Z \injto X$ is an inclusion, we often write $\mathcal{F}|_Z$ for the sheaf $\iota^{-1} \mathcal{F}$.
+
+	If $\iota : U \injto X$ is an open subset, then in fact $i^{-1} \mathcal{F} = \mathcal{F}|_Z$ is the sheaf $V \mapsto \mathcal{F}(V)$, for $V \subseteq U$ open.
+\end{exbox}
+
+If $s \in \mathcal{F}(U)$, we call $s$ a \emph{section}\index{section} of $\mathcal{F}$ over $U$. We often also write
+\[
+\mathcal{F}(U) = \Gamma(U, \mathcal{F}),
+\]
+thinking of $\Gamma(U, \cdot)$ as a covariant functor
+\[
+\Gamma(U, \cdot) : \mathbf{Presheaves}_X \to \mathbf{Ab}.
+\]
+
+\newpage
+
+\section{Affine Schemes}%
+\label{sec:as}
+
+Let $A$ be a ring. $\Spec A$ is a topological space analogous to the sheaf of regular functions.
+
+Let $S \subseteq A$ be a multiplicatively closed subset, i.e. $1 \in S$ and whenever $a, b \in S$, we have $a \cdot b \in S$. We define
+\[
+	S^{-1}A = \{(a, s) \mid a \in A, s \in S\} / \sim,
+\]
+where $(a, s) \sim (a', s')$ if there exists $s'' \in S$ such that
+\[
+s''(as' - a's) = 0.
+\]
+This is called the \emph{localization}\index{localization} of $A$ at $S$.
+
+\begin{exbox}
+	\begin{enumerate}
+		\item Say $S = \{1, f, f^2, \ldots\}$ for some $f \in A$. Then
+			\[
+				A_f = S^{-1} A = \left\{ \frac{a}{f^n} \mid a \in A, n \geq 0\right\} / \sim.
+			\]
+		\item Take $P \subseteq A$ a prime ideal, and $S = A \setminus P$. Then we write $A_P = S^{-1} A$.
+	\end{enumerate}
+\end{exbox}
+
+Our goal is to now construct the sheaf
+\[
+\mathcal{O} = \mathcal{O}_{\Spec A}.
+\]
+For $U \subseteq \Spec A$ open, we write
+\begin{align*}
+	\mathcal{O}(U) = \biggl\{ s : U \to \bigsqcup_{p \in U} A_p &\mid s(p) \in A_p \wedge \text{for each } p \in U, \exists \, q \in V \subseteq U \\
+								    & \text{and }a, f \in A \text{ such that } \forall q \in V, f \not \in q \wedge s(q) = \frac{a}{f} \in A_q \biggr\}
+\end{align*}
+Apparently this is clearly a sheaf.
+
+% lecture 6
+
+\newpage
+
+\printindex
+
+\end{document}
