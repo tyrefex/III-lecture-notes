@@ -794,8 +794,369 @@ X^T_n = X_{ n \wedge T}.
 	(iv) and (v) are on the example sheet.
 \end{proofbox}
 
-
 % lecture 6
+
+\begin{remark}
+	\begin{enumerate}
+		\item[]
+		\item The theorem are holds with supermartingales or submartingales in place of a martingale, with the corresponding inequalities.
+		\item The assumptions in the theorem are important. Let $(\xi_k)$ be iid, with $\mathbb{P}(\xi_1 = 1) = \mathbb{P}(\xi_1 = -1) = \frac{1}{2}$, and
+			\[
+			X_n = \sum_{j = 1}^n \xi_j.
+			\]
+			Let $T = \inf\{n \geq 0 \mid X_n = 1\}$. Then $T$ is a stopping time with $\mathbb{P}(T < \infty)$. From the optional stopping theorem,
+			\[
+			\mathbb{E}[X_{T \wedge n}] = \mathbb{E}[X_0] = 0
+			\]
+			for all $n$, but
+			\[
+			\mathbb{E}[X_T] = 1 \neq 0.
+			\]
+			We cannot apply (v) above as $\mathbb{E}[T] = \infty$.
+	\end{enumerate}
+\end{remark}
+
+\begin{proposition}
+	Suppose that $X$ is a non-negative supermartingale. Then for any almost-surely finite stopping time $T$, we have that
+	\[
+	\mathbb{E}[X_T] \leq \mathbb{E}[X_0].
+	\]
+\end{proposition}
+
+\begin{proofbox}
+	From the optional stopping theorem, $\mathbb{E}[X_{T \wedge n}] \leq \mathbb{E}[X_0]$ for all $n$.
+
+	Apply Fatou's lemma, since $X \geq 0$.
+\end{proofbox}
+
+\begin{exbox}[Gambler's Ruin]
+	Let $(\xi_k)$ e iid with $\mathbb{P}(\xi_1 = 1) = \mathbb{P}(\xi_1 = -1) = \frac{1}{2}$, and
+	\[
+	X_n = \sum_{i = 1}^n \xi_i.
+	\]
+	Let $T_c = \inf\{n \geq 0 \mid X_n = c\}$, and $T = T_{-a} \wedge T_b$ for $a, b > 0$.
+
+	$X$ clearly has bounded increments. We now claim that $\mathbb{E}[T] < \infty$. This is as $T$ is at most the first time that $a + b$ consecutive $\xi_i = 1$.
+
+	Hence the probability of $a+b$ consecutive $+1$'s is $2^{-(a+b)}$, hence
+	\[
+	T \leq (a + b) \cdot \Geom(2^{-(a+b)}).
+	\]
+	Hence,
+	\[
+	\mathbb{E}[T] \leq (a + b) 2^{a + b} < \infty.
+	\]
+	Hence from the optional stopping theorem,
+	\[
+	\mathbb{E}[X_T] = \mathbb{E}[X_0] = 0.
+	\]
+	Also,
+	\[
+	\mathbb{E}[X_T] = (-a) \mathbb{P}(T_{-a} < T_b) + b \mathbb{P}(T_b < T_{-a}) = 0.
+	\]
+	We also know that $\mathbb{P}(T_{-a} < T_b) + \mathbb{P}(T_b < T_{-a}) = 1$. Solving this system of equations,
+	\[
+	\mathbb{P}(T_{-a} < T_b) = \frac{b}{a + b}.
+	\]
+	
+	We can also compute $\mathbb{E}[T]$ using the fact that $X_n^2 - n$ is also a martingale.
+\end{exbox}
+
+\subsection{Martingale Convergence Theorem}%
+\label{sub:martct}
+
+The goal of this section is to prove the following:
+
+\begin{theorem}[Martingale Convergence Theorem]
+	Let $X = (X_n)$ be a supermartingale with
+	\[
+	\sup_n \mathbb{E}[|X_n|] < \infty.
+	\]
+	Then $X_n \to X_\infty$ almost surely as $n \to \infty$, where $X_\infty \in \mathcal{L}^1(\mathcal{F}_\infty)$, where
+	\[
+	\mathcal{F}_\infty = \sigma(\mathcal{F}_n \mid n \geq 0).
+	\]
+\end{theorem}
+
+\begin{corollary}
+	Let $X$ be a non-negative supermartingale. Then $X$ converges almost surely to a finite limit.
+\end{corollary}
+
+Let's show this corollary first.
+
+\begin{proofbox}
+	Since $X_n \geq 0$,
+	\[
+	\mathbb{E}[|X_n|] = \mathbb{E}[X_n] \leq \mathbb{E}[X_0] < \infty.
+	\]
+	So $X$ is $\mathcal{L}^1$ bounded, and we can apply martingale convergence theorem.
+\end{proofbox}
+
+Quick detour for some real analysis. Suppose that $x = (x_n)$ is a sequence in $\mathbb{R}$. Fix $a < b$, set $T_0(x) = 0$, and
+\begin{align*}
+	S_{k+1}(x) &= \inf \{n \geq T_k(x) \mid x_n \leq a\}, \\
+	T_{k+1}(x) &= \inf \{n \geq S_{k+1}(x) \mid x_n \geq b\}, \\
+	N_n([a, b], x) &= \sup\{k \geq 0 \mid T_k(x) \leq n\},
+\end{align*}
+the number of up-crossings of $[a, b]$ by $x$ before time $n$. Then,
+\[
+	N_n([a, b], x) \uparrow N([a, b], x) = \sup\{k \geq 0 \mid T_k < \infty\},
+\]
+which is the number of up-crossings of $[a, b]$.
+
+\begin{lemma}
+	A sequence in $x = (x_n)$ in $\mathbb{R}$ converges in $\mathbb{R} = \mathbb{R} \cup \{-\infty\} \cup \{\infty\}$ if and only if $N([a, b], x) < \infty$ for all $a < b$, $a, b \in \mathbb{Q}$.
+\end{lemma}
+
+\begin{proofbox}
+	We do the easy direction. Suppose that $x$ converges. Then if there exists $a < b$ with $N([a, b], x) = \infty$, then
+	\[
+	\liminf_n x_n \leq a, \qquad \limsup_n x_n \geq b,
+	\]
+	a contradiction to convergence.
+
+	Conversely, if $x$ does not converge, then there exists $a < b$ with $\liminf x_n < a < b < \limsup x_n$, and $a, b \in \mathbb{Q}$. Then
+	\[
+		N([a, b], x) = \infty.
+	\]
+\end{proofbox}
+
+One key inequality for the proof is the following:
+
+\begin{theorem}[Doob's Upcrossing Inequality]
+	Let $X$ be a supermartingale, and let $a < b$. Then for all $n$,
+	\[
+		(b - a) \mathbb{E}[N_n([a, b], X)] \leq \mathbb{E}[(X_n - a)^{-}].
+	\]
+\end{theorem}
+
+\begin{proofbox}
+	Let $N = N_n([a, b], X)$. Then,
+	\[
+		X_{T_k} - X_{S_k} \geq b - a.
+	\]
+	By definition of $N$,
+	\[
+	\sum_{k=1}^n (X_{T_{k}{\wedge n}} - X_{S_{k}{ \wedge n}}) = \sum_{k = 1}^N(X_{T_k} - X_{S_k}) + (X_n - X_{S_{N+1}}) \mathbbm{1}_{(S_{N+1} \leq n)}. \tag{$\ast\ast$ }
+	\]
+	Now $(T_k), (S_k)$ are stopping times, and $S_k \wedge n \leq T_{k} \wedge n$ are bounded stopping times, so from OST,
+	\[
+	\mathbb{E}[X_{S_{k}\wedge n}] \geq \mathbb{E}[X_{T_{k} {\wedge n}}]
+	\]
+	for all $k$. Taking the expectation of $(\ast\ast)$,
+	\begin{align*}
+		0 &\geq \mathbb{E}\left[ \sum_{k = 1}^n (X_{T_k \wedge n} - X_{S_k \wedge n}) \right] \\
+		&\geq (b - a)\mathbb{E}[N] - \mathbb{E}[(X_n - a)^{-}],
+	\end{align*}
+	since from the first equality,
+	\[
+		(X_n - X_{S_{N+1}})\mathbbm{1}_{S_{N+1} \leq n} \geq - (X_n - a)^{-}.
+	\]
+\end{proofbox}
+
+Now we prove martingale convergence theorem.
+
+\begin{proofbox}
+	Let $a < b$, $a, b \in \mathbb{Q}$. Doob's upcrossing inequality means
+	\[
+		\mathbb{E}[N_n([a, b], X)]] \leq \frac{1}{b-a} \mathbb{E}[(X_n-a)^{-}].
+	\]
+	From monotone convergence theorem,
+	\[
+		\mathbb{E}[N([a, b],X)] \leq \frac{1}{b - a} \sup_n \mathbb{E}[(|X_n| + a)] < \infty.
+	\]
+	In particular, $N([a, b], X) < \infty$ almost surely, for all $a < b$, $a, b\in \mathbb{Q}$. Hence
+	\[
+		\Omega_0 = \bigcap_{\substack{a < b\\a, b \in \mathbb{Q}}} \{N([a, b], X) < \infty\} \implies \mathbb{P}(\Omega_0) = 1,
+	\]
+	since it is an intersection of countably many almost-sure events. Set
+	\[
+	X_\infty =
+	\begin{cases}
+		\lim_n X_n & \text{on } \Omega_0,\\
+		0 &\text{on } \Omega\setminus \Omega_0.
+	\end{cases}
+	\]
+	Then $X_\infty$ is $\mathcal{F}_\infty$-measurable, and
+	\begin{align*}
+		\mathbb{E}[|X_\infty|] &= \mathbb{E}[\liminf_n |X_n|] \\
+				       &\leq \liminf_n \mathbb{E}[|X_n|] < \infty,
+	\end{align*}
+	by Fatou's, so $X_\infty \in \mathcal{L}^1$.
+\end{proofbox}
+
+% lecture 7
+
+From conditional Jensen's on $|x|$, we for a martingale $X$,
+\[
+	\mathbb{E}[|X_n| | \mathcal{F}_m] \geq |X_m| \qquad \text{a.s.}
+\]
+So if $X$ is a martingale, $|X|$ is a non-negative submartingale.
+
+\begin{theorem}[Doob's Maximal Inequality]
+	Let $X$ be a non-negative submartingale, and $X_n^\ast = \sup_{0\leq k \leq n} X_k$. Then for all $\lambda \geq 0$,
+	\[
+		\lambda \mathbb{P}[X_n\ast \geq \lambda] \leq \mathbb{E}[X_n \mathbbm{1}(X_n^\ast \geq \lambda)] \leq \mathbb{E}[X_n].
+	\]
+\end{theorem}
+
+This can be thought of as a better version of Markov's inequality, that applies to submartingales.
+
+\begin{proofbox}
+	Let $T = \inf\{k \geq 0 \mid X_k \geq \lambda\}$. Then $T \wedge n$ is a bounded stopping time. By optional stopping theorem,
+	\begin{align*}
+		\mathbb{E}[X_n] &\geq \mathbb{E}[X_{T \wedge n}] = \mathbb{E}[X_T \mathbbm{1}_{T \leq n}] + \mathbb{E}[X_n \mathbbm{1}_{T > n}] \\
+				&\geq \lambda \mathbb{P}(T \leq n) + \mathbb{E}[X_n \mathbbm{1}_{T > n}].
+	\end{align*}
+	Note that $\{T \leq n\} = \{X_n^\ast \geq \lambda\}$, so rearranging,
+	\[
+	\lambda \mathbb{P}(X_n^\ast \geq \lambda) \leq \mathbb{E}[X_n \mathbbm{1}_{T \leq n}] \leq \mathbb{E}[X_n].
+	\]
+\end{proofbox}
+
+\begin{theorem}[Doob's $\mathcal{L}^p$ Inequality]
+	Let $X$ be a non-negative submartingale. For $p > 1$ and with $X_n^\ast = \sup_{0 \leq k \leq n} X^k$, we have that
+	\[
+	\|X_n^\ast\|_p \leq \frac{p}{p-1} \|X_n\|_p.
+	\]
+\end{theorem}
+
+\begin{proofbox}
+	Fix $k < \infty$. We have that
+	\begin{align*}
+		\mathbb{E}[(X_n^\ast \wedge k)^p] &= \mathbb{E}\left[ \int_0^k p x^{p-1} \mathbbm{1}(X_n^\ast \geq x) \diff x \right] & & \\
+						  &= \int_0^k px^{p-1} \mathbb{P}(X_n^\ast \geq x) \diff x & &\text{(Fubini's)} \\
+						  &\leq \int_0^k p x^{p-2} \mathbb{E}[X_n \mathbbm{1}(X_n^\ast > x)] \diff x & & \\
+						  &= \frac{p}{p-1} \mathbb{E}[X_n(X_n^\ast \wedge k)^{p-1}] & &\text{(Fubini's)} \\
+						  &\leq \frac{p}{p-1} \|X_n\|_p \|X_n^\ast \wedge k\|_p^{p-1} & &\text{(H\"older's)}.
+	\end{align*}
+	This gives us
+	\[
+	\|X_n^\ast \wedge k\|_p \leq \frac{p}{p-1} \|X_n\|_p.
+	\]
+	Applying MCT, we can send $k \to \infty$, and get
+	\[
+	\|X_n^\ast\|_ \leq \frac{p}{p-1}\|X_n\|_p.
+	\]
+\end{proofbox}
+
+\subsection{\texorpdfstring{$\mathcal{L}^p$}{Lp} Convergence of Martingales}%
+\label{sub:lp_conv_mg}
+
+\begin{theorem}
+	Let $X$ be a martingale, and $p > 1$. The following are equivalent:
+	\begin{enumerate}[\normalfont(i)]
+		\item $X$ is $\mathcal{L}^p$ bounded:
+			\[
+			\sup_{n \geq 0} \|X_n\|_p < \infty.
+			\]
+		\item $X$ converges almost-surely and in $\mathcal{L}^p$ to $X_\infty$.
+		\item There exists $Z \in \mathcal{L}^p$ such that $X_n = \mathbb{E}[Z|\mathcal{F}_n]$ almost-surely, for all $n$.
+	\end{enumerate}
+\end{theorem}
+
+\begin{proofbox}
+	
+
+	(i) $\implies$ (ii): Suppose that $X$ is $\mathcal{L}^p$ bounded. Then from Jensen, $X$ is also $\mathcal{L}^1$. So martingale convergence theorem gives $X_n \to X_\infty$ almost-surely. Then,
+	\[
+	\mathbb{E}[|X_\infty|^p] = \mathbb{E}[\liminf_n |X_n|^p] \leq \liminf_n \mathbb{E}[|X_n|^p] \leq \sup_n \|X_n\|_p^p < \infty.
+	\]
+	Doob's $\mathcal{L}^p$ inequality gives
+	\[
+	\|X_n^\ast\|_p \leq \frac{p}{p-1} \|X_n\|_p,
+	\]
+	where $X_n^\ast = \sup_{0 \leq k \leq n} |X_n|$. From monotone convergence theorem,
+	\[
+	\|X_\infty^\ast\|_p \leq \frac{p}{p-1} \sup_n \|X_n\|_p < \infty.
+	\]
+	Thus, $|X_n - X_\infty| \leq 2 X_\infty^\ast \in \mathcal{L}^p$. So from dominated convergence theorem, $X_n \to X_\infty$ in $\mathcal{L}^p$.
+
+	(ii) $\implies$ (iii): Let $Z = X_\infty$, where $Z \in \mathcal{L}^p$. We will show that $X_n = \mathbb{E}[Z|\mathcal{F}_n]$. Now, for any $m \geq n$,
+	\begin{align*}
+		\|X_n - \mathbb{E}[X_\infty|\mathcal{F}_n]\|_p &= \|\mathbb{E}[X_m - X_\infty | \mathcal{F}_n]\|_p \\
+							       &\leq \|X_m - X_\infty\|_p \to 0,
+	\end{align*}
+	hence $X_n = \mathbb{E}[X_\infty | \mathcal{F}_n]$ almost-surel.
+
+
+	(iii) $\implies$ (i): Let $X_n = \mathbb{E}[Z | \mathcal{F}_n]$, then
+	\[
+	\|X_n\|_p \leq \|Z\|_p < \infty,
+	\]
+	so these are $\mathcal{L}^p$-bounded.
+\end{proofbox}
+
+\begin{definition}
+	A martingale of the form $\mathbb{E}[Z | \mathcal{F}_n]$ for $Z \in \mathcal{L}^p$ is \emph{closed}\index{closed martingale} in $\mathcal{L}^p$.
+\end{definition}
+
+\begin{corollary}
+	If $Z \in \mathcal{L}^p$, $X_n = \mathbb{E}[Z | \mathcal{F}_n]$, then if we let $\mathcal{F}_\infty = \sigma(\mathcal{F}_n, n \geq 0)$, we have that
+	\[
+		X_n \to X_\infty = \mathbb{E}[Z | \mathcal{F}_\infty] \qquad \text{\normalfont{a.s}}
+	\]
+	as $n \to \infty$, and also in $\mathcal{L}^p$.
+\end{corollary}
+
+\begin{proofbox}
+	From the theorem, $X_n \to X_\infty$ almost-surely, and in $\mathcal{L}^p$. What we want to show is that $X_\infty = \mathbb{E}[Z | \mathcal{F}_\infty]$.
+
+	Clearly $X_\infty$ is $\mathcal{F}_\infty$-measurable. Fix $A \in \bigcup \mathcal{F}_n$, then $A \in \mathcal{F}_N$ for some $N$. For $n \geq N$,
+	\[
+	\mathbb{E}[Z \mathbbm{1}_{A}] = \mathbb{E}[X_n \mathbbm{1}_{A}] \to \mathbb{E}[X_\infty \mathbbm{1}_{A}],
+	\]
+	hence
+	\[
+	\mathbb{E}[X_\infty \mathbbm{1}_{A}] = \mathbb{E}[\mathbb{E}[Z | \mathcal{F}_\infty] \mathbbm{1}_{A}].
+	\]
+	Note $\bigcup \mathcal{F}_n$ is a $\pi$-system which generates $\mathcal{F}_\infty$, so this holds for all $A$. Hence this gives $\mathbb{E}[Z|\mathcal{F}_\infty] = X_\infty$.
+\end{proofbox}
+
+\subsection{Uniformly Integrable Martingales}%
+\label{sub:ui_mg}
+
+\begin{definition}
+	A collection of random variables $(X_i)_{i \in I}$ is called \emph{uniformly integrable}\index{uniformly integrable} (UI) if
+	\[
+		\sup_{i \in I} \mathbb{E}[|X_i| \mathbbm{1}(|X_i| > \alpha)] \to 0
+	\]
+	as $\alpha \to \infty$. Alternatively, $(X_i)$ is UI if $(X_i)$ is $\mathcal{L}^1$-bounded, and for all $\eps > 0$, there exists $\delta > 0$ such that if $\mathbb{P}(A) < \delta$, then
+	\[
+	\sup_{i \in I} \mathbb{E}[|X_i| \mathbbm{1}_{A}] < \eps.
+	\]
+\end{definition}
+
+If $(X_i)$ is $\mathcal{L}^p$ bounded for some $p > 1$, then the family is UI. If $(X_i)$ is UI, then the family is $\mathcal{L}^1$-bounded. However the converse is not true.
+
+\begin{theorem}
+	Let $X \in \mathcal{L}^1$. Then
+	\[
+		\{\mathbb{E}[X | \mathcal{G}] \mid G \subseteq \mathcal{F} \text{ a $\sigma$-algebra}\}
+	\]
+	is UI.
+\end{theorem}
+
+\begin{proofbox}
+	Since $X \in \mathcal{L}^1$, for all $\eps > 0$ there exists $\delta > 0$ such that
+	\[
+	\mathbb{P}(A) < \delta \implies \mathbb{E}[|X| \mathbbm{1}_{A}] < \eps.
+	\]
+	Choose $\lambda > 0$ such that $\mathbb{E}[|X|] \leq \lambda \cdot \delta$. Suppose that $\mathcal{G} \subseteq \mathcal{F}$, and let $Y = \mathbb{E}[X|\mathcal{G}]$. We know that $\mathbb{E}[|Y|] < \mathbb{E}[|X|] < \infty$.
+
+	Applying Markov's inequality,
+	\[
+	\mathbb{P}(|Y| \geq \lambda) \leq \frac{\mathbb{E}[|X|]}{\lambda} \leq \delta,
+	\]
+	so
+	\[
+	\mathbb{E}[|Y| \mathbbm{1}(|Y| > \lambda)] \leq \mathbb{E}[|X| \mathbbm{1}(|Y| \geq \lambda)] \leq \eps,
+	\]
+	by conditional Markov's.
+\end{proofbox}
+
+
+% lecture 8
 
 \newpage
 

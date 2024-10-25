@@ -673,6 +673,240 @@ Real analyticity is local, meaning if $f$ is real analytic near $\tilde x$, then
 
 % lecture 6
 
+\begin{theorem}
+	Let $a, b > 0$, $u_0 \in \mathbb{R}^m$ for $m \geq 1$, and $F : B(u_0, b) \to \mathbb{R}^m$ real analytic.
+
+	Let $u : (-a, a) \to B(u_0, b)$ be a $C^1$ solution to $u'(t) = F(u(t))$, with $u(0) = u_0$.
+
+	Then $u$ is real analytic in $(-a, a)$.
+\end{theorem}
+
+\begin{proofbox}
+	We can extend proofs 1 and 3 from the scalar case.
+
+	To extend the method of majorants, for $C, r > 0$ well chosen, set
+	\[
+	G(x_1, \ldots, x_m) = (G_1(x_1, \ldots, x_m), \ldots, G_m(x_1, \ldots, x_m)),
+	\]
+	\[
+	G_1 = \cdots = G_m = \frac{Cr}{r - x_1 - \cdots - x_m}.
+	\]
+	We can reduce the proof to proving that the solution $v$ to the auxiliary problem
+	\begin{align*}
+		v'(t) &= G(v(t)),\\
+		v(0) &= 0.
+	\end{align*}
+	By symmetry, we solve in the form
+	\[
+	v_1(t) = \cdots = v_m(t) = w'(t),
+	\]
+	\[
+	w'(t) = \frac{Cr}{r - m w(t)}.
+	\]
+	This solves as
+	\[
+		w(t) = \frac{r}{m} - \frac{r}{m} \sqrt{1 - \frac{2 C m t}{r}}.
+	\]
+\end{proofbox}
+
+\newpage
+
+\section{Cauchy-Kovalevskaya for PDEs}%
+\label{sec:ck_pde}
+
+The CK theorem only extends for $k$-th order quasilinear PDEs, so for $x \in U \subseteq \mathbb{R}^m$,
+\[
+\sum_{|\alpha| = k} a_\alpha (D^{k-1} u, \ldots, Du, u, x) \partial^\alpha_x u + a_0 (D^{k-1} u, \ldots, Du, u, x) = 0.
+\]
+\begin{remark}
+	For $k = 1$, we have an alternative proof by the method of characteristics.
+\end{remark}
+
+\subsection{Cauchy Problem and Statement}%
+\label{sub:cp_s}
+
+\begin{definition}
+	Give $U \subseteq \mathbb{R}^n$ open and non-empty, we say that $\Sigma \subseteq U$ is a \emph{smooth}\index{smooth} (resp. real analytic) hypersurface near $x \in \Sigma \subseteq U$ if there exists $\eps > 0$ and $\Phi : B(x, \eps) \to V \in \mathbb{R}^n$ so that
+	\[
+		\phi\left( \Sigma \cap B(x, \eps) \right) = \{y_n = 0\} \cap V,
+	\]
+	and $\phi(x) = 0$, with:
+	\begin{itemize}
+		\item $\phi$ bijective,
+		\item $\phi, \phi^{-1}$ smooth (resp. real analytic).
+	\end{itemize}
+	$\Sigma \subseteq U$ is a smooth (resp. real analytic) hypersurface if it satisfies the previous definition around any $x \in \Sigma$.
+\end{definition}
+
+\begin{remark}
+	$\Sigma$ a submanifold is smooth (resp. real analytic) which is embedded with normal unit vector???
+\end{remark}
+
+The definition implies there admits a normal unit vector $N : \Sigma \to \mathbb{R}^n$, which is perpendicular to the tangent space, and smooth (resp. real analytic).
+
+Given a parametrization $\Psi : B_{\mathbb{R}^{n-1}}(0, \eps) \times (-\eps, \eps) \to U_x$, define
+\[
+\Psi(y) = \tilde \Psi(\tilde y) + y_n N(\psi(\tilde y)),
+\]
+where $\tilde y = (y_1, \ldots, y_{n-1})$, and $\tilde \Psi : B_{\mathbb{R}^{n-1}}(0, \eps) \to \Sigma \cap U_x$. Then for this parametrization,
+\[
+\partial y_n \Psi(y) = N(\tilde \Psi(\tilde \psi)).
+\]
+The tangent space to $\Sigma$ is given, for $x' \in U_x$, by
+\[
+x' + \spn \{ \partial y_1 \tilde \Psi(y'), \ldots, \partial_{n-1} \tilde \Psi(y')),
+\]
+where $\Psi(y, 0) = \tilde \Psi(y', 0) = x'$. So,
+\begin{itemize}
+	\item $\phi = \Psi^{-1}$ defines a chart.
+	\item Take $\varphi = \phi_n$, the last component. Then note $\Sigma \cap U_x = \{\varphi = 0\} \cap U_x$. Moreover,
+		\[
+		\nabla_x \varphi = N
+		\]
+		on $U_x \cap \Sigma$.
+\end{itemize}
+
+Indeed, $\varphi$ satisfies $\varphi(\psi(y)) = y_n$. Differentiating this condition,
+\[
+\nabla \varphi \cdot \partial y_i \psi = 0,
+\]
+so $\nabla \varphi$ is collinear to $N$. Differentiating along $y_n$,
+\[
+\nabla_x \varphi \cdot N = 1,
+\]
+so $\phi_x \varphi = N$ on $\Sigma$.
+
+\begin{definition}
+	Given $\Sigma \subseteq U \subseteq \mathbb{R}^n$ a smooth or real analytic hypersurface, and $j \geq 1$, we define the $j$'th \emph{normal derivative}\index{normal derivative} of the function $u$ to $\Sigma$ as
+	\[
+	\partial^j_N u = \sum_{|\alpha| = j} (\partial^\alpha_x u(x)) N(x)^\alpha = \sum_{\alpha_1 + \cdots + \alpha_n = j} \left( \frac{\partial^j u(x)}{\partial x_1^{\alpha_1} \cdots \partial x_n^{\alpha_n}}\right) N_1(x)^{\alpha_1} \cdots N_n(x) \alpha^{n}.
+	\]
+\end{definition}
+
+\begin{remark}
+	For $j = 1$,
+	\[
+	\partial^1_N u = (\nabla u \cdot N).
+	\]
+\end{remark}
+
+\begin{definition}
+	Given $\Sigma \subseteq  \mathbb{R}^n$ as before, and $g_0, g_1, \ldots, g_{k-1} : \Sigma \to \mathbb{R}$ smooth (resp. real analytic), the \emph{Cauchy problem}\index{Cauchy problem} is finding solutions to
+	\[
+	\sum_{|\alpha| = k} a_\alpha (D^{k-1} u, \ldots, Du, u, x) \partial^\alpha_x u + a_0(D^{k-1}u, \ldots, Du, u, x) = 0,
+	\]
+	with $u(x) = g_0(x), \partial^1_N u = g_1(x), \ldots, \partial^{k-1}_N u = g_{k-1}$ on $\Sigma$.
+\end{definition}
+
+The natural question to ask is, if we are given the above Cauchy data on $\Sigma$, does this determine all derivatives locally on $\Sigma$?
+
+Let us start with the flat case: $U = \mathbb{R}^n$, and $\Sigma = \{x_n = 0\}$. Then $N(x) = e_n$ is constant, and
+\[
+\partial^j_N u(x) = \partial^j_{x_n} u(x),
+\]
+on $x = (x', 0) \in \Sigma$. The second condition gives
+\[
+\partial^{\alpha}_x u(x) = \partial^{\alpha'}_{x'} \partial^j_{x_n} u(x) = \partial^{\alpha'}_{x'} g_j(x),
+\]
+for $\alpha' \in \mathbb{N}^{n-1}$ and $j = 0, \ldots, k-1$. The first missing partial derivatives is $\partial^{k}_{x_n} u$ on $\Sigma$. But we can find this using the PDE: if
+\[
+A(x) = a_{(0, \ldots, 0, k)}(D^{k-1}u, \ldots, Du, u, x) \neq 0,
+\]
+then the first condition gives
+\[
+\partial^k_{x_n} u(x) = - \sum_{|\alpha| = k} \frac{a_\alpha(\cdots)}{A(x)} \partial^\alpha_x u - \frac{a_0(\cdots)}{A(x)}
+\]
+on $\Sigma$. We can continue; differentiating again,
+% lecture 7
+
+\[
+0 = \sum_{|\alpha| = k} a_\alpha(D^{k-1} u, \ldots, Du, u, x) \partial^\alpha_x \partial_{x_n} u(x) + \tilde a_0 (D^k u, D^{k-1} u, \ldots),
+\]
+where
+\[
+\tilde a_0 (\cdots) = \sum_{|\alpha| = k} \partial_{x_n} (a_\alpha(\cdots)) \partial^\alpha_x u + \partial_{x_u}(a_0(\cdots)).
+\]
+If $A(x) \neq 0$, then
+\[
+g_{k+1}(x) = \partial^{k+1}_{x_n} u = \sum_{|\alpha| = k} \frac{a_\alpha(\cdots)}{A(x)} \partial^\alpha_x \partial_{x_n} u - \frac{\tilde a_0(\cdots)}{A(x)}.
+\]
+This is a function of $g_0, \ldots, g_k$, so in turn a function of only $g_0, \ldots, g_{k-1}$. So for the flat case, we ar happy if $A(x)$ is non-zero. In general, we want
+\[
+A(x) = \sum_{|\alpha| = k} a_\alpha (D^{k-1} u, \ldots, Du, u, x) N(x)^\alpha \neq 0
+\]
+on $\Sigma$.
+
+If $u$ is a solution in the general case, then $v = v(y) = u(\psi(y))$ is a solution to
+\[
+0 = \sum_{|\alpha| = k} b_\alpha (D^{k-1} v(y), \ldots, D v(y), v(y), y) + b_0 (D^{k-1} v(y), \ldots, D v(y), v(y), y).
+\]
+This is a PDE of the same type, and the coefficients $b_\alpha$ depends on the coefficients $a_\alpha$. The boundary conditions on $v$ are
+\begin{align*}
+	\partial^j_{y_n} v(y) &= \partial^j_{y_n} [u(\psi(y))] = \sum_{|\alpha| = j} \partial^\alpha_{x} u(\psi(y))(\partial_{y_n} \psi)^\alpha \\
+			      &= \partial^j_N u,
+\end{align*}
+so we get that
+\[
+\partial^j_{y_n} v(\tilde y, 0) = g_j(something)
+\]
+The non-characteristic condition in the original variables means
+\[
+\nabla \phi_n = N,
+\]
+on $\Sigma$. This is
+\[
+\sum_{|\alpha| = k} a_\alpha(\cdots) \partial^\alpha_{x} u.
+\]
+Collecting all $\partial^k_{y_n} v$ terms, we find
+\[
+	\partial^\alpha_x u = \partial^\alpha_x(v \circ \phi) = (\partial^k_{y_n} v) (\nabla_x \phi) + \text{higher order terms}.
+\]
+He yaps on idk what he is saying.
+
+\begin{theorem}
+	Let $\Sigma \subseteq U \subseteq \mathbb{R}^n$ be a real analytic hyerpsurface, with a PDE and Cauchy data as before, where $a_\alpha, a_0$ and $g_j$ are real analytic.
+
+	Then for any $x \in \Sigma \subseteq U$, there is a neighbourhood around $x$ in which there exists a unique real analytic solution to the PDE with prescribed Cauchy data.
+\end{theorem}
+
+To prove this, the idea is to use the method of majorants, with universal polynomials and a non-charactericity condition.
+
+First we have a reduction step: without loss of generality, our base point is $x = 0$, and with $\phi$ and $\psi$ we reduce to $\Sigma = \{x_n = 0\}$. Then the boundary conditions are
+\[
+\partial^j_{x_n} u = g_j
+\]
+on $\Sigma$. By our condition,
+\[
+A(x) = a_{(0, \ldots, 0, k)} (\cdots) \neq 0,
+\]
+so we can divide by it, and reduce to $A = 1$. Moreover we can reduce to $g_0 = g_1 = \cdots = g_{k-1} = 0$ by subtracting to $u$ an appropriate real analytic function, for example
+\[
+G(y) = \sum_{j = 0}^{k-1} g_j(\tilde x) \frac{x_n^j}{j!},
+\]
+with
+\[
+\partial^j_{x_k}(u - G) = 0
+\]
+on $\{x_n = 0\}$.
+
+Finally, we reduce to a first-order equation for a system of equations, by changing our unknown $u$ into
+\[
+	(u, Du, D^2 u, \ldots, D^{k-1} u).
+\]
+This produces a much nicer PDE of the form
+\[
+\partial x_n u = \sum_{j = 1}^{k-1} b_j (u(x), \tilde x) \partial_{x_j} u + b_0 (u(x), \tilde x),
+\]
+where we avoid $x_n$ dependency by adding if necessary one more component $x_n$ to $u$. Our boundary conditions are $u = 0$ on $\Sigma = \{x_n = 0\}$, and also $b_j : \mathbb{R}^m \times \mathbb{R}^{n-1} \to \mathbb{R}^{m \times m}$ to something, $b_0 : \mathbb{R}^{m} \times \mathbb{R}^{n-1} \to \mathbb{R}^m$ are real analytic near zero.
+
+The second step is to prove there are universal polynomials with non-negative integer coefficients $p_{\alpha, i}$ such that
+\[
+\partial^\alpha_x u_i(0) = p_{\alpha, i} ((D^\beta b_{j})_{\ell_1, \ell_2}, (D^\beta b_0)_\ell)(0, 0),
+\]
+for $|\beta| \leq |\alpha| - 1$, $\ell$ appropriate. We prove this by induction on $\alpha_n$.
+
+% lecture 8
+
 \newpage
 
 \printindex

@@ -870,8 +870,367 @@ $\nu$ satisfies the two continuity conditions:
 	works. Then letting $N = \Omega \setminus P$, we can check this works as a partition.
 \end{proofbox}
 
-
 % lecture 6
+
+\begin{definition}
+	Fix a measure space $(\Omega, \mathcal{F}, \mu)$. A complex measure $\nu : \mathcal{F} \to \mathbb{C}$ is \emph{absolutely continuous}\index{absolute continuous} with respect to $\mu$, written $\nu \ll \mu$, if for all $A \in \mathcal{F}$,
+	\[
+	\mu(A) = 0 \implies \nu(A) = 0.
+	\]
+\end{definition}
+
+\begin{remark}
+	\begin{enumerate}
+		\item[]
+		\item If $\nu \ll \mu$, then $|\nu| \ll \mu$. It follows that if $\nu = \nu_1 - \nu_2 + i \nu_3 - i \nu_4$ is the Jordan decomposition of $\nu_1$, then 
+			\[
+			\nu \ll \mu \iff \nu_k \ll \mu
+			\]
+			for all $k$ (note that $\nu_1, \nu_2$ are non-zero on different subsets of $\mathcal{F}$).
+		\item If $\nu \ll \mu$, then for all $\eps > 0$, there exists $\delta > 0$ such that for any $A \in \mathcal{F}$,
+			\[
+			\mu(A) < \delta \implies |\nu(A)| < \eps.
+			\]
+	\end{enumerate}
+\end{remark}
+
+\begin{exbox}
+	If $f \in L_1(\mu)$, then
+	\[
+	\nu(A) = \int_A f \diff \mu,
+	\]
+	for $A \in \mathcal{F}$, defines a complex measure on $\mathcal{F}$ (by dominated convergence), and $\nu \ll \mu$.
+\end{exbox}
+
+\begin{definition}
+	A set $A \in \mathcal{F}$ is $\sigma$-finite with respect to $\mu$ if there exists $(A_n)$ in $\mathcal{F}$ such that
+	\[
+	A = \bigcup_{n \in \mathbb{N}} A_n, \qquad \mu(A_n) < \infty.
+	\]
+	We say that $\mu$ is $\sigma$-finite if $\Omega$ is a $\sigma$-finite set (so every $A \in \mathcal{F}$ is $\sigma$-finite).
+\end{definition}
+
+\begin{theorem}[Radon-Nikodym Theorem]
+	Let $(\Omega, \mathcal{F}, \mu)$ be a $\sigma$-finite measure and $\nu : \mathcal{F} \to \mathbb{C}$ be a complex measure such that $\nu \ll \mu$.
+
+	Then there exists a unique $f \in L_1(\mu)$ such that
+	\[
+	\nu(A) = \int_A f \diff \mu,
+	\]
+	for all $A \in \mathcal{F}$. Moreover $f$ takes values in $\mathbb{C}$ or $\mathbb{R}$ or $\mathbb{R}^+$ depending on whether $\nu$ is a complex/signed/positive measure.
+\end{theorem}
+
+\begin{proofbox}
+	This is a non-examinable sketch.
+
+	First we show uniqueness. This follows as if $f \in L_1(\mu)$ and $\int_A f \diff \mu = 0$, then $f = 0$ almost everywhere.
+
+	For existence, first assume $\nu$ is a finite positive measure, by taking the Jordan decomposition.
+
+	We can also assume $\mu$ is finite: for each partition $A_i$ we have function $f_i$, which we can glue together; this extends by monotone convergence, since we first assumed $\nu$ is finite and positive.
+
+	Now let
+	\[
+		\mathcal{H} = \left\{h : \Omega \to \mathbb{R}^+ \biggm| \int_A h \diff \mu \leq \nu(A) \text{ for all } A \in \mathcal{F}\right\}.
+	\]
+	Note $0 \in \mathcal{H}$, $h_1, h_2 \in \mathcal{H} \implies h_1  \vee H_2 \in \mathcal{H}$, and if $h_n \in \mathcal{H}$, then $h_n \uparrow h \implies h \in \mathcal{H}$. Let
+	\[
+		\mathcal{L} = \sup \left\{ \int_{\Omega} h \diff \mu \biggm| h \in \mathcal{H} \right\}.
+	\]
+	This sup is attained (by monotone convergence). Hence there exists $f \in \mathcal{H}$ which attains $\mathcal{L}$. We show that
+	\[
+	\int_A f \diff \mu = \nu(A),
+	\]
+	for all $A \in \mathcal{F}$. The idea is that if there exists $A$ with
+	\[
+	\int_A f \diff \mu < \nu(A),
+	\]
+	then $f + \delta \mathbbm{1}_{A}$ should be in $\mathcal{H}$ for some $\delta > 0$, contradicting the maximality. However this doesn't quite work as we may fail the condition for $B \subseteq A$.
+
+	For $n \in \mathbb{N}$, define
+	\[
+	\nu_n(A) = \nu(A) - \int_A f \diff \mu - \frac{1}{n} \mu(A) = \nu(A) - \int_A \left(f + \frac{1}{n} \right) \diff \mu,
+	\]
+	for all $A \in \mathcal{F}$. Now $\nu_n$ is a signed measure, so we get a Hahn decomposition
+	\[
+	\Omega = P_n \cup N_n.
+	\]
+	Then, $f + \frac{1}{n} \mathbbm{1}_{P_n} \in \mathcal{H}$, so $\mu(P_n) = 0$ to not contradict maximality.
+
+	Let $P = \bigcup P_n$. Then $\mu(P) = 0$, so $\nu(P) = 0$ by absolute continuity.
+
+	Set $N = \bigcap N_n$. Then,
+	\begin{align*}
+		\nu(A) &= \nu(A \cap N) = \nu_n(A \cap N) + \int_{A \cap N}  f \diff \mu + \frac{1}{n} \mu(A \cap N) \\
+		       &\leq \int_A f \diff \mu + \frac{1}{n} \mu(A \cap N).
+	\end{align*}
+	Then we let $n \to \infty$.
+\end{proofbox}
+
+\begin{remark}
+	\begin{enumerate}
+		\item[]
+		\item The proof shows that every complex measure $\nu : \mathcal{F} \to \mathbb{C}$ has a decomposition $\nu = \nu_1 + \nu_2$, where $\nu_1 \ll \mu$ and $\nu_2 \perp \mu$. This is the \emph{Lebesgue decomposition}\index{Lebesgue decomposition} of $\nu$.
+		\item The unique $f \in L_1(\mu)$ in the Radon-Nikodym theorem is the \emph{Radon-Nikodym derivative}\index{Radon-Nikodym derivative} of $\nu$ with respect to $\mu$, denoted by $\diff \nu/ \diff \mu$. For measurable $g$, then $g$ is $\nu$-integrable if and only if $g \cdot \diff \nu/ \diff \mu$ is $\mu$-integrable, and
+			\[
+			\int_{\Omega} g \diff \nu = \int_{\Omega} g \frac{\diff \nu}{\diff \mu} \diff \mu.
+			\]
+	\end{enumerate}
+\end{remark}
+
+\subsection{Duals of \texorpdfstring{$L_p$}{Lp}}%
+\label{sub:dlp}
+
+Fix a measure space $(\Omega, \mathcal{F}, \mu)$, and let $1 \leq p < \infty$. Let $q$ be the conjugate index of $p$, and for $g \in L_q = L_q(\mu)$, define $\phi_g$ on $L_p$ by
+\[
+\phi_g(f) = \int_{\Omega} fg \diff \mu.
+\]
+By H\"older's, $fg \in L_1$, and
+\[
+|\phi_g(f)| \leq \|f\|_p \|g\|_q.
+\]
+So $\phi_g \in L_p^\ast$, and $\|\phi_g\| \leq \|g\|_q$. So $\phi : L_q \to L_p^\ast$ exists, given by $g \mapsto \phi_g$. This is linear and bounded, with $\|\phi\| \leq 1$.
+
+\begin{theorem}
+	Let $(\Omega, \mathcal{F}, \mu)$, and $p, q, \phi$ be as above.
+	\begin{enumerate}[\normalfont(i)]
+		\item If $1 < p < \infty$, then $\phi$ is an isometric isomorphic, so $L_p^\ast \cong L_q$.
+		\item If $p = 1$ and $\mu$ is $\sigma$-finite, then $L_1^\ast \cong L_\infty$.
+	\end{enumerate}	
+\end{theorem}
+
+\begin{proofbox}
+	What remains is to check that $\phi$ is isometric and onto. Fix $g \in L_q$. We need to check that $\|\phi_g\| = \|g\|_q$.
+
+	Let $\lambda : \Omega \to \text{scalars}$ be measurable, with $|\lambda| = 1$ and $\lambda \cdot g = |g|$, i.e. let $\lambda = \mathrm{sign}(g)$.
+
+	For $1 < p < \infty$, let $f = \lambda |g|^{q-1}$. Then,
+	\[
+	\int_{\Omega} |f|^{p} \diff \mu = \int_{\Omega} |g|^{pq - p} \diff \mu = \int_{\Omega} |g|^q \diff \mu < \infty,
+	\]
+	so $f \in L_p$, and
+	\[
+	\|f\|_p = \|g\|_q^{q/p} = \|g\|_q^{q-1}.
+	\]
+	Then notice
+	\[
+	\phi_g(f) = \int \lambda g |g|^{q-1} \diff \mu = \|g\|_q^{q} = \|f\|_p \cdot \|g\|_q,
+	\]
+	so $\|\phi_g\| \geq \|g\|_q$.
+
+	For $p = 1$, let $s < \|g\|_\infty$. Then $\mu(\{|g| > s\}) > 0$. Since $\mathcal{F}$ is $\sigma$-finite, there exists measurable $A \subseteq \{|g| > s\}$, such that $0 < \mu(A) < \infty$. Then $f = \lambda \mathbbm{1}_{A} \in L_1$, and $\|f\|_1 = \mu(A)$. Now,
+	\[
+	\|\phi_g\| \cdot \mu(A) \geq \phi_g(f) = \int_A |g| \diff \mu \geq s \mu(A).
+	\]
+	So $\|\phi_g\| \geq s$, and so $\|\phi_g\| \geq \|g\|_{\infty}$.
+
+	The hard part is showing $\phi$ is onto. Fix $\psi \in L_p^\ast$. We seek $g \in L_q$ such that $\psi = \phi_g$.
+
+	The idea is as follows: let $\psi(\mathbbm{1}_{A}) = \int_A g \diff \mu$. Then we can define $\nu(A) = \psi(\mathbbm{1}_{A})$ for $A \in \mathcal{F}$, with $\nu \ll \mu$, and apply Radon-Nikodym. But we have to split into cases to make this work.
+
+	First, consider when $\mu$ is finite. For $A \in \mathcal{F}$, $\mathbbm{1}_{A} \in L_p$, so we can define $\nu(A) = \psi(\mathbbm{1}_{A})$. This is a measure, as if $A = \bigcup A_n$ is a measurable partition, then
+	\[
+	\sum_{n = 1}^N \mathbbm{1}_{A_n} \to \mathbbm{1}_{A}
+	\]
+	in $L_p$, by DCT. So,
+	\[
+	\sum_{n=1}^N \nu(A_n) = \psi \left( \sum_{n=1}^N \mathbbm{1}_{A_n} \right) \to \psi(\mathbbm{1}_{A}) = \nu(A).
+	\]
+	So $\nu$ is a complex/signed measure. If $\mu(A) = 0$, then $\mathbbm{1}_{A} = 0$ almost everywhere, so $\nu(A) = \psi(\mathbbm{1}_{A}) = 0$. Thus $\nu \ll \mu$. Hence by Radon-Nikodym, there exists $g \in L_1(\mu)$ such that
+	\[
+	\nu(A) = \int_A g \diff \mu,
+	\]
+% lecture 7
+	for all $A \in \mathcal{F}$. We show that $g \in L_q(\mu)$ and $\psi = \phi_g$, i.e.
+	\[
+	\psi(f) = \int_{\Omega} fg \diff \mu
+	\]
+	for all $f \in L_p$. We have
+	\begin{align*}
+		\psi(\mathbbm{1}_{A}) &= \nu(A) = \int_A g \diff \mu = \int_{\Omega} \mathbbm{1}_{A} g \diff \mu,
+	\end{align*}
+	hence
+	\[
+	\psi(f) = \int_{\Omega} fg \diff \mu
+	\]
+	for all simple functions $f$. Given $f \in L_\infty$, there is a sequence $(f_n)$ of simple functions such that $f_n \to f$ in $L_\infty$. Then $f_n g \to f g$ in $L_1$ by dominated convergence, and $f_n \to f$ in $L_p$, as $\mu$ is finite. Thus
+	\[
+	\psi(f) = \lim_{n \to \infty} \psi(f_n) = \lim_{n \to \infty} \int_{\Omega} f_n g \diff \mu = \int_{\Omega} f g \diff \mu.
+	\]
+	Next we deduce that $g \in L_q$. Fix a measurable function $\lambda$ such that $|\lambda| = 1$ and $\lambda g = |g|$.
+
+	Split into cases. For $p \neq 1$, let $A_n = \{|g| \leq n\}$. Then $f = \lambda \mathbbm{1}_{A_n} |g|^{q-1} \in L_\infty$, and
+	\[
+	\int_{A_n} |g|^q \diff \mu = \int_{\Omega} fg \diff qm = \psi(f) \leq \|\psi\| \cdot \|f\| = \|\psi\| \left(\int_{A_n} |g|^q \diff \mu \right)^{1/p},
+	\]
+	so
+	\[
+	\left( \int_{A_n} |g|^q \diff \mu \right)^{1/q} \leq \|\psi\|.
+	\]
+	Let $n \to \infty$, and use monotone convergence to get $g \in L_q$.
+
+	For $p = 1$, fix $s > \|\psi\|$ and let $A = \{|g| > s\}$. Then $f = \lambda \mathbbm{1}_{A} \in L_\infty$, so
+	\[
+	s \mu(A) = \int_A |g| \diff \mu = \int_{\Omega} 
+f g \diff \mu = \psi(f) \leq \|\psi\| \|f\|_1 = \|\psi\| \mu(A).
+	\]
+	The only way is if $\mu(A) = 0$, so $g \in L_\infty$.
+
+	Hence, $\psi$ and $\phi_g$ are both in $L_p^\ast$, and $\psi = \phi_g$, on $L_\infty$. Since $L_\infty$ is dense in $L_p$, we get $\psi = \phi_g$. 
+\end{proofbox}
+
+Before we continue to our next cases when $\mu$ may not be finite, we need a few pieces notation.
+
+Fix $A \in \mathcal{F}$. Then,
+\[
+	\mathcal{F}_A = \{B \in \mathcal{F} \mid B \subseteq A\}
+\]
+is a $\sigma$-algebra on $A$. Define $\mu_A = \mu|_{\mathcal{F}_A}$. Then $(A, \mathcal{F}_A, \mu_A)$ is a measure space, with $L_p(\mu_A) \subseteq L_p(\mu)$. Let
+\[
+\psi_A = \psi|_{L_p(\mu_A)}.
+\]
+Let's continue.
+
+\begin{proofbox}
+	Let $\psi_A = \psi|_{L_p(\mu_A)}$, the restriction onto a subset. Then $\psi_A \in L_p(\mu_A)^\ast$, and $\|\psi_A\| \leq \|\psi\|$.
+
+	Let $A, B \in \mathcal{F}$ with $A \cap B = \emptyset$. In the case $1 < p < \infty$,
+	\begin{align*}
+		\|\psi_{A \cup B}\| &= \sup \{|\psi_{A \cup B}(h)| \mid h \in L_p(\mu_{A \cup B}), \|h\|_p \leq 1\} \\
+				    &= \sup\{|\psi_A(f) + \psi_B(g)| \mid f \in L_p(\mu_A), g \in L_p(\mu_B), \|f\|_p^p + \|g\|_p^p \leq 1\} \\
+				    &= \sup\{a |\psi_A(f)| + b |\psi_B(g)| \mid a, b \geq 0, a^p + b^p \leq 1, \\
+				    & \qquad \qquad \qquad \qquad \qquad \qquad \qquad \qquad f \in B_{L_p}(\mu_A), g \in B_{L_p}(\mu_B)\} \\
+				    &= \sup\{a \|\psi_A\| + b \|\psi_B\| \mid a, b \geq 0, a^p + b^p \leq 1\} \\
+				    &= (\|\psi_A\|^q + \|\psi_B\|^q)^{1/q},
+	\end{align*}
+	since $(\ell_p^2)^\ast = \cong \ell_q^2$.
+
+	The next case is when $\mu$ is $\sigma$-finite. We have a measurable partition $\Omega = \bigcup A_n$ of $\Omega$, with $\mu(A_n) < \infty$ for all $n$. By the first case, there is $g_n \in L_q(\mu_{A_n})$ with
+	\[
+	\psi_{A_n} = \phi_{g_n}.
+	\]
+	Define $g$ such that
+	\[
+	g|_{A_n} = g_n.
+	\]
+	When $p = 1$, then
+	\[
+	\|g\|_\infty = \sup_{n} \|g_n\|_\infty = \sup_n \|\psi_{A_n}\| \leq \|\psi\|.
+	\]
+	So $g \in L_q$. For $p \neq 1$, note
+	\[
+	\sum_{n = 1}^N \|g_n\|_q^q = \sum_{n = 1}^N \|\psi_{A_n}\|^q = \|\psi_{A_1 \cup \cdots \cup A_N}\|^q \leq \|\psi\|^q.
+	\]
+	By monotone convergence, $g \in L_q$. In both cases, $g \in L_q$, so $\phi_g \in L_p(\mu)^\ast$, and so we have
+	\[
+	\psi|_{L_p(\mu_{A_n})} = \psi_{A_n} = \phi_{g_n} = \phi_g |_{L_p(\mu_{A_n})}.
+	\]
+	Since $\bigcup L_p(\mu_{A_n})$ has dense linear span in $L_p(\mu)$, we find that $\psi = \phi_g$ on $L_p(\mu)$.
+
+	The final case is for general $\mu$, and $1 < p < \infty$. Choose $(f_n)$ in $B_{L_p}$ such that $\|\psi\| = \lim_n |\psi(f_n)|$. For all $k, n$, note that
+	\[
+	\mu(|f_n| \geq 1/k) \leq k^p \|f_n\|_p^p < \infty,
+	\]
+	by Markov's inequality. Hence
+	\[
+		A = \bigcup_{n, k}\{|f_n| \geq 1/k\}
+	\]
+	is $\sigma$-finite, and for all $n$, $f_n = 0$ on $\Omega \setminus A$. So $\|\psi_A\| = \|\psi\|$. So,
+	\[
+	\|\psi_A\| = \|\psi\| = (\|\psi_A\|^q + \|\psi_{\Omega \setminus A}\|^q)^{1/q},
+	\]
+	and hence $\psi_{\Omega\setminus A} = 0$. Hence we are done by case 2.
+\end{proofbox}
+
+\begin{corollary}
+	For $1 < p < \infty$, $L_p(\mu)$ is reflexive.
+\end{corollary}
+
+\begin{proofbox}
+	Let $\phi \in L_p^{\ast\ast}$. We seek $f \in L_p$ such that $\phi = \hat f$, i.e.
+	\[
+	\phi(\psi) = \hat f(\psi) = \psi(f)
+	\]
+	for all $\psi \in L_p^\ast$, i.e.
+	\[
+	\phi(\phi_g) = \phi_g(f)
+	\]
+	for all $g \in L_q$. The map $g \mapsto \phi(\phi_g)$ is in $L_q^\ast$, so by the previous theorem, there exists $f \in L_p$ such that
+	\[
+	\phi(\phi_g) = \int_{\Omega} g f \diff \mu = \phi_g(f).
+	\]
+\end{proofbox}
+
+\subsection{\texorpdfstring{$C(K)$}{C(K)} Spaces}%
+\label{sub:ck_sp}
+
+Throughout, we assume that $K$ is a compact Hausdorff space. Here we make a distinction on our base field:
+\[
+	C(K) = \{f : K \to \mathbb{C} \mid f \text{ continuous}\}.
+\]
+This is a complex Banach space with the $\|\cdot\|_\infty$ norm. We also denote
+\[
+	C^{\mathbb{R}}(K) = \{f : K \to \mathbb{R} \mid f \text{ continuous}\},
+\]
+and another important object is
+\[
+	C^+(K) = \{f : K \to \mathbb{R}^+ \mid f \text{ continuous}\},
+\]
+which is a subset of $C^{\mathbb{R}}(K)$ (more specifically a cone). Let
+\[
+	M(K) = C(K)^\ast \{ \phi : C(K) \to \mathbb{C} \mid \phi \text{ linear, bounded}\},
+\]
+and also we define
+\[
+	M^{\mathbb{R}}(K) = \{\phi \in M(K) \mid \phi(f) \in \mathbb{R} \text{ for all } f \in C^{\mathbb{R}}(K)\}.
+\]
+We do not define $M^{\mathbb{R}} = (C^{\mathbb{R}})^\ast$, however we will show this is true. Also define
+\[
+	M^+(K) = \{\phi : C(K) \to \mathbb{C} \mid \phi \text{ linear, for all } f \in C^+(K), \phi(f) \in \mathbb{R}^+\}.
+\] 
+We do note assume continuity, however we will show any $f \in M^+$ is continuous, so $M^+ \subseteq M^\mathbb{R}$. The members of this set are the \emph{positive linear functionals}\index{positive linear functionals}.
+
+Our aim is to describe $M(K), M^{\mathbb{R}}(K)$. We will show that it is enough to describe $M^+(K)$.
+
+\begin{lemma}
+	\begin{enumerate}[\normalfont(i)]
+		\item[]
+\item For all $\phi \in M(K)$, there is a unique $\phi_1, \phi_2 \in M^{\mathbb{R}}(K)$ such that
+	\[
+	\phi = \phi_1 + i \phi_2.
+	\]
+	\item The map $\phi \mapsto \phi|_{C^{\mathbb{R}(K)}}$, from $M^{\mathbb{R}} \to (C^{\mathbb{R}})^\ast$ is an isometric isomorphism.
+	\item $M^+(K) \subseteq M^\mathbb{R}(K)$ and
+		\[
+			M^+(K) = \{ \phi \in M(K) \mid \|\phi\| = \phi(1_K)\}.
+		\]
+	\item For all $\phi \in M^\mathbb{R}(K)$, there exists a unique $\phi^+, \phi^-$ such that
+		\[
+			\phi = \phi^+ - \phi^- \qquad \text{and} \qquad \|\phi\| = \|\phi^+\| + \|\phi^-\|.
+		\]
+\end{enumerate}
+\end{lemma}
+
+\begin{proofbox}
+	
+
+	(i) Define $\bar \phi : C(K) \to \mathbb{C}$, by
+	\[
+	\bar \phi(f) = \overline{\phi(\bar f)}.
+	\]
+	Then $\bar \phi \in M(K)$, and
+	\[
+	\phi \in M^{\mathbb{R}}(K) \iff \phi = \bar \phi.
+	\]
+	First we show uniqueness. If $\phi = \phi_1 + i \phi_2$, then $\bar f = \phi_1 - i \phi_2$, so
+	\[
+	\phi_1 = \frac{\phi + \bar \phi}{2}, \qquad \phi_2 = \frac{\phi - \bar \phi}{2i}.
+	\]
+	This also shows existence, by defining $\phi_1, \phi_2$ in this way.
+\end{proofbox}
+
+
+% lecture 8
 
 \newpage
 

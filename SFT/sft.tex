@@ -764,6 +764,294 @@ which is a \emph{functional integral}\index{functional integral}, a sum over all
 
 % lecture 4
 
+We can interpret this as a probability of a field configuration $m(\mathbf{x})$ as
+\[
+	p[m(\mathbf{x})] = \frac{e^{-\beta F[m(\mathbf{x})]}}{Z}.
+\]
+The form of $F[m(\mathbf{x})]$ is constrained by the following:
+\begin{itemize}
+	\item Locality: spins only influence nearby spins, so we may write
+		\[
+			F[m(\mathbf{x})] = \int \Diff dx\, f(m(\mathbf{x}), \nabla_i m(\mathbf{x}), \nabla_i \nabla_j m(\mathbf{x}), \ldots),
+		\]
+		not for example a function in $x$ and $y$.
+	\item Translational symmetry is inherited from discrete translational symmetry of the lattice.
+	\item Can also inherit rotational symmetry.
+	\item We also have a $\mathbb{Z}_2$ symmetry, by $s_i \to -s_i$, and $B \to -B$. So we can assume that $F$ is invariant under $m(\mathbf{x}) \to - m(\mathbf{x})$, and $B \to -B$.
+	\item Analyticity. We assume $F[m(\mathbf{x})]$ is defined by coarse graining over a finite number of spins. This lets us suppose $f$ is \emph{analytic}, i.e. we can Taylor expand near $m = 0$.
+\end{itemize}
+
+From dimensional analysis,
+\[
+a \nabla m \sim \frac{a m}{\xi}, \qquad a^2 \nabla \nabla m \sim \frac{a^2 m}{\xi^2}.
+\]
+The fact $\xi \gg a$ suggests that $\nabla m$ is more important than $\nabla \nabla m$, etc.
+
+From the above assumptions, for $B = 0$ we can write
+\[
+	F[m(\mathbf{x})] = \int \Diff4 x \left( \frac{1}{2} \alpha_2(T) m^2 + \frac{1}{4} \alpha^4 m^4 + \frac{1}{2} \gamma(T) (\nabla m)^2 + \cdots \right).
+\]
+If $B \neq 0$, we could include $Bm, Bm^3$ terms.
+
+The coefficients $\alpha_2(T), \alpha_4(T)$ are hard to compute from first principles. From MFT, we expect that $\alpha_2(T) \sim T - T_c$, and $\alpha_4(T) \sim T/3$. But all we will assume is that the coefficients are analytic in $T$, with $\alpha_4(T) > 0$, $\gamma(T) > 0$, and $\alpha_2(T) > 0$ for $T > T_c$, with a simple zero at $T = T_c$.
+
+Still, this field integral is hard to evaluate. Hence we will use a saddle point approximation.
+
+Assume that the integral is dominated by the saddle point; the $m(\mathbf{x})$ that minimizes $F[m(\mathbf{x})]$. We can vary $m(\mathbf{x}) \to m(\mathbf{x}) + \delta m(\mathbf{x})$, with
+\begin{align*}
+\delta F &= \int \Diff 4 x (\alpha_2 m \delta m + \alpha_4 m^3 \delta m + \gamma \nabla m \cdot \nu \delta m + \cdots ) \\
+		   &= \int \Diff 4 x (\alpha_2 m + \alpha_4 m^3 - \gamma \nabla ^2 m + \cdots ) \delta m,
+\end{align*}
+by using integration by parts. The part in the brackets is often written as
+\[
+\frac{\delta F}{\delta m(\mathbf{x})},
+\]
+the \emph{functional derivative}\index{functional derivative}. If $m(\mathbf{x})$ minimizes $F$, then $\delta F = 0$ for all $\delta m(\mathbf{x})$, so
+\[
+\gamma \nabla^2 m = \alpha_1 m + \alpha_4 m^3 + \cdots.
+\]
+This is just the Euler-Lagrange equaions, I think? The simplest solution is when $m$ is constant, which corresponds to MFT/Landau theory.
+
+For $T > T_c$, $\alpha_2 > 0$, so $m = 0$, and for $T < T_c$, $\alpha_2 < 0$, so
+\[
+	m = \pm m_0 \sqrt{\frac{-\alpha_2}{\alpha_4}}.
+\]
+
+\subsection{Domain Walls}%
+\label{sub:dw}
+
+If $T < T_c$, then there are two ground states $m = \pm m_0$. We could have $m \to \pm m_0$ as $x \to \pm \infty$.
+
+Consider a field that varies only in $x$, so $m(\mathbf{x}) = m(x)$. Then we need to solve
+\[
+\gamma \frac{\diff^2 m}{\diff x^2} = \alpha_2 m + \alpha_4 m^3 + \cdots.
+\]
+This is solved by
+\[
+m = m_0 \tanh \left( \frac{x - X}{W} \right),
+\]
+where $X$ is some constant, and $W = \sqrt{-2 \gamma/\alpha_2}$.
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    width=10cm,
+    %title={$B = 0$},
+    axis lines = middle,
+    xlabel = {$x$},
+    ylabel = {$m$},
+    samples=100,
+    domain=-2:2,
+    xmin=-2, xmax=2,
+    ymin=-1, ymax=1,
+    xtick = {0},
+    ytick = {0},
+    smooth,
+    thick
+]
+% Free energy function for T > T_c
+\addplot[
+    blue,
+    thick,
+    ] {tanh((x-0.5)* 0.8)};
+
+
+%\node at (axis cs:1,0.75) {Solid};
+
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+This is a \emph{domain wall}\index{domain wall} with position $X$ and width $W$.
+
+If the system has size $L$, then the free energy is $F[m_0] \propto L^d$. The cost of the domain wall is
+\[
+	\Delta F = F[m(\mathbf{x})] - F[m_0] \sim L^{d-1} \sqrt{\frac{- \gamma \alpha_2^3}{\alpha_4^2}},
+\]
+which is proportional to the area of the domain wall.
+
+Near the critical point $\alpha_2 \to 0$ and $W \to \infty$, so $\Delta F \to 0$.
+
+Domain walls explain why $d_l = 1$ for the Ising model. Let $d= 1$, and $-L/2 < x < L/2$, and assume $\alpha_2(T) < 0$.
+
+The boundary conditions are $m(\pm L/2) = m_0$, and the probability of the configuration is
+\[
+	\frac{e^{-\beta F[m(\mathbf{x})]}}{Z}.
+\]
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+    width=10cm,
+    %title={$B = 0$},
+    axis lines = middle,
+    xlabel = {$x$},
+    ylabel = {$m$},
+    samples=100,
+    domain=-2:2,
+    xmin=-2, xmax=2,
+    ymin=-1, ymax=1,
+    xtick = {0},
+    ytick = {0},
+    smooth,
+    thick
+]
+% Free energy function for T > T_c
+\addplot[
+    blue,
+    thick,
+    ] {tanh((x-1)*2)^2 - 2.5 + tanh((x+1)*2)^2 + tanh((x)*2)^2};
+
+
+%\node at (axis cs:1,0.75) {Solid};
+
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+Now consider a field with two domain walls. Assume $L \gg W$. For well separated wells, $\Delta F_{\mathrm{2 wells}} = 2 \Delta F$. Then,
+\[
+	\frac{\mathbb{P}(2 \text{ domain walls at given } X, Y)}{p(m = m_0)} = e^{-2 \beta \Delta F}.
+\]
+Summing over all $X, Y$,
+\[
+	\frac{\mathbb{P}(\text{2 domain walls})}{\mathbb{P}(m = m_0)} \sim \int_{-L/2}^{L/2} \frac{\diff X}{W} \int_{X}^{L/2} \frac{\diff Y}{W} e^{-2 \beta \Delta(F)} \sim \left( \frac{L}{W} \right)^2 e^{-2 \beta \Delta(F)}.
+\]
+For $d = 1$, the RHS goes to $0$ as $L \to \infty$, showing that energy beats entropy. But for $d = 1$, the RHS tends to $\infty$, as entropy beats energy.
+
+Hence for $d = 1$, it is much more probably to see two domain walls than a constant field, so any region with constant $m = \pm m_0$ is unstable to the formation of domain walls, so the ordered phase does not exist.
+
+% lecture 5
+
+\newpage
+
+\section{My First Path Integral}%
+\label{sec:mlp}
+
+We want to go beyond the saddle point approximation to calculate
+\[
+	Z = \int \mathcal{D} m(\mathbf{x}) \, e^{-\beta F[m(\mathbf{x}]}.
+\]
+We make a couple of changes: first we change from $m(\mathbf{x})$ to $\phi(\mathbf{x})$, and also we assume $B = 0$, so
+\[
+	F[\phi(\mathbf{x})] = \int \Diff dx \left( \frac{1}{2} \alpha_2(T) \phi^2 + \frac{1}{4} \alpha_4 \phi^4 + \frac{1}{2}\gamma(T) (\nabla \phi)^2 + \cdots \right).
+\]
+Evaluating the path integral is:
+\begin{itemize}
+	\item Easy if $F$ is quadratic in $\phi$.
+	\item Possibly if the higher order terms are small.
+	\item Very hard otherwise.
+\end{itemize}
+
+For $T > T_c$, let $\mu^2 = \alpha_2(T) > 0$. Consider the quadratic approximation to $F$:
+\[
+	F[\phi(\mathbf{x})] = \frac{1}{2} \int \Diff dx (\mu^2 \phi^2 + \gamma (\nabla \phi)^2).
+\]
+For $T < T_c$, $\alpha_2(T) < 0$, so $\braket \phi = \pm m_0$. Let $\tilde \phi = \phi - \braket \phi$. Then,
+\[
+	F = F[m_0] + \frac{1}{2} \int \Diff dx (\alpha_2(T) \tilde \phi^2 + \gamma(T) (\nabla \tilde \phi)^2 + \cdots).
+\]
+Here
+\[
+\alpha_2'(T) = \alpha_2(T) + 3 m_0^2 \alpha_4(T) = -2 \alpha_2(T) > 0.
+\]
+This quadratic approximation gives the same equation with $\phi$ replaced with $\tilde \phi$, and $\mu^2 = \alpha_2'(T) = 2|\alpha_2(T)| > 0$.
+
+\subsection{Thermodynamic Free Energy}%
+\label{sub:tfe}
+
+We aim to compute the corrections to $F_{\mathrm{thermo}}$ from the fluctuation in $\phi(\mathbf{x})$. It is useful to take the Fourier transform
+\[
+\phi_{\mathbf{k}} = \int \Diff d x \, e^{-i \mathbf{k} \cdot \mathbf{x}} \phi(\mathbf{x}),
+\]
+where since $\phi$ is real, $\phi^\ast_{\mathbf{k}} = \phi_{-{\mathbf{k}}}$. Here the wavevector $\mathbf{k}$ is often called the \emph{momentum}\index{momentum}. Since $\phi$ doesn't vary on scales less than $a$, we get $\phi_{\mathbf{k}} = 0$ for all $|\mathbf{k}| = \Lambda$, where $\Lambda = \pi/a$ is called the ultraviolet cutoff.
+
+The inverse Fourier transform is given by
+\[
+\phi(\mathbf{x}) = \int \frac{\Diff d x}{(2 \pi)^d} e^{i \mathbf{k} \cdot \mathbf{x}} \phi_{\mathbf{k}}.
+\]
+In finite volume, consider a system occupying a cubic region with $V = L^d$. Then $\mathbf{k}$ takes discrete values, $\mathbf{k} = \frac{2\pi}{L} \mathbf{n}$, for some $\mathbf{n} \in \mathbb{Z}^d$. Thus, the integral becomes
+\[
+\int \frac{\Diff d k}{(2 \pi)^d} \cdots = \left(\frac{1}{L}\right)^d \sum_{\mathbf{n}} \cdots = V^{-1} \sum_{\mathbf{n}} \cdots,
+\]
+hence the inverse Fourier transform can be written as
+\[
+\phi(\mathbf{x}) = \frac{1}{V} \sum_{\mathbf{k}} e^{-i \mathbf{k} \cdot \mathbf{x}} \phi_{\mathbf{k}}.
+\]
+Substituting this into the form for $F$,
+\[
+	F[\phi_{\mathbf{k}}] = \frac{1}{2} \int \frac{\Diff d k_1}{(2 \pi)^d} \frac{\Diff d k_2}{(2 \pi)^d} \int \Diff d x (\mu^2 - \gamma \mathbf{k}_1 \cdot \mathbf{k}_2) \phi_{ \mathbf{k}_1} \phi_{\mathbf{k}_2} e^{i(\mathbf{k}_1 + \mathbf{k}_2) \cdot \mathbf{x}}.
+\]
+Using the fact the latter integral is a $\delta$ function, this simplifies to
+\begin{align*}
+	F &= \frac{1}{2} \int \frac{\Diff d k}{(2 \pi)^d} (\mu^2 + \gamma \mathbf{k}^2) \phi_{\mathbf{k}} \phi_{- \mathbf{k}} \\
+	  &= \frac{1}{2} \int \frac{\Diff d k}{(2 \pi)^d} (\mu^2 + \gamma \mathbf{k}^2 |\phi_{\mathbf{k}}|^2 \\
+	  &= \int^+ \frac{\Diff d k}{(2 \pi)^d} (\mu^2 + \gamma \mathbf{k}^2) |\phi_{\mathbf{k}}|^2 \qquad \text{integral over } k_x > 0 \\
+	  &= \frac{1}{V} \sum^+_k (\mu^2 + \gamma \mathbf{k}^2) |\phi_{\mathbf{k}}|^2.
+\end{align*}
+The measure is
+\[
+\int \mathcal{D} \phi(\mathbf{x}) = \mathcal{N} \prod_{\mathbf{k}}^+ \int \diff(\Re \phi_{\mathbf{k}}) \diff(\Im \phi_{\mathbf{k}}),
+\]
+so the partition function becomes
+\begin{align*}
+	Z &= \mathcal{N} \left( \prod_{\mathbf{k}} \int \diff (\Re \phi_{\mathbf{k}}) \diff (\Im \phi_{\mathbf{k}}) \right) \exp \left[ - \frac{\beta}{V} \sum^+_{\mathbf{k}} (\mu^2 + \gamma \mathbf{k}^2) |\phi_{\mathbf{k}}|^2 \right] \\
+	  &= \mathcal{N} \prod^+_{\mathbf{k}} \int \diff (\Re \phi_{\mathbf{k}}) \diff (\Im \phi_{\mathbf{k}}) \exp \left[ - \frac{\beta}{V} (\mu^2 + \gamma \mathbf{k}^2 ) ((\Re \phi_{\mathbf{k}})^2 + (\Im \phi_{\mathbf{k}})^2) \right].
+\end{align*}
+Recall that
+\[
+	\int_{-\infty}^{\infty} e^{-x^2/a} = \sqrt{\pi a},
+\]
+so we find that
+\[
+	e^{-\beta F_{\mathrm{thermo}}} = Z = \mathcal{N}\prod_{\mathbf{k}}^+ \left[ \sqrt{\frac{\pi V T}{\mu^2 + \gamma \mathbf{k}^2}} \right]^2 = \mathcal{N} \prod_{\mathbf{k}}^+ \frac{\pi V T}{\mu^2 + \gamma \mathbf{k}^2},
+\]
+hence
+\[
+\frac{F_{\mathrm{thermo}}}{V} = - \frac{T}{V} \log Z = - \frac{T}{V} \sum_{\mathbf{k}}^+ \log \left( \frac{\pi V T}{\mu^2 + \gamma \mathbf{k}^2} \right) - \frac{T}{V} \log N.
+\]
+Now we compute the contribution of fluctuations to the heat capacity. Recall that
+\[
+\braket E = - \frac{\partial \log Z}{\partial \beta} = \frac{\partial (\beta F_{\mathrm{thermo}})}{\partial \beta},
+\]
+and the heat capacity is
+\[
+C = \frac{\partial \braket E}{T} = - \beta^2 \frac{\partial \braket E}{\partial \beta} = - \beta^2\frac{\partial^2 (\beta F_{\mathrm{thermo}})}{\partial \beta^2},
+\]
+from which we get
+\[
+	\frac{C}{V} = - \beta^2 \frac{\partial^2}{\partial \beta^2} \left[ - \frac{1}{V} \sum_{\mathbf{k}} \log \left( \frac{\pi V T}{\mu^2 + \gamma \mathbf{k}^2} \right) \right].
+\]
+Take $\mu^2 = T - T_c$, and $V$ a constant for simplicity. Taylor expanding,
+\[
+	\frac{C}{V} = \frac{1}{V} \sum^+_{\mathbf{k}} \left[1 + \frac{2T}{\mu^2 + \gamma \mathbf{k}^2} + \frac{T^2}{(\mu^2 + \gamma \mathbf{k}^2)^2} \right] = \frac{1}{2} \int \frac{\Diff d \mathbf{k}}{(2 \pi)^d} \left[ \cdots \right].
+\]
+The first term gives $\frac{1}{2} k_0$ per degree of freedom; this is equipartition.
+
+The other terms may diverge as $T \to T_c$, and the integral may not converge at $\mathbf{k} = 0$, an example of infrared divergence. The final term is proportional to
+\[
+	\int_0^\Lambda \frac{\diff k \, k^{d-1}}{(\mu^2 + \gamma k^2)^2} = \frac{\mu^{d-4}}{\gamma^{d/2}} \int_{0}^{\Lambda \sqrt{x/\mu^2}} \frac{\diff x\, x^{d-1}}{(1 + x^2)^2} \sim
+	\begin{cases}
+		\Lambda^{d-4} & d > 4, \\
+		\mu^{d-4} & d < 4,
+	\end{cases}	
+\]
+as $T \to T_c$. If $d = 4$, then this tends to $\log \Lambda$. Similarly, the second term is proportional to
+\[
+\int_0^\Lambda \frac{\diff k \, k^{d-1}}{\mu^2 + \gamma k^2} \sim
+\begin{cases}
+	\Lambda^{d-2} & d > 2, \\
+	\mu^{-1} & d = 1.
+\end{cases}
+\]
+as $T \to T_c$. Hence for $d \geq 4$, the contributions of fluctuations is finite as $T \to T_c$, and for $d < 4$ the contributions diverges. In general,
+\[
+C \sim \mu^{d-4} \sim |T - T_c|^{-\alpha},
+\]
+where $\alpha = 2 - d/2$. These fluctuations explain why the MFT value $\alpha = 0$ is incorrect. But this value is also wrong.
+
+% lecture 6
+
 \newpage
 
 \printindex

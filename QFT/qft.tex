@@ -712,10 +712,211 @@ Given $\ket 0$, we want to construct excited states. We know
 We can construct excited states by
 \begin{align*}
 	\ket p &= a^\dagger(p) \ket 0, \\
-	H \ket p &= \omega_p \ket p.
+	H \ket p &= \omega_p \ket p,
 \end{align*}
-
 % lecture 6
+where $\omega_p^2 = p^2 + m^2$. We can consider
+\[
+\mathbf{P} = - \int \Diff3 x \pi \nabla \phi = \int \frac{\Diff 3 k}{(2 \pi)^3} k a_k^\dagger a_k,
+\]
+where
+\[
+	\mathbf{P}\ket{\mathbf{p}}= \mathbf{p} \ket{\mathbf{p}}.
+\]
+Here $\ket{\mathbf{p}}$ is a momentum and energy eigenstate, with eigenvalues $\mathbf{p}$ and energy $E = w_p^2 = \mathbf{p}^2 + m^2$.
+
+Also, $\mathbf{p} = 0$ is an angular momentum $J^i$ eigenstate, i.e.
+\[
+	J^i \ket{\mathbf{p} = 0} = 0.
+\]
+With this, we can create more states:
+\[
+	\ket{\mathbf{p}_1 \cdots \mathbf{p}_n} = a^{\dagger}(\mathbf{p}_1) \cdots a^{\dagger}(\mathbf{p}_n) \ket 0.
+\]
+Because $a^\dagger$ commute, these are configurations which are symmetric under interchange, i.e.
+\[
+	\ket{\mathbf{p}_1 \mathbf{p}_2} = \ket{\mathbf{p}_2 \mathbf{p}_2}.
+\]
+The \emph{Fock space}\index{Fock space} is the collection of all possible combinations of $a^\dagger$ acting on $\ket 0$. Introducing
+\[
+N = \int\frac{\Diff 3p}{(2\pi)^3} a_p^\dagger a_p,
+\]
+which is the \emph{number operator}\index{number operator}, we find
+\[
+	N \ket{\mathbf{p}_1 \cdots \mathbf{p}_n} = n \ket{\mathbf{p}_1 \cdots \mathbf{p}_n}.
+\]
+For a free theory,
+\[
+	[N, H] = 0.
+\]
+Fork space is then
+\[
+\oplus_i \mathcal{H}_n
+\]
+
+\subsection{Relativistic Normalization}%
+\label{sub:rn}
+
+How do we normalize these states? First thing, pick
+\[
+	\braket{0|0} = 1.
+\]
+For 1-particle states, note
+\[
+	\ket{\mathbf{p}} = a_p^\dagger \ket 0 \implies \braket{\mathbf{p}|\mathbf{q}} = (2\pi)^3 \delta^3(\mathbf{p} - \mathbf{q}).
+\]
+This is not Lorentz invariant. Our dream is that under a Lorentz transformation,
+\[
+	\ket{\mathbf{p}} \to \ket{\mathbf{p}'} = U(\Lambda) \ket{\mathbf{p}}.
+\]
+To figure out a proper definition of $\ket{\mathbf{p}}$, we use the identity
+\[
+	\ket{\mathbf{q}}=  \int \frac{\Diff3p}{(2\pi)^3} \ket{\mathbf{p}} \braket{\mathbf{p}|\mathbf{q}},
+\]
+hence
+\[
+	1 = \int \frac{\Diff3p}{(2\pi)^3} \ket{\mathbf{p}}\bra{\mathbf{p}}.
+\]
+This integral is manifestly not Lorentz invariant, de to the measure we are taking the integral over. Instead, we transform
+\begin{align*}
+	\int \frac{\Diff3p}{(2\pi)^3} &\to \int \Diff4p \, \delta^{4}(\mathbf{p}^2-m^2) \Theta(p^0) = \int \Diff3p\, \frac{1}{2\sqrt{\mathbf{p}^2 + m^2}} \\
+				      &= \int \Diff3 p \frac{1}{2 \omega_p}.
+\end{align*}
+So instead, we should define
+\[
+	1 = \int \frac{\Diff3p}{(2\pi)^3} \frac{1}{2\omega_p} \ket{\mathbf{p}}\bra{\mathbf{p}},
+\]
+where
+\[
+	\ket{\mathbf{p}} = \sqrt{2\omega_p} a_p^\dagger \ket 0.
+\]
+This is relativistic normalization.
+
+\subsection{Causality}%
+\label{sub:cause}
+
+Here we are interested in whether measurements influence each other, i.e. whether commutators vanish. This is associated with why equal-time commutators are compatible with relativity. Define
+\[
+	\Delta(x - y) = [\phi(x), \phi(y)].
+\]
+We can evaluate this for a free theory:
+\begin{align*}
+	\Delta &= [\phi(x), \phi(y)] \\
+	       &= \int \frac{\Diff3k}{(2\pi)^3} \frac{\Diff3p}{(2\pi)^3}\frac{1}{2\sqrt{\omega_k\omega_p}}([a_k, a_p^\dagger] e^{-ikx} e^{ipy} + [a_k^\dagger, a_p] e^{ikx} e^{-ipy} ) \\
+	       &= \int \frac{\Diff 3 p}{(2 \pi)^3} \frac{1}{2\omega_p} (e^{-ip\cdot(x - y)} - e^{ip\cdot(x-y)}).
+\end{align*}
+This commutator satisfies a few properties:
+\begin{itemize}
+	\item It is Lorentz invariant due to the appearance of our measure, and also a c-number operator.
+	\item For time-like separation, $(x-y)_T = (t, 0, 0, 0)$, we find
+		\[
+		\Delta(x - y)_T = \int \frac{\Diff3p}{(2\pi)^3} \frac{1}{2\omega_p}(e^{-i\omega_pt}-e^{i\omega_pt}) \sim e^{-imt}-e^{imt}= 0.
+		\]
+	\item For spacelike separation, say $(x-y)_S = (0, \mathbf{x} - \mathbf{y})$, then
+		\[
+		\Delta(x - y)_S = \int\frac{\Diff3p}{(2\pi)^3}\frac{1}{2\omega_p}(e^{i\mathbf{p}\cdot(\mathbf{x}-\mathbf{y})}-e^{-i\mathbf{p}\cdot(\mathbf{x}-\mathbf{y})})=0,
+		\]
+		so any two spacelike events have zero commutator.
+\end{itemize}
+
+\subsection{Propagators}%
+\label{sub:props}
+
+Here we are interested in the quantity
+\[
+	\braket{0|\phi(x)\phi(y)|0} = \int \frac{\Diff3p}{(2\pi)^3} \frac{1}{2\omega_p} e^{-ip(x-y)} = D(x-y).
+\]
+For spacelike events,
+\[
+D(x-y) \sim e^{-m(\mathbf{x}-\mathbf{y})} \neq 0.
+\]
+But,
+\[
+	[\phi(x),\phi(y)]=D(x-y)-D(y-x)=0.
+\]
+
+% lecture 7
+
+Define
+\[
+	\Delta_F(x - y) = \braket{0|T \phi(x) \phi(y)|0}=
+	\begin{cases}
+		D(x - y) & x^0 > y^0, \\
+		D(y - x) & y^0 > x^0.
+	\end{cases}
+\]
+Here $T$ is the \emph{time operator}\index{time operator}. We claim that
+\[
+\Delta_F(x - y) = \int \frac{\Diff 4 p}{(2 \pi)^4} \frac{i}{p^2 - m^2 + i \eps} e^{-ip(x - y)}.
+\]
+
+\begin{proofbox}
+	A lot of calculation:
+	\begin{align*}
+		\braket{0|T\phi(x) \phi(y)|0} &= \braket{0|\phi(x) \phi(y)|0} \Theta(x^0 - y^0) + \braket{0|\phi(y)\phi(x)|0} \Theta(y^0 - x^0) \\
+					      &= \int \frac{\Diff 3 k}{(2 \pi)^3} \frac{1}{2 \omega_k} e^{-i \omega_k (x^0 - y^0)} e^{i \mathbf{k} \cdot (\mathbf{x} - \mathbf{y})} \Theta(x^0 - y^0) \\
+					      & \qquad \qquad + \int \frac{\Diff 3 k}{(2 \pi)^3} \frac{1}{2 \omega_k} e^{-i \omega_k (y^0 - x^0)} e^{i \mathbf{k}(\mathbf{y} - \mathbf{x})} \Theta(y^0 - x^0) \\
+					      &= \int \frac{\Diff 3 k}{(2 \pi)^3} \frac{1}{2 \omega_k} e^{i \mathbf{k} \cdot (\mathbf{x} - \mathbf{y})} \left( e^{-i \omega_k z} \Theta(z) + e^{i\omega_k z} \Theta(-z) \right).
+	\end{align*}
+	We focus on the time-dependent part, and show that
+	\[
+		e^{-i\omega_k z}\Theta(z) + e^{i\omega_k z} \Theta(-z) = \lim_{\eps \to 0} \frac{(- 2 \omega_k)}{2 \pi i} \int_{-\infty}^{\infty} \diff \omega \frac{e^{ i \omega z}}{\omega^2 - \omega_k^2 + \eps}.
+	\]
+	We start from the right hand side of the equation:
+	\begin{align*}
+		\frac{1}{\omega^2 - \omega_k^2 + i \eps} &= \frac{1}{(\omega - (\omega_k - i \tilde \eps))(\omega - (-\omega_k + i \tilde \eps))} \\
+							 &= \frac{1}{2 \omega_k} \left[ \frac{1}{\omega - (\omega_k - i \eps)} - \frac{1}{\omega - (-\omega_k + i \eps)} \right] + \mathcal{O}(\eps^2).
+	\end{align*}
+	Consider the integral
+	\[
+	I_1 = \int_{-\infty}^{\infty} \frac{e^{-i \omega z}}{\omega - (\omega_k - i \eps)}.
+	\]
+	We want to use Schwartz' lemma to evaluate this in the complex plane. The function has a pole at $\omega = \omega_k - i \eps$.
+
+	If $z < 0$, we can complete is in the upper-half plane, and get $I_1 = 0$. If $z > 0$, we need to close it in the lower-half plane, which encompasses the pole, and results in an integral of
+	\[
+	I_1 = - 2 \pi i e^{-i \omega_k z} \theta(z) + \mathcal{O}(\eps).
+	\]
+	The negative sign is as we are integrated in a clockwise direction.
+
+	The other term in the integral is
+	\[
+	I_2 = \int_{-\infty}^{\infty} \diff \omega \frac{e^{-i \omega z}}{\omega - (-\omega_k + i \eps)}.
+	\]
+	We can do a similar thing to find $I_2$, and get
+	\[
+	I_2 = 2 \pi i e^{i \omega_k z} \Theta(-z) + \mathcal{O}(\eps).
+	\]
+	Collecting these terms,
+	\begin{align*}
+		\lim_{\eps \to 0} \int_{-\infty}^{\infty} \diff \omega \frac{e^{-i\omega z}}{\omega^2 - \omega_k^2 + \eps} &= \lim_{\eps \to 0} \frac{1}{2 \omega_k} (I_1 - I_2) \\
+															   &= \frac{1}{2 \omega_k} \left(- 2 \pi i e^{-i \omega_k z} \Theta(z) - 2 \pi i e^{i \omega_k z} \Theta(-z) \right).
+	\end{align*}
+	Pulling this into the expression,
+	\begin{align*}
+		\braket{0|T\phi(x)\phi(y)|0} &= \int \frac{\Diff 3 k}{(2 \pi)^3} \frac{i}{2 \pi} e^{i \mathbf{k} \cdot (\mathbf{x} - \mathbf{y})} \int_{-\infty}^{\infty} \diff \omega \frac{e^{-i \omega z}}{\omega^2 - \omega_k^2 + i \eps} \\
+					     &= \int \frac{\Diff 4 k}{(2 \pi)^{4}} \frac{i}{k^2 - m^2 + i \eps} e^{-i k(x - y)}.
+	\end{align*}
+\end{proofbox}
+
+By convention we drop the limit.
+
+\begin{remark}
+	\begin{enumerate}
+		\item[]
+		\item Due to the time ordering, our contour is prescribed.
+		\item $\Delta_F(x - y)$ is Lorentz invariant.
+		\item $\Delta_F(x - y)$ is a Green's function, as
+			\begin{align*}
+				(\partial_\mu \partial^\mu + m^2)\Delta_F(x - y) &= -i \delta^{4}(x - y).
+			\end{align*}
+			$\Delta_F$ is the Green's function associated to the Klein-Gordon equation.
+	\end{enumerate}
+	
+\end{remark}
+
+
+% lecture 8
 
 \newpage
 

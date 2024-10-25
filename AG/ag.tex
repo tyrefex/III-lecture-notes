@@ -607,9 +607,233 @@ For $U \subseteq \Spec A$ open, we write
 	\mathcal{O}(U) = \biggl\{ s : U \to \bigsqcup_{p \in U} A_p &\mid s(p) \in A_p \wedge \text{for each } p \in U, \exists \, q \in V \subseteq U \\
 								    & \text{and }a, f \in A \text{ such that } \forall q \in V, f \not \in q \wedge s(q) = \frac{a}{f} \in A_q \biggr\}
 \end{align*}
-Apparently this is clearly a sheaf.
+This is a sheaf, as it is only defined locally.
 
 % lecture 6
+
+The scheme has the following properties. First, for any $p \in \Spec A$, $\mathcal{O}_p = A_p$.
+
+\begin{proofbox}
+	We have a map $\mathcal{O}_p \to A_p$ given by $(U, s) \mapsto s(p)$.
+
+	First we show surjectivity. Any element of $A_p$ can be written as $a/f$, for $a \in A$ and $f \not \in p$. We define
+	\[
+		D(f) = (\Spec A) \setminus V((f)) = \{q \in \Spec A \mid f \not \in q\}.
+	\]
+	This is an open neighbourhood of $p \in \mathrm{Spec} A$. Then $a/f$ defines a section $s$ of $\mathcal{O}$ over $D(f)$, via
+	\[
+	s(q) = \frac{a}{f} = A_q.
+	\]
+	In particular, $s(p) = a/f \in A_p$. So, $(D(f), s) \mapsto a/f$ under this map.
+
+	For injectivity, let $p \in U \subseteq \Spec A$, and $s \in \mathcal{O}(U)$, defining a germ $(U, s) \in \mathcal{O}_p$.
+
+	Suppose $s(p) = 0$. We want to show $(U, s) = 0$ in $\mathcal{O}_p$. We may shrink $U$ and assume there are $a, f \in A$ such that $s(q)=  a/f$ for all $q \in U$. In particular, $f \not \in q$.
+
+	Since $s(p) = 0$, $a/f = 0$ in $A_p$. Thus there exists $h \in A \setminus p$ such that
+	\[
+		h(a \cdot 1 - 0 \cdot f) = 0,
+	\]
+	i.e. $h \cdot a = 0$. Let $V = D(f) \cap D(h)$. Then for $q \in V$, $a/f = 0$ in $A_q$.
+
+	Since $h \not \in q$ and $h \cdot a = 0$, $s|_V = 0$, so $(U, s) = 0$. Moreover, $V$ is non-empty as it contains $p$.
+\end{proofbox}
+
+Another property is as follows: for any $f \in A$, $\mathcal{O}(D(f)) = A_f$. In particular,
+\[
+\mathcal{O}(\Spec A) = \mathcal{O}(D(1)) = A_1 = A.
+\]
+
+\begin{proofbox}
+	Let $\psi : A_f \to \mathcal{O}(D(f))$ be given by
+	\[
+	\frac{a}{f^n} \mapsto \left( p \mapsto \frac{a}{f^n} \in A_p \right).
+	\]
+	We need to show this map is injective, and surjective.
+
+	\textbf{Injectivity:} To show $\psi$ is injective, if $\psi(a/f^n) = 0$, then for all $p \in D(f)$, $a/f^n = 0$ in $A_p$. So there exists $h \not \in p$ such that $h \cdot a = 0$, where $h$ may depend on $p$. Let
+	\[
+		I = \{g \in A \mid g \cdot a = 0\}.
+	\]
+	So $h \in I$, for all $p$. But also $h \not \in p$, so $I \not \subseteq p$. This is true for all $p \in D(f)$, so
+	\[
+	V(I) \cap D(f) = \emptyset.
+	\]
+	Thus,
+	\[
+	f \in \bigcap_{q \in V(I)} q = \sqrt I,
+	\]
+	the radical of $I$. Thus $f^m \in I$ for some $n > 0$. Thus $f^m \cdot a = 0$, so in particular $a/f^n = 0$ in $A_f$, by choosing $h = f^m$.
+
+	\textbf{Surjectivity:} is a lot harder. Let $s \in \mathcal{O}(D(f))$. Our goal is to show that $s = \psi(a/f^n)$ for some $a$ and $n$. Let $\{V_i\}$ be an open cover of $D(f)$ such that $s|_{V_i}$ is represented by $a_i/g_i$ with $g_i \not \in p$, for all $p \in V_i$.
+
+	Thus $V_i \subseteq D(g_i)$. By an example sheet question, the open sets of te form $D(h)$ form a basis for the Zariski topology. We can thus assume $V_i = D(h_i)$ for some $h_i \in A$.
+
+	Since $D(h_i) \subseteq D(g_i)$, $V((h_i)) \subseteq V((g_i))$, so $\sqrt{(h_i)} \subseteq \sqrt{(g_i)}$. Therefore $h_i^n \in (g_i)$, for some $n$, so $h_i^n = c_i g_i$ for some $c_i \in A$. Thus,
+	\[
+	\frac{a_i}{g_i} = \frac{c_i a_i}{h_i^n}.
+	\]
+	We can thus replace $h_i$ with $h_i^n$, since a prime ideal containing one contains the other, and can now assume that $s|_{V_i}$ is represented by an element of the for $a_i/h_i$, where $V_i = D(h_i)$.
+
+	So far, we have proven that $D(f)$ is covered with open sets $V_i = D(h_i)$, and $s|_{V_i}$ represented by $a_i/h_i$.
+
+	\textbf{Claim:} $D(f)$ can be covered with a finite number of the $D(h_i)$'s, in other words $D(f)$ is \emph{quasicompact}\index{quasicompact}, meaning compact without the Hausdorff condition.
+
+	The proof is as follows:
+	\begin{align*}
+	&&	D(f) & \subseteq \bigcup_i D(h_i) \\
+	&\iff& V((f)) &\supseteq \bigcap V((h_i)) = V \left( \sum_i (h_i) \right) \\
+	&\iff& \sqrt{(f)} & \subseteq \sqrt{ \sum_i (h_i) } \\
+	&\iff& f &\in \sqrt{\sum_i (h_i)} \\
+	&\iff& f^n &\in \sum_I (h_i)
+	\end{align*}
+	for some $n$. Thus,
+	\[
+	f^n = \sum b_i h_i
+	\]
+	for some finite set of $h_i$'s. Thus, by running the above proof backwards, we find that the finite number of these $D(h_i)$ cover $D(f)$.
+
+	Now we have a finite cover of $D(f)$. On $D(h_i) \cap D(h_j)$, $a_i/h_i$ and $a_j/h_j$ both represent $s|_{D(h_i) \cap D(h_j)}$. But,
+	\[
+	\psi : A_{h_i h_j} \to \mathcal{O}(D(h_i, h_j)) = \mathcal{O}(D(h_i) \cap D(h_j))
+	\]
+	is injective, by proof of injectivity. So, $a_i/h_i = a_j/h_j$ in $A_{h_i h_j}$. Thus for some $n$,
+	\[
+		(h_i h_j)^n (h_j a_i - h_i a_j) = 0.
+	\]
+	We can choose $n$ to work for all $i, j$. Rewriting this as
+	\[
+	h_j^{n+1}(h_i^n a_i) - h_i^{n+1}(h_j^n a_j) = 0,
+	\]
+	and replacing each $h_i$ with $h_i^{n+1}$ and $a_i$ with $h_i^n a_i$, the ratio is the same, and so $s$ is still represented by $a_i/h_i$, but also $h_j a_i = h_i a_j$ for all $i, j$. Let
+	\[
+	a = \sum b_i a_i,
+	\]
+	where we recall that
+	\[
+	f^n = \sum b_i h_i.
+	\]
+	Then for any $j$,
+	\[
+	h_j a = \sum h_j b_i a_i = \sum_i h_i b_i a_j = f^n a_j,
+	\]
+	so $a_j/h_j = a/f^n$, for all $j$. So $\psi(a/f^n) = s$.
+\end{proofbox}
+
+% lecture 7
+
+\begin{definition}
+	A \emph{ringed space}\index{ringed space} is a pair $(X, \mathcal{O}_X)$ where:
+	\begin{itemize}
+		\item $X$ is a topological space,
+		\item $\mathcal{O}_X$ is a sheaf of rings.
+	\end{itemize}
+
+	A \emph{morphism}\index{morphism of ringed spaces} of ringed spaces $f : (X, \mathcal{O}_X) \to (Y, \mathcal{O}_Y)$ is data such that:
+	\begin{itemize}
+		\item $f : X \to Y$ is continuous.
+		\item $f^{\#} : \mathcal{O}_Y \to f_\ast \mathcal{O}_X$ is a morphism of sheaves of rings, i.e.
+			\[
+			f_U^{\#} : \mathcal{O}_Y(U) \to (f_\ast \mathcal{O}_X)(U) = \mathcal{O}_X(f^{-1}(U))
+			\]
+			is a ring homomorphism.
+	\end{itemize}
+\end{definition}
+
+\begin{exbox}
+	\begin{enumerate}
+		\item Let $X$ be a variety, and $\mathcal{O}_X$ the sheaf of regular functions on $X$, so
+			\[
+				\mathcal{O}_X(U) = \{f : U \to K \text{ such that $f$ is regular}\}.
+			\]
+			A morphism $f : X \to Y$ of varieties is a continuous map $f : X \to Y$ inducing a map, for all $U \subseteq Y$, by $\mathcal{O}_Y(U) \to \mathcal{O}_X(f^{-1}(U))$, where $\varphi \mapsto \varphi \circ f$.
+		\item Let $X$ be a topological space, then we can consider
+			\[
+				\mathcal{O}_X(U) = \{f : U \to \mathbb{R} \mid f \text{ continuous}\}.
+			\]
+		\item Let $X$ be a $C^\infty$-manifold, and
+			\[
+				\mathcal{O}_X(U) = \{f : U \to \mathbb{R} \mid f C^\infty\}.
+			\]
+			Then $f : X \to Y$ a continuous map between $C^\infty$ manifolds is $C^\infty$ if and only if, for any $C^\infty$ function $\varphi : U \to \mathbb{R}$, and $U \subseteq Y$, $f \circ \varphi : f^{-1}(U) \to \mathbb{R}$ is $C^\infty$.
+	\end{enumerate}	
+\end{exbox}
+
+\begin{remark}
+	All of these example have the feature that $\mathcal{O}_{X, p}$, for $p \in X$, is a local ring, i.e. one with a unique maximal ideal.
+
+	Indeed, take $m_p = \{(U, f) \mid f(p) = 0\}$. Note $(U, f) \sim (V, f|_V)$ for some $V$ with $f|_V$ non-vanishing if $f(p) \neq 0$.
+
+	So every element in $\mathcal{O}_{X, p} \setminus m_p$ is invertible, hence $m_p$ is the unique maximal ideal.
+\end{remark}
+
+Note that given a morphism of ringed space $f : (X, \mathcal{O}_X) \to (Y, \mathcal{O}_Y)$ in the previous three examples, we get a map
+\[
+f_p^{\#} : \mathcal{O}_{Y, f(p)} \to \mathcal{O}_{X, p}
+\]
+for $p \in X$ defined by
+\[
+f_p^{\#}(U, \varphi) = (f^{-1}(U), \varphi \circ f).
+\]
+Note that $(U, \varphi) \in m_{f(p)}$ if and only if $(f^{-1}(U), \varphi \circ f) \in m_p$.
+
+In particular, $(f_p^{\#})^{-1}(m_p) = m_{f(p)}$.
+
+\begin{definition}
+	A \emph{locally ringed space}\index{locally ringed space} is a ringed space $(X, \mathcal{O}_X)$ such that $\mathcal{O}_{X, p}$ is a local ring for all $p \in X$.
+
+	A \emph{morphism}\index{morphism of locally ringed spaces} $f : (X, \mathcal{O}_X) \to (Y, \mathcal{O}_Y)$ of locally ringed spaces is a morphism of ringed spaces such that the induced morphism
+	\[
+	f_p^{\#} : \mathcal{O}_{Y, f(p)} \to \mathcal{O}_{X, p}
+	\]
+	is a local homomorphism.
+
+	Here $f_p^{\#}$ is defined by
+	\[
+	\mathcal{O}_{Y, f(p)} \ni (U, \varphi) \mapsto (f^{-1}(U), f_U^{\#}(\varphi)) \in \mathcal{O}_{X, p}.
+	\]
+\end{definition}
+
+A homomorphism  $g : A \to B$ of local rings is a ring homomorphism such that $g^{-1}(m_B) = m_A$. Note that $g(A \setminus m_a) = g(A^\ast) \subseteq B^\ast = B \setminus m_B$, so we always have $g^{-1}(m_B) \subseteq m_A$.
+
+The motivating example is $(\Spec A, \mathcal{O}_{\Spec A})$, which we will show is a locally ringed space. Recall that $\mathcal{O}_{\Spec A, p} = A_p$, which has a unique maximal ideal
+\[
+m = \left\{ \frac{a}{s} \biggm| a \in p, s \not \in p\right\}.
+\]
+There is a natural map $A \to A_p$ by $a \mapsto a/1$, and $m \subseteq A_p$ is the ideal generated by the image of $p$ under this map. This is often written as $p A_p$.
+
+We call $(\Spec A, \mathcal{O}_{\Spec A})$ an \emph{affine scheme}\index{affine scheme}.
+
+\begin{theorem}
+	The category of affine schemes with morphisms being morphisms of locally ringed spaces is equivalent to the opposite category of rings.
+\end{theorem}
+
+\begin{proofbox}
+	We need to show that:
+	\begin{itemize}
+		\item If $\varphi : A \to B$ is a homomorphism of rings, we get a morphism of locally ringed spaces
+			\[
+				(f, f^{\#}) : (\Spec B, \mathcal{O}_{\Spec B}) \to (\Spec A, \mathcal{O}_{\Spec A}).
+			\]
+		\item Any morphism of locally ringed spaces is induced b a homomorphism $\varphi : A \to B$ of rings.
+	\end{itemize}
+	For the first part, we define $f : \Spec B \to Spec A$ by
+	\[
+	f(p) = \varphi^{-1}(p).
+	\]
+	Note that $\varphi^{-1}(p)$ is prime, as if $a \cdot b \in \varphi^{-1}(p)$, then $\varphi(a) \varphi(b) = \varphi(ab) \in p$, so say $\varphi(a) \in p$. Then $a \in \varphi^{-1}(p)$.
+
+	Now we show $f$ is continuous. Note for any $I \subseteq A$,
+	\begin{align*}
+		f^{-1}(V(I)) &= \{p \in \Spec B \mid f(p) \supseteq I\} = \{p \in \Spec B \mid \varphi^{-1}(p) \supseteq I\} \\
+			     &= \{p \in \Spec B \mid p \supseteq \varphi(I)\} \\
+			     &= V(\varphi(I)).
+	\end{align*}
+	
+\end{proofbox}
+
+
+% lecture 8
 
 \newpage
 

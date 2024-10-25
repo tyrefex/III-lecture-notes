@@ -764,6 +764,241 @@ which is smooth provided the components $T\indices{^{\mu_1 \ldots, \mu_r}_{ \nu_
 	In particular, $\partial / \partial x^\mu$ are always smooth, but only defined locally.
 \end{exbox}
 
+% lecture 6
+
+A vector field can act on a function $f : M \to \mathbb{R}$ to give a new function $Xf$ by
+\[
+Xf(p) = X_p(f).
+\]
+In coordinates,
+\[
+Xf(p) = X^\mu(\phi(p)) \frac{\partial F}{\partial x^\mu} \biggr|_{\phi(p)},
+\]
+where $F = f \circ \phi^{-1}$.
+
+\subsection{Integral Curves}%
+\label{sub:ic}
+
+Given a vector field $X$ on $M$, we say a curve $\lambda : I \to M$ is an \emph{integral curve}\index{integral curve} of $X$ if its tangent at every point $x$, which we denote by $\diff \lambda/ \diff t$, then
+\[
+\frac{\diff \lambda}{\diff t} (t) = X_{\lambda(t)}.
+\]
+Through each point $p$, there is a unique integral curve passing through it, unique up to extension or shift of the parameter.
+
+To see this, pick a chart $\phi$ with $\phi = (x^1, \ldots, x^n)$, and $\phi(p) = 0$. In this chart, the equation becomes
+\[
+\frac{\diff x^\mu}{\diff t}(t) = X^\mu(x(t)),
+\]
+where $x^\mu(t) = x^\mu(\lambda(t))$. Assuming without loss of generality that $\lambda(0) = p$, we get an initial condition $x^\mu(0)= 0$.
+
+By standard ODE theory, this equation with initial conditions has a solution which is unique up to extension.
+
+\subsection{Commutators}%
+\label{sub:com}
+
+Suppose $X$ and $Y$ are two vector fields, and $f : M \to \mathbb{R}$ is smooth. Then $X(Y(f))$ is a smooth function, however it is not of the form $K(f)$ for some vector field $K$, since
+\begin{align*}
+	X(Y(fg)) &= X(f Y(g) + g Y(f)) = X(f(Y(g)) + X(g Y(f)) \\
+		 &= f X(Y(g)) + g X(Y(f)) + X(f) Y(g) + X(g) Y(f).
+\end{align*}
+So the Leibniz rule does not hold. But, if we consider $[X, Y](f) = X(Y(f)) - Y(X(f))$, then the Leibniz rule does hold. In fact, $[X, Y]$ defines a vector field.
+
+To see this, we can use coordinates:
+\begin{align*}
+	[X, Y](f) &= X \left( Y^\nu \frac{\partial f}{\partial x^\nu} \right) - Y \left( X^\mu \frac{\partial f}{\partial x^\mu} \right) \\
+		  &= X^\mu \frac{\partial}{\partial x^\mu} \left( Y^\nu \frac{\partial f}{\partial x^\nu} \right) - Y^\nu \frac{\partial}{\partial x^\nu} \left( X^\mu \frac{\partial F}{\partial x^\mu} \right) \\
+		  &= X^\mu Y^\nu \left( \frac{\partial^2 f}{\partial x^\mu \partial x^\nu} - \frac{\partial^2 f}{\partial x^\nu \partial x^\mu} \right) + X ^\mu \frac{\partial Y^\nu}{\partial x^\mu} \frac{\partial F}{\partial x^\nu} - Y^\nu \frac{\partial X^\mu}{\partial x^\nu} \frac{\partial F}{\partial x^\mu} \\
+		  &= \left( X^\mu \frac{\partial Y^\nu}{\partial x^\mu} - Y^\mu \frac{\partial X^\nu}{\partial x^\mu} \right) \frac{\partial F}{\partial x^\nu} \\
+		  &= [X, Y]^\nu \frac{\partial F}{\partial x^\nu},
+\end{align*}
+where
+\[
+	[X, Y]^\nu = X^\mu \frac{\partial Y^\nu}{\partial x^\mu} - Y^\mu \frac{\partial X^\nu}{\partial x^\mu}
+\]
+are the components of the commutator. Since $f$ is arbitrary,
+\[
+	[X, Y] = [X, Y]^\nu \frac{\partial}{\partial x^\nu}
+\]
+is valid only in a coordinate basis.
+
+\subsection{Metric Tensor}%
+\label{sub:met_tens}
+
+We are familiar from Euclidean geometry (and special relativity) with the fact that the fundamental object when talking about distances and angles (or time intervals and rapidity) is an inner product between vectors. For example,
+\[
+\mathbf{x} \cdot \mathbf{y} = x_1 y_1 + x_2 y_2 + x_3 y_3
+\]
+in $\mathbb{R}^3$ with Euclidean geometry, and
+\[
+	X \cdot Y = - X^0 Y^0 + X^1 Y^1 + X^2 Y^2 + X^3 Y^3
+\]
+for $\mathbb{R}^{3 + 1}$ with the Minkowski geometry (and $c = 1$).
+
+\begin{definition}
+	A \emph{metric tensor}\index{metric tensor} at $p \in M$ is a $(0, 2)$-tensor satisfying:
+	\begin{enumerate}[(i)]
+		\item $g$ is symmetric, so $g(X, Y) = g(Y, X)$ for all $X, Y \in T_pM$. In coordinates, $g_{ab} = g_{ba}$.
+		\item $g$ is \emph{non-degenerate}\index{non-degenerate}: $g(X, Y) = 0$ for all $Y \in T_p M$ if and only if $X = 0$.
+	\end{enumerate}
+\end{definition}
+
+We sometimes write
+\[
+g(X, Y) = \langle X, Y\rangle = \langle X, Y\rangle_g = X \cdot Y.
+\]
+By adapting the Gram-Schmidt algorithm, we can always find a basis $\{e_\mu\}$ for $T_p M$ such that
+\[
+g(e_\mu, e_\nu) =
+\begin{cases}
+	0 & \mu \neq \nu, \\
+	+1 \text{ or } -1 & \mu = \nu.
+\end{cases}
+\]
+The number of $-1$'s and $1$'s does not depend on the choice of basis, by Sylvester's law of inertia, and is called the \emph{signature}\index{signature}.
+
+If $g$ has signature that is entirely positive, we say it is \emph{Riemannian}\index{Riemannian}.
+
+If $g$ has signature that is positive apart from one component, we say it is \emph{Lorentzian}\index{Lorentzian}.
+
+\begin{definition}
+	A \emph{Riemannian} (resp. \emph{Lorentzian}) manifold is a pair $(M, g)$ where $M$ is a manifold, and $g$ is a Riemannian (resp. Lorentzian) metric tensor field.
+
+	On a Riemannian manifold, the \emph{norm}\index{norm} of a vector $X \in T_p M$ is
+	\[
+		|X| = \sqrt{g(X, X)},
+	\]
+	and the \emph{angle}\index{angle} between $X, Y \in T_p M$ is given by
+	\[
+	\cos \theta = \frac{g(X, Y)}{|X||Y|}.
+	\]
+	The \emph{length}\index{length} of a curve $\lambda : (a, b) \to M$ is given by
+	\[
+	\ell(\lambda) = \int_a^b \left| \frac{\diff \lambda}{\diff t} (t) \right| \diff t.
+	\]
+\end{definition}
+
+It is an easy exercise to show that if $\tau : (c, d) \to (a, b)$ is a reparametrization with $\diff \tau/ \diff u > 0$, and $\tau(c) = a$, $\tau(d) = b$, then $\tilde \lambda = \lambda \circ \tau : (c, d) \to M$ is a reparametrization of $\lambda$, in which $\ell(\tilde \lambda) = \ell(\lambda)$.
+
+% lecture 7
+
+In a coordinate basis, $g = g_{\mu\nu} \diff x^\mu \otimes \diff x^\nu$. We often write
+\[
+\diff x^\mu \diff x^\nu = \frac{1}{2} (\diff x^\mu \otimes \diff x^\nu + \diff x^\nu \otimes \diff x^\mu).
+\]
+And by convention we often write $g = \diff s^2$, so that
+\[
+g = \diff s^2 = g_{\mu\nu} \diff x^\mu \diff x^\nu.
+\]
+\begin{exbox}
+	\begin{enumerate}[(i)]
+		\item Consider $\mathbb{R}^n$ with
+			\[
+			g = \diff s^2 = (\diff x^1)^2 + (\diff x^2)^2 + (\diff x^n)^2 + \delta_{\mu\nu} \diff x^\mu \diff x^\nu.
+			\]
+			This is called Euclidean space, and any chart covering $\mathbb{R}^n$ in which the metric takes this form is called \emph{Cartesian}\index{Cartesian}.
+		\item Consider $\mathbb{R}^{1+3}$ with
+			\[
+			g = \diff s^2 = -(\diff x^0)^2 + (\diff x^1)^2 + (\diff x^2)^2 + (\diff x^3)^2 = \eta_{\mu\nu} \diff x^\mu \diff x^\nu.
+			\]
+			This is \emph{Minkowski space}\index{Minkowski space}. A coordinate chart covering $\mathbb{R}^{1+3}$ in which the metric takes this form is an \emph{intertial frame}\index{intertial frame}.
+		\item On $S^2 = \{\mathbf{x} \in \mathbb{R}^3 \mid |\mathbf{x}| = 1\}$, define a chart by $\phi^{-1} : (0, \pi) \times (-\pi, \pi) \to S^2$ by
+			\[
+				(\theta, \varphi) \mapsto (\sin\theta \cos \varphi, \sin \theta \sin \varphi, \cos \theta).
+			\]
+			In this chart, the round metric is
+			\[
+			g = \diff s^2 = \diff \theta^2 + \cos^2\theta \diff \varphi^2.
+			\]
+			This covers $S^2 \setminus \{\mathbf{x}| = 1, x^2 = 0, x^1 \leq 0\}$.
+
+			To cover the rest, let $\tilde \phi^{-1}$ be given by
+			\[
+				(\theta', \varphi') \mapsto (-\sin\theta' \cos \varphi', \cos \theta', \sin \theta' \sin \varphi').
+			\]
+			Setting $g = \diff \theta'^2 + \sin^2 \theta' \diff \varphi'^2$ defines a metric on all of $S^2$.
+	\end{enumerate}
+\end{exbox}
+
+Since $g_{ab}$ is non-degenerate, it is invertible as a matrix in any basis. We can check the inverse define a symmetric $(2, 0)$-tensor $g^{ab}$ satisfying
+\[
+g^{ab} g_{bc} = \delta\indices{^{a}_{c}}.
+\]
+
+\begin{exbox}
+	In the $\phi$ coordinates of the $S^2$ example, note
+	\[
+	g^{\mu\nu} = \left( 1, \frac{1}{\sin^2\theta}\right).
+	\]
+\end{exbox}
+
+An important property of the metric is that it induces a canonical identification of $T_pM$ and $T^\ast_pM$.
+
+Given $X^a \in T_pM$, we define a covector $g_{ab} X^b = X_a$, and given $\eta_a \in T_p^\ast M$, we define a vector $g^{ab}\eta_b = \eta^a$.
+
+In $(\mathbb{R}^3, \delta)$ we often do this without realizing. More generally, this allows us to raise tensor indices with $g^{ab}$ and lower with $g_{ab}$. For example if $T\indices{^{ab}_{c}}$ is  $(2, 1)$-tensor, then $T\indices{_{a}^{bc}}$ is the $(2, 1)$-tensor given by
+\[
+T\indices{_{a}^{bc}} = g_{ad} g^{ce} T\indices{^{db}_{e}}.
+\]
+
+\subsection{Lorentzian Signature}%
+\label{sub:lorsig}
+
+In Lorentzian signature, with indices $0, 1, \ldots, n$. At any point in a Lorentzian manifold we can find a basis $\{e_\mu\}$ such that
+\[
+g(e_\mu, e_\nu) = \eta_{\mu\nu} = \mathrm{diag}(-1, 1, 1, \ldots, 1).
+\]
+This basis is not unique; if $e_\mu' = (A^{-1})\indices{^{\nu}_{\mu}} e_\nu$ is another such basis, then
+\[
+\eta_{\mu\nu} = g(e_\mu', e_\nu') = (A^{-1})\indices{^{\sigma}_{\mu}} (A^{-1})\indices{^{\tau}_{\nu}} g(e_\sigma, e_\tau) = (A^{-1})\indices{^{\sigma}_{\mu}} (A^{-1})\indices{^{\tau}_{\nu}} \eta_{\sigma\tau}.
+\]
+This is the condition that $A$ is a \emph{Lorentz transformation}\index{Lorentz transformation}.
+
+The tangent space at $p$ has $\eta_{\mu\nu}$ as a metric tensor, so it has the structure of Minkowski space.
+
+\begin{definition}
+	$X \in T_p M$ is:
+	\begin{itemize}
+		\item \emph{spacelike}\index{spacelike} if $g(X, X) > 0$,
+		\item \emph{null}\index{null} or \emph{lightlike}\index{lightlike} if $g(X, X) = 0$,
+		\item \emph{timelike}\index{timelike} if $g(X, X) < 0$.
+	\end{itemize}
+\end{definition}
+
+A curve $\lambda : I \to M$ in a Lorentzian manifold is \emph{spacelike}/\emph{timelike}/\emph{null} if the tangent vector is everywhere spacelike/timelike/null respectively.
+
+A spacelike curve has a well-defined \emph{length}\index{length}, given by the same formula as in the Riemannian case. For a timelike curve $\lambda : (a, b) \to M$, the relevant quantity is the \emph{proper time}\index{proper time}
+\[
+	\tau(\lambda) = \int_{a}^b \sqrt{-g_{ab} \frac{\diff x^a}{\diff u} \frac{\diff x^b}{\diff u}} \diff u.
+\]
+If
+\[
+g_{ab} \frac{\diff \lambda^a}{\diff u} \frac{\diff \lambda^b}{\diff u} = -1
+\]
+for all $u$, then $\lambda$ is parametrized by proper time. In this case, we call the tangent vector $U^a = \frac{\diff \lambda^a}{\diff x}$ the \emph{four-velocity}\index{four-velocity} of $\lambda$.
+
+\subsection{Curves of Extremal Proper Time}%
+\label{sub:cept}
+
+Suppose $\lambda : (0, 1) \to M$ is timelike, satisfies $\lambda(0) = p$, $\lambda(1) = q$, and extremizes the proper time along all such curves. This is a variational problem associated to
+\[
+	\tau[\lambda] = \int_0^1 G(x^\mu(u), \dot x^\mu(u)) \diff u,
+\]
+with
+\[
+	G(x^\mu(u), \dot x^\mu(u)) = \sqrt{-g_{\mu\nu}(x(u)) \dot x^\mu(u) \dot x^\nu(u)}
+\]
+The Euler-Lagrange equation is
+\[
+\frac{\diff}{\diff u} \left( \frac{\partial G}{\partial \dot x^\mu} \right) = \frac{\partial G}{\partial x^\mu}.
+\]
+We can compute
+\begin{align*}
+	\frac{\partial G}{\partial \dot x^\mu} &= - \frac{1}{G} g_{\mu\nu} \dot x^\nu, \\
+	\frac{\partial G}{\partial x^\mu} &= - \frac{1}{2G} \frac{\partial}{\partial x^\mu} (g_{\mu\nu}) \dot x^\sigma \dot x^\tau \\
+					  &= - \frac{1}{2G} g_{\sigma\tau,\mu} \dot x^\sigma \dot x^\tau.
+\end{align*}
+
+% lecture 8
 
 \newpage
 
