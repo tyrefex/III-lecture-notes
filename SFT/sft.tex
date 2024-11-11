@@ -930,7 +930,7 @@ Hence for $d = 1$, it is much more probably to see two domain walls than a const
 
 We want to go beyond the saddle point approximation to calculate
 \[
-	Z = \int \mathcal{D} m(\mathbf{x}) \, e^{-\beta F[m(\mathbf{x}]}.
+	Z = \int \mathcal{D} m(\mathbf{x}) \, e^{-\beta F[m(\mathbf{x})]}.
 \]
 We make a couple of changes: first we change from $m(\mathbf{x})$ to $\phi(\mathbf{x})$, and also we assume $B = 0$, so
 \[
@@ -1051,6 +1051,464 @@ C \sim \mu^{d-4} \sim |T - T_c|^{-\alpha},
 where $\alpha = 2 - d/2$. These fluctuations explain why the MFT value $\alpha = 0$ is incorrect. But this value is also wrong.
 
 % lecture 6
+
+\subsection{Correlation Functions}%
+\label{sub:cor_fns}
+
+We know that
+\[
+	\braket{\phi(\mathbf{x})} =
+	\begin{cases}
+		0 & T > T_c,\\
+		\pm m_0 & T < T_c.
+	\end{cases}
+\]
+The fluctuations about this are captured by correlation functions:
+\[
+	\langle(\phi(\mathbf{x}) - \langle \phi(\mathbf{x})\rangle)(\phi(\mathbf{y}) - \langle\phi(\mathbf{y})\rangle)\rangle = \langle\phi(\mathbf{x}) \phi(\mathbf{y})\rangle - \langle\phi(\mathbf{x})\rangle \langle \phi(\mathbf{y}) \rangle.
+\]
+We can compute this by including the magnetic field ($B$-field) in $F$:
+\[
+	F[\phi, B] = \int \Diff d x \left( \frac{1}{2} \mu^2 \phi^2 + \frac{1}{2} \gamma(\nabla \phi)^2 - B(\mathbf{x}) \phi(\mathbf{x}) \right).
+\]
+This becomes a functional in terms of $B$:
+\[
+	Z[B(\mathbf{x})] = \int \mathcal{D} \phi \, e^{-\beta F[\phi, B]}.
+\]
+This contains a lot of information! For example,
+\begin{align*}
+	\frac{1}{\beta} \frac{\delta \log Z}{\delta B(\mathbf{x})} &= \frac{1}{\beta Z} \frac{\delta Z}{\delta B(\mathbf{x})} = \frac{1}{2} \int \mathcal{D} \phi \, \phi(\mathbf{x}) e^{-\beta F} = \langle \phi(\mathbf{x})\rangle_B, \\
+	\frac{1}{\beta^2} \frac{\delta^2 \log Z}{\delta B(\mathbf{x}) \delta B(\mathbf{y})} &= \frac{1}{\beta^2 Z} \frac{\delta^2 Z}{\delta B(\mathbf{x}) \delta B(\mathbf{y})} = \frac{1}{\beta^2 Z^2} \frac{\delta Z}{\delta B(\mathbf{x})} \frac{\delta Z}{\delta B(\mathbf{y})} \\
+											    &= \langle \phi(\mathbf{x}) \phi(\mathbf{y}) \rangle_B - \langle \phi(\mathbf{x}) \rangle_B \langle \phi(\mathbf{y}) \rangle_B,
+\end{align*}
+hence at $B = 0$, this gives our correlation function. We can calculate $Z[B(\mathbf{x})]$ in Fourier space, as
+\[
+	F[\phi, B] = \int \frac{\Diff d k}{(2 \pi)^d} \left[ \frac{1}{2} (\mu^2 + \gamma^2 \mathbf{k}^2) |\phi_{\mathbf{k}}|^2 - B_{-\mathbf{k}} \phi_{\mathbf{k}} \right].
+\]
+We complete the square, by setting
+\[
+\hat \phi_{\mathbf{k}} = \phi_{\mathbf{k}} - \frac{B_{\mathbf{k}}}{\mu^2 + \gamma \mathbf{k^2}}.
+\]
+Then we find
+\[
+	F = \int \frac{\Diff d k}{(2 \pi)^d} \left[ \frac{1}{2} (\mu^2 + \gamma \mathbf{k}^2)|\hat \phi_{\mathbf{k}}|^2 - \frac{1}{2} \frac{|B_{\mathbf{k}}|^2}{(\mu^2 + \gamma \mathbf{k}^2)} \right].
+\]
+Shift $\phi_{\mathbf{k}} \to \hat \phi_{\mathbf{k}}$ in the path integral, so we are now integrating over $\hat \phi_{\mathbf{k}}$. So,
+\begin{align*}
+	Z &= N \int \prod_k \diff (\Re \hat \phi_{\mathbf{k}}) \diff (\Im \hat \phi_{\mathbf{k}}) e^{-\beta F} \\
+	  &= e^{-\beta F_{\mathrm{thermo}}} \exp \left( \frac{\beta}{2} \int \frac{\Diff d k}{(2 \pi)^d} \frac{|B_{\mathbf{k}}|^2}{\mu^2 + \gamma \mathbf{k}^2} \right) \\
+	  &= e^{-\beta F_{\mathrm{thermo}}} \exp \left( \frac{\beta}{2} \int \Diff d x \Diff d y B(\mathbf{x}) G(\mathbf{x} - \mathbf{y}) B(\mathbf{y}) \right),
+\end{align*}
+where
+\[
+G(\mathbf{x}) = \int \frac{\Diff d k}{(2 \pi)^d} \frac{e^{-i \mathbf{k} \cdot \mathbf{x}}}{\mu^2 + \gamma \mathbf{k^2}}.
+\]
+So now we can use this to find the correlation coefficient:
+\[
+\langle \phi(\mathbf{x}) \phi(\mathbf{y}) \rangle - \langle \phi \rangle^2 = \frac{1}{\beta} G(\mathbf{x} - \mathbf{y}).
+\]
+Let $\xi^2 = \gamma/\mu^2$. Then we claim that
+\[
+G(\mathbf{x}) \sim
+\begin{cases}
+	1/\Gamma^{d-2} & r \ll \xi,\\
+	e^{-r/\xi}/(\xi^{(d-2)/2} \Gamma^{(d-1)/2}) & r \gg \xi.
+\end{cases}
+\]
+This shows fluctuations occur over $|\mathbf{x}| < \xi$, and decay rapidly for $|\mathbf{x}| > \xi$. In general, this property defines the \emph{correlation length}\index{correlation length} $\xi$.
+
+If $\xi \to \infty$ as $T \to T_c$, then there are fluctuations on all length scales at the critical point. Moreover,
+\[
+	(- \gamma \nabla^2 + \mu^2) G(\mathbf{x}) = \delta^{(d)}(\mathbf{x}).
+\]
+In other words, $G(\mathbf{x})$ is a Green's function for $- \gamma \nabla^2 + \mu^2$.
+
+We can define another critical exponent
+\[
+\xi \sim \frac{1}{|T - T_c|^{\nu}},
+\]
+and at the critical point ($\xi = \infty$),
+\[
+\langle \phi(\mathbf{x}) \phi(0) \rangle \sim \frac{1}{\Gamma^{d 02 + \eta}}.
+\]
+Our predictions are $\eta = 0$, and $\nu = 1/2$.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{c|ccc}
+	& MFT & $d = 2$ & $d = 3$ \\
+\hline
+	$\eta$ & $0$ & $1/4$ & 0.0363... \\
+	$\nu$ & $1/2$ & $1$ & 0.6300... \\
+\end{tabular}
+\caption{Predictions and Theoretical Critical Exponents}
+\end{table}
+
+We can also consider the susceptibility:
+\[
+\chi = \frac{\partial \langle \phi \rangle}{\partial B} \biggr|_{B = 0}.
+\]
+This is defined when there is no spatial variation. We can generalize to
+\begin{align*}
+	\chi(\mathbf{x}, \mathbf{y}) &= \frac{\delta \langle \phi(\mathbf{x} \rangle_B}{\delta B(\mathbf{y})} \biggr|_{B = 0} = \frac{\delta}{\delta B(\mathbf{y})} \left[ \frac{1}{\beta} \frac{\delta \log 2}{\delta B(\mathbf{x})} \right] \biggr|_{B = 0} \\
+				     &= \beta(\langle \phi(\mathbf{x}) \phi(\mathbf{y}) \rangle - \langle \phi \rangle^2) = G(\mathbf{x} - \mathbf{y}).
+\end{align*}
+If there is no spatial variation,
+\begin{align*}
+	\langle \phi \rangle &= \frac{1}{V} \int_V \Diff d x \langle \phi(\mathbf{x}) \rangle \\
+	\delta \langle \phi \rangle &= \frac{1}{V} \Diff d x \Diff d y \frac{\delta \langle \phi(\mathbf{x}) \rangle}{\delta B(\mathbf{y})} \delta B(\mathbf{y}) = \frac{1}{V} \int \Diff d x \Diff d y \chi(\mathbf{x}, \mathbf{y}) \delta B,
+\end{align*}
+hence
+\[
+\chi = \frac{1}{V} \int \Diff d x \Diff d y G(\mathbf{x}- \mathbf{y}) = \Diff d x (\mathbf{x}).
+\]
+This integral diverges at $|\mathbf{x}| \to \infty$ as $T \to T_c$, by substituting in the large $r$ behaviour of $G$, as the integral is
+\[
+\int r^{d-1} \diff r \frac{e^{-r/\xi}}{\xi^{(d-2)/2} r^{(d-1)/2}} \sim \xi^2 \sim \frac{1}{|T - T_c|}.
+\]
+
+% lecture 7
+
+The upper critical dimension is, for $T < T_c$, that
+\[
+\langle \phi(\mathbf{x}) \rangle = \pm m_0.
+\]
+The Ginzburg criterion says that MFT cannot be trusted when fluctuations in $\phi$ are large compared to $\langle \phi \rangle$. Define by
+\[
+	R = \int_{|x|, |y| < \xi} \Diff d x \Diff d y \, \langle (\phi(\mathbf{x}) - \langle \phi(\mathbf{x})\rangle) (\phi(\mathbf{y}) - \langle \phi(\mathbf{y})\rangle ) \rangle \bigg/ \left( \int_{|x| < \xi} \Diff d x \langle \phi(\mathbf{x}) \rangle \right)^2.
+\]
+This is dimensionless. Moreover by changing the coordinates $\mathbf{x}' = \mathbf{x} - \mathbf{y}$, this integral is approximated by
+\begin{align*}
+	\frac{\int_{|\mathbf{x}|, |\mathbf{y}| < \xi} \frac{1}{\beta} G(\mathbf{x}) \Diff d x \Diff d y}{(\xi^{d} m_0)^2} &\sim \frac{\xi^d}{\xi^{2d} m_0^2} \int_0^{\xi} r^{d-1} \diff r \frac{1}{r^{d-2}} \sim \frac{\xi^{2 - d}}{m_0^2} \\
+															  &\sim \frac{(|T - T_c|^{-1/2})^{2-d}}{(|T - T_c|^{1/2})^2} \sim |T - T_c|^{(d-4)/2}.
+\end{align*}
+Hence MFT is bad as $T \to T_c$ for $d < 4$.
+
+\newpage
+
+\section{The Renormalization Group}%
+\label{sec:renorm}
+
+Now we include non-quadratic terms in $F$, for example $\vphi^{4}$.
+
+\subsection{The Key Idea}%
+\label{sub:key}
+
+Suppose that
+\[
+	F[\vphi] = \int \Diff d x \left[ \frac{1}{2} (\nabla \vphi)^2 + \frac{1}{2} \mu^2 \vphi^2 + g \vphi^{4} + \cdots \right]
+\]
+We allow all possible terms in $F$ consistent with analyticity and the symmetries. For example, we could take $\vphi^{12}$ or $\vphi^{5}(\nabla \vphi)^{5} \nabla^2 \vphi$, but not $\vphi^{17}$ due to $\mathbb{Z}_2$ symmetry, or $\vphi^{-2}$ due to analyticity.
+
+Each term has a coupling constant (e.g. $\mu^2$, $g$ in the above). These can be viewed as coordinates in $\infty$-dimensional ``theory space''. Then,
+\[
+	Z = \int \mathcal{D} \vphi \, e^{-F[\vphi]},
+\]
+where we absorb $\beta$ into $F$. This is well-defined because of the V cutoff: we say $\vphi_{\mathbf{k}} = 0$ for $|\mathbf{k}| > \Lambda$.
+
+Suppose that we only care about the physics on a long-distance scale $L$. This corresponds to not caring about $\vphi_{\mathbf{k}}$ for $|\mathbf{k}| \gg L^{-1}$. Hence we try to construct a new theory with cutoff
+\[
+\Lambda' = \Lambda/\zeta,
+\]
+for some $\zeta > 1$. Write $\vphi_{\mathbf{k}} = \vphi_{\mathbf{k}}^{-} + \vphi_{\mathbf{k}}^+$, where
+\[
+\vphi_{\mathbf{k}}^{-} =
+\begin{cases}
+	\vphi_{\mathbf{k}} & |\mathbf{k}| < \Lambda',\\
+	0 & |\mathbf{k}| > \Lambda',
+\end{cases}
+\qquad \qquad \vphi_{\mathbf{k}}^+ =
+\begin{cases}
+	\vphi_{\mathbf{k}} & \Lambda' < |\mathbf{k}| < \Lambda, \\
+	0 & \text{else}.
+\end{cases}
+\]
+Here $\vphi_{\mathbf{k}}^{-}$ corresponds to the long wavelength (infrared) modes, and $\vphi_{\mathbf{k}}^{+}$ are the short wavelength (ultraviolet) modes. We can decompose
+\[
+	F[\vphi_{\mathbf{k}}] = F_0[\vphi_{\mathbf{k}}^{-}] + F_0[\vphi_{\mathbf{k}}^+] + F_I[\vphi_{\mathbf{k}}^{-}, \vphi_{ \mathbf{k}}^{+}].
+\]
+Our partition function can then be written
+\begin{align*}
+	Z &= \int \prod_{|\mathbf{k}| < \Lambda} \diff \vphi_{\mathbf{k}} \, e^{- F[\vphi_{\mathbf{k}}]} \\
+	  &= \int \prod_{|\mathbf{k}| < \Lambda'} \diff \vphi_{\mathbf{k}}^{-} \, e^{-F_0[\vphi_{\mathbf{k}}^{-}]} \int \prod_{\Lambda' < |\mathbf{k}| < \Lambda} \diff \vphi_{\mathbf{k}}^{+} \, e^{- F_0[\vphi_{\mathbf{k}}^{+}] - F_I[\vphi_{\mathbf{k}}^-, \vphi_{\mathbf{k}}^+]} \\
+	  &= \int \prod_{|\mathbf{k}| < \Lambda'} \diff \vphi_{\mathbf{k}}^{-} \, e^{-F'[\vphi_{\mathbf{k}}^-]}.
+\end{align*}
+Here we pretended to do the latter integral, to get $F'[\vphi_{\mathbf{k}}]$. This is the \emph{Wilsonian effective free energy}\index{Wilsonian effective free energy}, obtained by integrating out the ultraviolet modes to obtain a theory with a lower cutoff.
+
+We must take the same ground form as $F$, since we included all possible terms. So,
+\[
+	F'[\vphi] = \int \Diff d x \left( \frac{1}{2} \gamma'(\nabla \vphi)^2 + \frac{1}{2} \mu'^2 \vphi^2 + g' \vphi^{4} + \cdots \right).
+\]
+Here the values $\gamma', \mu', g'$ of the coupling constants will differ. We want to compare with the original theory, but they have different cutoffs. So we rescale $\mathbf{k}' =  \zeta \mathbf{k}$, such that
+\[
+|\mathbf{k}'| < \zeta \Lambda' = \Lambda.
+\]
+The similarly set $\mathbf{x}' = \mathbf{x}/\zeta$, so $\mathbf{k} \cdot \mathbf{x} = \mathbf{k}' \cdot \mathbf{x}'$. This corresponds to zooming out. Our integrals become, for example
+\[
+\int \Diff d x \, \frac{1}{2} \gamma' (\nabla \vphi)^2 = \int \zeta^{d} \Diff d x' \, \frac{1}{2} \gamma' \zeta^{-2} (\nabla' \vphi)^2.
+\]
+If we also rescale so that
+\[
+	\vphi'(\mathbf{x}') = \zeta^{(d-2)/2} \sqrt{\gamma'} \vphi(\mathbf{x}),
+\]
+then our form of $F'$ is
+\[
+	F'[\vphi'] = \int \Diff d x' \, \left[ \frac{1}{2} (\nabla' \vphi)^2 + \frac{1}{2} \mu(\zeta)^2 \vphi'^2 + g(\zeta) \vphi'^{4} + \cdots \right].
+\]
+As $\zeta$ increases, we obtain a \emph{flow}\index{flow} in theory space. The map $R(\zeta)$ from $F$ to $F'$ is a \emph{renormalization group transformation}\index{renormalization group}. It obeys
+\[
+R(\zeta_1) R(\zeta_2) = R(\zeta_1 \zeta_2).
+\]
+But $R(\zeta)$ is not invertible (so not actually a group; instead a semigroup). This is because we lose information when we integrate out the higher energy modes.
+
+In summary, there are three steps to the renormalization group:
+\begin{itemize}
+	\item Integrate out the high momentum modes $\Lambda/\zeta < |\mathbf{k}| < \Lambda$.
+	\item Rescale $\mathbf{k}' = \Lambda \mathbf{k}$, $\mathbf{x} = \mathbf{x}/\zeta$.
+	\item Rescale our fields to get canonically normalized gradient terms.
+\end{itemize}
+This process ends by giving us a flow on couplings.
+
+A key question is how RG flow behaves as $\zeta \to \infty$. There are a few possibilities.
+\begin{itemize}
+	\item The flow goes to $\infty$ in theory space, i.e. one of the couplings blows up.
+	\item The flow approaches a fixed point.
+	\item The flow goes into a limit cycle.
+	\item The flow just wanders around.
+\end{itemize}
+The latter two do not tend to happen.
+
+If we focus on the fixed point after, $\xi' = \xi/\zeta$. But this is a fixed point, so $\xi' = \xi = 0$ or $\infty$.
+
+If we take the disordered phase $(T > T_c)$, then $\xi = 0$ as $T \to \infty$. Similarly in the ordered phase $(T < T_c)$, $\xi = 0$ as $T \to 0$.
+
+But $\xi = \infty$ occurs at a critical point of a continuous phase transition.
+
+% lecture 8
+
+\begin{center}
+\begin{tikzpicture}
+
+\tikzset{midarrow/.style={decoration={markings, mark=at position 0.5 with {\arrow{>}}}, postaction={decorate}}}	
+
+% Draw axes
+\draw[->, thick] (-3, 0) -- (3, 0) node[anchor=north west] {$g_1$};
+\draw[->, thick] (0, -3) -- (0, 3) node[anchor=south east] {$g_2$};
+
+% Draw flow lines using arrows
+\draw[thick, blue, midarrow] (0, 0) .. controls (-1.5, -1.2) and (-1, -0.8) .. (-2, -2);
+\draw[thick, blue, midarrow] (-2, 1) .. controls (-1.5, 0.8) and (-1, 0.5) .. (0, 0);
+\draw[thick, blue, midarrow] (2, -2) .. controls (1.5, -1.5) and (1, -1) .. (0, 0);
+\draw[thick, blue, midarrow] (0, 0) .. controls (1.5, 1.2) and (1, 0.8) .. (1, 3);
+\draw[thick, blue, midarrow] (1.5, 3) .. controls (1.7, 0.5) and (2, -1) .. (2.5, -2);
+
+% Add fixed points
+\fill[red] (0,0) circle (2pt) node[anchor=north east] {} ;% {UV Fixed Point};
+%\fill[red] (2,0) circle (2pt) node[anchor=west] {} ;% {IR Fixed Point};
+
+% Optional labels for flow direction
+%\node[anchor=south] at (-1.5, -1) {Flow};
+%\node[anchor=west] at (1.5, -1) {Flow};
+\end{tikzpicture}
+\end{center}
+
+All points on the RG trajectories that lead to the same fixed point have the same long-distance physics, controlled by the fixed point, i.e. these are different microscopic theories with the same long-distance behaviour, giving universality.
+
+Note that $\xi' = \xi/\zeta = \infty$ as $\zeta \to \infty$ implies that $\xi = \infty$ for all points on the trajectory approaching a fixed point.
+
+At a fixed point, we can classify couplings:
+\begin{itemize}
+	\item If we turn on a (combination of) coupling(s), and the RG flow takes us back to the fixed point, this coupling is \emph{irrelevant}\index{irrelevant}.
+	\item If turning on couplings takes us away from the fixed point, the coupling is \emph{relevant}\index{relevant}.
+\end{itemize}
+
+We could also have a line (or surface) of fixed point. A coupling that moves us along this line is \emph{marginal}\index{marginal}.
+
+Typically, there exists just a few relevant directions or couplings, and infinitely many irrelevant directions. The basin of attraction of a fixed points is called its \emph{critical surface}\index{critical surface}.
+
+The \emph{codimension}\index{codimension} of such a surface is the number of relevant deformations of the fixed point.
+
+\subsection{Scaling}%
+\label{sub:sc}
+
+We use dimensional analysis, and measure dimensions in units of inverse length, so
+\[
+	[x] = -1, \qquad \left[ \frac{\partial}{\partial x} \right] = 1.
+\]
+Then we have $[F] = 0$, so $e^{-F}$ makes sense. Notice that
+\[
+	F[\vphi] = \int \Diff dx \left( \frac{1}{2} (\nabla \vphi)^2 + \cdots \right) \implies [\vphi] = \frac{d - 2}{2}.
+\]
+At the critical point, we have
+\[
+\langle \vphi(\mathbf{x})  \vphi(0) \rangle \sim \frac{1}{\Gamma^{d-2+\eta}}.
+\]
+Dimensional analysis gives $\eta = 0$. However experimentally this is not true.
+
+The reason is that there exists another length scale $\Lambda = 1a$, so writing
+\[
+\langle \vphi(\mathbf{x}) \vphi(0) \rangle \sim \frac{a^{\eta}}{\Gamma^{d - 2 + \eta}}
+\]
+becomes dimensionally constant. Then $\eta \neq 0$ can come from the third stop of RG:
+\[
+\vphi' (\mathbf{x}') = \zeta^{\Delta_{\vphi}} \vphi(\mathbf{x}).
+\]
+Here $\Delta_{\vphi}$ is the \emph{scaling dimension}\index{scaling dimension} of $\vphi$. Then we have
+\[
+\langle \vphi'(\mathbf{x}') \vphi'(0) \rangle = \zeta^{2 \Delta_{\vphi}} \langle \vphi(\mathbf{x}) \vphi(0) \rangle \sim \zeta^{2 \Delta_{\vphi}} / \Gamma^{d - 2 + \eta},
+\]
+at the critical point. But the ciritcal point is a fixed point, hence the left hand side scales as
+\[
+\frac{1}{(\Gamma')^{d - 2 + \eta}} = \frac{\zeta^{d - 2 + \eta}}{\Gamma^{d - 2 + \eta}} \implies \Delta_{\vphi} = \frac{d - 2}{2} + \frac{\eta}{2}.
+\]
+Near the fixed point, $\xi' = \xi/\zeta$, so $\Delta_{\xi} = -1$. If $\xi \sim t^{-\nu}$, where $t = |T - T_c|/T_c$ is the reduced temperature, then
+\[
+t' = \zeta^{\Delta_t} t,
+\]
+where $\Delta_t = 1/\nu$. We have the following relations between critical exponents:
+\begin{enumerate}
+	\item Write $F_{\mathrm{thermo}}(t) = \int \Diff d x \, f(t)$. Then RG doesn't change the value of $F_{\mathrm{thermo}} = - \log Z$, as it does not change the physics, so
+		\[
+		F'_{\mathrm{thermo}}(t') = F_{\mathrm{thermo}}(t),
+		\]
+		giving
+		\[
+		\int \Diff d x'\, f(t') = \int \Diff d x \, f(t).
+		\]
+		At the fixed point, $f' = f$ near the fixed point, so the left hand side becomes
+		\[
+		\int \Diff d x \, \zeta^{-d} f(\zeta^{\Delta_t} t).
+		\]
+		Hence we find $f(t) \sim t^{d/\Delta_t} = t^{dv}$. This can be thought of as spins correlating over blocks of size $\xi$, and by extensivity $F_{\mathrm{thermo}}$ is proportional to the number of blocks, which scales as $(L/\xi)^{d} \sim t^{dv}$.
+
+		Then we can find that
+		\[
+		c \sim \frac{\partial^2 f}{\partial t^2} \sim t^{dv - 2},
+		\]
+		but $c$ scales as $t^{-\alpha}$, so $\alpha = 2 - dv$, a \emph{hyperscaling relation}.
+	\item For $T < T_c$, and $T \approx T_c$, $\vphi \sim t^{\beta}$. Hence $\Delta_{\vphi} = \beta \Delta_t = \beta/\nu$. So
+		\[
+		\beta = \nu \Delta_{\vphi} = \frac{1}{2}(d - 2 + \eta)\nu.
+		\]
+	\item With a magnetic field, $F$ includes terms of the form
+		\[
+		\int \Diff d x \, B(\mathbf{x}) \vphi(\mathbf{x}).
+		\]
+		At the critical point, $F$ is invariant under RG action, so $\Delta_B + \Delta_{\vphi} = d$. Hence
+		\[
+		\Delta_B = \frac{d + 2 - \eta}{2}.
+		\]
+		Also the susceptibility scales as
+		\[
+		\chi = \left( \frac{\partial \vphi}{\partial B} \right)_T \sim t^{-\gamma} \implies \Delta_{\vphi} - \Delta_B = - \frac{\gamma}{\nu} \implies \gamma = \nu(2 - \eta).
+		\]
+	\item Near the critical point, $\vphi \sim B^{1/\delta}$, so
+		\[
+		\delta = \frac{\Delta_B}{\Delta_{\vphi}} = \frac{d + 2 - \eta}{d - 2 + \eta}.
+		\]
+\end{enumerate}
+
+Hence if we know $\eta, \nu$, we are able to compute $\alpha, \beta, \gamma, \delta$.
+
+This works well for $d = 2$ and $3$ Ising model, and $d = 4$ mean field theory, with quadratic flows. However it disagrees with the MFT predictions for $\beta$ and $\delta$ when $d > 4$. We will understand soon why this is true.
+
+% lecture 9
+
+Scaling is used to characterize interactions:
+\[
+	F[\phi] \supset \int \Diff d x \, g_{\mathcal{O}} \mathcal{O}(\mathbf{x}),
+\]
+where $\mathcal{O} = \vphi^{n}$ or $\vphi^{m}(\nabla \vphi^2)$. Here $m\mathcal{O}$ is called an \emph{operator}\index{operator}. Under RG by $\mathbf{x} \to \mathbf{x}'/\zeta$, if
+\[
+\mathcal{O}(\mathbf{x}) \to \mathcal{O}'(\mathbf{x}') = \zeta^{\Delta_{\mathcal{O}}} \mathcal{O}(\mathbf{x}),
+\]
+then $\mathcal{O}$ has scaling dimension $\Delta_{\mathcal{O}}$. But not all operators transform simply under RG; only certain combinations, analogous to the eigenvectors of RG. If $\mathcal{O}$ has scaling dimension $\Delta_{\mathcal{O}}$, then
+\[
+\int \Diff d x\, g_{\mathcal{O}} \mathcal{O}(\mathbf{x}) = \int \Diff d x' \, \zeta^{d} g_{\mathcal{O}} \zeta^{-\Delta_{\mathcal{O}}} \mathcal{O}'(\mathbf{x}'),
+\]
+hence $g_{\mathcal{O}}' = \zeta^{d - \Delta_{\mathcal{O}}} g_0$, giving $\Delta_{g_{\mathcal{O}}} = d - \Delta_{\mathcal{O}}$. The interaction is:
+\begin{itemize}
+	\item relevant if $\Delta_{\mathcal{O}} < d$,
+	\item irrelevant if $\Delta_{\mathcal{O}} > d$,
+	\item marginal if $\Delta_{\mathcal{O}} = d$.
+\end{itemize}
+
+Note that $\Delta_{\mathcal{O}}$ depends on which fixed point we are studying.
+
+\subsection{The Gaussian Fixed Point}%
+\label{sub:gfp}
+
+We apply RG starting from a very special point in theory space. Say
+\[
+	F_0[\vphi] = \int \Diff d x\, \left( \frac{1}{2} (\nabla \vphi)^2 + \frac{1}{2} \mu_0^2 \vphi^2 \right) = \int \frac{\Diff d k}{(2 \pi)^{d}} \left( \frac{1}{2}(\mathbf{k}^2 + \mu_0^2) |\vphi_{\mathbf{k}}|^2 \right).
+\]
+Break $\vphi_{\mathbf{k}}$ into $\vphi_{\mathbf{k}}^{-}$ and $\vphi_{\mathbf{k}}^+$, where the former is the low energy modes and the latter has the higher energy. Then the free energy splits:
+\[
+	F_0[\vphi] = F_0[\vphi^{-}] + F_0[\vphi^{+}].
+\]
+The new free energy satisfies
+\[
+	e^{-F_0'[\vphi']} = \left( \int \mathcal{D} \vphi^{+} \, e^{-F_0[\vphi^{+}]} \right) e^{-F_0[\vphi^{-}]} = \mathcal{N} e^{-F_0[\vphi^{-}]}.
+\]
+Now we scale, letting $\mathbf{k}' = \zeta \mathbf{k}$, so $\vphi'_{\mathbf{k}'} = \zeta^{-w} \vphi_{\mathbf{k}}^{-}$, where $w$ is to be determined. So
+\begin{align*}
+	F_0[\vphi^{-1}] &= \int_{|\mathbf{k}| < \Lambda/\zeta} \int \frac{\Diff d k}{(2 \pi)^{d}} \frac{1}{2} (\mathbf{k}^2 + \mu_0^2) |\vphi_{\mathbf{k}}^{-}|^2 \\
+			&= \int_{|\mathbf{k}'| < \Lambda} \int \frac{\Diff d k'}{(2 \pi)^{d}} \frac{1}{2 \zeta^{d}} \left( \frac{\mathbf{k}'^2}{\zeta^2} + \mu_0^2 \right) \zeta^{2w} |\vphi_{\mathbf{k}'}'|^2.
+\end{align*}
+For the canonical kinetic terms, we need $w = \frac{d+2}{2}$. Relabelling,
+\[
+	F_0'[\vphi] = \int_{|\mathbf{k}| < \Lambda} \frac{\Diff d k}{(2 \pi)^{d}} \frac{1}{2} (\mathbf{k}^2 + \mu(\zeta)^2) |\vphi_{\mathbf{k}}|^2,
+\]
+where $\mu(\zeta)^2 = \zeta^2 \mu_0^2$.
+
+Interestingly the quadratic form of $F$ is preserved by RG. For this theory, $\xi \sim 1/\mu$, then $\xi \to \xi/\zeta$ under RG, as expected. There are two fixed points:
+\begin{itemize}
+	\item $\mu^2 = \infty$, when $T = \infty$.
+	\item $\mu^2 = 0$. This is the Gaussian fixed point.
+\end{itemize}
+
+What happens near the fixed point? Since $\mu^2$ grows under RG, this shows $\vphi^2$ is a relevant operator.
+
+We can also include other quadratic terms such as $\alpha_0(\nabla^2 \vphi)^2$, and find $\alpha(\zeta)(\nabla^2 \vphi)^2$, where $\alpha(\zeta) = \zeta^{-2} \alpha_0$, hence $(\nabla^2 \vphi)^2$ is irrelevant.
+
+What about a general free energy
+\[
+	F_0[\vphi] = \int \Diff d x \, \left( \frac{1}{2} (\nabla \vphi)^2 + \frac{1}{2} \mu_0^2 \vphi^2 + \sum_{n = 4}^{\infty} g_{0, n} \vphi^{n} \right).
+\]
+This is non-quadratic, so the first step of integrating out higher order modes is harder. Integrating out $\vphi^{+}$ shifts $g_{0, n} \to g_n' = g_{0,n} + \delta g_n$.
+
+We ignore this for now, and just look at applying the second and third steps. So say $\mathbf{x}' = \mathbf{x}/\zeta$, and $\vphi'(\mathbf{x}) = \zeta^{\Delta_{\vphi}} \vphi(\mathbf{x})$. Then
+\[
+	F_0'[\vphi'] = \int \Diff d x'\, \zeta^{d} \left( \frac{1}{2} \zeta^{-2 - 2 \Delta_{\vphi}}(\nabla' \vphi')^2 + \frac{1}{2} \mu_0^2 \zeta^{-2 \Delta_{\vphi}} \vphi'^2 + \sum_{n \geq 0} g_{0, n} \zeta^{-n \Delta_{\vphi}} \vphi^{-n} \right).
+\]
+As before we find
+\[
+\Delta_{\vphi} = \frac{d - 2}{2} , \qquad \mu(\zeta)^2 = \zeta^2 \mu_0^2.
+\]
+Hence we must have
+\[
+g_n(\zeta) = \zeta^{d - n \Delta_{\vphi}} g_{0, n} = \zeta^{(1 - n/2)d + n} g_{0, n},
+\]
+for example
+\[
+g_4(\zeta) = \zeta^{4 - d} g_{0, 4}.
+\]
+This shows $\vphi^{4}$ is irrelevant for $d > 4$, and is relevant for $d < 4$. This is why re normalization is only accurate for higher dimensions. $d = 4$ looks marginal, but we need to include boundary terms. Similarly,
+\[
+g_6(\zeta) = \zeta^{6 - 2d} g_{0, 6},
+\]
+which says $\vphi^{6}$ is irrelevant for $d > 3$, and relevant for $d < 3$.
+
+If $d = 2$, then all $\vphi^{n}$ are relevant.
+
+We will look at RG flow in the $(\mu^2, g_4)$ subspace of our theory space: (INSERT PICTURE)
+
+To hit the GFP with $d < 4$, we need to tune at least two parameters $\mu^2$ and $g_4$. But to hit the Ising CP with $B = 0$, we need to tune $T$. Hence the GFP does not describe the Ising critical point if $d < 4$. We will see there is another fixed point.
+
+Previously, we saw that the saddle point approximation to the path integral lead to MFT with quadratic fluctutations. This is self-consistent only if the couplings of non-quadratic terms remain small, i.e. remain near the GFP. But if $d < 4$, $g_4$ does not remain small under RG, so the saddle point approximation cannot be trusted.
+
+
+% lecture 10
 
 \newpage
 

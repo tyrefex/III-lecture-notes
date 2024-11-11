@@ -466,7 +466,7 @@ These are the energy, and the three momenta.
 	\]
 	So
 	\[
-	E = \int \Diff 3 x \, T^{00} = H, \qquad p^i = \int \Diff 3 x \, T^{0i} = \int \Diff 3x \, \dot \phi \partial^i \phi.
+	E = \int \Diff 3 x \, T^{00} = H, \qquad P^i = \int \Diff 3 x \, T^{0i} = \int \Diff 3x \, \dot \phi \partial^i \phi.
 	\]
 \end{exbox}
 
@@ -654,8 +654,8 @@ which we want in terms of $a, a^\dagger$. Writing this out,
 	  & \qquad \qquad + \frac{m^2}{2} \frac{1}{\sqrt{\omega_p \omega_q}} (a e^{ipx} + a^{\dagger} e^{-ipx})(ae^{iqx} + a^{\dagger} e^{-iqx}) \biggr) \\
 	  &= \frac{1}{2} \int \frac{\Diff 3 p}{(2 \pi)^3} \frac{1}{2 \omega_p} \biggl[ \underbrace{(-\omega_p^2 + \mathbf{p}^2 + m^2)}_{0}(a_p a_p e^{-2i\omega t} + a_p^{\dagger} a_p^{\dagger} e^{2i\omega t}) \\
 	  & \qquad \qquad + (\omega_p^2 + \mathbf{p}^2 + m^2)(a_p^\dagger a_p + a_p a_p^\dagger) \biggr] \\
-	  &= \frac{1}{2} \int \frac{\Diff 3p}{(2 \pi)^3} \omega(a_p^\dagger a_p + a_p a_p^\dagger) \\
-	  &= \int \frac{\Diff 3 p}{(2 \pi)^3} \omega a_p^\dagger a_p + \int \frac{\Diff 3 p}{2} \, \omega \delta(0).
+	  &= \frac{1}{2} \int \frac{\Diff 3p}{(2 \pi)^3} \omega_p(a_p^\dagger a_p + a_p a_p^\dagger) \\
+	  &= \int \frac{\Diff 3 p}{(2 \pi)^3} \omega_p a_p^\dagger a_p + \int \frac{\Diff 3 p}{2} \, \omega_p \delta(0).
 \end{align*}
 We should be scared by the last term. If we take a vacuum state $\ket 0$ such that
 \[
@@ -663,13 +663,13 @@ a_p \ket 0 = 0,
 \]
 then in fact
 \[
-H \ket 0 = \int \frac{\Diff 3 p}{2} \omega (2 \pi)^3 \delta(0) \ket 0 = \infty.
+H \ket 0 = \int \frac{\Diff 3 p}{2} \, \omega (2 \pi)^3 \delta(0) \ket 0 = \infty.
 \]
 To understand the nature of this, we need to see the origin of this divergence. We actually have two infinities:
 \begin{enumerate}[(i)]
 	\item Infrared divergence: $(2 \pi)^3 \delta(0)$. This arises as follows:
 		\[
-			(2\pi)^3 \delta(0) = \lim_{L \to \infty} \int_{-L}^L \Diff 3 x e^{i \mathbf{x} \cdot \mathbf{p}} \biggr|_{\mathbf{p} = 0} = \lim_{L \to \infty} \int_{-L}^{L} \Diff 3 x = V.
+			(2\pi)^3 \delta(0) = \lim_{L \to \infty} \int_{-L}^L \Diff 3 x \, e^{i \mathbf{x} \cdot \mathbf{p}} \biggr|_{\mathbf{p} = 0} = \lim_{L \to \infty} \int_{-L}^{L} \Diff 3 x = V.
 		\]
 		For an infinite size system, this blows up. The solution is to discuss energy densities, so
 		\[
@@ -696,7 +696,7 @@ The origin is due to an ambiguity in multiplying fields. The cure is \emph{norma
 \begin{definition}
 	If we are given a list of fields, we define the \emph{normal ordering} as
 	\[
-	: \phi_1(x_1) \phi_2(x_2) \cdots \phi_n(x_n):
+		\normalorder{\phi_1(x_1) \phi_2(x_2) \cdots \phi_n(x_n)}
 	\]
 	where this is the usual product with all $a(p)$ operators placed to the right of an $a^\dagger(p)$.
 \end{definition}
@@ -717,7 +717,7 @@ We can construct excited states by
 % lecture 6
 where $\omega_p^2 = p^2 + m^2$. We can consider
 \[
-\mathbf{P} = - \int \Diff3 x \pi \nabla \phi = \int \frac{\Diff 3 k}{(2 \pi)^3} k a_k^\dagger a_k,
+\mathbf{P} = - \int \Diff3 x \, \pi \nabla \phi = \int \frac{\Diff 3 k}{(2 \pi)^3} k a_k^\dagger a_k,
 \]
 where
 \[
@@ -735,7 +735,7 @@ With this, we can create more states:
 \]
 Because $a^\dagger$ commute, these are configurations which are symmetric under interchange, i.e.
 \[
-	\ket{\mathbf{p}_1 \mathbf{p}_2} = \ket{\mathbf{p}_2 \mathbf{p}_2}.
+	\ket{\mathbf{p}_1 \mathbf{p}_2} = \ket{\mathbf{p}_2 \mathbf{p}_1}.
 \]
 The \emph{Fock space}\index{Fock space} is the collection of all possible combinations of $a^\dagger$ acting on $\ket 0$. Introducing
 \[
@@ -810,7 +810,7 @@ This commutator satisfies a few properties:
 	\item It is Lorentz invariant due to the appearance of our measure, and also a c-number operator.
 	\item For time-like separation, $(x-y)_T = (t, 0, 0, 0)$, we find
 		\[
-		\Delta(x - y)_T = \int \frac{\Diff3p}{(2\pi)^3} \frac{1}{2\omega_p}(e^{-i\omega_pt}-e^{i\omega_pt}) \sim e^{-imt}-e^{imt}= 0.
+		\Delta(x - y)_T = \int \frac{\Diff3p}{(2\pi)^3} \frac{1}{2\omega_p}(e^{-i\omega_pt}-e^{i\omega_pt}) \sim e^{-imt}-e^{imt}\neq 0.
 		\]
 	\item For spacelike separation, say $(x-y)_S = (0, \mathbf{x} - \mathbf{y})$, then
 		\[
@@ -826,7 +826,7 @@ Here we are interested in the quantity
 \[
 	\braket{0|\phi(x)\phi(y)|0} = \int \frac{\Diff3p}{(2\pi)^3} \frac{1}{2\omega_p} e^{-ip(x-y)} = D(x-y).
 \]
-For spacelike events,
+This can be thought of as preparing a particle at position $y$, and measuring its amplitude at position $x$. For spacelike events,
 \[
 D(x-y) \sim e^{-m(\mathbf{x}-\mathbf{y})} \neq 0.
 \]
@@ -911,12 +911,365 @@ By convention we drop the limit.
 				(\partial_\mu \partial^\mu + m^2)\Delta_F(x - y) &= -i \delta^{4}(x - y).
 			\end{align*}
 			$\Delta_F$ is the Green's function associated to the Klein-Gordon equation.
+% lecture 8
+		\item Normal orderings are invariant up to reordering, as each $a^{\dagger}$ and $a$ commute.
+		\item Fun little fact:
+			\[
+				T \phi(x) \phi(y) = \normalorder{\phi(x) \phi(y)} + \Delta_F(x - y) = \normalorder{\phi(x) \phi(y)} + \overbrace{\phi(x)\phi(y)}
+			\]
+			To prove this, write $\phi = \phi^{+} + \phi^{-}$, where 
+			\begin{align*}
+				\phi^{+} &= \int \frac{\Diff 3 p}{(2\pi)^3} \frac{1}{\sqrt{2 \omega_p}} a_p e^{-i p x}, \\
+				\phi^{-} &= \int \frac{\Diff 3 p}{(2\pi)^3} \frac{1}{\sqrt{2 \omega_p}} a_p^{\dagger} e^{i p x}.
+			\end{align*}
+			Choose $x^0 > y^0$. Then,
+			\begin{align*}
+				T(\phi(x)\phi(y)) &= \phi(x)\phi(y) \\
+						  &= \phi^{+}(x) \phi^{+}(y) + \phi^{-}(x) \phi^{+}(y) + \phi^{-}(y) \phi^{+}(x) \\
+						  & \qquad + [\phi^{+}(x), \phi^{-}(y)] + \phi^{-}(x) \phi^{-}(y) \\
+						  &= \normalorder{\phi(x) \phi(y)} + D(x - y).
+			\end{align*}
+			If $x^0 < y^0$, we get
+			\[
+			T \phi(x) \phi(y) = \normalorder{\phi(x)\phi(y)} + D(y - x).
+			\]
+			Together this gives \emph{Wick's theorem}, a generalisation of this:
+			\begin{align*}
+				T(\phi(x_1) \phi(x_2) \phi(x_3)\phi(x_4)) &= \normalorder{\phi(x_1)\phi(x_2)\phi(x_3)\phi(x_4)} \\
+									  & \qquad + \overbrace{\phi_1 \phi_2} \normalorder{\phi_3 \phi_4} + \overbrace{\phi_1 \phi_3} \normalorder{\phi_2 \phi_4} + \overbrace{\phi_1 \phi_4} \normalorder{\phi_2\phi_3} \\
+									  & \qquad + \overbrace{\phi_2\phi_3} \normalorder{\phi_1 \phi_4} + \overbrace{\phi_2 \phi_4} \normalorder{\phi_1\phi_3} + \overbrace{\phi_3\phi_4} \normalorder{\phi_1\phi_2} \\
+									  & \qquad + \overbrace{\phi_1\phi_2} \overbrace{\phi_3 \phi_4} + \overbrace{\phi_1\phi_3} \overbrace{\phi_2\phi_4} + \overbrace{\phi_1\phi_4} \overbrace{\phi_2\phi_3}.
+			\end{align*}
 	\end{enumerate}
-	
 \end{remark}
 
+\newpage
 
-% lecture 8
+\section{Interactions}%
+\label{sec:ints}
+
+\subsection{Couplings}%
+\label{sub:cups}
+
+The free theory we have been studying so far is ``simple'': we can construct explicitly the Fock space.
+
+We want to consider more general Lagrangians. An obstruction is that we cannot generally solve the equations of motion, hence do not have access to the Hilbert space.
+
+In this way, we take a perturbative approach to QFT, where
+\[
+\mathcal{L} = \mathcal{L}_0 + \mathcal{L}_{\mathrm{int}},
+\]
+where say
+\[
+\mathcal{L}_0 = \frac{1}{2} \partial_\mu \phi \partial^\mu \phi - \frac{1}{2} m^2 \phi^2,
+\]
+and
+\[
+\mathcal{L}_{\mathrm{int}} = \sum_{n \geq 0} \frac{\lambda_n}{n!} \phi^n.
+\]
+A naive approach is to believe that $\lambda_n \ll 1$. This will in general not be true.
+
+In some way we want to quantify smallness. Recall our units
+\[
+c = 1 = \hbar,
+\]
+and so
+\[
+	[L] = [T] = [M^{-1}],
+\]
+where $[M] = 1$. Applying this to the action,
+\[
+S = \int \Diff 4 x \mathcal{L},
+\]
+where $[S] = [\hbar] = 0$, which is dimensionless. Since we are taking an integral over 4-space, this means that $[\mathcal{L}] = 4$.
+
+Applying to $\mathcal{L}_0$, we see that $[m] = 1$, the partial have unit 1, so hence $[\phi] = 1$. Therefore,
+\[
+	[\mathcal{L}_{\mathrm{int}}] = [\lambda_n \phi^n] \implies [\lambda_n] = 4 - n.
+\]
+In different cases, we want to consider our $\lambda_n$ in relation to given scales.
+\begin{enumerate}
+	\item Take $n = 3$, so $[\lambda_n] = 1$. Then a dimensionless quantity we could consider is $\lambda_n/E$, where $E$ is some energy scale.
+
+		If $\lambda_n \ll E$, then the perturbation is small. If $\lambda_n \gg E$, then the perturbation is large.
+
+		If for example $E > m$, then $\lambda_n \ll m$ is a small perturbation. This is an example of a \emph{relevant coupling}\index{relevant coupling}.
+	\item If $n = 4$, then $[\lambda_n] = 0$, so it is meaningful to write $\lambda_n \gg 1$ or $\lambda_n \ll 1$. This is a \emph{marginal coupling}\index{marginal coupling}.
+	\item If $n > 4$, then $[\lambda_n] < 0$. So the dimensional combination is $\lambda_n(E)^{n-1}$, which are not important at low energies, and only become important at higher energies. In this case $\lambda_n$ is an \emph{irrelevant coupling}\index{irrelevant coupling}.
+\end{enumerate}
+
+QFT is simple because at the start, we only case about relevant and marginal couplings.
+
+In our case, the classification or identification of the couplings is classical. In advanced QFT, we will see that quantum effects may change the couplings.
+
+\subsection{LSZ Reduction Formula}%
+\label{sub:lsz}
+
+The basic quantity to study in QFT is a scattering matrix (S-matrix). That is, given an ingoing particle which interacts in some way, we want to calculate the outgoing particle.
+
+To fully quantify the theory, we need to:
+\begin{enumerate}
+	\item Define our states (asymptotic states).
+	\item Understand how to relate the in and out states (S-matrices).
+	\item Understand how to evaluate $S$.
+\end{enumerate}
+
+To understand our states, consider our Lagrangian
+\[
+\mathcal{L} = \mathcal{L}_0 + \mathcal{L}_{\mathrm{int}},
+\]
+which is analogously given by a Hamiltonian
+\[
+H = H_0 + H_{\mathrm{int}}.
+\]
+We will assume there is a vacuum state $\ket \Omega$, for the entire system $H$. $\ket 0$ will still be our vacuum state for $H_0$.
+
+% lecture 9
+
+We will also assume that the Hamiltonian is responsible for time evolution, so
+\[
+	i \partial_t \phi = [\phi, H],
+\]
+and in general
+\[
+	i \partial_t \Theta = [\Theta, H]
+\]
+for any operator $\Theta$. We also declare that at some time $t = t_0$, we can match the Hilbert space of $H_0$ to that of $H$, so
+\[
+a_p(t) = e^{iH(t - t_0)} a_p e^{-iH(t - t_0)}.
+\]
+Then our overall field becomes
+\[
+	\phi(x) = \int \frac{\Diff 3 p}{(2 \pi)^3} \frac{1}{\sqrt{2 \omega_p}} \left( a_p(t) e^{-i p x} + a_p^{\dagger}(t) e^{ipx} \right).
+\]
+With this, we can write out states as, e.g.
+\begin{align*}
+	\ket{\text{initial}} &= \sqrt{2 \omega_1} \sqrt{2 \omega_2} a_{p_1}^{\dagger}(t_i) a_{p_2} ^{\dagger}(t_i) \ket \Omega, \\
+	\ket{\text{final}} &= \sqrt{2\omega_3}\sqrt{2\omega_4} a_{p_3}^{\dagger}(t_f) a_{p_4}^{\dagger} (t_f) \ket \Omega.
+\end{align*}
+
+In our definition of asymptotic states, we will want interactions to be turned off when $t_i \to -\infty$, and $t_f \to \infty$, so
+\[
+\lim_{t \to \pm \infty} a_p^{\dagger} (t) = a_p^{\dagger}.
+\]
+We can relate the states at $\pm \infty$ by
+\begin{align*}
+	\braket{f|S|i} &= \braket{\text{final}|\text{initial}} \\
+		       &= \prod_{i = 1}^4 \sqrt{2 \omega_i} \braket{\Omega | T a_{p_3}(+\infty) a_{p_4}(+\infty) a_{p_1}^{\dagger}(-\infty) a_{p_2}^{\dagger}(-\infty)| \Omega}.
+\end{align*}
+We want the $S$-matrix for other times. To achieve this, we prove the following:
+
+\begin{proposition}
+	We have
+	\[
+		\sqrt{2 \omega_p} (a_p^{\dagger}(\infty) - a_p^{\dagger}(-\infty)) = - i \int \Diff 4 x \, e^{-ipx} (\square + m^2) \phi(x)
+	\]
+	in the interacting theory, where
+	\[
+		\omega_p = \sqrt{\mathbf{p}^2 + m^2}.
+	\]
+\end{proposition}
+
+\begin{proofbox}
+	We have, the right side is
+	\begin{align*}
+		-i \int \Diff 4 x \, e^{-ipx}(\square + m^2)\phi(x) &= - i \int \Diff4 x \, e^{-ipx}(\partial_t^2 - \overrightarrow{\nabla}^2 + m^2) \phi(x) \\
+								 &= - i \int \Diff 4 x \, e^{-ipx} (\partial_t^2 - \overleftarrow{\nabla}^2 + m^2) \phi(x) \\
+								 &= - i \int \Diff 4 x \, e^{-ipx} (\partial_t^2 + \mathbf{p}^2 + m^2) \phi(x) \\
+								 &= -i \int \Diff 4 x \, \partial_t(e^{-ipx} \partial_t \phi - (\partial_t e^{-ipx})\phi ).
+	\end{align*}
+	This only depends at times at $\pm \infty$. Recall from the free theory that
+	\begin{align*}
+		\sqrt{2 \omega_p} \mathring a_p &= i \int \Diff 3  x \, e^{ipx} \overrightarrow{\partial_t} \phi, \\
+	\sqrt{2 \omega_p} \mathring{a}_p^{\dagger} &= -i \int \Diff 3 x \, e^{-ipx} \overrightarrow{\partial_t} \phi,
+	\end{align*}
+	where
+	\[
+		f \overrightarrow{\partial_t} g = f \partial_t g - (\partial_t f)g.
+	\]
+	Hence we can evaluate this as
+	\[
+		\sqrt{2 \omega_p} \int_{-\infty}^{\infty} \diff t \, \partial_t (a_p^{\dagger}(t)) = \sqrt{2\omega_p} (a_p^{\dagger}(\infty) - a_p^{\dagger}(-\infty)).
+\]
+\end{proofbox}
+
+Analogously, we have
+\[
+	\sqrt{2 \omega_p} (a_p(\infty) - a_p(-\infty)) = i \int \Diff 3 x \, e^{ipx} (\square + m^2)\phi(x).
+\]
+
+Hence we can write $\braket{f|S|i}$ as
+\begin{align*}
+	\braket{f|S|i} &= \prod_{i= 1}^4 \sqrt{2 \omega_i} \langle\Omega | T(a_{p_3}(+\infty) - a_{p_3}(-\infty))(a_{p_4}(+\infty)- a_{p_4}(-\infty))\\
+		       & \qquad \times (a_{p_1}^{\dagger}(-\infty)- a_{p_1}^{\dagger}(+\infty))(a_{p_2}^{\dagger}(-\infty) - a_{p_2}^{\dagger}(+\infty))| \Omega\rangle \\
+		       &= \prod_{j = 1}^{4} \left( i \int \Diff 4 x_j \right) e^{-ip_1 x_2}(\square_1 + m^2) e^{-ip_2x_2} (\square_2 + m^2) e^{ip_3x_3} (\square_3 + m^2) e^{ip_4x_4}(\square_4+m^2) \\
+		       & \qquad \times \braket{\Omega | T \phi(x_1) \phi(x_2) \phi(x_3) \phi(x_4)| \Omega}.
+\end{align*}
+
+The advantages of LSZ:
+\begin{itemize}
+	\item This formula above is manifestly Lorentz invariant.
+	\item It makes clear the relation between the correlation functions, and the S-matrix.
+\end{itemize}
+
+Note that
+\[
+	\braket{\Omega | T (\square_x + m^2) \phi(x) \cdots | \Omega} \neq (\square_x + m^2) \braket{\Omega | T \phi(x) \cdots | \Omega}
+\]
+but we still pull these out anyway. The difference are contact terms.
+
+% lecture 10
+
+\subsection{Schwinger-Dyson Formula}%
+\label{sub:sdf}
+
+We need a way to evaluate
+\[
+	\braket{\Omega | T \phi(x_1) \cdots \phi(x_n) | \Omega}.
+\]
+The strategy is to present a Lagrangian approach to this. We make some assumptions.
+\begin{enumerate}
+	\item At any given time, the Hilbert space of the interacting theory is equal to the Hilbert space of the free theory, so
+		\begin{align*}
+			[\phi(\mathbf{x}, t), \phi(\mathbf{x}', t)] &= 0, \\
+			[\phi(\mathbf{x}, t), \partial_t \phi(\mathbf{x}', t)] &= i \delta^3(\mathbf{x} - \mathbf{x}').
+		\end{align*}
+	\item Our fields still comply with the Euler-Lagrange equations. In the free theory,
+		\[
+			(\square + m^2) \phi(x) = 0.
+		\]
+		In the interacting theory,
+		\[
+			(\square + m^2) \phi(x) - \mathcal{L}_{\mathrm{int}}'(\phi) = 0,
+		\]
+		where $\mathcal{L}_{\mathrm{int}}' = \partial \mathcal{L}_{\mathrm{int}} / \partial \phi$.
+\end{enumerate}
+
+In the Hamiltonian derivation, you would assume
+\[
+	\partial_t \phi = i [H, \phi].
+\]
+For brevity, we remove the $T$:
+\[
+	\langle \Omega | \phi(x_1) \cdots \phi(x_n) | \Omega \rangle = \braket{ \phi_1 \cdots \phi_n}.
+\]
+We claim that
+\[
+	(\square_x + m^2) \braket{\phi_x \phi_y} = \braket{ (\square_x + m^2)\phi_x \phi_y} - i \delta^{4}(x - y).
+\]
+\begin{proofbox}
+	For our warm up, we take the free theory:
+	\[
+		(\square _x + m^2) \braket{\phi_x^0 \phi_y^0} = 0 - i \delta^{4}(x - y).
+	\]
+	This is saying the Feynman propagator is a Green's function. For an interacting theory,
+	\begin{align*}
+		\partial_{x^0} \braket{\phi_x \phi_y} &= \partial_{x^0} ( \braket{\Omega | \phi_x \phi_y | \Omega} \Theta(x^0 - y^0) + \braket{\Omega | \phi_y \phi_x | \Omega} \Theta(y^0 - x^0) ) \\
+						      &= \braket{\partial_{x^0} \phi_x \phi_y} + \braket{\Omega | \phi_x \phi_y | \Omega} \partial_x \Theta(x^{0} - y^{0}) + \braket{\Omega| \phi_y \phi_x|\Omega} \partial_{x^{0}} \Theta(y^{0} - x^{0}) \\
+						      &= \braket{\partial_{x^0} \phi_x \phi_y} + \delta(x^0-y^0) \braket{\Omega|[\phi_x, \phi_y]|\Omega} \\
+		\partial_{x^0}^2\braket{\phi_x \phi_y} &= \braket{\partial_{x^0}^2 \phi_x \phi_y} + \delta(x^0 - y^0) \braket{\Omega | [\partial_x \phi_x, \phi_y] | \Omega} \\
+						       &= \braket{\partial_{x^0}^2 \phi_x \phi_y} - i \delta^{4}(x - y).
+	\end{align*}
+	Hence we see
+	\[
+		(\square_x + m^2) \braket{\phi_x \phi_y} = \braket{(\square_x + m^2)\phi_x \phi_y} - i \delta^{4}(x - y).
+	\]
+\end{proofbox}
+
+Now that this has been shown, we can write down
+\begin{align*}
+	(\square_x + m^2)\braket{\phi_x \phi_y} &= \braket{ \mathcal{L}_{\mathrm{int}}'(\phi_x) \phi_y} - i \delta^{4}(x - y).
+\end{align*}
+This generalizes.
+\[
+	(\square_x + m^2) \braket{\phi_1 \cdots \phi_n} = \braket{ \mathcal{L}_{\mathrm{int}}'(\phi_x) \phi_1 \cdots \phi_n } - i \sum_{j = 1}^n \delta^{4}(x - x_j) \braket{\phi_1 \cdots \phi_{j-1} \phi_{j+1} \cdots \phi_n}.
+\]
+
+\begin{exbox}[Uses of Schwinger-Dyson]
+	\begin{enumerate}
+		\item Consider finding the $4$-point function in the free theory. By Wick's theorem, we find
+			\begin{align*}
+				\braket{\phi_1^0 \phi_2^0 \phi_3^0 \phi_4^0} &= \Delta_F(x_1 - x_2) \Delta_F(x_3 - x_4) + \cdots \\
+									     &= \Delta_{12} \Delta_{34} + \Delta_{13} \Delta_{24} + \Delta_{14} \Delta_{23}.
+			\end{align*}
+			We can also derive this using Schwinger-Dyson:
+			\begin{align*}
+				\braket{\phi_1^0 \phi_2^0 \phi_3^0 \phi_4^0} &= \int \Diff 4 x \, \delta^{4}(x - x_1) \braket{\phi_x \phi_2 \phi_3 \phi_4 } \\
+									     &= i \int \Diff 4 x \, ((\square_x + m^2) \Delta_{x_1}) \braket{\phi_x \phi_2 \phi_3 \phi_4} \\
+									     &= i \int \Diff4 x \, \Delta_{x_1}((\square_x + m^2) \braket{\phi_x \phi_2 \phi_3 \phi_4}) \\
+									     &= i \int \Diff 4 x \, \Delta_{x_1}(-i \delta(x - x_2) \braket{\phi_3\phi_4} - i \delta(x - x_3) \braket{\phi_2\phi_4} \\
+									     & \qquad - i \delta(x - x_4) \braket{\phi_2 \phi_3}) \\
+									     &= \Delta_{12} \Delta_{34} + \Delta_{13} \Delta_{24} + \Delta_{14} \Delta_{23}.
+			\end{align*}
+			We can also write this pictorially.
+		\item Consider a cubic interaction term
+			\[
+			\mathcal{L}_{\mathrm{int}} = \frac{g}{3!} \phi^3,
+			\]
+			and let us try to calculate the one-point function. Then,
+			\begin{align*}
+				\braket{\phi_x} &= \int \Diff 4 y \, \delta(x - y) \braket{\phi_y} \\
+						&= i \int \Diff 4 y ((\square_y + m^2) \Delta_{xy}) \braket{\phi_y} \\
+						&= i \int \Diff 4 y \, \Delta_{xy}((\square_y + m^2) \braket{\phi_y}) \\
+						&= i \int \Diff 4 y \, \Delta_{xy} \frac{g}{2} \braket{\phi_y^2} \\
+						&= \frac{ig}{2} \int \Diff 4 y \, \Delta_{xy} \braket{\phi_y^{02}} + \mathcal{O}(g^3) \\
+						&= \frac{ig}{2} \int \Diff 4 y \, \Delta_{xy} \Delta_{yy} + \mathcal{O}(g^3).
+			\end{align*}
+% lecture 11
+		\item Now lets look at the three-point function in the cubic theory:
+			\begin{align*}
+				\braket{\phi_1 \phi_2 \phi_3} &= \int \Diff 4 x \, \delta(x - x_1) \braket{\phi_x \phi_2 \phi_3} \\
+							      &= i \int \Diff 4 x \, \Delta_{x1} (\nabla_x + m^2) \braket{\phi_x \phi_2 \phi_3} \\
+							      &= \frac{ig}{2} \int \Diff 4 x \, \Delta_{x1} \braket{\phi_x \phi_x \phi_2 \phi_3} + \int \Diff 4 x \, \Delta_{x1} (\delta(x = x_2) \braket{\phi_3} + \delta(x - x_3) \braket{\phi_2}).
+			\end{align*}
+			Here we will use a couple of approximations, by relating the one-point and four-point functions to either their free-theory results, or results from previous calculation, to firs order in $g$. This gives
+			\begin{align*}
+				&= \frac{ig}{2} \int \Diff 4 x\, \Delta_{x1}(\Delta_{xx} \Delta_{23} + 2 \Delta_{x3} \Delta_{x2}) \\
+				& \qquad+ \frac{ig}{2} \int \Diff 4 x \, \Delta_{x1} \delta(x - x_2) \int \Diff 4 y \, \Delta_{3y} \Delta_{yy} \\
+				&\qquad + \frac{ig}{2} \int \Diff 4 x \, \Delta_{x1} \delta(x - x_3) \int \Diff 4 y \, \Delta_{2y} \Delta_{yy} + \mathcal{O}(g^2).
+			\end{align*}
+			This gives
+			\begin{align*}
+				\braket{\phi_1 \phi_2 \phi_3} &= ig \int \Diff4 x\, \Delta_{x1} \Delta_{x2} \Delta_{x3} \\
+				&\qquad + \frac{ig}{2} \int \Diff 4 x \, \Delta_{xx} (\Delta_{x1} \Delta_{23} + \Delta_{12} \Delta_{3x} + \Delta_{13} \Delta_{2x}) + \mathcal{O}(g^2).
+			\end{align*}
+			We can repeat our diagram drawing.
+		\item Finally we can find our two-point function:
+			\begin{align*}
+				\braket{\phi_1 \phi_2} &= i \int \Diff 4 x \, \Delta_{1x} \left( \frac{g}{2} \braket{ \phi_x^2 \phi_2} - i \delta(x - x2) \right) \\
+						       &= \Delta_{12} + \frac{ig}{2} \int \Diff 4 x \int \Diff 4 y \, \delta(y = x_2) \Delta_{1x} \braket{\phi_x^2 \phi_y} \\
+						       &= \Delta_{12} + \frac{ig}{2} \int \Diff4 x \Diff 4 y \, i \Delta_{1x} \Delta_{2y} \left( \frac{g}{2} \braket{\phi_x^2 \phi_y^2} - 2i \delta(x - y) \braket{\phi_x}\right) \\
+						       &= \Delta_{12} + \frac{(ig)^2}{4} \int \Diff 4 x \Diff 4 y \, (\Delta_{1x} \Delta_{2y} \Delta_{xx} \Delta_{yy} + 2 \Delta_{1x} \Delta_{2y} \Delta_{xy} \Delta_{xy} \\
+						       & \qquad + 2 \Delta_{1x} \Delta_{2x} \Delta_{xy} \Delta_{yy}) + \mathcal{O}(g^3).
+			\end{align*}
+	\end{enumerate}
+	
+\end{exbox}
+
+\subsection{Feynman Diagrams}%
+\label{sub:fd}
+
+What we learn from Schwinger-Dyson is that
+\begin{align*}
+	\braket{\phi_1 \cdots \phi_n} &= i \int \Diff 4 x \, \left( \braket{ \mathcal{L}_{\mathrm{int}}'[\phi_x] \phi_2 \cdots \phi_n} - i \sum_j \delta(x - x_j) \braket{\phi_2 \cdots \phi_{j-1} \phi_{j+1} \cdots \phi_n} \right).
+\end{align*}
+We have two terms: the field propagation, and the contraction. Let us draw these as diagrams:
+\begin{enumerate}
+	\item Start with $x_i$ external points, and draw a line from each point.
+	\item A line can either:
+		\begin{itemize}
+			\item Contract with an existing line. This gives $\Delta_f(x_i - x_j)$.
+			\item Split, where the split gives a new vertex. The coefficient will be $i \lambda_n$, for $\mathcal{L}_{\mathrm{int}} = \frac{\lambda_n}{n!} \phi^n$, and the number of lines depends on $\mathcal{L}_{\mathrm{int}}'$.
+		\end{itemize}
+	\item At any given order in $i \lambda_n$, the result is the sum of all diagrams with all lines contracted and integrated over vertices.
+	\item We have symmetry factors: the same combination can be obtained in different ways.
+\end{enumerate}
+
+% lecture 12
+
+
+
+% lecture 13
 
 \newpage
 

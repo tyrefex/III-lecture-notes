@@ -713,8 +713,476 @@ So, if $|\mathcal{A}| = \binom kr$, then
 \[
 	|\partial^t \mathcal{A}| \geq \binom k{r-t}.
 \]
-
 % lecture 6
+
+Note that our proof of Kruskal-Katona uses lemmas 1.2 and 1.3, not lemma 1.1 and its corollary.
+
+\subsection{Intersecting Families}%
+\label{sub:int_fam}
+
+Say $\mathcal{A} \subseteq \mathcal{P}(X)$ is \emph{intersecting}\index{intersecting} if $A \cap B \neq \emptyset$ for all $A, B \in \mathcal{A}$.
+
+How large can an intersecting family be? We can have $|\mathcal{A}| = 2^{n-1}$, by taking
+\[
+	\mathcal{A} = \{A \in \mathcal{P}(X) \mid 1 \in A\}.
+\]
+\begin{proposition}
+	Let $\mathcal{A} \subseteq \mathcal{P}(X)$ be intersecting. Then $|\mathcal{A}| \leq 2^{n-1}$.
+\end{proposition}
+
+\begin{proofbox}
+	For any $A \subseteq X$, at most one of $A, A^{c}$ can belong to $\mathcal{A}$.
+\end{proofbox}
+
+Note that there are many other extremal example, for example
+\[
+	\mathcal{A} = \{A \in \mathcal{P}(X) \mid |A| > n/2\}.
+\]
+What if $\mathcal{A} \subseteq X^{(r)}$? If $r > n/2$, then we can just take $A = X^{(r)}$, and if $r = n/2$, then we can choose one of $A, A^{c}$.
+
+So the interesting case is $r < n/2$. We could try again
+\[
+	\mathcal{A} = \{A \in X^{(r)} \mid 1 \in A\}.
+\]
+Then this has size
+\[
+	\binom{n-1}{r-1} = \frac{r}{n} \binom nr.
+\]
+We could also take, for example
+\[
+	\mathcal{B} = \{A \in X^{(r)} \mid |A \cap \{1, 2, 3\}| \geq 2\}.
+\]
+But for $n = 8$, $r = 3$, we see $|\mathcal{A}| = 21$, and $|\mathcal{B}| = 16$.
+
+\begin{theorem}[Erdos-Ko-Rado Theorem]
+	Let $\mathcal{A} \subseteq X^{(r)}$ be intersecting, where $r < n/2$. Then
+	\[
+		|\mathcal{A}| \leq \binom{n-1}{r-1}.
+	\]
+\end{theorem}
+
+\begin{proofbox}
+	We do multiple proofs. First, note that
+	\[
+	A \cap B = \emptyset \iff A \not \subseteq B^{c}.
+	\]
+	This motivates the idea, `bubble down with Kruskal-Katona'.
+
+	Let $\tilde{\mathcal{A}} = \{A^{c} \mid A \in \mathcal{A}\} \subseteq X^{(n - r)}$. Then we know that $\partial^{n - 2r} \tilde{\mathcal{A}}$ and $\mathcal{A}$ must be disjoint families of $r$-sets.
+
+	Suppose that $|\mathcal{A}| > \binom{n-1}{r-1}$. Then
+	\[
+		|\tilde{\mathcal{A}}| = |\mathcal{A}| > \binom{n-1}{r-1} = \binom{n-1}{n-r}.
+	\]
+	Hence, by Kruskal-Katona, we have
+	\[
+		|\partial^{n-2r} \tilde{\mathcal{A}}| \geq \binom{n-1}{r}.
+	\]
+	But this gives
+	\[
+		|\mathcal{A}| + |\partial^{n-2r} \tilde{\mathcal{A}}| > \binom{n-1}{r-1} + \binom{n-1}{r} = \binom nr = |X^{(r)}|,
+	\]
+	contradiction.
+
+	Note that this calculation had to give the correct answer, as the shadow calculation would all be exact if $\mathcal{A} = \{A \in X^{(r)} \mid 1 \in A\}$.
+
+	Now we consider a second proof. Pick a circle ordering of $[n]$, i.e. a bijection $C : [n] \to \mathbb{Z}_n$. How many sets in $\mathcal{A}$ are intervals in this ordering?
+
+	At most $r$, since if $C_1 \ldots C_r \in \mathcal{A}$, then for each $2 \leq i$, at most one of the intervals $C_i C_{i+1} \ldots C_{i+r-1}$ and $C_{i-r} C_{i-r+1} \ldots C_{i-1}$ can belong to $\mathcal{A}$.
+
+	For each $r$-set $A$, in how many of then $n!$ cyclic orderings is it an interval? We have $n$ choices for where it is placed, $r!$ orderings for the elements of $A$, and $(n-r)!$ orderings for the elements of $A^{c}$. Hence,
+	\[
+		|\mathcal{A}| n r! (n-r)! \leq n! r \implies |\mathcal{A}| \leq \frac{n! r}{n r! (n - r)!} = \binom{n-1}{r-1}.
+	\]
+\end{proofbox}
+
+\begin{remark}
+	\begin{enumerate}
+		\item[]
+		\item Again the numbers had to work out.
+		\item Equivalently, we are double-counting the edges in a bipartite graph, where one class is the vertex classes, and the other  class is the cyclic orderings, and an edge is present if $A$ is an interval in $C$.
+		\item This method is called \emph{averaging}, or \emph{Katona's method}.
+		\item When do we have equality? It is actually unique; if $\mathcal{A} \subseteq X^{(r)}$ is intersecting, and $|\mathcal{A}|$ is maximal, then
+			\[
+				\mathcal{A} = \{A \in X^{(r)} \mid i \in A\},
+			\]
+			for some $1 \leq i \leq n$. This can be seen from proof 1, by analysing the equality case in KK, or by looking at proof 2 a bit more carefully.
+	\end{enumerate}
+	
+\end{remark}
+
+% lecture 7
+
+\newpage
+
+\section{Isoperimetric Inequalities}%
+\label{sec:ii}
+
+This section deals with problems of the following form: how do we minimize the boundary of a set of a given size?
+
+For example in $\mathbb{R}^2$, given an area, the disc minimizes the perimeter. For $\mathbb{R}^3$, given a volume, the solid sphere minimizes the surface area. In $S^2$, given a surface area, the circular cap minimizes the perimeter.
+
+We want to discretize this. For a set $A$ of vertices of a graph $G$, the \emph{boundary}\index{boundary} of $A$ is
+\[
+	b(A) = \{x \in G \mid x \not \in A, xy \in E \text{ for some }y \in A\}.
+\]
+An \emph{isoperimetric inequality}\index{isoperimetric inequality} on $G$ is an equality of the form
+\[
+|b(A)| \geq f(|A|),
+\]
+for all $A \subseteq G$, and some function $f$.
+
+Often it is simpler to look at the neighbourhood of $A$, $N(A) = A \cup b(A)$, so
+\[
+	N(A) = \{x \in G \mid d(x, A) \leq 1\}.
+\]
+
+A good example for $A$ might be a ball $B(x, r) = \{y \in G \mid d(x, y) \leq r\}$. What happens for $Q_n$?
+
+For $|A| = 4$ in $Q_3$, we may either take a ball, or $Q_2$. The ball has boundary 3, while $Q_2$ has boundary 4.
+
+\begin{center}
+\begin{tikzpicture}
+
+% Define colors for highlighting
+\definecolor{highlight1}{rgb}{0.8,0.2,0.2}
+\definecolor{highlight2}{rgb}{0.2,0.2,0.8}
+
+% Cube on the left
+\begin{scope}[xshift=-4cm, scale = 2]
+  % Define vertices of the left cube
+  \coordinate (A) at (0,0,0);
+  \coordinate (B) at (1,0,0);
+  \coordinate (C) at (1,1,0);
+  \coordinate (D) at (0,1,0);
+  \coordinate (E) at (0,0,1);
+  \coordinate (F) at (1,0,1);
+  \coordinate (G) at (1,1,1);
+  \coordinate (H) at (0,1,1);
+
+  % Draw edges of the left cube
+  \draw[thick] (A) -- (B) -- (C) -- (D) -- cycle; % Bottom face
+  \draw[thick] (E) -- (F) -- (G) -- (H) -- cycle; % Top face
+  \draw[thick] (A) -- (E);
+  \draw[thick] (B) -- (F);
+  \draw[thick] (C) -- (G);
+  \draw[thick] (D) -- (H);
+
+  % Highlight chosen vertex and adjacent vertices
+  \fill[highlight1] (A) circle (2pt); % Highlight vertex A
+  \fill[highlight1] (B) circle (2pt); % Adjacent vertex to A
+  \fill[highlight1] (D) circle (2pt); % Adjacent vertex to A
+  \fill[highlight1] (E) circle (2pt); % Adjacent vertex to A
+\end{scope}
+
+% Cube on the right
+\begin{scope}[xshift=4cm, scale = 2]
+  % Define vertices of the right cube
+  \coordinate (A') at (0,0,0);
+  \coordinate (B') at (1,0,0);
+  \coordinate (C') at (1,1,0);
+  \coordinate (D') at (0,1,0);
+  \coordinate (E') at (0,0,1);
+  \coordinate (F') at (1,0,1);
+  \coordinate (G') at (1,1,1);
+  \coordinate (H') at (0,1,1);
+
+  % Draw edges of the right cube
+  \draw[thick] (A') -- (B') -- (C') -- (D') -- cycle; % Bottom face
+  \draw[thick] (E') -- (F') -- (G') -- (H') -- cycle; % Top face
+  \draw[thick] (A') -- (E');
+  \draw[thick] (B') -- (F');
+  \draw[thick] (C') -- (G');
+  \draw[thick] (D') -- (H');
+
+  % Highlight vertices on the lower face
+  \fill[highlight2] (A') circle (2pt); % Lower face vertex
+  \fill[highlight2] (B') circle (2pt); % Lower face vertex
+  \fill[highlight2] (E') circle (2pt); % Lower face vertex
+  \fill[highlight2] (F') circle (2pt); % Lower face vertex
+\end{scope}
+\end{tikzpicture}
+\end{center}
+
+A good guess is that balls are the best, i.e. sets of the form
+\[
+B(\emptyset, r) = X^{(\leq r)} = X^{(0)} \cup X^{(1)} \cup \cdots \cup X^{(r)}.
+\]
+What if the size of our set is between two levels, i.e. $|X^{(\leq r)}| \leq |A| \leq |X^{(\leq r + 1)}|$?
+
+Our guess is to take $A$ with $X^{(\leq r)} \leq A \leq X^{(\leq r + 1)}$. If $A = X^{(\leq r)} \cup B$, where $B \subseteq X^{(r + 1)}$, then
+\[
+b(A) = (X^{(r+1)} - B) \cup \partial^{+}(B).
+\]
+So we would take $B$ to be an initial segment of lex, by Kruskal-Katona.
+
+In the \emph{simplicial ordering}\index{simplicial ordering} of $\mathcal{P}(X)$, we set $x < y$ if either $|x| < |y|$, or $|x| = |y|$, but $x < y$ in lex.
+
+Our aim is to show that initial segments of the simplicial ordering minimize the boundary. We do it by compression, in the spirit of KK.
+
+Fix $A \subset \mathcal{P}(X)$. For $1 \leq i \leq n$, the \emph{$i$-selection}\index{$i$-selection} of $A$ are the families $A_-^{(i)}$, $A_+^{(i)} \subseteq \mathcal{P}(X - i)$ given by
+\begin{align*}
+	A_{-}^{(i)} &= \{x \in A \mid i \not \in x\}, \\
+	A_{+}^{(i)} &= \{x-i \mid x \in A, i \in x\}.
+\end{align*}
+The \emph{$i$-compression}\index{$i$-compression} of $A$ is the family $C_i(A) \subseteq \mathcal{P}(X)$ given by, $(C_i(A))^{(i)}_{-}$ is the first $|A_{-}^{(i)}|$ elements of the simplicial ordering of $\mathcal{P}(X - i)$, and $(C_i(A))_{+}^{(i)}$ be the first $|A_{+}^{(i)}|$ elements of the simplicial ordering on $\mathcal{P}(X - i)$.
+
+This is essentially doing a compression on each of the two $i$-level sub-hypercubes simultaneously.
+
+A subset is \emph{$i$-compressed} if $C_i(A) = A$. Here a \emph{Hamming ball}\index{Hamming ball} is a family with $X^{(\leq r)} \subseteq A \subseteq X^{(\leq r + 1)}$ for some $r$.
+
+\begin{theorem}[Harper's Theorem]
+	Let $A \subseteq Q_n$, and let $C$ be the initial segment of the simplicial order with $|C| = |A|$. Then $|N(A)| \geq |N(C)|$. In particular, if
+	\[
+	|A| = \sum_{i = 0}^{k} \binom ni \implies |N(A)| \geq \sum_{i = 0}^{k + 1} \binom ni.
+	\]
+\end{theorem}
+
+\begin{remark}
+	\begin{enumerate}
+		\item[]
+		\item If we knew $A$ was a Hamming ball, we would be done by KK.
+		\item Conversely, this theorem implies KK, as we could take $B \subseteq X^{(r)}$, and then apply theorem 1 to $A = X^{(\leq r - 1)} \cup B$.
+	\end{enumerate}
+\end{remark}
+
+\begin{proofbox}
+	We proceed by induction on $n$. For $n = 1$, this is trivial.
+
+	Now suppose we are given $n > 1$, $A \subseteq Q_n$, and $1 \leq i \leq n$. Then we claim that
+	\[
+	|N(C_i(A))| \leq |N(A)|.
+	\]
+	Write $B$ for $C_i(A)$. Then we have
+	\begin{align*}
+		N(A)_{-} &= N(A_{-}) \cup A_+, \\
+		N(A)_+ &= N(A_+) \cup A_-,
+	\end{align*}
+	and of course
+	\begin{align*}
+		N(B)_- &= N(B_-) \cup B_+, \\
+		N(B)_+ &= N(B_+) \cup B_-.
+	\end{align*}
+	Now, $|B_+| = |A_+|$, and $|N(B_-)| \leq |N(A_-)|$ by induction. But $B_+$ is an initial segment of the simplicial ordering, and $N(B_-)$ is as well, as a neighbourhood of an initial segment is an initial segment.
+
+	So, $B_+$ and $N(B_-)$ are nested. Hence $|N(B)_-| \leq |N(A)_-|$. Similarly, $|N(B)_+| \leq |N(A)_+|$, giving $|N(B)| \leq |N(A)|$.
+% lecture 8
+	Define a sequence $A_0, A_1, \ldots \subseteq Q_n$ as follows: Set $A_0 = A$, and having chose $A_0, \ldots, A_k$, if $A_k$ is $i$-compressed for all $i$, then stop the sequence with $A_k$.
+
+	If not, pick $i$ with $C_i(A_k) \neq A_k$, and set $A_{k+1} = C_i(A_k)$, and continue. This must terminate, because the sum of the position of $x$ in the simplicial order, over all $x \in A_k$, is strictly decreasing.
+
+	The final family $B = A_k$ satisfies $|B| = |A|$, and $|N(B)| \leq |N(A)|$, and is $i$-compressed for all $i$. 
+\end{proofbox}
+
+Does $B$ being $i$-compressed or all $i$ imply $B$ is an initial segment? No; a copy of $Q_2$ in $Q_3$. However,
+
+\begin{lemma}
+	Let $B \subseteq Q_n$ be $i$-compressed for all $i$, but not an initial segment of the simplicial order. Then either:
+	\begin{itemize}
+		\item $n$ is odd, say $n = 2k + 1$, and $B = X^{(\leq k)} - \{k+2, k+3, \ldots, 2k+1\} \cup \{1, 2, \ldots, k+1\}$,
+	\item $n$ is even, say $n = 2k$, and $B = X^{(\leq k)} - \{1, k+2, \ldots, 2k\} \cup \{2, 3, \ldots, k+1\}$.
+	\end{itemize}
+\end{lemma}
+
+Then we are done, as in each case $|N(B)| \geq |N(C)|$.
+
+\begin{proofbox}
+	Suppose that $B$ is not an initial segment of the simplicial ordering, so there is $x < y$ in the simplicial ordering with $x\not \in B$, $y \in B$.
+
+	For each $1 \leq i \leq n$, we cannot have $i \in x$ and $i \in y$, since $B$ is $i$-compressed, and we also cannot have $i \not \in x$, $i \not \in y$ for the same reason.
+
+	So $x = y^{c}$. Thus for each $y \in B$, there is at most one earlier $x$ with $x \not \in B$, namely $x = y^{c}$, and for each $x \not \in B$, there is at most one later $y$ with $y \in B$, namely $y = x^{c}$.
+
+	So $B = \{z \mid z \leq y\} - \{x\}$, with $x$ the predecessor of $y$, and $x = y^{c}$. Hence if $n = 2k+1$, then $x$ must be the last $k$-set, and if $n = 2k$ then $x$ is the last $k$-set with $1$.
+\end{proofbox}
+
+This completes the proof of Harper's theorem.
+
+\begin{remark}
+	\begin{enumerate}
+		\item[]
+		\item We can also prove Harper's theorem using $UV$-compressions.
+		\item We can also prove KK using $i$-compressions.
+	\end{enumerate}
+\end{remark}
+
+For $A \subseteq Q_n$ and $t = 1, 2, 3, \ldots$, the $t$-neighbourhood of $A$ is
+\[
+	A_{(t)} = N^{t}(A) = \{x \in Q_n \mid d(x, A) \leq t\}.
+\]
+
+\begin{corollary}
+	Let $A \subseteq Q_n$ with
+	\[
+	|A| \geq \sum_{i = 0}^r \binom ni.
+	\]
+	Then for all $t \leq n - r$,
+	\[
+	|A_{(t)}| \geq \sum_{i = 0}^{r + t} \binom ni.
+	\]
+\end{corollary}
+
+\begin{proofbox}
+	Use Harper's theorem and induction (the neighbourhood of an initial segment of simplicial is another initial segment).
+\end{proofbox}
+
+To get a feeling for the strength of the corollary, we will need some estimates on the size of things like
+\[
+\sum_{i = 0}^{r} \binom ni
+\]
+
+\begin{proposition}
+	Let $0 < \eps < 1/4$. Then,
+	\[
+	\sum_{i = 0}^{\lfloor (\frac{1}{2} - \eps) n \rfloor} \binom ni \leq \frac{1}{\eps} e^{-\eps^2 n/t} 2^{n}.
+	\]
+\end{proposition}
+
+\begin{proofbox}
+	For $i \leq \lfloor (\frac{1}{2} - \eps) n \rfloor$, we have
+	\[
+		\frac{\binom n{i-1}}{\binom ni} = \frac{i}{n - i + 1} \leq \frac{(\frac{1}{2} - \eps) n}{(\frac{1}{2} + \eps)n} = \frac{\frac{1}{2} - \eps}{\frac{1}{2} + \eps} = 1 - \frac{2 \eps}{\frac{1}{2} + \eps} \leq 1 - 2 \eps.
+	\]
+	Hence, summing this as a GP,
+	\[
+		\sum_{i = 0}^{\lfloor ( \frac{1}{2} - \eps) n \rfloor} \binom ni \leq \frac{1}{2 \eps} \binom n{\lfloor ( \frac{1}{2} - \eps) n \rfloor}.
+	\]
+	The same argument tells us that
+	\[
+		\binom{n}{\lfloor (\frac{1}{2} - \eps) n \rfloor} \leq \binom{n}{\lfloor ( \frac{1}{2} - \frac{\eps}{2}) n \rfloor} (1 - \eps)^{\frac{\eps n}{2} - 1} \leq 2^{n} \cdot 2 (1 - \eps)^{\eps n / 2} \leq 2^{n} \cdot 2 e^{-\eps^2 n/2}.
+	\]
+	Thus we get
+	\[
+	\sum_{i = 0}^{\lfloor (\frac{1}{2} - \eps) n \rfloor} \binom ni \leq \frac{1}{2 \eps} 2 e^{-\eps^2n / 2} 2^{n}.
+	\]
+\end{proofbox}
+
+% lecture 9
+
+\begin{theorem}
+	Let $0 < \eps < 1/4$, $A \subseteq Q_n$. Then
+	\[
+		\frac{|A|}{2^{n}} \geq \frac{1}{2} \implies \frac{|A_{(\eps n)}|}{2^{n}} \geq 1 - \frac{2}{\eps} e^{-\eps^2n/2}.
+	\]
+\end{theorem}
+
+In other words, half-sized sets have exponentially large $\eps n$-neighbourhoods.
+
+\begin{proofbox}
+	It is enough to show that if $\eps n$ is an integer, then
+	\[
+	\frac{|A_{(\eps n)|}}{2^{n}} \geq 1 - \frac{1}{\eps} e^{-\eps^2n/2}.
+	\]
+	We have that
+	\[
+	|A| \geq \sum_{i = 0}^{\lceil n/2 - 1 \rceil} \binom ni,
+	\]
+	so by Harper, we have
+	\[
+	|A_{(\eps n)}| \geq \sum_{i = 0}^{\lceil n/2 - 1 + \eps n\rceil} \binom ni.
+	\]
+	So
+	\[
+	|A_{(\eps n)}^{c}| \leq \sum_{\lceil n/2 + \eps n \rceil}^n \binom ni = \sum_{i = 0}^{\lfloor n/2 - \eps n \rfloor} \binom ni \leq \frac{1}{\eps} e^{-\eps^2n/2} \cdot 2^{n}.
+	\]
+\end{proofbox}
+
+\begin{remark}
+	The same would show that, for small sets,
+	\[
+	\frac{|A|}{2^{n}} \geq \frac{2}{\eps} e^{-\eps^2n/2} \implies \frac{|A_{(2 \eps n)}|}{2^{n}} \geq 1 - \frac{2}{\eps} e^{-\eps^2n/2}.
+	\]
+\end{remark}
+
+\subsection{Concentration of Measure}%
+\label{sub:conc_m}
+
+Say $f : Q_n \to \mathbb{R}$ is \emph{Lipschitz}\index{Lipschitz} if $|f(x) - f(y)| \leq 1$ for all $x, y$ adjacent. For $f : Q_n \to \mathbb{R}$, say $M \in \mathbb{R}$ is a \emph{L\'evy mean}\index{L\'evy mean} or the \emph{median}\index{median} of $f$ if
+\[
+	|\{x \in Q_n \mid f(x) \leq M\}| \leq 2^{n-1} \qquad \text{and} \qquad |\{x \in Q_n \mid f(x) \geq M\}| \geq 2^{n-1}.
+\]
+
+We are now ready to show that every well-behaved function on the cube $Q_n$ is roughly constant nearly everywhere.
+
+\begin{theorem}
+	Let $f: Q_n \to \mathbb{R}$ be Lipschitz with median $M$. Then,
+	\[
+		\frac{|\{x \mid |f(x) - M| \leq \eps n\}|}{2^{n}} \geq 1 - \frac{4}{\eps} e^{-\eps^2n/2},
+	\]
+	for any $0 < \eps < 1/4$.
+\end{theorem}
+
+Note that this is the concentration of measure phenomenon.
+
+\begin{proofbox}
+	Let $A = \{x \mid f(x) \leq M\}$. Then
+	\[
+	\frac{|A|}{2^{n}} \geq \frac{1}{2} \implies \frac{|A_{(\eps n)|}}{2^{n}} \geq 1 - \frac{2}{\eps} e^{-\eps^2n/2}.
+	\]
+	But $f$ is Lipschitz, so if $x \in A_{(\eps n)}$, then $f(x) \leq M + \eps n$. Then,
+	\[
+		\frac{|\{x \mid f(x) \leq M + \eps n\}|}{2^{n}} \geq 1 - \frac{2}{\eps} e^{-\eps^2n/2}.
+	\]
+	Similarly,
+	\[
+		\frac{|\{x \mid f(x) \geq M - \eps n\}|}{2^{n}} \geq 1 - \frac{2}{\eps} e^{-\eps^2n/2}.
+	\]
+	Putting this together,
+	\[
+		\frac{|\{x \mid |f(x) - M| \leq \eps n\}|}{2^{n}} \geq 1 - \frac{4}{\eps} e^{-\eps^2n/2},
+	\]
+\end{proofbox}
+
+Let $G$ be a graph of diameter $D$. Write
+\[
+\alpha(G, \eps) = \max \left\{ 1 - \frac{|A_{(\eps D)}|}{|G|} \bigm| A \subseteq G, \frac{|A|}{|G|} \geq \frac{1}{2} \right\}.
+\]
+So $\alpha(G, \eps)$ says that half-sized sets have larger $\eps D$-neighbourhoods.
+
+We say that a sequence of graphs is a \emph{L\'evy family}\index{L\'evy family} if $\alpha(G_n, \eps) \to 0$ as $n \to \infty$, for each $\eps > 0$.
+
+This theorem tells us that the sequence $(Q_n)$ is a L\'evy family, and it is even a \emph{normal L\'evy family}\index{normal L\'evy family}, meaning that $\alpha(G_n, \eps)$ is exponentially small in $n$, for each $\eps > 0$.
+
+For any L\'evy family we have concentration of measure. Most naturally occurring families of graphs are L\'evy families, for example $(S_n)$ where $S_n$ is made into a graph by joining permutations joined by a transposition.
+
+We can also define $\alpha(X, \eps)$ similarly for an metric measure space $X$, of finite measure and finite diameter.
+
+\begin{exbox}
+	$(S^{n})$ is a L\'evy family. This requires two ingredients.
+	\begin{enumerate}
+		\item An isoperimetric inequality on $S_n$: for $A \subseteq S_n$ and $C$ a circular cap with $|C| = |A|$, we have $|A_{(\eps})| \geq |C_{(\eps)}|$.
+
+			This is proven by compression; consider laying the sphere out on some way, and then vertically projecting each point if possible. This is known as two-point symmetrisation.
+		\item Then we estimate the size. A circular cap of measure $1/2$ is the cap of angle $\pi/2$. Then $C_{(\eps)}$ is the circular cap of angle $\pi/2 + \eps$. This has measure about
+			\[
+			\int_\eps^{\pi/2} \cos^{n-1}t \diff t \to 0.
+			\]
+	\end{enumerate}
+	Moreover this is a normal L\'evy family.
+\end{exbox}
+
+We have deduced concentration of measure from an isoperimetric family. Conversely,
+
+\begin{proposition}
+	Let $G$ be a graph such that for any Lipschitz function $f : G  \to \mathbb{R}$ with median $M$, we have
+	\[
+		\frac{|\{x \in G \mid |f(x) - M| > t\}}{|G|} \leq \alpha
+	\]
+	for some given $t, \alpha$. Then for all $A \in G$, if $\frac{|A|}{|G|} \geq \frac{1}{2}$, we have
+	\[
+	\frac{|A_{(t)}|}{|G|} \geq 1 - \alpha.
+	\]
+\end{proposition}
+
+\begin{proofbox}
+	The function $f(x) = d(x, A)$ is Lipschitz, and has $0$ as its median since at least half of the values take $0$. So
+	\[
+	\frac{|\{x \in G \mid x \not \in A_{(t)}|}{|G|} \leq \alpha.
+	\]
+\end{proofbox}
+
+
+% lecture 10
 
 \newpage
 

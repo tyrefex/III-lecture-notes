@@ -1178,7 +1178,7 @@ and another important object is
 \]
 which is a subset of $C^{\mathbb{R}}(K)$ (more specifically a cone). Let
 \[
-	M(K) = C(K)^\ast \{ \phi : C(K) \to \mathbb{C} \mid \phi \text{ linear, bounded}\},
+	M(K) = C(K)^\ast =  \{ \phi : C(K) \to \mathbb{C} \mid \phi \text{ linear, bounded}\},
 \]
 and also we define
 \[
@@ -1227,10 +1227,909 @@ Our aim is to describe $M(K), M^{\mathbb{R}}(K)$. We will show that it is enough
 	\phi_1 = \frac{\phi + \bar \phi}{2}, \qquad \phi_2 = \frac{\phi - \bar \phi}{2i}.
 	\]
 	This also shows existence, by defining $\phi_1, \phi_2$ in this way.
+% lecture 8
+
+	(ii) Let $\phi \in M^{\mathbb{R}}$, and $\psi = \phi|_{C^{\mathbb{R}}}$. Note that $\psi \in (C^{\mathbb{R}})^{\ast}$, and moreover $\|\psi\| \leq \|\phi\|$.
+
+	First we show this map is isometric. Let $f \in C(K)$, and $\lambda \in \mathbb{C}$ such that $|\lambda| = 1$ and $|\phi(f)| = \lambda \phi(f)$. Then,
+	\begin{align*}
+		|\phi(f)| &= \lambda \phi(f) = \phi(\lambda f) = \phi(\Re(\lambda f)) + i \underbrace{\phi(\Im(\lambda f))}_{0 \text{ as } \phi \in M^{\mathbb{R}}} \\
+			  &= \phi(\Re(\lambda f)) = \psi(\Re(\lambda f)) \leq \|\psi\| \|\Re(\lambda f)\|_\infty \leq \|\psi\| \|f\|_\infty.
+	\end{align*}
+	So $\|\phi\| \leq \|\psi\|$. To show this map is onto, say we have $\psi \in (C^{\mathbb{R}})^{\ast}$. Then the obvious way to define $\phi$ is
+	\[
+	\phi(f) = \psi(\Re(f)) + i \psi(\Im(f)),
+	\]
+	for $f \in C(K)$. Then $\phi \in M(K)$ and $\phi|_{C^{\mathbb{R}}(K)} = \psi$.
+
+	(iii) To show the inclusion, let $\phi \in M^{+}(K)$, and $f \in C^{\mathbb{R}}(K)$ with $-1 \leq f \leq 1$ on $K$. Then $1_K \pm f \geq 0$ on $K$. So,
+	\[
+	\phi(1_K \pm f) = \phi(1_K) \pm \phi(f) \geq 0.
+	\]
+	So $\phi(f) \in \mathbb{R}$, and $|\phi(f)| \leq \phi(1_K)$. Hence, $\phi|_{C^{\mathbb{R}}(K)} \in (C^{\mathbb{R}})^{\ast}$, and $\|\phi|_{C^{\mathbb{R}}(K)}\| = \phi(1_K)$.
+
+	By (ii), this gives us that $\phi \in M^{\mathbb{R}}(K)$ and $\|\phi\| = \phi(1_K)$.
+
+	This immediately shows that $M^{+}(K) \subseteq \{\phi \in M(K) \mid \|\phi\| = \phi(1_K)\}$. To show the other inclusion, let $\phi \in M(K)$ with $\|\phi\| = \phi(1_K)$. Scale so that $\phi(1_K) = 1$.
+
+	Let $f \in C^{\mathbb{R}}(K)$, and $\phi(f) = a + ib$. For $f \in \mathbb{R}$,
+	\begin{align*}
+		|\phi(f + it 1_K)|^2 &= |a + i(b + t)|^2 = a^2 + b^2 + 2bt + t^2 \\
+				     &\leq \|f + it1_K\|^2_\infty \leq \|f\|_\infty^2 + t^2.
+	\end{align*}
+	By looking at the degree 1 term, we get $b = 0$, so $\phi(f) \in \mathbb{R}$.
+
+	Now let $f \in C^{+}(K)$. Without loss of generality, let $0 \leq f \leq 1$ on $K$. Then
+	\[
+	-1 \leq 1_K - 2f \leq 1,
+	\]
+	so we get
+	\[
+	\phi(1_K - 2f) = 1 - 2 \phi(f) \leq \|\phi\| \cdot \|1_K - 2f\|_\infty \leq 1,
+	\]
+	which gives $\phi(f) \geq 0$, as desired.
+
+	(iv) We begin by motivating uniqueness, but will sidetrack to prove existence.
+
+	Assume that $\psi^+, \psi^- \in M^{+}(K)$, $\phi = \psi^{+} - \psi^{-}$, and $\|\phi\| = \|\psi^{+}\| + \|\psi^{-}\|$.
+
+	If $0 \leq g \leq f$ on $K$, then note
+	\[
+	\phi(g) \leq \psi^{+}(g) \leq \psi^{+}(f).
+	\]
+	So $\psi^{+}(f) \geq \sup\{\phi(g) \mid 0 \leq g \leq f\}$. This motivates our definition of $\phi^{+}$, $\phi^{-}$.
+
+	We segue into proving existence. Define for $f \in C^{+}(K)$ 
+	\[
+		\phi^{+}(f) = \sup \{\phi(g) \mid 0 \leq g \leq f\}.
+	\]
+	Then we have
+	\[
+	|\phi(g)| \leq \|\phi\| \cdot \|g\|_\infty \leq \|\phi\| \cdot \|f\|_\infty,
+	\]
+	so the supremum exists. Moreover $\phi^{+}(f) \geq 0$ since we may take $g = 0$, and $\phi^{+}(f) \geq \phi(f)$ by taking $g = f$.
+
+	Next it is easy to see that $\phi^{+}(\lambda f) = \lambda \phi^{+}(f)$ for all $f \in C^{+}(K)$ and $\lambda \in \mathbb{R}^+$. Moreover for $f_1, f_2 \in C^{+}(K)$,
+	\[
+	\phi^{+}(f_1 + f_2) = \phi^{+}(f_1) + \phi^{+}(f_2).
+	\]
+	Indeed, if $0 \leq g_1 \leq f_1$, and $0 \leq g_2 \leq f_2$, then $0 \leq g_1 + g_2 \leq f_1 + f_2$, showing that
+	\[
+	\phi^{+}(f_1 + f_2) \geq \phi(g_1 + g_2) = \phi(g_1) + \phi(g_2).
+	\]
+	Taking a supremum we get
+	\[
+	\phi^{+}(f_1 + f_2) \geq \phi^{+}(g_1 + g_2).
+	\]
+	For the other way around let $0 \leq g \leq f_1 + f_2$, and define
+	\begin{align*}
+		g_1 = g \wedge f_1, \qquad g_2 = g - g_1.
+	\end{align*}
+	Then $0 \leq g_1 \leq f_1$, and $0 \leq g_2 \leq f_2$. And hence
+	\[
+	\phi^{+}(f_1) + \phi^{+}(f_2) \geq \phi(g_1) + \phi(g_2) = \phi(g).
+	\]
+	Taking a supremum over all $g$, gives the other inequality. So $\phi^{+}$ is positively linear.
+
+	Next we want to extend $\phi$ to $C^{\mathbb{R}}$. Given $f \in C^{\mathbb{R}}$, we can write $f = f_1 - f_2$ for some $f_1, f_2 \in C^{+}(K)$ (splitting into positive and negative parts). Then define
+	\[
+	\phi^{+}(f) = \phi^{+}(f_1) - \phi^{+}(f_2).
+	\]
+	Then we can show $\phi^{+}$ is well-defined and linear on $C^{\mathbb{R}}$, from the scaling and multiplicative properties we showed earlier.
+
+	Finally define $\phi^{+} : C(K) \to \mathbb{C}$ by
+	\[
+	\phi^{+}(f) = \phi^{+}(\Re f) + i \phi^{+}(\Im f).
+	\]
+	Then $\phi^{+}$ is in $M^{+}(K)$. Now we can define $\phi^{-} = \phi^{+} - \phi$. For $f \in C^{+}(K)$, note that $\phi^{+}(f) \geq \phi(f)$, so $\phi^{-}(f) \leq 0$. Hence $\phi^{-} \in M^{+}(K)$ and $\phi = \phi^{+} - \phi^{-}$.
+
+	Finally we show that the norms coincide. We have
+	\[
+	\|\phi\| \leq \|\phi^{+}\| + \|\phi^{-}\| = \phi^{+}(1_K) - \phi^{-}(1_K) = 2 \phi^{+}(1_K) - \phi(1_K).
+	\]
+	Fox some $0 \leq g \leq 1$, so $-1 \leq 2g - 1_K \leq 1$ on $K$. So,
+	\[
+	\phi(2g - 1_K) = 2\phi(g) - \phi(1_K) \leq \|\phi\|.
+	\]
+	Taking a supremum over $g$, we find
+	\[
+	2 \phi^{+}(1_K) - \phi(1_K) \leq \|\phi\|.
+	\]
+	Hence we get equality, and so
+	\[
+	\|\phi\| = \|\phi^{+}\| + \|\phi^{-}\|.
+	\]
+
+	Now we get back to uniqueness. Recall that if we have $\phi = \psi^{+} - \psi^{-}$, then we have shown $\psi^{+}(f) \geq \phi^{+}(f)$ for all $f \in C^{+}(K)$.
+
+	This also implies that $\psi^{-}(f) \geq \phi^{-}(f)$. So we have
+	\[
+	\psi^{+} - \phi^{+}, \qquad \psi^{-} - \phi^{-} \in M^{+}(K).
+	\]
+	But hence we have
+	\begin{align*}
+		\|\phi\| &= \|\phi^{+}\| + \|\phi^{-}\| = \phi^+(1_K) + \phi^{-}(1_K) \\
+			 &\leq \psi^+(1_K) + \psi^{-}(1_K) = \|\psi^{+}\| + \|\psi^{-}\| \\
+			 &= \|\phi\|.
+	\end{align*}
+	So we have equality. Hence $\phi^{+}(1_K) = \psi^{+}(1_K)$, but then
+	\[
+	\|\psi^{+} - \phi^{+}\| = (\psi^{+} - \phi^{+})(1_K) = 0.
+	\]
+	So $\psi^{+} = \phi^{+}$, and $\psi^{-} = \phi^{-}$.
 \end{proofbox}
 
+Before starting the next discussion, we will need to go over a few topological preliminaries.
 
-% lecture 8
+Recall that we have a fixed compact Hausdorff space $K$.
+\begin{enumerate}
+	\item $K$ is \emph{normal}\index{normal space} if given closed $E, F \subseteq K$, with $E \cap F = \emptyset$, then there exists open $U, V \subseteq K$ with $U \cap V = \emptyset$ such that $E \subseteq U, F \subseteq V$.
+
+		Equivalently, given $E \subseteq U \subseteq K$, where $E$ is closed and $U$ is open, there exists open $V \subseteq K$ such that
+		\[
+		E \subseteq V \subseteq \overline{V} \subseteq U.
+		\]
+	\item Urysohn's lemma: if $E, F \subseteq K$ are closed and disjoint in a normal space, then there exists continuous $f : K \to [0, 1]$ such that $f = 0$ on $E$, and $f = 1$ on $F$.
+	\item $f \prec U$ means that $U$ is open, and $f : K \to [0, 1]$ is continuous with support of $f$ $\mathrm{supp} f \subseteq U$.
+
+		$E \prec f$ means that $E \subseteq K$ is closed, and $f : K \to [0, 1]$ is a continuous function such that $f = 1$ on $E$.
+
+		Urysohn is equivalent to: if $E \subseteq U \subseteq K$, with $E$ closed, $U$ open, then there exists $f$ such that
+		\[
+		E \prec f \prec U.
+		\]
+\end{enumerate}
+
+\begin{lemma}
+	\begin{enumerate}[\normalfont(i)]
+		\item[]
+		\item Let $E, U_1, \ldots, U_n \subseteq K$, with $E$ closed and $U_1, \ldots, U_n$ open, with $E \subseteq \bigcup U_j$.
+
+			Then there exists open sets $V_j$ such that $\overline{V_j} \subseteq U_j$, and $E \subseteq \bigcup V_j$.
+		\item There exists functions $f_j$, for $j = 1, \ldots, n$ , such that $f_j \prec U_j$, $0 \leq \sum f_j \leq 1$, and $\sum f_j = 1$ on $E$.
+	\end{enumerate}
+\end{lemma}
+
+
+% lecture 9
+
+\begin{proofbox}
+	Recall that
+	\[
+	E \subseteq \bigcup_{j = 1}^n U_j \subseteq K.
+	\]
+	
+	(i) By induction on $n$,
+	\[
+		E \setminus U_n \subseteq \bigcup_{j = 1}^{n-1} U_j.
+	\]
+	By induction there exists open sets $V_j$ such that $\overline{V_j} \subseteq U_j$ such that $E \setminus U_n \subseteq \bigcup_{j=1}^{n-1} V_j$. Then
+	\[
+	E \setminus \bigcup_{j = 1}^{n-1} V_j \subseteq U_n.
+	\]
+	Since $K$ is normal, there exists open $V_n$ such that
+	\[
+	E \setminus \bigcup_{j = 1}^{n-1} V_j \subseteq V_n \subseteq \overline{V_n} \subseteq U_n.
+	\]
+	Then $E \subseteq \bigcup_{j = 1}^n V_j$.
+
+	(ii) We seek functions $f_j$, for $1 \leq j \leq n$ such that $f_j \prec U_j$ for all $j$, and
+	\[
+	0 \leq \sum_{j = 1}^n f_j \leq 1
+	\]
+	on $K$, and which equals 1 on $E$. Let $V_j$ be as in (i).
+
+	By Urysohn, for each $j = 1, \ldots, n$, there exists $g_j$ such that
+	\[
+	\overline{V_j} \prec g_j \prec U_j,
+	\]
+	and there exists a function $g_0$ such that
+	\[
+	K \setminus \bigcup_{j = 1}^n V_j \prec g_0 \prec K \setminus E.
+	\]
+	Define
+	\[
+	g = \sum_{j = 0}^n g_j.
+	\]
+	Then $g \geq 1$ on $K$. Set $f_j = g_j/g$, for $1 \leq j \leq n$. Then $0 \leq f_j \leq 1$ on $K$, and $f_j$ is continuous.
+
+	On $K$, note
+	\[
+	\sum_{j = 1}^n f_j = \sum_{j = 1}^n \frac{g_j}{g} \leq \sum_{j = 0}^n \frac{g_j}{g} = 1.
+	\]
+	On $E$, $g_0 = 0$, so indeed
+	\[
+	\sum_{j=1}^n f_j = 1.
+	\]
+\end{proofbox}
+
+\subsection{Borel Measures and Regularity}%
+\label{sub:bmr}
+
+Let $X$ be a Hausdorff space, and let $\mathcal{G}$ be the subset of all open subsets of $X$. Then
+\[
+\mathcal{B} = \sigma(\mathcal{G})
+\]
+is the \emph{Borel $\sigma$-algebra}\index{Borel $\sigma$-algebra} on $X$, and the members are the \emph{Borel sets}\index{Borel set} of $X$.
+
+A \emph{Borel measure}\index{Borel measure} on $X$ is a measure on $\mathcal{B}$. A Borel measure $\mu$ on $X$ is \emph{regular}\index{regular measure} if:
+\begin{enumerate}[(i)]
+	\item $\mu(E) < \infty$ for all $E \subseteq X$ compact.
+	\item $\mu(A) = \inf\{\mu(U) \mid A \subseteq U \in \mathcal{G}\}$, for all $A \in \mathcal{B}$ (outer-regularity).
+	\item $\mu(U) = \sup\{\mu(E) \mid E \subseteq U, E \text{ compact}\}$ for all $U \in \mathcal{G}$ (inner-regularity).
+\end{enumerate}
+
+An example is the Lebesgue measure on $\mathbb{R}$. A complex Borel measure $\nu$ is \emph{regular} if $|\nu|$ is regular.
+
+If $X$ is compact, then a Borel measure $\mu$ on $X$ is regular if and only if $\mu(X) < \infty$ and $X$ is outer-regular.
+
+Let $\Omega$ be a set, $\mathcal{F}$ be a $\sigma$-field on $\Omega$, and $\nu$ a complex measure on $\mathcal{F}$. A measurable function $f : \Omega \to \mathbb{C}$ is \emph{$\nu$-integrable} if and only if
+\[
+\int_{\Omega} |f| \diff |\nu| < \infty.
+\]
+Then we may define
+\[
+\int_{\Omega} f \diff \nu = \int_{\Omega} f \diff \nu_1 - \int_{\Omega} f \diff \nu_2 + i \int_{\Omega} f \diff \nu_3 - i \int_{\Omega} f \diff \nu_4,
+\]
+where $\nu = \nu_1 - \nu_2 + i \nu_3 - i \nu_4$ is the Jordan decomposition of $\nu$. Note that $f$ is $\nu$-integrable if and only if $f$ is $\nu_i$ integrable for all $k$. $\nu$-integration has the following properties:
+\begin{enumerate}
+	\item For all $A \in \mathcal{F}$, $\mathbbm{1}_{A}$ is $\nu$-integrable, and
+		\[
+		\int_{\Omega} \mathbbm{1}_{A} \diff \nu = \nu(A).
+		\]
+	\item Linearity: if $f, g$ are $\nu$-integrable, then so is $\alpha f + \beta g$ for any $\alpha, \beta \in \mathbb{C}$, and
+		\[
+		\int_{\Omega}(\alpha f + \beta g) \diff \nu = \alpha \int_{\Omega} f \diff \nu + \beta \int_{\Omega} g \diff \nu.
+		\]
+	\item Dominated convergence: if $f_n \to f$ $|\nu|$-almost everywhere, and there exists $g \in L_1(|\nu|)$ such that $|f_n| \leq g$ $\nu$-almost everywhere, then $f, f_n$ are $\nu$-integrable, and
+		\[
+		\int_{\Omega} f_n \diff \nu \to \int_{\Omega}f \diff \nu.
+		\]
+		This is true as it is true for all $(\nu_i)$.
+	\item If $f$ is $\nu$-integrable, then
+		\[
+		\left| \int_{\Omega} f \diff \nu \right| \leq \int_{\Omega} |f| \diff |\nu|.
+		\]
+\end{enumerate}
+
+\subsection{Dual of \texorpdfstring{$C(K)$}{C(K)}}%
+\label{sub:dual_ck}
+
+Let $\nu$ be a complex Borel measure on $K$. If $f \in C(K)$, then
+\[
+\int_{K} |f| \diff |\nu| \leq \|f\|_\infty |\nu| (K) = \|f\|_\infty |\nu|_1,
+\]
+so $f$ is $\nu$-measurable, and
+\[
+\left| \int_K f \diff \nu \right| \leq \|f\|_\infty \|\nu\|_1.
+\]
+So we can define $\phi : C(K) \to \mathbb{C}$, by
+\[
+\phi(f) = \int_K f \diff \nu.
+\]
+Then $\phi$ is linear, and $|\phi(f)| \leq \|f\|_\infty \|\nu\|_1$. So $\phi \in M(K)$, and $\|\phi\| \leq \|\nu\|_1$. If $\nu$ is a signed measure then $\phi \in M^{\mathbb{R}}(K)$, and if $\nu$ 	s a positive measure, then $\phi \in M^{+}(K)$.
+
+\begin{theorem}[Riesz Representation Theorem]
+	For each $\phi \in M^{+}(K)$, there exists a unique regular Borel measure $\mu$ on $K$ which represents $\phi$, i.e.
+	\[
+	\phi(f) = \int_K f \diff \mu.
+	\]
+	Moreover $\|\phi\| = \|\mu\|_1 = \mu(K)$.
+\end{theorem}
+
+\begin{proofbox}
+	We begin with uniqueness. First, assume $\mu_1, \mu_2$ both represent $\phi$. By Urysohn, there exists a function $f$ with $E \prec f \prec U$. Then,
+	\[
+	\mu_1(E) \leq \int_K f \diff \mu_1 = \phi(f) = \int_K f \diff \mu_2 \leq \mu_2(U).
+	\]
+	Fix $U$, and take the supremum over $E$. Then by inner-regularity, $\mu_1(U) \leq \mu_2(U)$.
+
+	By symmetry,  $\mu_1 = \mu_2$ on $\mathcal{G}$, and hence $\mu_1 = \mu_2$ on $\mathcal{B}$ by regularity.
+
+	For existence, define for $U \in \mathcal{G}$,
+	\[
+		\mu(U) = \sup \{ \phi(f) \mid f \prec U\}.
+	\]
+	The supremum exists as for all $f \prec U$,
+	\[
+	|\phi(f)| \leq \|\phi\| \|f\|_\infty \leq \|\phi\|,
+	\]
+	and $0 \prec U$. Note $\mu(U) \geq 0$, $\mu(\emptyset) = 0$, and if $U \subseteq V$, then $\mu(U) \leq \mu(V)$. Moreover $\mu(K) = \phi(1_{K})$.
+
+	We then define the outer-measure on $\mathcal{P}(K)$ by
+	\[
+		\mu^{\ast}(A) = \inf \{ \mu(U) \mid A \subseteq U \in \mathcal{G}\},
+	\]
+	for all $A \subseteq K$. By $\mu$ increasing, $\mu^{\ast}(U) = \mu(U)$, so $\mu^{\ast}(\emptyset) = 0$, and $\mu^{\ast}(K) = \phi(1_{K})$.
+
+	We prove that $\mu^{\ast}$ is indeed an outer measure. For $A \subseteq B \subseteq K$, then $\mu^{\ast}(A) \leq \mu^{\ast}(B)$. What we want to show is that if $A \subseteq \bigcup_{n} A_n$, then
+	\[
+	\mu^{\ast} (A) \leq \sum_{n = 1}^\infty \mu^{\ast}(A_n).
+	\]
+
+	First suppose that $A = U \in \mathcal{G}$, and $A_n = U_n \in \mathcal{G}$. Fix $f \prec U$, and let $E = \mathrm{supp} f$. Then $E$ is closed, and $E \subseteq U \subseteq \bigcup U_n$.
+
+	By compactness, there exists $E \subseteq \bigcup_{j=1}^n U_j$.
+
+	By lemma 2.2, there are functions $g_j$ such that $g_j \prec U_j$, with $\sum g_j \leq 1$ on $K$, and with equality on $E$. Then $fg_j \prec U_j$ for all $j$, and $f = \sum_{j = 1}^n f g_j$. Hence
+	\[
+	\phi(f) = \sum_{j = 1}^n \phi(f g_j) = \sum_{j = 1}^n \mu(U_j) \leq \sum_{j = 1}^\infty \mu(U_j).
+	\]
+	Taking a supremum over all $f$,
+	\[
+	\mu(U) \leq \sum_{j = 1}^\infty \mu(U_j).
+	\]
+% lecture 10
+	Now we tackle the general case. Fix $\eps > 0$, and for each $n$ choose open $U_n \supseteq A_n$ such that $\mu^{\ast}(U_n) \leq \mu^{\ast}(A_n) + \eps 2^{-n}$. Then by the first case,
+	\begin{align*}
+		\mu^{\ast}(A) &\leq \mu \left( \bigcup_{n \geq 1} U_n \right) \leq \sum_{n \geq 1} \mu(U_n) \leq \sum_{n \geq 1} \mu^{\ast}(A_n) + \eps.
+	\end{align*}
+	This holds for all $\eps$, so
+	\[
+	\mu^{\ast}(A) \leq \sum_{n \geq 1} \mu^{\ast}(A_n).
+	\]
+
+	Therefore $\mu^{\ast}$ is an outer measure. By measure theory, the family $\mathcal{M}$ of $\mu^{\ast}$-measurable subsets of $K$ is a $\sigma$-algebra on $K$, and $\mu^{\ast}|_{\mathcal{M}}$ is a measure.
+
+	Next we show that $\mathcal{B} \subseteq \mathcal{M}$. It is enough to show that $\mathcal{G} \subseteq \mathcal{M}$.
+
+	Fix $U \in \mathcal{G}$. To show $U \in \mathcal{M}$, we need that for all $A \subseteq K$,
+	\[
+	\mu^{\ast}(A) \geq \mu^{\ast}(A \cap U) + \mu^{\ast}(A \setminus U).
+	\]
+	First, if $A = V \in G$, then fix $f \prec V \cap U$, and then also fix $g \prec V \setminus \mathrm{supp} f$. Then $f + g \prec V$, so
+	\[
+	\mu^{\ast}(V) \geq \phi(f + g) = \phi(f) + \phi(g).
+	\]
+	Taking a supremum over $g$,
+	\[
+	\mu^{\ast}(V) \geq \phi(f) + \mu^{\ast}(V \setminus \mathrm{supp} f) \geq \phi(f) + \mu^{\ast}(V \setminus U).
+	\]
+	Then taking a supremum over $f$,
+	\[
+		\mu^{\ast}(V) \geq \mu^{\ast}(V \cap U) + \mu^{\ast}(V \setminus U).
+	\]
+	Now we consider general $A$. Take an open $V \supseteq A$, then $V \cap U \supseteq A \cap U$, and $V \setminus U \supseteq A \setminus U$. So,
+	\[
+	\mu^{\ast}(V) \geq \mu^{\ast}(V \cap U) + \mu^{\ast}(V \setminus U) \geq \mu^{\ast}(A \cap U) + \mu^{\ast}(A \setminus U).
+	\]
+	Taking an infimum over $V$,
+	\[
+	\mu^{\ast}(A) \geq \mu^{\ast}(A \cap U) + \mu^{\ast}(A \setminus U).
+	\]
+	Hence $\mathcal{B} \subseteq \mathcal{M}$, so let $\mu = \mu^{\ast}|_{\mathcal{B}}$. Then $\mu$ is a Borel measure on $K$, with $\mu(K) = \phi(1_K) = \|\phi\|$, and $\mu$ is regular by definition.
+
+	We need to check that
+	\[
+	\phi(f) = \int_K f \diff \mu,
+	\]
+	for all $f \in C(K)$. By our decomposition, it is enough to check this for $f \in C^{\mathbb{R}}(K)$, and in fact it is enough to check that
+	\[
+	\phi(f) \leq \int_K f \diff \mu
+	\]
+	for all $f \in C^{\mathbb{R}}(K)$. Applying this to $f$ and $-f$ gives equality. Note that for $f = 1_K$,
+	\[
+	\phi(1_K) = \mu(K) = \int_K 1_K \diff \mu,
+	\]
+	so it is enough to show that
+	\[
+	\phi(f) \leq \int_K f \diff \mu
+	\]
+	for $f > 0$ on $K$, as for $f \in C^{\mathbb{R}}$ general we may apply this to $f + \lambda 1_K$ for $\lambda$ large.
+
+	Let $f > 0$ on $K$. Fix $b > a > 0$ such that $f(K) \subseteq [a, b]$ Fix $\eps > 0$ and $0 \leq y_0 < a \leq y_1 \leq \cdots \leq y_n = b$ such that $y_i - y_{i-1} \leq \eps$, and set
+	\[
+		A_j = f^{-1}((y_{i-1}, y_j]).
+	\]
+	Then these are Borel sets, and $K = \bigcup_j A_j$ is a Borel partition.
+
+	As $\mu$ is regular, we can pick $U_j \supseteq U_j$ with $\mu(U_j \setminus A_j) \leq \eps/n$. By shrinking $U_j$, without loss of generality let
+	\[
+	U_i = f^{-1}((y_{i-1}, y_i + \eps)).
+	\]
+	Since $K = \bigcup U_i$, by the previous lemma 2.2 there is $g_i \prec U_i$ with $\sum_i g_i = 1$ on $K$. Then $f = \sum_j f g_j$, and $f g_j \leq (y_j + \eps) g_j$ for $1 \leq j \leq n$. So,
+	\begin{align*}
+		\phi(f) &= \sum_{j = 1}^n \phi(f g_j) \leq \sum_{j = 1}^n (y_j + \eps) \phi(g_j) \\
+			&\leq \sum_{j = 1}^n (y_j + \eps) \mu(U_j) \leq \sum_{j= 1}^n (y_{j-1} + 2 \eps)(\mu(A_j)+  \eps/n) \\
+			&\leq \sum_{j = 1}^n y_{j-1} \mu(A_j) + \eps (b + 2 \mu(K) + 2 \eps) \\
+			& = \int_K \sum_{j = 1}^n y_{j-1} \mathbbm{1}_{A_j} \diff \mu + \eps (b + 2 \mu(K) + 2 \eps) \\
+			&\leq \int_K f \diff \mu + \eps(b + 2 \mu(K) + 2 \eps).
+	\end{align*}
+	Taking $\eps \to 0$ gives the required result.
+\end{proofbox}
+
+\begin{corollary}
+	For any $\phi \in M(K)$, there exists a unique regular complex Borel measure $\nu$ on $K$ that represents $\phi$:
+	\[
+	\int_K f \diff \nu = \phi(f)
+	\]
+	for all $f \in C(K)$. Moreover, $\|\phi\| = \|\nu\|_1$. If $\phi \in M^{\mathbb{R}}(K)$, then $\nu$ is a signed measure.
+\end{corollary}
+
+\begin{proofbox}
+	For existence, use lemma 2.1 then theorem 2.5. We only need to show that $\|\phi\| = \|\nu\|_1$.
+
+	This will follow from uniqueness: if $\nu_1, \nu_2$ both represent $\phi$, then $\nu_1 - \nu_2$ represents $0$, so $\|\nu_1 - \nu_2\|_1 = 0$, hence $\nu_1 = \nu_2$.
+
+	Say that $\nu$ represents $\phi$. We have seen that $\|\phi\| \leq \|\nu\|_1$. Let
+	\[
+	K = \bigcup_{i = 1}^n A_i
+	\]
+	be a Borel partition of $K$. We will show that
+	\[
+	\sum_{i = 1}^n |\nu(A_i)| \leq \|\phi\|,
+	\]
+	then we are done.
+
+	Choose $\lambda_i \in \mathbb{C}$ such that $|\lambda_i| = 1$, and
+	\[
+	|\nu(A_i)| = |\lambda_i| \nu(A_i).
+	\]
+	Then we find
+	\[
+	\sum_{i = 1}^n |\nu(A_i)| = \sum_{i = 1}^n \lambda_i \nu(A_i) = \int_K \sum_{j = 1}^n \lambda_j \mathbbm{1}_{A_j} \diff \nu.
+	\]
+	Fix $\eps > 0$, and $E_j \subseteq A_j \subseteq U_j$ with $E_j$ closed, $U_j$ open such that $|\nu|(U_j \setminus E_j) < \eps/n$. Without loss of generality,
+	\[
+	U_j \subseteq K \setminus \bigcup_{\substack{i = 1 \\ i \neq j}}^n E_i.
+	\]
+	Let $E = \bigcup E_j$, so $E \subseteq \bigcup U_j$. So there exists $g_j \prec U_j$ such that $\sum g_j = 1$ on $E$, and $\sum g_j \leq 1$ on $K$.
+
+	But on $E_j$, $g_i = 0$ for $i \neq j$, so $g_j = 1$. Set
+	\[
+	f = \sum_{j = 1}^n \lambda_j g_j \in C(K),
+	\]
+	and moreover $\|f\|_\infty \leq 1$. Then
+	\begin{align*}
+		\left| \sum_{j = 1}^n |\nu(A_j)| - \phi(f)\right| &= \left| \int_K \left( \sum_{j = 1}^n \lambda_j \mathbbm{1}_{A_j} - \sum_{j = 1}^n \lambda_j g_j \right) \diff \nu \right| \\
+								  &= \sum_{j = 1}^n \int_K \left| \mathbbm{1}_{A_j} - g_j \right| \diff \nu \\
+								  &\leq \sum_{j = 1}^n |\nu|(U_j \setminus E_j) < \eps.
+	\end{align*}
+	So
+	\[
+	\sum_{j = 1}^n |\nu(A_j)| \leq |\phi(f)| + \eps \leq \|\phi\| + \eps.
+	\]
+\end{proofbox}
+
+\begin{corollary}
+	The space of regular complex Borel measures on $K$ is a complex Banach space with $\|\cdot\|_1$, and is isometrically isomorphic to $M(K) = C(K)^{\ast}$.
+
+	The space of regular signed Borel measures on $K$ is a real Banach space with $\|\cdot\|_1$, and is isometrically isomorphic to $M^{\mathbb{R}}(K) \cong C^{\mathbb{R}}(K)^{\ast}$.
+\end{corollary}
+
+\newpage
+
+\section{Weak Topologies}%
+\label{sec:weak}
+
+Let $X$ be a set, and $\mathcal{F}$ a family of functions, where each $f \in \mathcal{F}$ is $f : X \to Y_f$, with $Y_f$ a topological space.
+
+The \emph{weak topology}\index{weak topology} $\sigma(X, \mathcal{F})$ on $X$ generated by $\mathcal{F}$ is the smallest topology on $X$ such that each $f \in \mathcal{F}$ is continuous.
+
+\begin{remark}
+	\begin{enumerate}
+		\item[]
+		\item Let $S = \{f^{-1}(U) \mid f \in \mathcal{F}, U \subseteq Y_f \text{ open}\}$. Then this is a subbase of $\sigma(X, \mathcal{F})$, i.e. $\sigma(X, \mathcal{F})$ is generated by $S$. So the finite intersections of members of $S$ is a base of $\sigma(X, \mathcal{F})$.
+
+			So $V \subseteq X$ is open, if and only if for all $x \in V$, there exists $n \in \mathbb{N}$, and $f_1, \ldots, f_n \in \mathcal{F}$, and $U_j \subseteq Y_{f_j}$ open such that
+			\[
+			x \in \bigcap _{j = 1}^n f_j^{-1}(U_j) \subseteq V.
+			\]
+
+			Hence $V \subseteq X$ is open if and only if for all $x \in V$, there exists $f_1, \ldots, f_n \in \mathcal{F}$ and neighbourhoods $U_j$ of $f_j(x)$ in $Y_{f_j}$ such that
+			\[
+			\bigcap_{j = 1}^n f_j^{-1}(U_j) \subseteq V.
+			\]
+			% lecture 11
+		\item If $S_f$ is a subbase for the topology of $Y_f$ for each $f$, then
+			\[
+				S = \{f^{-1}(U) \mid f \in \mathcal{F}, U \in S_f\}
+			\]
+			is a subbase for $\sigma(X, \mathcal{F})$.
+		\item If all $Y_f$ are Hausdorff, and $\mathcal{F}$ separates points, then $\sigma(X, \mathcal{F})$ are Hausdorff.
+		\item Let $Y \subseteq X$ and $\mathcal{F}_Y = \{f_Y \mid f \in \mathcal{F}\}$. Then $\sigma(X, \mathcal{F})|_Y = \sigma(Y, \mathcal{F}_Y)$.
+		\item There is a universal property: a function $g : Z \to X$ is continuous with respect to $\sigma(X, \mathcal{F})$ if and only if $f \circ g : Z \to Y_f$ is continuous, for each $f \in \mathcal{F}$.
+	\end{enumerate}
+\end{remark}
+
+\begin{exbox}
+	\begin{enumerate}
+		\item Let $X$ be a topological space, and $Y \subseteq X$, with $\iota : Y \injto X$ the inclusion. Then $\sigma(Y, \{\iota \}\})$ is the subspace topology.
+		\item Let $\Gamma$ be a set, and for each $\gamma \in \Gamma$ let $X_\gamma$ be a topological space. Take
+			\[
+			X = \prod_{\gamma \in \Gamma} X_\gamma,
+			\]
+			and define $\pi_\gamma : X \to X_\gamma$. Then $\sigma(X, \{\pi_\gamma \mid \gamma \in \Gamma\})$ is the product topology.
+	\end{enumerate}
+\end{exbox}
+
+\begin{proposition}
+	Let $X$ be a set, and for each $n \in \mathbb{N}$ let $(Y_n, d_n)$ be a metric space and $f_n : X \to Y_n$ a function. Assume that $\mathcal{F} = \{f_n \mid n \in \mathbb{N}\}$ separates the points of $X$.
+
+	Then $\sigma(X, \mathcal{F})$ is metrizable.
+\end{proposition}
+
+In general, in the non-separable case, we get a pseudo-metric.
+
+
+\begin{proofbox}
+	For $x, y \in X$, set
+	\[
+		d(x, y) = \sum_{n=1}^{\infty} 2^{-n} \min \{d_n(f_n(x), f_n(y)), 1\}.
+	\]
+	Then $d$ is a metric on $X$, as if $x \neq y$ then since $\mathcal{F}$ separates points, there is $n$ with $f_n(x) \neq f_n(y)$, and so $d(x, y) > 0$. Moreover if $d_n$ is a metric, $\min(d_n, 1)$ is a metric, so $d$, as a sum of metrics, is a metric.
+
+	All that is required is to show that this induces the same topology as $\sigma(X, \mathcal{F})$, which amounts to showing the identity map is continuous. Let $\tau$ be the induced topology.
+
+	First, note $\tilde f_n$, which is the function $f_n$, is uniformly continuous on the metric topology. Indeed, for $\eps > 0$, we want to show there is $\delta > 0$ such that $d(x, y) \leq \delta \implies d_n(f_n(x), f_n(y)) \leq \eps$.
+
+	It suffices to show this for $\eps < 1$. Set $\delta = 2^{-n} \eps$. Then $d(x, y) \leq \delta \implies 2^{-n} \min\{d_n(f_n(x), f_n(y)), 1\} \leq 2^{-n \eps}$, so since $\eps < 1$, this means $d_n(f_n(x), f_n(y)) \leq \eps$. So as each $\tilde f_n$ continuous, $\sigma(X, \mathcal{F}) \subseteq \tau$.
+
+	Conversely, we need to show $\id$ is continuous from $\sigma(X, \mathcal{F})$ to $\tau$. This is equivalent to showing that $d$ is continuous, as a map $d : X \times X \to \mathbb{R}$. Indeed, $f_n$ is continuous, so $\tilde d_n : X \times X \to \mathbb{R}$ by $\tilde d_n = d_n \circ (f_n \times f_n)$ is a composition of continuous functions, so it continuous.
+
+	Then $d$ is the uniform limit of continuous functions, and hence is continuous. So for all $x \in X$, $B_r(x) = \{y \in X \mid d(y, x) < r\}$ is open in $\sigma(X, \mathcal{F})$, as this is the preimage of $(-\infty, r)$ under $d$.
+\end{proofbox}
+
+\begin{theorem}[Tychonov's Theorem]
+	The product of compact topological spaces is compact in the product topology.
+\end{theorem}
+
+\begin{proofbox}
+	TODO
+\end{proofbox}
+
+\subsection{Weak Topologies on Vector Spaces}%
+\label{sub:wvs}
+
+Let $E$ be a real or complex vector space, and let $F \subseteq E^{\ast}$ be a subspace that separates the points of $E$. We want to consider the topology $\sigma(E, F)$.
+
+For $f \in F$, let $P_f : E \to \mathbb{R}$ be defined by $P_f(x) = |f(x)|$. Then $\mathcal{B} = \{P_f \mid f \in F\}$ is a family of seminorms that separates the points of $E$. Then the topology of the LCS $(E, \mathcal{B})$ is exactly the same as $\sigma(E, F)$, by the definition of the topology. In particular, $\sigma(E, F)$ makes $E$ into a Hausdorff TVS.
+
+\begin{lemma}
+	Let $E$ be a vector space and $f, g_1, \ldots, g_n$ be linear functions. If
+	\[
+	\bigcap_{i = 1}^n \ker g_i \subseteq \ker f,
+	\]
+	then $f \in \spn\{g_1, \ldots, g_n\}$.
+\end{lemma}
+
+\begin{proofbox}
+	Define $T : E \to \mathbb{R}^n$ or $\mathbb{C}^n$ by
+	\[
+	T(x) = (g_1(x), \ldots, g_n(x)).
+	\]
+	Then $T$ is linear, and
+	\[
+	\ker T = \bigcap_{i = 1}^n \ker g_i \subseteq \ker f.
+	\]
+	So there is a map $\tilde f$ from $\Img T$ to the scalars such that
+	\[
+	f = \tilde f \circ T,
+	\]
+	and moreover $\tilde f$ is linear. We can extend $\tilde f$ to the entirety of $\mathbb{R}^n$ or $\mathbb{C}^n$ linearly, and so $\tilde f$ takes the form
+	\[
+	\tilde f(y_1, \ldots, y_n) = a \cdot y = \sum_{i = 1}^n a_i y_i.
+	\]
+	Hence as $f = \tilde f \circ T$, we have
+	\[
+	f(x) = \sum_{i = 1}^n a_i g_i(x),
+	\]
+	for all $x \in E$, as required.
+\end{proofbox}
+
+% lecture 12
+
+\begin{proposition}
+	Let $E, F$ be as above, and $f$ be a linear functional on $E$. Then $f$ is continuous with respect to $\sigma(E, F)$ if and only if $f \in F$.
+
+	In other words, $(E, \sigma(E, F))^{\ast} = F$.
+\end{proposition}
+
+\begin{proofbox}
+	The reverse direction is clear by definition, as $\sigma(E, F)$ is the smallest topology making all $f \in F$ continuous.
+
+	For the forwards, assume $f$ is continuous with respect to $\sigma(E, F)$. Then $V = \{x \in E \mid |f(x)| < 1\}$ is a neighbourhood of $0$ in $E$.
+
+	Hence there exists $g_1, \ldots, g_n \in F$, and $\eps > 0$ such that
+	\[
+		U = \{x \in E \mid |g_j(x)| \leq \eps \text{ for all } 1 \leq j \leq n\} \subseteq V.
+	\]
+	If $x \in \bigcap \ker g_j$, then for every scalar $\lambda$, $\lambda x \in U$, so $|f(\lambda x)| < 1$. Hence $f(x) = 0$. This shows that
+	\[
+	\bigcap_{j = 1}^n \ker  g_j \subseteq \ker f.
+	\]
+	This implies that $f \in \spn\{g_1, \ldots, g_n\} \subseteq F$.
+\end{proofbox}
+
+\begin{exbox}
+	Let $X$ be a normed space.
+
+	\begin{enumerate}
+		\item The \emph{weak topology}\index{weak topology on NVS} on $X$ is $\sigma(X, X^{\ast})$. Note that $X^{\ast}$ separates points of $X$ by Hahn-Banach.
+
+			We write $(X, w)$ for $(X, \sigma(X, X^{\ast}))$. Open sets in $\sigma(X, X^{\ast})$ are called \emph{weakly open}\index{weakly open set}. Note that $U \subseteq X$ is weakly open if and only if, for all $x \in U$, there is $f_1, \ldots, f_n \in X^{\ast}$ and $\eps > 0$ such that
+			\[
+				\{y \mid |f_j(y- x)| < \eps, 1 \leq j \leq n\} \subseteq U.
+			\]
+		\item The \emph{weak-$\ast$ topology}\index{weak-$\ast$ topology} on $X^{\ast}$ is $\sigma(X^{\ast, X)}$, regarding $X$ as a subset of $X^{\ast\ast}$. We write $(X^{\ast}, w^{\ast})$ for $(X^{\ast}, \sigma(X^{\ast}, X))$.
+
+			Open sets in $\sigma(X^{\ast}, X)$ are \emph{weak-$\ast$ open}\index{weak-$\ast$ open set}. Then, $U \in X^{\ast}$ is weak-$\ast$ open if and only if, for all $f \in U$, there exists $x_1, \ldots, x_n \in X$, and $\eps > 0$ such that
+			\[
+				\{ g \in X^{\ast} \mid |(g - f)(x_j)| < \eps, 1 \leq j \leq n\} \subseteq U.
+			\]
+	\end{enumerate}
+\end{exbox}
+
+These topologies satisfy the following properties:
+\begin{enumerate}[(i)]
+	\item $(X, w)$ and $(X^{\ast}, w^{\ast})$ are LCSs, and hence Hausdorff with continuous functions of addition and scalar multiplication.
+	\item $\sigma(X, X^{\ast})$ is a subset of the $\|\cdot\|$-induced topology of $X$, with equality if and only if $\dim X < \infty$.
+	\item $\sigma(X^{\ast}, X) \subseteq \sigma(X^{\ast}, X^{\ast\ast})$, with equality if and only if $X$ is reflexive.
+	\item Let $Y$ be a subspace of $X$. Then
+		\[
+			\sigma(X, X^{\ast})|_Y = \sigma(Y, \{f|_Y \mid f \in X^{\ast}\}) = \sigma(Y, Y^{\ast}).
+		\]
+		by Hahn-Banach. Similarly,
+		\[
+		\sigma(X^{\ast\ast}, X^{\ast})|_X = \sigma(X, X^{\ast}).
+		\]
+		So the canonical embedding $X \to X^{\ast\ast}$ is a weak-to-weak-$\ast$ homeomorphism between $X$ and $\hat X$.
+\end{enumerate}
+
+\begin{proposition}
+	Let $X$ be a normed space.
+	\begin{enumerate}[\normalfont(i)]
+		\item A linear function $f$ on $X$ is weakly-continuous $\iff$ $f \in X^{\ast}$, i.e. $(X, w)^{\ast} = X^{\ast}$.
+		\item A linear functional $\vphi$ on $X^{\ast}$ is weak-$\ast$-continuous $\iff$ $\vphi \in X$, i.e. $\vphi = \hat x$ for some $x \in X$. So $(X^{\ast}, w^{\ast})^{\ast} = X$.
+	\end{enumerate}
+	Moreover, $\sigma(X^{\ast}, X^{\ast\ast}) = \sigma(X^{\ast}, X)$ $\iff$ $X$ is reflexive.
+\end{proposition}
+
+\begin{proofbox}
+	(i) and (ii) are special cases of proposition 3.2.
+
+	If $X$ is reflexive, then clearly $\sigma(X^{\ast}, X^{\ast\ast}) = \sigma(X^{\ast}, X)$.
+
+	On the other hand, if $\sigma(X^{\ast}, X^{\ast\ast}) = \sigma(X^{\ast}, X)$, then the duals are equal, in particular $X^{\ast\ast} = X$.
+\end{proofbox}
+
+\begin{definition}
+	Let $X$ be a normed space.
+	\begin{enumerate}[(i)]
+		\item $A \subseteq X$ is \emph{weakly bounded}\index{weakly bounded}if $\{f(x) \mid x \in A\}$ is bounded for all $f \in X^{\ast}$. This is true if and only if, for all weak-neighbourhoods $U$ of $0$, there exists $\lambda > 0$ with $A \subseteq \lambda U$.
+		\item $B \subseteq X^{\ast}$ is \emph{weak-$\ast$ bounded}\index{weak-$\ast$ bounded} if $\{f(x) | f \in B\}$ is bounded for all $x \in X$. This is true if and only if, for all weak-$\ast$-neighbourhoods $U$ of $0$, there exists $\lambda > 0$ with $B \subseteq \lambda U$.
+	\end{enumerate}
+\end{definition}
+
+Recall the following:
+\begin{lemma}[Principle of Uniform Boundedness]
+	Let $X, Y$ be normed spaces with $X$ complete, and $\mathcal{T} \subseteq \mathcal{B}(X, Y)$ be pointwise bounded, i.e. for all $x \in X$,
+	\[
+	\sup_{T \in \mathcal{T}} \|Tx\| < \infty.
+	\]
+	Then
+	\[
+	\sup_{T \in \mathcal{T}}\|T\| < \infty.
+	\]
+\end{lemma}
+
+\begin{proposition}
+	Let $X$ be a normed space.
+	\begin{enumerate}[\normalfont(i)]
+		\item If $A \subseteq X$ is weakly bounded, then $A$ is norm bounded.
+		\item If $B \subseteq X^{\ast}$ is weak-$\ast$ bounded and $X$ is complete, then $B$ is norm bounded.
+	\end{enumerate}
+\end{proposition}
+
+\begin{proofbox}
+	
+
+	(i) Consider $\{\hat x \mid x \in A\} \subseteq X^{\ast\ast} = \mathcal{B}(X^{\ast})$. $X^{\ast}$ is complete, so since by assumption $\hat x$ is pointwise bounded, it is uniformly bounded. Hence
+	\[
+	\sup_{x \in A} \|x\| = \sup_{x \in A} \|\hat x\| < \infty.
+	\]
+
+	(ii) $B \subseteq X^{\ast} = B(X)$. By assumption, $B$ is pointwise bounded, hence by the principle of uniform boundedness, it is norm bounded.
+\end{proofbox}
+
+\begin{definition}
+	We say that $(x_n)$ \emph{converges weakly}\index{weak convergence} to $x$ in some normed space $X$ if $x_n \to x$ in $\sigma(X, X^{\ast})$. We write
+	\[
+	x_n \overset w \to x.
+	\]
+	Then note $x_n \overset w\to x \iff \langle x_n, f\rangle \to \langle x, f\rangle$ for all $f \in X^{\ast}$.
+
+	We say that $(f_n)$ \emph{converges weak-$\ast$}\index{weak-$\ast$ convergence} to $f$ in some $X^{\ast}$ if $f_n \to f$ in $\sigma(X^{\ast}, X)$. We write
+	\[
+		f_n \overset {w^{\ast}}\to f.
+	\]
+	Again, $f_n \overset{w^{\ast}}\to f \iff  \langle x, f_n \rangle \to \langle x, f\rangle$ for all $x \in X$.
+\end{definition}
+
+Recall the following consequence of PUB: let $X, Y$ are normed spaces, $X$ complete and $(T_n)$ in $\mathcal{B}(X, Y)$ which converges to $T$ pointwise.
+
+Then $T \in \mathcal{B}(X, Y)$, $\sup \|T_n\| < \infty$ and
+\[
+\|T\| \leq \liminf \|T_n\|.
+\]
+
+\begin{proposition}
+	Let $X$ be a normed space.
+	\begin{enumerate}[\normalfont(i)]
+		\item If $x_n \overset w\to x$ in $X$, then $\sup \|x_n\| < \infty$, and $\|x\| \leq \liminf \|x_n\|$.
+		\item If $f_n \overset {w^{\ast}}\to f$ in $X^{\ast}$ and $X$ is complete, then $\sup \|f_n\| < \infty$, and $\|f\| \leq \liminf \|f_n\|$.
+	\end{enumerate}
+\end{proposition}
+
+\begin{proofbox}
+	Analogous to proposition 3.4 (look at $\{x_n\} \subseteq X^{\ast\ast}$, use PUB and the above corollary, and similarly for $\{f_n\}$).
+\end{proofbox}
+
+\subsection{Hahn-Banach Separation Theorems}%
+\label{sub:sep_thms}
+
+Let $(X, \mathcal{P})$ be a LCS. Let $C$ be a convex subset of $X$ with $0 \in \mathrm{int} C$. For $x \in X$, let
+\[
+	\mu_C(x) = \inf \{t > 0 \mid x \in tC\}.
+\]
+This is well-defined: $x/n \to 0$ as $n \to \infty$, so there exists $n \in \mathbb{N}$ with $x/n \in C$, i.e. $x \in nC$.
+
+The function $\mu_C : X \to \mathbb{R}^+$ is the \emph{Minkowski functional}\index{Minkowski functional} of $C$.
+
+\begin{exbox}
+	In a normed space,
+	\[
+	\mu_{B_X} = \|\cdot\|.
+	\]
+	
+\end{exbox}
+
+% lecture 13
+
+\begin{lemma}
+	$\mu_C$ is positive homogeneous and subadditive. Moreover,
+	\[
+		\{x \in X \mid \mu_C(x) < 1 \} \subseteq C \subseteq \{x \in X \mid \mu_C(x) \leq 1\},
+	\]
+	with equalities on the left and right if $C$ is open or closed, respectively.
+\end{lemma}
+
+\begin{proofbox}
+	
+
+	For positive homogeneity, $\mu_C(0) = 0$ since $0 \in C$ and hence $0 \in tC$ for all $t>0$.
+
+	For $t > 0$ and $x \in X$, $x \in s C \iff t x \in s t C$ so $\mu_C(tx) = t\mu_C(x)$.
+
+	If $\mu_C(x) < t$, then there is $t'$ with $0 < t' < t$ such that $x \in t' C$. Then,
+	\[
+	\frac{x}{t} = \frac{t'}{t} \frac{x}{t'} + \left(1 - \frac{t'}{t} \right) 0 \in C
+	\]
+	as $C$ is convex, so $x \in tC$.
+
+	Now let $x,y  \in X$, and fix $s > \mu_C(x)$, $t > \mu_C(y)$. Then $x \in sC$, $y \in tC$, and
+	\[
+	\frac{x + y}{s + t} = \frac{s}{s + t} \frac{x}{s} + \frac{t}{s + t} \frac{y}{t} \in C
+	\]
+	by convexity, so $x + y \in (s + t) C$. This shows that $\mu_C(x + y) \leq s + $. It follows that $\mu_C(x + y) \leq \mu_C(x) + \mu_C(y)$.
+
+	If $\mu_C(x) < 1$, then $x \in C$ by the observation. Moreover if $x \in C$, then $\mu_C(x) \leq 1$.
+
+	If $C$ is open, pick $x \in C$. As $(1 + \frac{1}{n})x \to x \in C$, for some $n$ we must have $(1 + \frac{1}{n})x \in C$, and hence $\mu_C(x) \leq 1/(1 + \frac{1}{n}) < 1$.
+
+	If $C$ is closed and $\mu_C(x) \leq 1$, then $\mu_C((1 - \frac{1}{n})x) = (1 - \frac{1}{n}) \mu_C(x) < 1$, so $(1 - \frac 1n)x \in C$. Since $(1 - \frac 1n ) x \to x$ and $C$ is closed, $x \in C$.
+\end{proofbox}
+
+\begin{remark}
+	If, in the real case $C$ is symmetric, or in the complex case $C$ is balanced, then $\mu_C$ is a seminorm.
+
+	If we further assume that $C$ is bounded, then $\mu_C$ is a norm.
+\end{remark}
+
+\begin{theorem}[Hahn-Banach Separation Theorem]
+	Let $(X, \mathcal{P})$ be a LCS, $C$ an open convex set in $X$ with $0 \in C$. Let $x_0 \in X \setminus C$. Then there exists $f \in X^{\ast}$ such that
+	\[
+		f(x_0) > f(x) \text{ for all }x \in C,
+	\]
+	in the real case, or
+	\[
+		\Re f(x_0) > \Re f(x) \text{ for all } x \in C,
+	\]
+	in the complex case.
+\end{theorem}
+
+\begin{proofbox}
+	We show that the real case implies the complex case.
+
+	Think of the complex space $X$ as a real space, and find a real-linear continuous functional $g$ on $X$ such that $g(x_0) > g(x)$ for all $x \in C$. Then $f(x) = g(x) - i g(ix)$ defines a complex-linear continuous functional on $X$ such that $\Re f = g$.
+
+	So we can assume the scalar field is $\mathbb{R}$.
+
+	By lemma 3.3, $C = \{x \in X \mid \mu_C(x) < 1\}$, and $\mu_C(x_0) \geq 1$. Let $Y = \spn \{x_0\}$, and define $g : Y \to \mathbb{R}$ by
+	\[
+	g(\lambda x_0) = \lambda \mu_C(x_0).
+	\]
+	For $\lambda \geq 0$, $g(\lambda x_0) = \mu_C(\lambda x_0)$. For $\lambda < 0$, $g( \lambda x_0) \leq 0 \leq \mu_C (\lambda x_0)$. So $g \leq \mu_C$ on $Y$.
+
+	By Hahn-Banach, there exists real-linear $f : X \to \mathbb{R}$ with $f|_Y = g$ and $f \leq \mu_C$ on $X$. For $x \in C$, $f(x) \leq \mu_C(x) < 1 \leq \mu_C(x_0) = f(x_0)$.
+
+	For $\eps > 0$, $|f| < \eps$ on the neighbourhood $\eps C \cap (-\eps) C$ of $0$. So $f$ is continuous at $0$, and hence $f \in X^{\ast}$.
+\end{proofbox}
+
+\begin{theorem}
+	Let $A, B$ be non-empty, disjoint convex subsets of a LCS.
+	\begin{enumerate}[\normalfont(i)]
+		\item If $A$ is open, then there exists $f \in X^{\ast}$ and $\alpha \in \mathbb{R}$ such that $f(a) < \alpha \leq f(b)$ for all $a, b \in A, B$.
+		\item If $A$ is compact and $B$ is closed, then there exists $f \in X^{\ast}$ such that $\sup_A f < \inf_B f$.
+	\end{enumerate}
+\end{theorem}
+
+\begin{proofbox}
+	
+
+	(i) Fix $a_0 \in A$, $b_0 \in B$. Set $x_0 = b_0 - a_0$, and $C = A - B + x_0$. Then $C$ is convex,
+	\[
+	C = \bigcup_{b \in B}(A - b + x_0)
+	\]
+	is open, $0 \in C$ and $x_0 \not \in C$, as $A \cap B \neq \emptyset$. By the previous theorem, there exists $f \in X^{\ast}$ such that $f(a - b + x_0) < f(x_0)$ for all $a \in A$, $b \in B$, i.e. $f(a) < f(b)$.
+
+	So if $\alpha = \inf_B f$, then $f(a) \leq \alpha \leq f(b)$ for all $a \in A$, $b \in B$. Note $f \neq 0$, so we can fix $u \ni X$ such that $f(u) > 0$. Then $a + u/n \to a$ as $n \to \infty$, so $a + u/n \in A$ for some $n$ This gives
+	\[
+	f(a) < f\left(a + \frac{u}{n} \right) \leq \alpha.
+	\]
+
+	(ii) We show that there exists an open convex neighbourhood $V$ of $0$ such that $(A + V) \cap B \neq \emptyset$. For $x \in A$ there exists a neighbourhood $U_x$ of $0$ such that $(x + U_x) \cap B \neq \emptyset$. Addition is continuous, so there exists a neighbourhood $V_x$ of $0$ such that $V_x + V_x \subseteq U_x$. Let $V_x$ be open and convex.
+
+	$A$ is compact, so there exists $x_1, \ldots, x_n \in A$ such that
+	\[
+	A \subseteq \bigcup_{i = 1}^{n}(x_i + V_{x_i}).
+	\]
+	Let $V = \bigcap V_{x_i}$. Then this is a convex open neighbourhood of $0$ and $(A + V) \cap B = \emptyset$. Indeed, $a \in x_n + V_{x_i}$, so $a + v \in x_i + V_{x_i} + V_{x_i} \subseteq x_i + U_{x_i}$ which is disjoint from $B$.
+
+	Now $A + V$ is open and convex, so by (i), there exists $f \in X^{\ast}$ and $\alpha \in \mathbb{R}$ such that
+	\[
+	f(\alpha + v) < \alpha \leq f(b),
+	\]
+	for all $a \in A, v \in V$ and $b \in B$. As $f \neq 0$, choose $z \in X$ with $f(z) > 0$. Then $z/n \to 0$, so for some $n$, $z/n \in V$. Then for all $a \in A$,
+	\[
+	f(a) = f\left(a + \frac{z}{n} \right) - f\left( \frac{z}{n} \right) \leq \alpha - f\left( \frac{z}{n} \right) < \alpha.
+	\]
+	Hence $\sup_A f < \inf_B f$.
+\end{proofbox}
+
+\begin{theorem}[Mazur's Theorem]
+	Let $X$ be a normed space and $C$ a convex subset of $X$. Then $\overline{C}^w = \overline{C}^{\|\cdot\|}$. So $C$ is weakly-closed if and only if $C$ is norm closed.
+\end{theorem}
+
+\begin{proofbox}
+	Note that $\overline{C}^w \supseteq \overline{C}^{\|\cdot\|}$ since the weak topology is weaker than the norm topology.
+
+	If $x \not \in \overline{C}^{\|\cdot\|}$, then applying theorem 3.3 part (ii) with $A = \{x\}$, $B = \overline{C}^{\|\cdot\|}$, and $X$ with the $\|\cdot\|$-topology, then there is $f \in X^{\ast}$ such that $f(x) < \inf_B f \leq \inf_C f = \alpha$.
+
+	Then $\{y \in X \mid f(y) < \alpha\}$ is a weak neighbourhood of $x$ disjoint from $C$. So $x \not \in \overline{C}^w$.
+\end{proofbox}
+
+\begin{corollary}
+	If $x_n \overset w\to 0$ in a normed space $X$, then
+	\[
+		0 \in \overline{\mathrm{conv}\{x_n \mid n \in \mathbb{N}\}}^{\|\cdot\|}.
+	\]
+\end{corollary}
+
+\begin{proofbox}
+	Let $C = \mathrm{conv}\{x_n \mid n \in \mathbb{N}\}$. Then $0 \in \overline{C}^w = \overline{C}^{\|\cdot\|}$.
+\end{proofbox}
+
+\begin{remark}
+	So there exists $p_1 < q_1 < p_2 < q_2 < \cdots$ in $\mathbb{N}$ and convex combinations
+	\[
+	\sum_{i = p_n}^{q_n} t_i x_i \to 0
+	\]
+	in $\|\cdot\|$.
+\end{remark}
+
+
+% lecture 14
 
 \newpage
 

@@ -725,7 +725,7 @@ We can also (anti)symmetrize over more than two indices.
 For example,
 \begin{align*}
 	T^{(abc)} &= \frac{1}{3!} (T^{abc} + T^{bca} + T^{cab} + T^{acb} + T^{cba} + T^{bac}), \\
-	T^{[abc]} &= \frac{1}{3!} (T^{abc} + T^{bca} + T^{cab} - T^{acb} - T^{cba} - T^{bac}.
+	T^{[abc]} &= \frac{1}{3!} (T^{abc} + T^{bca} + T^{cab} - T^{acb} - T^{cba} - T^{bac}).
 \end{align*}
 To exclude indices from (anti)symmetrization, we use vertical lines:
 \[
@@ -740,13 +740,13 @@ The space of $(r, s)$-tensors at a point $p$ is the vector space $(T\indices{^{r
 \]
 If $(O, \phi)$ is a coordinate chart on $M$, set
 \[
-	\tilde O = \bigcup_{p \in O} \{p\} \times (T^{\indices{^{r}_{s}}})_p M \subseteq T\indices{^{r}_{s}}M,
+	\tilde O = \bigcup_{p \in O} \{p\} \times (T{\indices{^{r}_{s}}})_p M \subseteq T\indices{^{r}_{s}}M,
 \]
 and
 \[
 \tilde \phi(p, S_p) = (\phi(p), S\indices{^{\mu_1 \ldots \mu_r}_{\nu_1 \ldots \nu_s}} ).
 \]
-$T\indices{^{r}_{s}} M$ is a manifold, with a natural smooth map $\Pi : T\indices{^{r}_{s}}M \to M$ such that $\pi(p, S_p) = p$.
+$T\indices{^{r}_{s}} M$ is a manifold, with a natural smooth map $\Pi : T\indices{^{r}_{s}}M \to M$ such that $\Pi(p, S_p) = p$.
 
 A \emph{tensor field}\index{tensor field} is a smooth map $T : M \to T\indices{^{r}_{s}}M$ such that $\pi \circ T = \id$.
 
@@ -999,6 +999,892 @@ We can compute
 \end{align*}
 
 % lecture 8
+
+Fix the parametrization so that the curve is parametrized by proper time $\tau$. Doing this, we get
+\[
+\frac{\diff x^\mu}{\diff \tau} = \dot x^\mu \frac{\diff u}{\diff \tau} , \qquad -1 = g_{\mu\nu} \frac{\diff x^\mu}{\diff \tau} \frac{\diff x^\nu}{\diff \tau}.
+\]
+We deduce that
+\begin{align*}
+	-1 = g_{\mu\nu} \dot x^\mu \dot x^\nu \left( \frac{\diff u}{\diff \tau} \right)^2 &\implies \frac{\diff u}{\diff \tau} = \frac{1}{G} \\
+											  &\implies \frac{1}{G} \frac{\diff}{\diff u} = \frac{\diff}{\diff \tau}.
+\end{align*}
+Returning to the Euler-Lagrange quations, we find
+\[
+\frac{\diff}{\diff \tau} \left( g_{\mu\nu} \frac{\diff x^\nu}{\diff \tau} \right) = \frac{1}{2} g_{\nu\rho,\mu} \frac{\diff x^\nu}{\diff \tau} \frac{\diff x^\rho}{\diff \tau}.
+\]
+Hence expanding the LHS,
+\[
+	g_{\mu\nu} \frac{\Diff2 x^\nu}{\diff \tau^2} + g_{\mu[\nu,\rho]} \frac{\diff x^\nu}{\diff \tau} \frac{\diff x^\rho}{\diff \tau} - \frac{1}{2} g_{\sigma\rho,\mu} \frac{\diff x^\rho}{\diff \tau} \frac{\diff x^\rho}{\diff \tau} = 0,
+\]
+after symmetrizing. Thus,
+\[
+	\frac{\Diff2 x^\mu}{\diff \tau^2} + \Gamma\indices{_\mu^\nu_\rho} \frac{\diff x^\mu}{\diff \tau} \frac{\diff x^\rho}{\diff \tau} = 0, \tag{$\ast$}
+\]
+where
+\[
+\Gamma\indices{_\mu^\nu_\rho} = \frac{1}{2} g^{\nu\sigma} \left( g_{\mu\sigma, \rho} + g_{\sigma\rho,\mu} - g_{\mu\rho,\sigma} \right)
+\]
+are the \emph{Christoffel symbols}\index{Christoffel symbols} of $g$. Note that:
+\begin{itemize}
+	\item $\Gamma\indices{_\nu^\mu_\rho} = \Gamma\indices{_\rho^\mu_\nu}$.
+	\item $\Gamma\indices{_\nu^\mu_\rho}$ are not tensor components.
+	\item We can solve ($\ast$) with standard ODE theory, to get \emph{geodesics}\index{geodesics}.
+	\item The same equation governs curves of extremal length in a Riemannian manifold, or spacelike curves in a Lorentzian manifold, parametrized by arc-length.
+\end{itemize}
+We can show that the geodesic equation can be obtained as the Euler-Lagrange equation for the Lagrangian
+\[
+L = - g_{\mu\nu}(x(\tau)) \dot x^\mu(\tau) \dot x^\nu(\tau).
+\]
+\begin{exbox}
+	\begin{enumerate}
+		\item In Minkowski space in an inertial frame, $g_{\mu\nu} = \eta_{\mu\nu}$, so $\Gamma\indices{_\mu^\nu_\rho} = 0$, and the geodesic equation is
+			\[
+			\frac{\Diff2 x^\mu}{\diff \tau^2} = 0.
+			\]
+			These are straight lines.
+		\item The Schwarzschild metric in the Schwarzchild coordinates is a metric on $M = \mathbb{R}_t \times  (2m, \infty)_r \times S^2_{\theta, \varphi}$ given by
+			\[
+			\diff s^2 = - f \diff t^2 + \frac{\diff r^2}{f} + r^2 (\diff \theta^2 + \sin^2\theta \diff \varphi^2),
+			\]
+			where $f = 1 - 2m/r$. Then
+			\[
+			L = f \left( \frac{\diff t}{\diff \tau}\right)^2 - \frac{1}{f}\left( \frac{\diff r}{\diff \tau} \right)^2 - r^2 \left( \frac{\diff \theta}{\diff \tau} \right)^2 - r^2 \sin^2 \theta \left( \frac{\diff \varphi}{\diff \tau} \right)^2.
+			\]
+			The Euler-Lagrange equation for $t(\tau)$ is
+			\[
+			\frac{\diff}{\diff \tau} \left( \frac{\partial L}{\partial t'} \right) = \frac{\partial L}{\partial t},
+			\]
+			where $t' = \diff t/\diff \tau$. This gives
+			\[
+			2 \frac{\diff}{\diff\tau} \left( f \frac{\diff t}{\diff \tau} \right) = 0,
+			\]
+			or
+			\[
+			f \frac{\diff^2 t}{\diff \tau^2} + \frac{\diff f}{\diff r} \left( \frac{\diff r}{\diff \tau} \right) \left( \frac{\diff t}{\diff \tau} \right) = 0.
+			\]
+			We can compare this with the geodesic equation to see that
+			\[
+			\Gamma\indices{_1^0_0} = \Gamma\indices{_0^0_1} = \frac{1}{2f} \frac{\diff f}{\diff r},
+			\]
+			and $\Gamma\indices{_\mu^0_\nu} = 0$ otherwise. The other symbols can be found from the other Euler-Lagrange equations.
+	\end{enumerate}
+\end{exbox}
+
+\subsection{Covariant Derivative}%
+\label{sub:cov_dev}
+
+For a function $f : M \to \mathbb{R}$, we know that $\partial f/\partial x^\mu$ are components of a covector $(\diff f)$. For a vector field, we cannot just differentiate the components.
+
+Indeed, we can show that if $V$ is a vector field, then
+\[
+T\indices{^{\mu}_{\nu}} = \frac{\partial V^\mu}{\partial x^\nu}
+\]
+do not form the components of a $(1, 1)$-tensor.
+
+\begin{definition}
+	A \emph{covariant derivative}\index{covariant derivative} $\nabla$ on a manifold $M$ is a map sending $X, Y$, smooth vector fields, to a vector field $\nabla_X Y$ satisfying, for $X, Y, Z$ smooth vector fields and $f, g$ functions:
+	\begin{enumerate}[(i)]
+		\item $\nabla_{fX + gY}Z = f \nabla_X Z + g \nabla_Y Z$.
+		\item $\nabla_X(Y + Z) = \nabla_X Y + \nabla_X Z$.
+		\item $\nabla_X(fY) = f \nabla_X Y + (\nabla_X f)Y$, where $\nabla_X f = X(f)$.
+	\end{enumerate}	
+\end{definition}
+
+Here a \emph{smooth vector field}\index{smooth vector field} is a map $X : C^\infty(M) \to C^\infty(M)$ that satisfies the Leibniz rule.
+
+Note the first definition implies $\nabla Y : X \mapsto \nabla_X Y$ is a linear map of $T_p M$ to itself, so it defines a $(1, 1)$-tensor, the \emph{covariant derivative} of $Y$. In AIN,
+\[
+	(\nabla Y)\indices{^{a}_{b}} = \nabla_b Y^a,
+\]
+or $Y\indices{^{a}_{;b}}$.
+
+\begin{definition}
+	In a basis $\{e_\mu\}$, the \emph{connection components}\index{connection components} $\Gamma\indices{_\nu^\mu_\rho}$ are defined by
+	\[
+	\nabla_{e_\rho} e_\nu = \Gamma\indices{_\nu^\mu_\rho} e_\mu.
+	\]
+	These define $\nabla$, as
+	\begin{align*}
+		\nabla_X Y &= \nabla_{X^\mu e_\mu} (Y^\nu e_\nu) = X^\mu \nabla_{e_\mu} (Y^\nu e_\nu) \\
+			   &= X^\mu(e_\mu (Y^\nu)e_\nu + Y^\sigma \nabla_{e_\mu} e_\sigma) \\
+			   &= (X^\mu e_\mu(Y^\nu) + \Gamma\indices{_\sigma^\nu_\mu} Y^\sigma X^\mu)e_\nu.
+	\end{align*}
+\end{definition}
+
+Hence,
+\[
+	(\nabla_X Y)^\nu = X^\mu(e_\mu(Y^\nu) + \Gamma\indices{_\sigma^\nu_\mu} Y^\sigma),
+\]
+and so
+\[
+	Y\indices{^{\nu}_{;\mu}} = e_\mu(Y^\nu) + \Gamma\indices{_\sigma^\nu_\mu} Y^\sigma.
+\]
+In the coordinate bases $e_\mu = \partial/\partial x^\mu$, then
+\[
+	Y\indices{^{\nu}_{;\mu}} = \frac{\partial Y^\nu}{\partial x^\mu} + \Gamma\indices{_\sigma^\nu_\mu} Y^\sigma = Y\indices{^{\nu}_{,\mu}} + \Gamma\indices{_\sigma^\nu_\mu} Y^\sigma.
+\]
+Again note $\Gamma\indices{_\mu^\nu_\sigma}$ are not components of a tensor.
+
+We can extend $\nabla$ to arbitrary tensor field by requiring that the Leibniz property holds, for example for $\eta$ a tensor field, we define $\nabla_X \eta$ by
+\[
+	(\nabla_X \eta) (Y) = \nabla_X(\eta(Y)) - \eta(\nabla_X Y).
+\]
+In components,
+\begin{align*}
+	(\nabla_X \eta)Y &= X^\mu e_\mu(\eta_\sigma Y^\sigma) - \eta_{\sigma}(\nabla_X Y)^{\sigma} \\
+			 &= X^\mu e_\mu(\eta_\sigma)Y^{\sigma} + X^{\mu} \eta_\sigma e_\mu(Y^{\sigma}) - \eta_\sigma(X^\nu e_\nu(Y^{\sigma}) + X^\nu \Gamma\indices{_\tau^\sigma_\nu} Y^{\tau}) \\
+			 &= (e_\mu(\eta_\sigma) - \Gamma\indices{_\sigma^\nu_\mu} \eta_\nu) X^\mu Y^{\sigma},
+\end{align*}
+which is linear in $X$ and $Y$. Hence $\nabla \eta$ is a $(0, 2)$-tensor, with components
+\[
+\nabla_\mu \eta_\sigma = e_\mu(\eta_\sigma) - \Gamma\indices{_\sigma^\nu_\mu} \eta_\nu = \eta_{\sigma;\mu}.
+\]
+In a coordinate basis,
+\[
+n_{\sigma;\mu} = n_{\sigma,\mu} - \Gamma\indices{_\sigma^\nu_\mu} \eta_{\nu}.
+\]
+
+% lecture 9
+
+In general, we can show, due to the Leibniz rule, that in a coordinate basis,
+\begin{align*}
+	T\indices{^{\mu_1 \ldots \mu_r}_{ \nu_1 \ldots \nu_s ; \rho}} &= T\indices{^{\mu_1 \ldots \mu_r}_{ \nu_1 \ldots \nu_s, \rho}} + \Gamma\indices{_\sigma^{\mu_1}_\rho} T\indices{^{\sigma \mu_2 \ldots \mu_r}_{ \nu_1 \ldots \nu_s}} + \cdots \\
+								      & \qquad + \Gamma\indices{_\sigma^{\mu_r}_\rho} T\indices{^{\mu_1 \ldots \mu_{r-1} \sigma}_{\nu_1 \ldots \nu_s}} - \Gamma\indices{_{\nu_1}^\sigma_\rho} T\indices{^{\mu_1 \ldots \mu_r}_{ \sigma \nu_2 \ldots \nu_s}} - \cdots \\
+								      & \qquad - \Gamma\indices{_{\nu_s}^\sigma_\rho} T\indices{^{\mu_1 \ldots \mu_r}_{ \nu_1 \ldots \nu_{s-1} \sigma}}.
+\end{align*}
+
+\begin{remark}
+	If $T\indices{^{a}_{b}}$ is a $(1, 1)$-tensor, then $T\indices{^{a}_{b;c}}$ is a $(1, 2)$-tensor, and we can take further derivatives:
+	\[
+		(T\indices{^{a}_{b; c}})_{;d} = T\indices{^{a}_{b;cd}} = \nabla_d \nabla_c T\indices{^{a}_{b}}.
+	\]
+	In general, $T\indices{^{a}_{b;cd}} \neq T\indices{^{a}_{b;dc}}$.
+\end{remark}
+
+If $f$ is a function, then $f_{;a} = (\diff f)_a$ is a covector. In a coordinate basis $f_{;\mu} = f_{,\mu}$, then 
+\[
+f_{;\mu\nu} = f_{,\mu\nu} - \Gamma\indices{_\mu^\sigma_\nu} f_{,\sigma},
+\]
+hence
+\[
+	f_{;[\mu\nu]} = - \Gamma\indices{_{[\mu}^\sigma_{\nu]}} f_{,\sigma}.
+\]
+\begin{definition}
+	A connection (or covariant derivative) is \emph{torsion free}\index{torsion free} (or symmetric) if
+	\[
+	\nabla_a \nabla_b f = \nabla_b \nabla_a f.
+	\]
+	For any function $f$ in a coordinate basis, this is equivalent to
+	\[
+		\Gamma\indices{_{[\mu}^\rho_{\nu]}}= 0 \implies \Gamma\indices{_\mu^\rho_\nu} = \Gamma\indices{_\nu^\rho_\mu}.
+	\]
+\end{definition}
+
+\begin{lemma}
+	If $\nabla$ is torsion free, then for $X, Y$ vector fields,
+	\[
+		\nabla_X Y - \nabla_Y X = [X, Y].
+	\]
+\end{lemma}
+
+\begin{proofbox}
+	We show this is true in one basis: then as the objects are defined in a basis-free way, this must be true in all bases.
+
+	In a basis,
+	\begin{align*}
+		(\nabla_X Y - \nabla_Y X)^{\mu} &= X^{\sigma} Y\indices{^{\mu}_{;\sigma}} - Y^{\sigma} X\indices{^{\mu}_{;\sigma}} \\
+						&= X^{\sigma} (Y\indices{^{\mu}_{,\sigma}} + \Gamma\indices{_\rho^\mu_\sigma} Y^{\rho}) - Y^{\sigma} (X\indices{^{\mu}_{,\sigma}} + \Gamma\indices{_\rho^\mu_\sigma} Y^{\rho}) \\
+						&= [X, Y]^{\mu} + 2 X^{\sigma} Y^{\rho} \Gamma\indices{_{[\rho}^\mu_{\sigma]}} = [X, Y]^{\mu}.
+	\end{align*}
+\end{proofbox}
+
+Even if $\nabla$ is torsion free, we may still not have $\nabla_a \nabla_b X^{c} = \nabla_b \nabla_a X^{c}$.
+
+\subsection{The Levi-Civita Connection}%
+\label{sub:lcc}
+
+For a manifold with a metric, there is a preferred connection.
+
+\begin{theorem}[Fundamental Theorem of Riemannian Geometry]
+	If $(M, g)$ is a manifold with a metric, then there is a unique, torsion free connection $\nabla$ which satisfies
+	\[
+	\nabla g = 0.
+	\]
+\end{theorem}
+
+This is called the \emph{Levi-Civita connection}\index{Levi-Civita connection}.
+
+\begin{proofbox}
+	Suppose such a connection exists. Then by Leibniz, if $X, Y, Z$ are smooth vector fields, then
+	\begin{align*}
+		X(g(Y,Z)) &= \nabla_X (g(Y, Z)) = (\nabla_X g)(Y, Z) + g(\nabla_X Y, Z) + g(Y, \nabla_X Z).
+	\end{align*}
+	If $\nabla_X g = 0$, then
+	\begin{align*}
+		X(g(Y,Z)) &= g(\nabla_X Y, Z) + g(Y, \nabla_X Z), \\
+		Y(g(Z,X)) &= g(\nabla_Y Z, X) + g(Z, \nabla_Y X), \\
+		Z(g(X,Y)) &= g(\nabla_Z X, Y) + g(X, \nabla_Z Y).
+	\end{align*}
+	Summing the first two equations and subtracting the third,
+	\begin{align*}
+		X(g(Y,Z)) + Y(g(Z,X)) &- Z(g(X,Y)) = g(\nabla_X Y + \nabla_Y X, Z) \\
+						  &\qquad + g(\nabla_X Z - \nabla_ZX,Y) + g(\nabla_YZ - \nabla_ZY, X).
+	\end{align*}
+	Using the fact that $\nabla_XY - \nabla_YX = [X, Y]$,
+	\begin{align*}
+		X(g(Y,Z)) + Y(g(Z,X)) - Z(g(X,Y)) &= 2 g(\nabla_XY, Z) - g([X, Y], Z) \\
+						  & \qquad - g([Z, X], Y) + g([Y, Z], X).
+	\end{align*}
+	Hence we can write
+	\begin{align*}
+		g(\nabla_XY, Z) &= \frac{1}{2} \Bigl( X(g(Y, Z)) + Y(g(Z,X)) - Z(g(X,Y)) \\
+				& \qquad + g([X, Y], Z) + g([Z,X],Y) - g([Y,Z],X) \Bigr).
+	\end{align*}
+	This determines $\nabla_X Y$ uniquely, since $g$ is non-degenerate. We can thus use this to define $\nabla_X Y$. Then we need to check the properties of a symmetric connection hold. For example,
+	\begin{align*}
+		g(\nabla_{fX}Y,Z)&= \frac{1}{2} \Bigl( f X(g(Y,Z)) + Y(fg(Z,X)) - Z(fg(X,Y)) \\
+				 & \qquad + g([fX,Y],Z) + g([Z,fX], Y) - g([Y,Z],fX) \Bigr) \\
+				 &= \frac{1}{2} \Bigl( fX(g(Y,Z)) + fY(g(Z,X)) - fZ(g(X,Y)) \\
+				 &\qquad + Y(f) g(Z,X) - Z(f) g(X,Y) \\
+				 & \qquad + g(f[X,Y] - Y(f)X, Z) + g(f[Z,X] \\
+				 & \qquad + Z(f)X, Y) - fg([Y, Z], X) \Bigr).
+	\end{align*}
+	Hence by cancelling terms,
+	\[
+	g(\nabla_{fX}Y, Z) = g(f\nabla_XY,Z) \implies \nabla_{fX}Y = f\nabla_XY.
+	\]
+	We can check the other properties hold ourselves.
+\end{proofbox}
+
+In a coordinate basis, we can compute
+\[
+g(\nabla_{e_\mu} e_\nu, e_\sigma) = \frac{1}{2} \Bigl( e_\mu (g(e_\nu, e_\sigma)) + e_\nu(g(e_\sigma, e_\mu)) - e_\sigma(g(e_\mu, e_\nu)) \Bigr).
+\]
+This gives
+\[
+g(\Gamma\indices{_\nu^\tau_\mu} e_\tau, e_\sigma) = \Gamma\indices{_\nu^\tau_\mu} g_{\tau\sigma} = \frac{1}{2} (g_{\sigma\nu, \mu} + g_{\sigma\mu,\nu} - g_{\mu\nu,\sigma}),
+\]
+or,
+\[
+\Gamma\indices{_\nu^\tau_\mu} = \frac{1}{2} g^{\sigma\tau} (g_{\sigma\nu,\mu} + g_{\mu\sigma,\nu} - g_{\mu\nu,\sigma}).
+\]
+This $\nabla$ is the Levi-Civita connection, which is the same as the connection involved when extremizing proper time. We can raise or lower indices with $\nabla$, and this commutes with covariant differentiation.
+
+\subsection{Geodesics}%
+\label{sub:geo}
+
+We found that a curve extremizing proper time satisfies
+\[
+\frac{\Diff2 x^\mu}{\diff \tau^2} + \Gamma\indices{_\nu^\mu_\rho}(x(\tau)) \frac{\diff x^\nu}{\diff \tau} \frac{\diff x^\rho}{\diff \tau} = 0,
+\]
+where $\tau$ is the proper time. The tangent vector $X^a$ to the curve has components
+\[
+X^\mu = \frac{\diff x^\mu}{\diff \tau}.
+\]
+Extending this off of the curve, we get a vector field, of which the geodesic is an integral curve. We note that
+\[
+\frac{\Diff2 x^\mu}{\diff \tau^2} = \frac{\diff}{\diff \tau} \left( \frac{\diff x^\mu}{\diff \tau} \right) = \frac{\partial X^\mu}{\partial x^\nu} \frac{\diff x^\nu}{\diff \tau} = X\indices{^{\mu}_{,\nu}} X^\nu,
+\]
+hence the geodesic equation gives
+\[
+X\indices{^{\mu}_{,\nu}} X^\nu + \Gamma\indices{_\nu^\mu_\rho} X^\nu X^\rho = 0 \iff X^\nu X\indices{^{\mu}_{;\nu}} = 0 \implies \nabla_X X = 0.
+\]
+We can extend this to any connection.
+
+\begin{definition}
+	Let $M$ be a manifold with connection $\nabla$. An \emph{affinely parametrized geodesic}\index{affinely parametrized geodesic} satisfies
+	\[
+	\nabla_X X = 0,
+	\]
+	where $X$ is the tangent vector.
+\end{definition}
+
+% lecture 10
+
+If we reparametrize $t \to t(u)$, then
+\[
+	\underbrace{\frac{\diff x^\mu}{\diff u}}_{Y} = \underbrace{\frac{\diff x^\mu}{\diff t}}_{X} \frac{\diff t}{\diff u},
+\]
+so if we take $X \to Y = hX$ with $h > 0$, then
+\begin{align*}
+	\nabla_{Y} Y &= \nabla_{hX}(hX) = h \nabla_X(hX) = h^2\underbrace{\nabla_XX}_{0} + hX \cdot X(h) = fY,
+\end{align*}
+with 
+\[
+f = X(h) = \frac{\diff}{\diff t} (h) = \frac{1}{h}  \frac{\diff h}{\diff u} = \frac{1}{h} \frac{\diff^2 t}{\diff u^2}.
+\]
+So $\nabla_Y Y = 0 \iff t= \alpha u + \beta$, for $\alpha, \beta \in \mathbb{R}$, $\alpha > 0$.
+
+\begin{theorem}
+	Given $p \in M$, $X_p \in T_p M$, there exists a unique affinely parametrized geodesic $\lambda : I \to M$ satisfying
+	\[
+	\lambda(0) = p, \qquad \dot \lambda(0) = X_p.
+	\]
+\end{theorem}
+
+\begin{proofbox}
+	Choose coordinates with $\phi(p) = 0$. Then $x^\mu(t) = \phi(\lambda(t))$ satisfies $\nabla_X X = 0$ with $X = X^\mu \frac{\partial}{\partial x^\mu}$, $X^\mu = \frac{\diff x^\mu}{\diff t}$. This becomes
+	\[
+	\frac{\diff^2 x^\mu}{\diff t^2} + \Gamma\indices{_\nu^\mu_\sigma} \frac{\diff x^\nu}{\diff t} \frac{\diff x^\sigma}{\diff t} = 0.
+	\]
+	This has  unique solution $x^\mu : (-\eps : \eps) \to \mathbb{R}^n$ for $\eps$ sufficiently small, given by standard ODE theory.
+\end{proofbox}
+
+We just descend the condition $\nabla_X X = 0$ to $\mathbb{R}^n$.
+
+\subsection{Geodesic Postulate}%
+\label{sub:gp}
+
+In general relativity, free particles move along geodesics of the Levi-Civita connection. These are timelike for massive particles, and null/lightlike for massless particles.
+
+If we fix $p \in M$, we can map $T_pM$ into $M$ by setting
+\[
+\psi(X_p) = \lambda_{X_p}(1),
+\]
+where $\lambda_{X_p}$ is the unique affinely parametrized geodesic with $\lambda_{X_i}(0) = p$, $\dot \lambda_{X_i}(0) = X_p$. Notice that
+\[
+\lambda_{\alpha X_p}(t) = \lambda_{X_p}(\alpha t)
+\]
+for $\alpha \in \mathbb{R}$, since if $\tilde \lambda(t) = \lambda_{X_p}(\alpha t)$, this is an affine reparametrization, so is still a geodesic, and
+\[
+	\dot{\tilde \lambda}(0) = \alpha \dot \lambda_{X_p}(0) = \alpha X_p.
+\]
+Moreover $\alpha \mapsto \psi(\alpha X_p)$ is an affinely parametrized geodesic, so must be $\lambda_{X_p}(\alpha)$.
+
+We claim that if $U \subseteq T_p M$ is a sufficiently small neighbourhood of the origin, then $\psi : T_p M \to M$ is one-to-one and onto.
+
+\begin{definition}
+	Suppose $\{e_\mu\}$ is a basis for $T_pM$. We construct \emph{normal coordinates}\index{normal coordinates} at $p$ as follows: for $q \in \psi(U) \subseteq M$, we define $\phi(q) = (X^1, \ldots, X^n)$, where $X^\mu$ are the components of the unique $X_p \in U$ with $\psi(X_p) = q$, with respect to $\{e_\mu\}$.
+\end{definition}
+
+By our previous observation, the curve given in normal coordinates by $X^\mu(t) = t Y^\mu$ for $Y^\mu$ a constant, is an affinely parametrized geodesic, so from the geodesic equation,
+\[
+	\Gamma\indices{_\nu^\mu_\sigma}(t Y) Y^\nu Y^{\sigma} = 0.
+\]
+Set $t = 0$ to deduce that $\Gamma\indices{_{(\nu}^\mu_{\sigma)}}|_p = 0$. So if $\nabla$ is torsion free, then $\Gamma\indices{_\nu^\mu_\sigma}|_p = 0$ in normal coordinates.
+
+Hence if $\nabla$ is the Levi-Civita connection of a metric, then
+\[
+g_{\mu\nu,\rho}|_p = 0,
+\]
+since
+\begin{align*}
+	g_{\mu\nu, \rho} &= \frac{1}{2} (g_{\mu\nu,\rho} + g_{\rho\nu,\mu} - g_{\mu\rho,\nu}) + \frac{1}{2}(g_{\mu\nu,\rho} + g_{\mu\rho,\nu} - g_{\rho\nu,\mu}) \\
+			 &= \Gamma\indices{_\mu^\sigma_\rho} g_{\sigma\nu} + \Gamma\indices{_\rho^\sigma_\nu} g_{\sigma\mu} = 0
+\end{align*}
+at $p$. We can always choose the basis $\{e_\mu\}$ for $T_p M$ on which we base the normal coordinates to be orthonormal. We have:
+
+\begin{lemma}
+	On a Riemannian or Lorentzian field, we can choose normal coordinates at $p$ such that $g_{\mu\nu,\rho}|_p = 0$ and
+	\[
+		g_{\mu\nu}|_p =
+		\begin{cases}
+			\delta_{\mu\nu} & \text{\normalfont{Riemannian,}} \\
+			\eta_{\mu\nu} & \text{\normalfont{Lorentzian.}}
+		\end{cases}
+	\]
+\end{lemma}
+
+\begin{proofbox}
+	The curve given in normal coordinates by $t \mapsto (t, 0, \ldots, 0)$ is the APG with $\lambda(0) = p$, and $\dot \lambda(0) = e_1$, by the previous argument. But by definition of the coordinate basis, this vector is
+	\[
+		\left( \frac{\partial}{\partial x^1} \right)_p.
+	\]
+	So if $\{e_\mu\}$ is orthonormal, then at $p$ 
+	\[
+	\left( \frac{\partial}{\partial x^\mu} \right)_p
+	\]
+	forms an orthonormal basis.
+\end{proofbox}
+
+\newpage
+
+\section{Curvature}%
+\label{sec:curves}
+
+\subsection{Parallel Transport}%
+\label{sub:pt}
+
+Suppose $\lambda : I \to M$ is a curve with tangent vector $\dot \lambda(t)$. We say that a tensor field $T$ is \emph{parallely transported}\index{parallel transport} or \emph{propagated}\index{propagation} along $\lambda$ if
+\[
+\nabla_{\dot \lambda} T = 0
+\]
+on $\lambda$. In particular, if $\lambda$ is an APG, then $\dot \lambda$ is parallely transported along $\lambda$.
+
+A parallely propagated tensor is determined everywhere on $\lambda$ by its value at one point.
+
+\begin{exbox}
+	If $T$ is a $(1, 1)$ tensor, then in coordinates, parallel propagation becomes
+	\[
+	0 = \frac{\diff x^\mu}{\diff t} T\indices{^{\nu}_{\sigma;\mu}} = \frac{\diff x^\mu}{\diff t} (T\indices{^{\nu}_{\sigma,\mu}} + \Gamma\indices{_\rho^\nu_\mu} T\indices{^{\rho}_{\sigma}} - \Gamma\indices{_\sigma^\rho_\mu} T\indices{^{\nu}_{\rho}}).
+	\]
+	But
+	\[
+	T\indices{^{\nu}_{\sigma,\mu}} \frac{\diff x^\mu}{\diff t} = \frac{\diff}{\diff t} (T\indices{^{\nu}_{\sigma}}),
+	\]
+	so
+	\[
+	0 = \frac{\diff}{\diff t} T\indices{^{\nu}_{\sigma}} + (\Gamma\indices{_\rho^\nu_\mu} T\indices{^{\rho}_{\sigma}} - \Gamma\indices{_\sigma^\rho_\mu} T\indices{^{\nu}_{\rho}}) \frac{\diff x^\mu}{\diff t}.
+	\]
+
+	This is a first-order linear ODE for $T\indices{^{\nu}_{\sigma}}(x(t))$, so ODE theory gives us a unique solution, once $T\indices{^{\nu}_{\sigma}}(x(0))$ is specified.
+\end{exbox}
+
+Note that parallel transport along a curve from $p$ to $q$ gives an isomorphism between tensors at $p$ and $q$, however this isomorphism depends on the choice of curve in general.
+
+% lecture 11
+
+\subsection{The Riemann Tensor}%
+\label{sub:rt}
+
+The Riemann tensor captures the extent to which parallel transport depends on the curve.
+
+\begin{lemma}
+	Given $X, Y, Z$ smooth vector fields, and $\nabla$ a connection, define
+	\[
+		R(X, Y) Z = \nabla_X \nabla_Y Z - \nabla_Y \nabla_X Z - \nabla_{[X, Y]} Z.
+	\]
+	Then we claim
+	\[
+		(R(X, Y) Z)^{a} = R\indices{^{a}_{bcd}} X^{c}Y^d Z^{b},
+	\]
+	for a $(1, 3)$-tensor $R\indices{^{a}_{bcd}}$, the \emph{Riemann tensor}\index{Riemann tensor}.
+\end{lemma}
+
+\begin{proofbox}
+	Suppose $f$ is a smooth function. Then,
+	\begin{align*}
+		R(fX, Y)Z &= \nabla_{fX} \nabla_Y Z - \nabla_Y \nabla_{fX} Z - \nabla_{[fX, Y]}Z \\
+			  &= f \nabla_X \nabla_Y Z - \nabla_Y (f \nabla_X Z) - \nabla_{f[X, Y] - Y(f) X} Z \\
+			  &= f \nabla_X \nabla_Y Z - f \nabla_Y \nabla_X Z - Y(f) \nabla_X Z-  f \nabla_{[X, Y]}Z + Y(f) \nabla_X Z \\
+			  &= f R(X, Y)Z.
+	\end{align*}
+	Since $R(X, Y)Z = - R(Y, X)Z$, we have $R(X, fY)Z = f R(X, Y)Z$. Similarly, we can check $R(X, Y)(fZ) = f R(X, Y), Z$.
+
+	Now suppose we pick a basis $\{e_\mu\}$ with dual basis $\{f^\mu\}$. Then
+	\begin{align*}
+		R(X, Y)Z &= R(X^{\rho} e_\rho, Y^{\sigma}e_\sigma)(Z^{\nu} e_\nu) = X^{\rho} Y^{\sigma} Z^{\nu} R(e_\rho, e_\sigma) e_\nu \\
+			 &= (R\indices{^{\mu}_{\nu\rho\sigma}} X^\rho Y^\sigma Z^\nu) e_\mu,
+	\end{align*}
+	where $R\indices{^{\mu}_{\nu\rho\sigma}} = f^\mu(R(e_\rho, e_\sigma) e_\nu)$ are the components of $R\indices{^{a}_{bcd}}$ in this basis. Since this results holds in one basis, it hold in all, since the object was defined tensorially.
+\end{proofbox}
+
+In a coordinate basis $e_\mu = \frac{\partial}{\partial x^\mu}$, with $[e_\mu, e_\nu] = 0$, we have
+\begin{align*}
+	R(e_\rho,e_\sigma)e_\nu &= \nabla_{e_\rho} (\nabla_{e_\sigma} e_\nu) - \nabla_{e_\sigma}(\nabla_{e_\rho} e_\nu) - \nabla_{e_\rho} (\Gamma\indices{_\nu^\tau_\sigma} e_\tau) - \nabla_{e_\sigma} (\Gamma\indices{_\nu^\tau_\rho} e_\tau) \\
+				&= \partial_\rho (\Gamma\indices{_\nu^\tau_\sigma})e_\tau + \Gamma\indices{_\nu^\tau_\sigma} \Gamma\indices{_\tau^\mu_\rho} e_\mu - \partial_\sigma (\Gamma\indices{_\nu^\tau_\rho})e_\tau - \Gamma\indices{_\nu^\tau_\rho} \Gamma\indices{_\tau^\mu_\sigma} e_\mu.
+\end{align*}
+Hence the components are
+\[
+T\indices{^{\mu}_{\nu\rho\sigma}} = \partial_\rho(\Gamma\indices{_\nu^\mu_\sigma}) - \partial_\sigma(\Gamma\indices{_\nu^\mu_\rho}) + \Gamma\indices{_\nu^\tau_\sigma} \Gamma\indices{_\tau^\mu_\rho} - \Gamma\indices{_\nu^\tau_\rho} \Gamma\indices{_\tau^\mu_\sigma}.
+\]
+In normal coordinates, we can drop the last two terms, since the connection is zero at $p$. However the derivative is not 0.
+
+\begin{exbox}
+	For the Levi-Civita connection of Minkowski space in an intertial frame, $\Gamma\indices{_\mu^\nu_\sigma} = 0$. Hence in these coordinates $R\indices{^{\mu}_{\nu\sigma\tau}} = 0$. Thus
+	\[
+	R\indices{^{a}_{bcd}} = 0.
+	\]
+	Such a connection is called \emph{flat}\index{flat connection}.
+\end{exbox}
+
+Conversely, for a Lorentzian spacetime with flat Levi-Civita connection, we can locally find coordinates such that $g_{\mu\nu} = \mathrm{diag}(-1, 1, \ldots, 1)$.
+
+Here is a note of caution:
+\[
+	(\nabla_X \nabla_Y Z)^{c} = X^a \nabla_a (Y^b \nabla_b Z^c) \neq X^a Y^b \nabla_a \nabla_b Z^c.
+\]
+Hence
+\begin{align*}
+	(R(X, Y)Z)^{c} &= X^a \nabla_a (Y^b \nabla_b Z^c) - Y^a \nabla_a (X^{b} \nabla_b Z^{c}) - [X, Y]^{b}\nabla_b Z^{c} \\
+		       &= X^{a} Y^{b} \nabla_a \nabla_b Z^{c} - Y^{a} X^{b} \nabla_a \nabla_b Z^{c} + (\nabla_X Y - \nabla_Y X - [X, Y])^{b} \nabla_b Z^{c} \\
+		       &= X^{a} Y^{b} R\indices{^{c}_{dab}} Z^{d}.
+\end{align*}
+So if $\nabla$ is torsion free,
+\[
+\nabla_a \nabla_b Z^{c} - \nabla_b \nabla_a Z^{c} = R\indices{^{c}_{dab}} Z^{d}.
+\]
+This is the \emph{Ricci identity}\index{Ricci identity}. We can generalise this to an expression for
+\[
+	\nabla_{[a} \nabla_{b]} T\indices{^{c_1 \ldots c_r}_{d_1 \ldots d_s}}.
+\]
+We can construct a new tensor from $R\indices{^{a}_{bcd}}$ by contraction.
+
+\begin{definition}
+	The \emph{Ricci tensor}\index{Ricci tensor} is the $(0, 2$-tensor defined by
+	\[
+	R_{ab} = R\indices{^{c}_{ac b}}.
+	\]
+\end{definition}
+
+Suppose $X, Y$ are vector fields satisfying $[X, Y] = 0$.
+
+Insert picture of vector curves going from $A \to B \to C \to D \to A$.
+
+Consider going from $A$ to $B$ flowing a distance $\eps$ along the integral curve of $X$, then $B$ to $C$ distance $\eps$ along the integral curve of $Y$, then $C$ to $D$ along $X$, and $D$ to $A$ along $Y$.
+
+Since $[X, Y] = 0$, we return to the starting location. We claim the following of a propagated tensor:
+
+\begin{proposition}
+	If $Z$ is parallely transported around $ABCD$ to a vector $Z'$, then
+	\[
+		(Z - Z')^{\mu} = \eps^2 R\indices{^{\mu}_{\nu\rho\sigma}} Z^{\nu} X^{\rho} Y^{\sigma} + \mathcal{O}(\eps^3).
+	\]
+\end{proposition}
+
+\subsection{Geodesic Deviation}%
+\label{sub:gd}
+
+Let $\nabla$ be a symmetric connection, and suppose $\lambda : I \to M$ is an affinely parametrized geodesic through $p$. We can pick normal coordinates centred at $p$, such at $\lambda$ is given by $t \mapsto (t, 0, \ldots, 0)$. Suppose we start a geodesic with
+\[
+x^{\mu}_s(0) = s x_0^{\mu}, \qquad \dot x^{\mu}_s(0) = s x_1^{\mu} + (1, 0, \ldots, 0).
+\]
+Then we find that
+\[
+x^{\mu}_s(t) = x^{\mu}(s, t) = (t, 0, \ldots, 0) + s Y^{\mu}(t) + \mathcal{O}(s^2),
+\]
+where
+\[
+Y^{\mu}(t) = \frac{\partial x^{\mu}}{\partial s} \biggr|_{s = 0}
+\]
+are the components of a vector field along $\lambda$ measuring the (infinitesimal) deviation of the geodesics. We have, by the geodesic equation,
+\[
+\frac{\partial^2 x^\mu}{\partial t^2} + \Gamma\indices{_\nu^\mu_\sigma}(x^{\mu}(s, t)) \frac{\partial x^\nu}{\partial t} \frac{\partial x^\mu}{\partial t} = 0.
+\]
+Take the derivative with respect to $s$, at $s = 0$. Then,
+\[
+	\frac{\partial^2 Y^\mu}{\partial t^2} + \partial_\mu(\Gamma\indices{_\nu^\mu_\sigma})_{s = 0} T^{\nu} T^{\sigma} Y^{\rho} + Z \Gamma\indices{_\rho^\mu_\sigma} \frac{\partial}{\partial t} Y^{\rho} T^{\sigma} = 0,
+\]
+which gives
+\[
+T^{\nu}(T^{\sigma} Y\indices{^{\mu}_{,\sigma}})_{,\nu} + \partial_\rho (\Gamma\indices{_\nu^\mu_\sigma})_{s = 0} T^{\nu} T^{\sigma} Y^{\rho} + Z \Gamma\indices{_\rho^\mu_\sigma} \frac{\partial Y^{\rho}}{\partial t} T^{\sigma} = 0.
+\]
+At $p = 0$, $\Gamma = 0$ so
+\[
+T^{\nu}(T^{\sigma} Y\indices{^{\mu}_{;\sigma}} - \Gamma\indices{_\rho^\mu_\sigma} T^{\sigma} Y^{\rho})_{;\nu} + (\partial_\rho \Gamma\indices{_\nu^\mu_\sigma} )_p T^{\nu} T^{\sigma} Y^{\rho} = 0.
+\]
+% lecture 12
+We can write this as
+\begin{align*}
+	T^{\nu}(T^{\sigma} Y\indices{^{\mu}_{;\sigma}})_{;\nu} + (\partial_\rho \Gamma\indices{_\nu^\mu_\sigma} - \partial_\nu \Gamma\indices{_\rho^\mu_\sigma}) T^{\nu} T^{\sigma} Y^{\rho} = 0 \\
+	\implies (\nabla_T \nabla_T Y)^{\mu} + R \indices{^{\mu}_{\omega\rho\nu}} T^{\nu} T^{\sigma} Y^{\rho} = 0 \\
+	\implies \nabla_T \nabla_T Y + R(Y, T)T = 0.
+\end{align*}
+This is the Jacobi equation for geodesic deviation.
+
+\subsection{Riemann Tensor Symmetries}%
+\label{sub:rts}
+
+From the definition, it is clear that
+\[
+R\indices{^{a}_{bcd}} = - R\indices{^{a}_{bdc}} \iff R\indices{^{a}_{b(cd)}} = 0.
+\]
+
+\begin{proposition}
+	If $\nabla$ is torsion free, then
+	\[
+		R\indices{^{a}_{[bcd]}}= 0.
+	\]
+\end{proposition}
+
+\begin{proofbox}
+	Fix $p \in M$, and choose normal coordinates at $p$, and work in the coordinate basis. Then $\Gamma$ vanishes, and $\Gamma\indices{_\mu^\sigma_\nu} = \Gamma\indices{_\nu^\sigma_\mu}$ everywhere. Then,
+	\begin{align*}
+		R\indices{^{\mu}_{\nu\rho\sigma}}|_p &= \partial_\rho (\Gamma\indices{_\nu^\mu_\sigma})|_p - \partial_\sigma (\Gamma\indices{_\nu^\mu_\rho})|_p \\
+		\implies R\indices{^{\mu}_{[\nu\rho\sigma]}}|_p |&= 0,
+	\end{align*}
+	as by symmetry
+	\[
+	\partial_\rho \Gamma\indices{_\nu^\mu_\sigma}|_p = \partial_\rho \Gamma\indices{_\sigma^\mu_\nu}|_p
+	\]
+	Here $p$ is arbitrary, so $R\indices{^{\mu}_{[\nu\rho\sigma]}} = 0$ everywhere.
+\end{proofbox}
+
+\begin{proposition}
+	If $\nabla$ is torsion free, then the Bianchi identity holds:
+	\[
+		R\indices{^{a}_{b[cd;e]}} = 0.
+	\]
+\end{proposition}
+
+\begin{proofbox}
+	Choose normal coordinates. Then
+	\[
+	R\indices{^{\mu}_{\nu\rho\sigma;\tau}}|_p = R\indices{^{\mu}_{\nu\rho\sigma,\tau}}|_p.
+	\]
+	Schematically, $R \sim \partial \Gamma + \Gamma^2$, so $\partial R \sim \partial^2 \Gamma + \partial \Gamma \cdot \Gamma$, and since $\Gamma|_p = 0$, we deduce
+	\[
+	R\indices{^{\mu}_{\nu\rho\sigma,\tau}}|_p = \partial_\tau \partial_\rho \Gamma\indices{_\nu^\mu_\sigma}|_p - \partial_\tau \partial_\sigma \Gamma\indices{_\nu^\mu_\rho}|_p.
+	\]
+	By symmetry of mixed partial derivatives, we see
+	\[
+		R\indices{^{\mu}_{\nu[\rho\sigma;\tau]}}|_p = 0.
+	\]
+	Since $p$ was arbitrary, the result follows.
+\end{proofbox}
+
+Suppose $\nabla$ is the Levi-Civita connection of a manifold with a metric $g$. We can lower an index with $g_{ab}$, and consider $R_{abcd}$.
+
+\begin{proposition}
+	$R_{abcd}$ satisfies
+	\[
+	R_{abcd} = R_{cdab} \implies R_{(ab)cd} = 0.
+	\]
+\end{proposition}
+
+\begin{proofbox}
+	Pick normal coordinates at $p$ so that $\partial_\mu g_{\nu\rho}|_p = 0$. We notice that
+	\[
+	0 = \partial_\mu \delta\indices{^{\nu}_{\sigma}}|_p = \partial_\mu(g^{\nu\tau} g_{\tau\sigma}) = (\partial_\mu g^{\nu\tau})g_{\tau\sigma}|_p.
+	\]
+	The derivative $\partial_\mu^{\nu\tau}|_p = 0$, hence
+	\begin{align*}
+		\partial_\rho (\Gamma\indices{_\nu^\mu_\sigma})|_p &= \partial_\rho \left( \frac{1}{2} g^{\mu\tau}(g_{\tau\sigma,\nu} + g_{\nu\tau,\sigma} - g_{\nu\sigma,\tau})\right)|_p \\
+								   &= \frac{1}{2} g^{\mu\tau}(g_{\tau\sigma,\nu\rho} + g_{\nu\tau,\sigma\rho} - g_{\nu\sigma,\tau\rho})|_p.
+	\end{align*}
+	We have then that
+	\begin{align*}
+		R_{\mu\nu\rho\sigma}|_p &= g_{\mu\kappa}(\partial_\rho \Gamma\indices{_\nu^\kappa_\sigma} - \partial_\sigma \Gamma\indices{_\nu^\kappa_\rho})|_p \\
+					&= \frac{1}{2} (g_{\mu\sigma,\nu\rho} + g_{\nu\rho,\mu\sigma} - g_{\nu\sigma,\mu\rho} - g_{\mu\rho,\nu\sigma})|_p.
+	\end{align*}
+	This satisfies
+	\[
+	R_{\mu\nu\rho\sigma}|_p = R_{\rho\sigma\mu\nu}|_p,
+	\]
+	hence this is true everywhere.
+\end{proofbox}
+
+\begin{corollary}
+	The Ricci tensor is symmetric:
+	\[
+	R_{ab}= R_{ba}.
+	\]
+\end{corollary}
+
+\begin{proofbox}
+	We have
+	\[
+	R_{ab} = R\indices{^{c}_{ac b}} = g^{cd} R_{cadb} = g^{cd} R_{dbca} = R_{ba}.
+	\]
+\end{proofbox}
+
+\begin{definition}
+	The \emph{Ricci scalar}\index{Ricci scalar} (scalar curvature) is
+	\[
+	R = R\indices{^{a}_{a}} = g^{ab} R_{ab}.
+	\]
+	The \emph{Einstein tensor}\index{Einstein tensor} is
+	\[
+	G_{ab} = R_{ab} - \frac{1}{2} g_{ab} R.
+	\]
+\end{definition}
+
+We can show that the Bianchi identity implies
+\[
+\nabla_a G\indices{^{a}_{b}} = 0.
+\]
+This is the contracted Bianchi identity.
+
+\newpage
+
+\section{Diffeomorphisms and the Lie Derivative}%
+\label{sec:diff_lie}
+
+Suppose $\vphi : M \to N$ is a smooth map. Then $\vphi$ induces maps between corresponding vector or covector bundles.
+
+\begin{definition}
+	Given $f : N \to \mathbb{R}$, the \emph{pullback}\index{pullback} of $f$ by $\vphi$ is the map $\vphi^{\ast}f : M \to \mathbb{R}$ given by
+	\[
+	\vphi^{\ast} f(p) = f(\vphi(p)).
+	\]
+\end{definition}
+
+\begin{definition}
+	Given $X \in T_pM$, we define the \emph{push forward}\index{push forward} of $X$ by $\vphi$, say $\vphi_\ast X \in T_{\vphi(p)}N$ as follows:
+
+	Let $\lambda : I \to M$ be a curve with $\lambda(0) = p$, $\dot \lambda(0) = X$. Then set $\tilde \lambda = \vphi \circ \lambda$. $\tilde \lambda : I \to N$ gives a curve in $N$ with $\tilde \lambda(0) = \vphi(p)$.
+
+	We set $\vphi_\ast X = \dot{\tilde \lambda}(0)$.
+\end{definition}
+
+Note that if $f : N \to \mathbb{R}$, then
+\begin{align*}
+	\vphi_\ast X(f) &= \frac{\diff}{\diff t} (f \circ \tilde \lambda(t)) |_{t = 0} = \frac{\diff}{\diff t} (f \circ \vphi \circ \lambda(t)) |_{t = 0} \\
+			&= \frac{\diff}{\diff t}(\vphi^{\ast} f \circ \lambda(t))|_{t = 0} = X(\vphi^{\ast} f).
+\end{align*}
+
+We can show that if $x^{\mu}$ are coordinates on $M$ near $p$, and $y^{\alpha}$ are coordinates on $N$ near $\vphi(p)$, then $\vphi$ gives a map $y^{\alpha}(x^{\mu})$, and we can show in a coordinate basis that
+\[
+	(\vphi_\ast X)^{\alpha} = \left( \frac{\partial y^{\alpha}}{\partial x^{\mu}} \right)_p X^{\mu}.
+\]
+On the contangent bundle, we go backwards.
+
+\begin{definition}
+	If $\eta \in T_{\vphi(p)}^{\ast} N$, then the \emph{pullback}\index{pullback} of $\eta$, $\vphi^{\ast} \eta \in T_p^{\ast}M$ is defined by
+	\[
+	\vphi^{\ast} \eta (X) = \eta(\vphi_\ast X),
+	\]
+	for all $X \in T_p M$.
+\end{definition}
+
+Note that if $f : N \to \mathbb{R}$, then
+\begin{align*}
+	\vphi^{\ast}(\diff f)[X] &= \diff f[\vphi_\ast X] = \vphi_\ast X(f) = X(\vphi^{\ast} f) \\
+				 &= \diff (\vphi^{\ast} f)[X],
+\end{align*}
+hence $\vphi^{\ast} \diff f = \diff (\vphi^{\ast} f)$. We can also show that in a basis,
+\[
+	(\vphi^{\ast} \eta)_\mu = \left( \frac{\partial y^{\alpha}}{\partial x^{\mu}} \right)_p \eta_\alpha.
+\]
+We can extend the pullback to map a $(0, s)$-tensor $T$ at $\vphi(p) \in N$, to a $(0, s)$-tensor $\vphi^{\ast} T$ at $p \in M$, by
+\[
+\vphi^{\ast} T (X_1, \ldots, X_s) = T(\vphi_\ast X_1, \ldots, \vphi_\ast X_s)
+\]
+for all $X_i \in T_p M$. Similarly, we can push forward a $(s, 0)$-tensor $S$ at $p \in M$ to a $(S, 0)$-tensor $\vphi_\ast S$ at $\vphi(p)$ by
+\[
+\vphi_\ast S(\eta_1, \ldots, \eta_s) = S(\vphi^{\ast} \eta_1, \ldots, \vphi^{\ast} \eta_s),
+\]
+for all $\eta_1, \ldots, \eta_s \in T_{\vphi(p)}^{\ast} N$.
+
+If $\vphi : M \to N$ has the property that $\vphi_{\ast} : T_p M \to T_{\vphi(p)} N$ is injective, we say that $\vphi$ is an \emph{immersion}\index{immersion}. In particular $\dim N \geq \dim M$.
+
+If $N$ is a manifold with metric $g$ and $\vphi : M \to N$ is an immersion, we can consider $\vphi^{\ast} g$. If $g$ is Riemannian, then $\vphi^{\ast} g$ is non-degenerate and positive definite, so it defines a metric on $M$, the \emph{induced metric}\index{induced metric}.
+
+% lecture 13
+
+\begin{exbox}
+	Let $(N, g) = (\mathbb{R}^3, \delta)$, and $M = S^2$. Let $\vphi$ be the map taking a point on $S^2$ with spherical coordinates $(\theta, \phi)$ to
+	\[
+		(x^1, x^2, x^3) = (\sin \theta \cos \phi, \sin \theta \sin \phi, \cos \theta).
+	\]
+	Then
+	\[
+	\vphi^{\ast}((\diff x^1)^2 + (\diff x^2)^2 + (\diff x^3)^2) = \diff \theta^2 + \sin^2\theta \diff \phi^2.
+	\]
+\end{exbox}
+
+If $\vphi$ is an immersion and $(N, g)$ is Lorentzian, then $\vphi^{\ast} g$ is not in general a metric on $M$. There are three important cases:
+\begin{itemize}
+	\item $\vphi^{\ast} g$ is a Riemannian metric $\implies$ $\vphi(M)$ is spacelike.
+	\item $\vphi^{\ast} g$ is a Lorentian metric $\implies$ $\vphi(M)$ is timelike.
+	\item $\vphi^{\ast} g$ is everywhere degenerate $\implies$ $\vphi(M)$ is null.
+\end{itemize}
+
+Recall that $\vphi : M \to N$ is a \emph{diffeomorphism}\index{diffeomorphism} if it is bijective with a smooth inverse. If we have a diffeomorphism, we can push forward a general $(r, s)$-tensor at $p$ to an $(r, s)$-tensor at $\vphi(p)$ by'
+\[
+\vphi_\ast T(\eta^1, \ldots, \eta^r, X_1, \ldots, X_s) = T(\vphi^{\ast} \eta^1, \ldots, \vphi^{\ast} \eta^r, \vphi^{-1}_\ast X_1, \ldots, \vphi^{-1}_\ast X_s),
+\]
+for all $\eta_i \in T_{\vphi(p)}^{\ast}N$, and $X_i \in T_{\vphi(p)} N$. We can similarly define a pullback by $\psi_\ast^{-1} = \vphi^{\ast}$.
+
+If $M, N$ are diffeomorphic, we often do not distinguish between them, and can think of $\vphi : M \to M$.
+
+We say that a diffeomorphism $\vphi : M \to M$ is a symmetry of $T$ if $\vphi_\ast T = T$. If $T$ is the metric, we say $\vphi$ is an \emph{isometry}\index{isometry}.
+
+\begin{exbox}
+	In a Minkowski space with an interial frame,
+	\[
+	\vphi(x^0, x^1, \ldots, x^n) = (x^0 + 1, x^1, \ldots, x^n)
+	\]
+	is a symmetry of $g$.
+\end{exbox}
+
+An important class of diffeomorphisms are those that are generated by a vector field. If $X$ is a smooth vector field, we associate to each point $p \in M$ the point $\vphi^{X}_t(p) \in M$ given by flowing a parameter distance $t$ along the integral curve of $X$ starting at $p$.
+
+Suppose $\vphi_t^{X}(p)$ is well defined for all $t \in I \subseteq \mathbb{R}$ for each $p \in M$. Then $\vphi_t^{X} : M \to M$ is a diffeomorphism for all $t \in I$. Further,
+\begin{itemize}
+	\item If $t, s, t + s \in I$, then $\vphi_t^X \circ \vphi_s^X = \vphi_{t + s}^X$, and $\vphi_0^X = \id$.
+	\item If $I = \mathbb{R}$, this gives $\{\vphi_t^{X}\}$ the structure of a one-parameter abelian group.
+	\item If $\vphi_t$ is any smooth family of diffeomorphisms satisfying the group property, we can define a vector field by
+		\[
+		X_p = \frac{\diff}{\diff t} (\vphi_t(p))\biggr|_{t = 0}.
+		\]
+		Then $\vphi_t = \vphi_t^{X}$.
+\end{itemize}
+
+We can use $\vphi_t^X$ to compare tensors at different points. As $t \to 0$, this gives a new notion of derivative.
+
+\subsection{The Lie Derivative}%
+\label{sub:tld}
+
+Suppose $\vphi_t^X : M \to M$ is the smooth one-parameter family of diffeomorphisms generated by a vector field $X$.
+
+\begin{definition}
+	For a tensor field $T$, the \emph{Lie derivative}\index{Lie derivative} of $T$ with respect to $X$ is
+	\[
+		(\mathcal{L}_X T)_p = \lim_{t \to 0} \frac{((\vphi_T^X)^{\ast} T)_p - T_p}{t}.
+	\]
+\end{definition}
+This is the pullback of the tensor field minus the original tensor field.
+
+It is easy to see that for constants $\alpha, \beta$ and $(r, s)$-tensors $S, T$,
+\[
+\mathcal{L}_X(\alpha S + \beta T) = \alpha \mathcal{L}_X S + \beta \mathcal{L}_X T.
+\]
+To see how $\mathcal{L}_X$ acts in components, it is useful to construct coordinates adapted to $X$. Near $p$, we can construct an $(n-1)$-surface $\Sigma$ which is transverse to $X$. Pick coordinates $x^i$ on $\Sigma$ and assign the coordinate $(t, x^i)$ to the point a parameter distance $t$ along the integral curve of $X$ starting at $x^i$ on $\Sigma$.
+
+In these coordinates $X = \frac{\partial}{\partial t}$, and $\vphi_t^X(\tau, x^i) = (\tau + t, x^i)$. So if $y^{\mu} = \vphi_t^{X}(x^\mu)$, then
+\[
+\frac{\partial y^\mu}{\partial x^\nu} = \delta\indices{^{\mu}_{\nu}}.
+\]
+Hence we find
+\[
+	[(\vphi_t^X)^{\ast} T]\indices{^{\mu_1\ldots \mu_r}_{\nu_1 \ldots \nu_s}} |_{(t, x^i)} = T\indices{^{\mu_1 \ldots \mu_r}_{\nu_1 \ldots \nu_s}}|_{(\tau+ t, x^i)}.
+\]
+Thus we find
+\[
+	(\mathcal{L}_X T)\indices{^{\mu_1 \ldots \mu_r}_{\nu_1 \ldots \nu_s}}|_p = \frac{\partial T}{\partial t}\indices{^{\mu_1 \ldots \mu_r}_{\nu_1 \ldots \nu_s}}|_p.
+\]
+So in these coordinates, $\mathcal{L}_X$ acts on components by $\frac{\partial}{\partial t}$. In particular, we immediately see that
+\[
+\mathcal{L}_X(S \otimes T) = (\mathcal{L}_X S) \otimes T + S \otimes \mathcal{L}_X T.
+\]
+So $\mathcal{L}_X$ commutes with contraction. To write $\mathcal{L}_X$ in a coordinate free fashion, we can simply seek a basis independent expression that agrees with $\mathcal{L}_X$ in these coordinates.
+
+For example, for a function
+\[
+\mathcal{L}_X f = \frac{\partial f}{\partial t} = X(f)
+\]
+in these coordinates. For a vector field $Y$, we observe that
+\[
+	\frac{\partial Y^\mu}{\partial t} =  X^\sigma \frac{\partial}{\partial x^\sigma} (Y^\mu) - Y^\sigma \frac{\partial}{\partial x^\sigma} X^\mu = [X, Y]^\mu.
+\]
+So $\mathcal{L}_X Y = [X, Y]$. For a covector field, we can show
+\[
+	(\mathcal{L}_X \omega)_\mu = X^\sigma \partial_\sigma w_\mu + w_\sigma \partial_\mu X^\sigma.
+\]
+If $\nabla$ is torsion-free, then
+\[
+	(\mathcal{L}_X \omega)_a = X^b \nabla_b \omega_a + \omega_b \nabla_a X^b.
+\]
+If $g_{ab}$ is a metric tensor, and $\nabla$ is Levi-Civita, then
+\[
+	(\mathcal{L}_X g)_{ab} = \nabla_a X_b + \nabla_b X_a.
+\]
+If $\vphi_t^X$ is a one-parameter family of isometries for a manifold with metric $g$, then $\mathcal{L}_X g = 0$. Conversely if $\mathcal{L}_X g = 0$, then $X$ generates a one-parameter family of isometries.
+
+\begin{definition}
+	A vector field $K$ satisfies $\mathcal{L}_K g = 0$ is called a \emph{Killing vector}\index{Killing vector}. It satisfies Killing's equation:
+	\[
+	\nabla_a K_b + \nabla_b K_a = 0.
+	\]
+\end{definition}
+
+\begin{lemma}
+	Suppose $K$ is Killing and $\lambda : T \to M$ is a geodesic of the Levi-Civita connection then $g_{ab} \dot \lambda ^a K^b$ is constant along $\lambda$.
+\end{lemma}
+
+\begin{proofbox}
+	We have
+	\begin{align*}
+		\frac{\diff}{\diff t} (K_b \dot \lambda^b) &= \dot \lambda^a \nabla_a (K_b \dot \lambda^b) = (\nabla_{(a}K_{b)}) \dot \lambda^a \dot \lambda^b + K_b \dot \lambda^a \nabla_a \dot \lambda^b \\
+							   &= 0,
+	\end{align*}
+	for the first part as $K$ is Killing and the latter as $\nabla_\lambda \lambda = 0$ for a geodesic.
+\end{proofbox}
+
+
+% lecture 14
 
 \newpage
 

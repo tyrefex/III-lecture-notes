@@ -160,10 +160,8 @@ Second, if we interpret this is an ODE $u'(t) = g(u)$, then $u$ lives in functio
 \end{tikzpicture}
 \end{center}
 
-\newpage
-
-\section{The Cauchy Problem}%
-\label{sec:cauchy}
+\subsection{The Cauchy Problem}%
+\label{sub:cauchy}
 
 A basic question of mathematical analysis is to solve
 \[
@@ -522,10 +520,8 @@ Real analyticity is local, meaning if $f$ is real analytic near $\tilde x$, then
 	\end{align*}
 \end{proofbox}
 
-\newpage
-
-\section{Cauchy-Kovalevskaya for ODEs}%
-\label{sec:ck_ode}
+\subsection{Cauchy-Kovalevskaya for ODEs}%
+\label{sub:ck_ode}
 
 \begin{theorem}
 	Let $a, b > 0$, and $u_0 \in \mathbb{R}$. Consider $F : (u_0 - b, u_0 + b) \to \mathbb{R}$ real analytic, and $u : (-a, a) \to (u_0 - b, u_0 + b)$ a $C^1$ solution to
@@ -709,10 +705,8 @@ Real analyticity is local, meaning if $f$ is real analytic near $\tilde x$, then
 	\]
 \end{proofbox}
 
-\newpage
-
-\section{Cauchy-Kovalevskaya for PDEs}%
-\label{sec:ck_pde}
+\subsection{Cauchy-Kovalevskaya for PDEs}%
+\label{sub:ck_pde}
 
 The CK theorem only extends for $k$-th order quasilinear PDEs, so for $x \in U \subseteq \mathbb{R}^m$,
 \[
@@ -895,7 +889,7 @@ Finally, we reduce to a first-order equation for a system of equations, by chang
 \]
 This produces a much nicer PDE of the form
 \[
-\partial x_n u = \sum_{j = 1}^{k-1} b_j (u(x), \tilde x) \partial_{x_j} u + b_0 (u(x), \tilde x),
+	\partial_{x_n} u = \sum_{j = 1}^{k-1} b_j (u(x), \tilde x) \partial_{x_j} u + b_0 (u(x), \tilde x),
 \]
 where we avoid $x_n$ dependency by adding if necessary one more component $x_n$ to $u$. Our boundary conditions are $u = 0$ on $\Sigma = \{x_n = 0\}$, and also $b_j : \mathbb{R}^m \times \mathbb{R}^{n-1} \to \mathbb{R}^{m \times m}$ to something, $b_0 : \mathbb{R}^{m} \times \mathbb{R}^{n-1} \to \mathbb{R}^m$ are real analytic near zero.
 
@@ -906,6 +900,715 @@ The second step is to prove there are universal polynomials with non-negative in
 for $|\beta| \leq |\alpha| - 1$, $\ell$ appropriate. We prove this by induction on $\alpha_n$.
 
 % lecture 8
+
+\begin{proofbox}
+	This is done by induction on $a_n$: Differentiate $u(\tilde x, 0)= 0$ near $\tilde x = 0$ to get
+	\[
+	\partial^{\alpha}_x u(0) = 0,
+	\]
+	which gives $\alpha_n = 0$. For $\alpha_n = 1$, we look at
+	\[
+	\partial^{\tilde \alpha}_{\tilde x} \partial^1_{x_n} u.
+	\]
+	We are actually now just going to look at the general case, when we differentiate the PDE with
+	\[
+	\partial^{\tilde \alpha}_{\tilde x} \partial^{\alpha_n - 1}_{x_n},
+	\]
+	which gives
+	\[
+		\partial^{\tilde \alpha}_{\tilde x} \partial^{\alpha_n}_{x_n} u(0) = \partial^{\tilde \alpha}_{\tilde x} \partial^{\alpha_n - 1}_{x_n}\left[ \sum b_j (\cdot) \partial x_j u + b_0\right].
+	\]
+	For $\alpha_n = 1$, we have no $\partial_{x_n}$ on the RHS, so we get only $D^{\tilde \alpha}_{2}b_0(0, 0)$. To prove the induction step, note
+	\[
+		\partial^{\tilde \alpha}_{\tilde x} \partial^{\ell + 1}_{x_n} u(0) = \partial^{\tilde \alpha}_{\tilde x} \partial^{\ell}_{x_n} \left[ \sum_{j = 1}^{n-1} b_j(u(x), \tilde x) \partial x_j u + b_0(\cdots) \right],
+	\]
+	which is a polynomial with coefficients in $\mathbb{N}$, after applying the induction hypothesis for $\ell$.
+\end{proofbox}
+
+Our candidate solution is
+\[
+u(x) = \sum_{\alpha \geq 0} \partial^{\alpha}_x u(0) \frac{x^\alpha}{\alpha!},
+\]
+where $\partial^{\alpha}_x u$ is defined by $p_{\alpha, i} (D b_j(0), D b_0(0))$. If we are able to find a majorant $b_j^\ast \gg b_j$, and $b_0^\ast \gg b_0$, then
+\begin{align*}
+	|\partial^{\alpha}_x u_i(0)| &\leq |p_{\alpha, i} (D b_j(0), D b_0(0))| \\
+				     &\leq p_{\alpha, i} (|Db_j(0)|, |Db_0(0)|) \\
+				     &\leq p_{\alpha, i} (Db_j^{\ast}(0), D b_0^{\ast}(0)) \\
+				     & = \partial^{\alpha}_x v_i(0),
+\end{align*}
+where $v$ is a solution to
+\[
+\partial x_n v = \sum b_j^{\ast} (v(x), \tilde x) \partial_{x_j} v + b_)(v(x), \tilde x),
+\]
+and $v = 0$ on $\Sigma$. Now $v \gg u$, and if $v$ is real analytic near $0$, then so is $u$. Then
+\[
+\partial x_n u - \sum b_j(u(x), \tilde x) \partial_{x_j} u - b_0(u(x), \tilde x) = S(x)
+\]
+is an entire series with non-zero radius of convergence around 0, with $\partial^{\alpha}_x S(0) = 0$ for all $\alpha \in \mathbb{N}$. Hence $S = 0$ near $0$, and $u$ is a solution which is unique by real analyticity.
+
+Now all that is left is to define the majorants. Define
+\begin{align*}
+	b_j^{\ast} &= g J_{m\times m}, \\
+	b_0^{\ast} &= g U_{m},
+\end{align*}
+where $J$ is the all $1$'s matrix, and $U$ is the all $1$'s vector. Then we can define
+\[
+g(y_1, \ldots, y_m, x_1, \ldots, x_{n-1}) = \frac{Cr}{r - (x_1 +\cdots + x_{n-1}) - (y_1 + \cdots + y_m)}.
+\]
+Then we find that
+\[
+\partial^{\alpha} g(0) = C \alpha! r^{-|\alpha|},
+\]
+which dominates the entries of $b_j$ and $b_0$ for suitable $C, r > 0$. The solution to the auxiliary equation then becomes, for $n = 2$,
+\[
+	v(x) = \frac{n m C t}{r - (x_1 + \cdots + x_{n-1}) + \sqrt{(r - x_1 - \cdots - x_{n-1})^2 - 2nmCrx_n}} U_m,
+\]
+and for $n \geq 3$ we find
+\[
+	v(x) = \frac{1}{nm} \left[ (r - x_1 - \cdots - x_{n-1}) - \sqrt{(r - x_1 - \cdots - x_{n-1})^2 - 2nmCr x_n} \right] U_m.
+\]
+These are real analytic near $0$, so we are done.
+
+The question then becomes, how did we get these formulas? By symmetry, the first $n-1$ variables must play the same role, and the components of $v$ must be the same, so
+\[
+v_1 = \cdots = v_m = w,
+\]
+and
+\[
+w = w(x_1 + \cdots + x_{n-1}, x_n) = w(\xi, x_n).
+\]
+This gives a scalar equation
+\begin{align*}
+	\partial_t \omega &= \frac{Cr}{r - \xi - m w} [(n - 1)m \partial_\xi w + 1], \\
+	w(\xi, 0) &= 0.
+\end{align*}
+
+As an exercise, we can find $\xi(t), \eta(t)$ solving
+\begin{align*}
+	\xi'(t) &= \frac{-(n-1)m Cr}{r - \xi(t) - m \eta(t)}, \\
+	\eta'(t) &= - \frac{Cr}{r - \xi(t) - m \eta(t)},
+\end{align*}
+where we initialize $\xi(0) = \xi_0$, $\eta(0) = 0$. Then $w(\xi(t), t) = \eta(t)$ defines $w$ that solves the PDE
+\[
+\xi'(t) (\partial_\xi w)(\xi(t), t) + (\partial_t w)(\xi(t), t) = \eta'(t),
+\]
+at $(\xi(t), t)$. We can then solve for $\xi(t)$ and $\eta(t)$, and invert $\xi_0 \mapsto \xi(t)$ for $t$ small enough.
+
+%\newpage
+%
+%\section{Limitations of CK and Classification}%
+%\label{sec:lim_ck}
+
+\subsection{Limitations}%
+\label{sub:lims}
+
+There are many limits of CK.
+\begin{enumerate}[(i)]
+	\item Consider the heat equation:
+		\begin{align*}
+			\partial_t u &= \partial^2_x u, \\
+			u(0, x) &= \frac{1}{1 + x^2},
+		\end{align*}
+		where the surface is $\Sigma = \{t = 0\}$. The non-characteristic condition means that $a_{(2, 0)} \neq 0$, but this is not true in the above. This is due to the fact we cannot solve the PDE for negative times.
+	\item If we have a diffusion equation of the form
+		\[
+		\partial_t^{k} u = \sum_{|\alpha| = l} a_\alpha(\cdots) \partial^{\alpha}_x u,
+		\]
+		then the necessary condition is $k \geq l$.
+	\item Analyticity is not good for propagation phenomena, or for shocks or singularities.
+
+		Finally it is not good for regularisation. Consider for example $\Delta u = 0$, for $u \in C^2$. Then this means $u \in C^{\infty}$, which we do not get from CK.
+\end{enumerate}
+
+The good aspect of the Cauchy-Kovalevskaya is that it leads to classification.
+
+\subsection{Classification}%
+\label{sub:cfs}
+
+\begin{definition}
+	Given a linear differential operator
+	\[
+	p_u = \sum_{|\alpha| \leq k} a_\alpha(x) \partial^{\alpha}_x u,
+	\]
+	the \emph{principal symbol}\index{principal symbol} at $x$ is
+	\[
+	\sigma_p(x, \xi) = \sum_{|\alpha|= k}a_\alpha(x) \xi^{\alpha},
+	\]
+	for $\xi \in \mathbb{R}^n$, and the \emph{characteristic cone}\index{characteristic cone} at $x$ is
+	\[
+	\mathcal{C}_x = \{\xi \in \mathbb{R} \mid \sigma_p(x, \xi) = 0\}.
+	\]
+	Non-charactericity means
+	\[
+	\sigma_p(x, N(x)) \neq 0
+	\]
+	at $x \in \Sigma$.
+\end{definition}
+
+We can check this definition for the:
+\begin{itemize}
+	\item Laplace equation.
+	\item Wave equation.
+	\item Transport equation
+		\[
+		\sum_{j = 1}^n c_j(x) \partial_{x_j} u = 0.
+		\]
+	\item Heat equation.
+	\item Schr\"odinger equation.
+\end{itemize}
+
+% lecture 9
+
+These all have problems for CK:
+\begin{itemize}
+	\item For the Laplace equation, even though there is no characteristic surface, this means the Cauchy problem is ill-posed.
+	\item The wave equation, although solvable by CK, wishes to be solved in a local, non-analytic way.
+	\item The heat equation is ill-suited, as it is irreversible.
+	\item The Schr\"odinger equation is a hybrid; it is a dispersive relation.
+\end{itemize}
+
+\newpage
+
+\section{Functional Toolbox}%
+\label{sec:ft}
+
+Our motivation is to get access to Banach and Hilbertian geometric tools.
+
+Moreover, some spaces are equal or close to physical quantities (e.g. energy) that is minimized or propogated in a PDE.
+
+\subsection{H\"older Spaces}%
+\label{sub:hs}
+
+\begin{definition}
+	Given $U \subseteq \mathbb{R}^n$ open, and $k \in \mathbb{N} \cup \{ \infty\}$ then
+	\begin{itemize}
+		\item $C^{k}(U)$ is the set of functions $u : U \to \mathbb{R}$ which are $k$-times differentiable, with $\partial^{\alpha}_x u$ continuous on $U$, for all $|\alpha| \leq k$.
+		\item $C^{k}_b(U)$ is the set of function $u : U \to K$ in $C^{k}(U)$, and so that $\partial^{\alpha}_x u$ is bounded on $U$ for all $|\alpha| \leq k$.
+		\item $C^{k}(\bar U) \subseteq C^{k}_b(U) \subseteq C^{k}(U)$ is the set of functions in $C^{k}_b(U)$, so that $\partial^{\alpha}_x u$ is uniformly continuous on $U$, for all $|\alpha| \leq k$.
+	\end{itemize}
+\end{definition}
+
+\begin{remark}
+	\begin{enumerate}
+		\item[]
+		\item The $\nabla$ notation is slighly incosistent on $C^k(\overline{\mathbb{R}^n})$ and $C^k(\mathbb{R}^n)$, even though these are the same.
+		\item $C^{k}(U)$ is a Fr\'echet space.
+	\end{enumerate}
+\end{remark}
+
+Both $C^{k}_b(U)$ and $C^{k}(\overline{U})$ are normed (Banach) vector spaces with
+\[
+\|u\|_{C^{k}_b(U)} = \|u\|_{C^k(\overline{U})} = \sup_{x \in U} \sup_{|\alpha| \leq k} |\partial^{\alpha}_x u(x)|.
+\]
+We can use H\"older space to interpolate between the $C^k$.
+
+\begin{definition}
+	Let $U \subseteq \mathbb{R}^n$ be open, $\gamma \in [0, 1]$, and $u : U \to \mathbb{R}$. The $u$ is \emph{H\"older continuous}\index{H\"older continuous} with respect to index $\gamma$ if there exists $C > 0$ such that for all $x, y \in U$,
+	\[
+	|u(x) - u(y)| \leq C |x - y|^{\gamma}.
+	\]
+	The space of such functions which are bounded is the $0$'th order H\"older space with index $\gamma$, $C^{0, \gamma}(\overline{U})$.
+
+	For $k \in \mathbb{N}$, $C^{k, \gamma}(\overline{U})$ is defined as
+	\[
+		C^{k, \gamma}(\overline{U}) = \{u \in C^{k}(\overline{U}) \mid \partial^{\alpha}_x u \in C^{0, \gamma}(\overline{U}) \text{ for all } |\alpha| \leq k\}.
+	\]\index{H\"older space}
+\end{definition}
+
+These spaces are Banach spaces, with the norm
+\[
+	\|u\|_{C^{k, \gamma}(\overline{U})} = \|u\|_{C^{k}(\overline{U})} + \sum_{|\alpha| \leq k} [\partial^{\alpha}_x u]_{C^{0, \gamma}(\overline{U})},
+\]
+where
+\[
+	[u]_{C^{0,\gamma}(\overline{U})} = \sup_{x \neq y \in U} \frac{|u(x) - u(y)|}{|x - y|^{\gamma}}.
+\]
+We have $\gamma \leq 1$, as if $\gamma > 1$, then we immediately get differentiability with derivative 0.
+
+\subsection{Lebesgue Spaces}%
+\label{sub:ls}
+
+\begin{definition}
+	Let $U \subseteq \mathbb{R}^n$ be open, and $p \in [1, +\infty]$. Then the global \emph{Lebesgue space}\index{Lebesgue space} $L^p()$ is the set of classes of equivalence (for almost-everywhere equality) of measurable functions $u$ such that $|u|^p$ is integrable:
+	\[
+	\int_U |u|^p < +\infty.
+	\]
+	The \emph{local Lebesgue space}\index{local Lebesgue space} $L^p_{\mathrm{loc}}(U)$ is the classes of equivalence of measurable functions $u$ such that $u \in L^p(V)$ for any $V \subseteq \subseteq U$.
+\end{definition}
+
+Here, $V \subseteq \subseteq U$ means that $V$ is an open set such that $\overline{V} = U$, and $\overline{V}$ is compact.
+
+There are three key results:
+
+\begin{enumerate}
+	\item Monotone convergence theorem: if $f_n \geq 0$, and $f_n \uparrow$, then
+		\[
+		\sup \int f_n = \sup f_n.
+		\]
+	\item Fatou's lemma: if $f_n \geq 0$ measurable, then
+		\[
+		\int \liminf f_n \leq \liminf \int f_n.
+		\]
+	\item Dominated convergence theorem: if $f_n \to f$ a.e. and $|f_n| \leq g$ integrable, then
+		\[
+		\int f_n \to \int f.
+		\]
+	\item $L^p(U)$ is a Banach space, where for $p < \infty$,
+		\[
+		\|u\|_{L^p(U)} = \left( \int_u |u(x)|^p \diff x \right)^p,
+		\]
+		and for $p = \infty$,
+		\[
+		\|u\|_{L^\infty(U)} = \mathrm{esssup}_U |u|.
+		\]
+\end{enumerate}
+
+To prove this, we can show a Cauchy sequence in $L^p$ has a subsequence converging almost-everywhere, and we can use Fatou's lemma to deduce $L^p$ convergence.
+
+For $p = 2$, we have a Hilbert space, with
+\[
+\langle u, v\rangle = \int_U u v.
+\]
+
+\subsection{Weak (generalized) Derivatives}%
+\label{sub:wd}
+
+We say that $v$ is an \emph{$\alpha$-weak derivative}\index{$\alpha$-weak derivative} of $u$, denoted $D^\alpha u = v$, if for all $\phi \in C^{\infty}_c(U)$,
+\[
+\int_U u (\partial^{\alpha}_x \phi) = (-1)^{\alpha} \int_U v \phi.
+\]
+\begin{remark}
+	\begin{enumerate}
+		\item[]
+		\item If $u \in C^{k}(U)$, $\partial^{\alpha}_x u$ for $|\alpha| \leq k$ is also an $\alpha$-weak derivative.
+		\item The $\alpha$-weak derivative of $u$ is unique, as
+			\[
+				\int_U (v_1 - v_2) \phi = 0 \text{ for all }\phi \in C^{\infty}_c(U) \implies v_1 = v_2 \text{ in } L^{1}_{\mathrm{loc}}(U).
+			\]
+	\end{enumerate}
+\end{remark}
+
+\begin{definition}
+	If $U \subseteq \mathbb{R}^n$ is open, $k \in \mathbb{N}$ and $p \in [1, +\infty]$, we say that $u \in W^{k, p}(U)$ (\emph{Sobolev space}\index{Sobolev space}) if $u \in L^p(U)$ and for all $|\alpha| \leq k$, $D^\alpha u \in L^p(U)$.
+
+	Moreover $W^{k, p}_{\mathrm{loc}}(U)$ are $u \in L^1_{\mathrm{loc}}(U)$, which are in $W^{k, p}(V)$ for all $V \subseteq \subseteq U$.
+\end{definition}
+
+This is a Banach space, with norm
+\begin{align}
+	\|u\|_{W^{k, p}(U)} &= \left( \sum_{|\alpha| \leq k} \|D^\alpha u\|_{L^p(U)}^p \right)^{1/p}
+\end{align}
+for $p < \infty$, and
+\[
+\|u\|_{W^{k, \infty}(U)} = \sup_{|\alpha| \leq k} \|D^\alpha u\|_{L^\infty(U)}.
+\]
+For $p = 2$, we write
+\[
+W^{k, 2}(U) = H^{k}(U),
+\]
+as a Hilbert space.
+
+We can also define $W^{k, p}_0(U)$ as the closure of $C_c^{\infty}(U)$ for the $W^{k, p}(U)$ norm, and analogously $H^{k}_0(U) = W_0^{k, 2}(U)$.
+
+\begin{exbox}
+	Consider $u(x) = |x|^{-s}$ in $B(0, 1) \subseteq \mathbb{R}^n$, for some $s < n$. Then $u \in L^1(B(0, 1))$
+
+	For $s < n-1$, $u \in W^{1, 1}(B(0,1))$, and we can find $D_{x_1} u$. Also for $s < \frac{n-p}{p}$, this is in $W^{2, p}(B(0, 1))$.
+\end{exbox}
+
+% lecture 10
+
+\subsection{Approximations in Sobolev Spaces}%
+\label{sub:approx}
+
+In this section we wish to approximate Sobolev functions by functions with classical derivatives.
+
+\begin{definition}
+	A \emph{standard mollifier}\index{standard mollifier} is a family $(\vphi_\eps)$, such that $\vphi_\eps \in C_c^{\infty}(\mathbb{R}^{n})$, $\mathrm{supp} \vphi_\eps \subseteq B(0, \eps)$, $\vphi_\eps \geq 0$ and
+	\[
+	\int_{\mathbb{R}^n} \vphi_{\eps}(x) \diff x = 1.
+	\]
+\end{definition}
+
+\begin{proposition}
+	Let $U \subseteq \mathbb{R}^n$ be open, and $p \in [1, +\infty]$. Then,
+	\begin{enumerate}[\normalfont(i)]
+		\item There exists a family of standard mollifiers.
+		\item For $u \in L^1_{\mathrm{loc}}(U)$, define $u_\eps = \vphi_\eps \ast u$. This mollification satisfies $u_\eps \in C_c^{\infty}(U_\eps)$, where $U_\eps = \{x \in U \mid d(x, \partial U) > \eps\}$.
+
+			Moreover $u_\eps \to u$ almost-everywhere.
+		\item If $u \in C^k(U)$, then $\partial^{\alpha}_x u_\eps \to \partial^{\alpha}_x u$ uniformly on compact subsets of $U$, for any $|\alpha| \leq k$.
+		\item If $u \in W^{k, p}(U)$, then $u_\eps \to u$ in $W^{k, p}_{\mathrm{loc}}(U)$, i.e. convergence in $W^{k,p}(V)$ for any $V \subseteq \subseteq U$.
+		\item If $U$ is bounded and $u \in W^{k, p}(U)$, then there exists $(u_j)$, with $u_j \in C^{\infty}(U) \cap W^{k, p}(U)$ so that $u_j \to u$ in $W^{k, p}(U)$ (global approximation not uniform near the boundary).
+		\item If $U$ is bounded and $\partial U$ is locally the graph of a Lipschitz function, then for $u \in W^{k, p}(U)$, there exists $(u_j)$ where $u_j \in C^{\infty}(\bar U)$ (which implies $u_j \in W^{k, p}(\Omega)$) so that $u_j \to u$ in $W^{k, p}(U)$ (global approximation in $W^{k,p}(U)$ by smooth functions uniformly regular at $\partial U$).
+	\end{enumerate}
+\end{proposition}
+
+\begin{proofbox}
+	
+
+	(i) We can use, for instance
+	\[
+	\vphi(x) = 
+	\begin{cases}
+		C \exp \left( - \frac{1}{1 - |x|^2} \right) & |x| \leq 1, \\
+			0 & |x| > 1.
+	\end{cases}
+	\]
+	We choose $C > 0$ such that $\int \vphi = 1$, and then scale:
+	\[
+	\vphi_\eps(x) = \eps^{-k} \vphi \left( \frac{x}{\eps} \right).
+	\]
+	(ii) Importantly, translations are continuous in $L^1$, i.e.
+	\[
+		\tau_\eps u = u(\cdot + \eps) \overset{L^1}\to u.
+	\]
+	We can check this by density of simple functions. Hence $u_\eps \to u$ in $L^1_{\mathrm{loc}}(U)$, for $\eps < \eps_0$. We can also use Lebesgue differentiation theorem.
+
+	(iii) This is a standard calculation, by integration by parts:
+	\[
+	\partial^{\alpha}_x u_\eps = \int \partial^{\alpha}_x u(y) \vphi_\eps(x - y) \diff y = \cdots.
+	\]
+
+	(iv) We repeat (ii) on each weak derivative.
+
+	(v) We use a covering argument. We decompose $U$ into $U_{l} = \{x \in U \mid d(x, \partial U) > 1/l\}$, and define
+	\[
+	V_l = U_{l + 3} \setminus \overline{U_{l+1}}.
+	\]
+	Then,
+	\[
+	\bigcup_{l \geq 1} V_l \cup (V_0) = U,
+	\]
+	where $V_0 = U \setminus \bigcup_{l \geq 1} V_c$.
+
+	We now take partitions of unity $(\xi_l)$, subordinate to $(V_l)$ i.e. $\xi_l \in C_c^\infty(V_l)$, and
+	\[
+	\sum_{l \geq 0} \xi_l = 1.
+	\]
+	Then for each $l > 0$, we pick $\eps_l  0$ so that
+	\[
+	u^l = \vphi_{\eps_l} \ast (\xi_l u)
+	\]
+	is supported in
+	\[
+	W_l = U_{l + 4} \setminus \overline{U_l},
+	\]
+	and is $2^{-l-1} \cdot \delta$ close to $\xi_l u$ in $W^{k, p}(\cdots)$. Then we define
+	\[
+	\tilde u = \sum_{l = 0} u^{l},
+	\]
+	which satisfies
+	\begin{align*}
+		\|u - \tilde u\|_{W^{k, p}(U)} &= \left\| \sum_{l \geq 0} \xi_{l} u - \sum_{l \geq 0} \vphi_{\eps_l} \ast (\xi_l u) \right\|_{W^{k, p}(U)} \\
+					       &\leq \sum_{l \geq 0} 2^{-l-1} \delta \leq \delta.
+	\end{align*}
+
+	(vi) For each $x \in \partial U$, there is $r_x > 0$ such that $\partial U \cap B(x, r_0)$ is the graph of a Lipschitz function. By compactness of $\partial U$ (since $U$ is bounded), we get a finite cover
+	\[
+	\partial U \subseteq \bigcup_{l = 1}^L (\partial U \cap B(x^l, r_l)).
+	\]
+	Hence let us write
+	\[
+	U = V_0 \cup \bigcup_{l = 1}^L V_l,
+	\]
+	where $V_l = U \cap B(x^l, r_l)$. Then on each $V_l$ in $B(x^l, r_l)$ we write the boundary as a graph of a Lipschitz function. Without loss of generality, say $x_n = \Gamma(x_1, \ldots, x_{n-1})$ defines $\partial U \cap B(x^l, r_l)$, where $\Gamma$ is Lipschitz.
+
+	Then, there exists $\lambda \in \mathbb{R}_+$ such that for all $x \in \partial U \cap B(x^l, r_l)$, and for all $\eps  >0$ small enough,
+	\[
+		B(x + \lambda \eps e_n, \eps) \subseteq U.
+	\]
+	Then,
+	\[
+	\vphi_{\hat \eps} \ast (\tau_{\lambda \eps e_n} u)
+	\]
+	is well-defined for all $\hat \eps < \eps$ small, and for $\eps \ll 1$, $\hat \eps \ll \eps$, this constructs $u_l$ such that
+	\[
+	\|u^l - u\|_{W^{k, p}(U \cap B(x^l, r_l)} \leq \frac{\delta}{k+1}.
+	\]
+	We can then recontruct, by taking $(\xi_l)$ a partition of unity subordinate to $(V_l)$, and letting
+	\[
+	v = \sum_{l = 0}^L \xi_l u^l.
+	\]
+	This satisfies $\|v - u\|_{W^{k, p}(U)} \leq \delta$, again by triangle inequality.
+\end{proofbox}
+
+% lecture 11
+
+\subsection{Extensions and Traces}%
+\label{sub:ext_tr}
+
+\begin{theorem}[Extensions of $W^{1, p}$ functions]
+	Given $U \subseteq \mathbb{R}^n$ open and bounded with $C^1$ boundary, and $V \subseteq \mathbb{R}^{n}$ open and bounded such that $U \subseteq \subseteq V$, if $p \in [+1, \infty]$ then there exists an extension operator, which is linear and bounded
+	\[
+	E : W^{1, p}(U) \to W^{1, p}(\mathbb{R}^n)
+	\]
+	 such that $\mathrm{supp} E(u) \subseteq V$ for $u \in W^{1, p}(U)$, and $E(u)|_{U} = u$ almost everywhere.
+\end{theorem}
+
+\begin{remark}
+	Bounded means there is $C = C(U, V, p) > 0$ such that
+	\[
+	\|E(u)\|_{W^{1, p}(\mathbb{R}^n)} \leq C \|u\|_{W^{1, p}(U)}.
+	\]
+\end{remark}
+
+\begin{proofbox}
+	Since $\partial U$ is $C^1$, it is locally the graph of a $C^1$ function. So for all $x \in \partial U$, there is $B(x, r)$ so that $\partial U \cap B(x, r)$ can be written as
+	\[
+	x_n = \Gamma(x_1, \ldots, x_{n-1}),
+	\]
+	for some $\Gamma \in C^1$. Then we can write
+	\[
+		U \cap B(x, r) = \{x' \in B(x, r) \mid x_n' > \Gamma(x_1', \ldots, x_{n-1}')\}.
+	\]
+	Now we wish to flatten out the boundary. Take $\Phi : B(x, r) \to B(y, r')$, where $y = (\tilde x, 0)$, and $\tilde x = (x_1, \ldots, x_{n-1})$. We can define $\Phi(x') = y'$ where $y_n' = x_n' - \Gamma(\tilde x')$, and $\tilde y' = \tilde x'$.
+
+	Then $\Phi$ maps $\partial U \cap B(x, r)$ into $\{y_n' = 0\}$, and $U \cap B(x, r)$ into $\{y_n' > 0\}$. Also $\Phi$ is $C^1$ and has $\det D \Phi = 1$.
+
+	So we may take $\Psi = \Phi^{-1}$ on $B(y, r'')$, so $\Psi(y') = x'$.
+
+	Take $u \in C^{\infty}(\overline{U}) \cap W^{1, p}(U)$. Then locally around $x \in \partial U$, $v = u \circ \Psi$ is defined on
+	\[
+		B_+ = B(y, r'') \cap \{y_n' > 0\}.
+	\]
+	Define (higher-order) symmetrization $\bar v(y')$ on $B(y, r'')$ by
+	\[
+	\bar v = v,
+	\]
+	on $B_+$, and
+	\[
+	\bar v(y') = - 3 v(\tilde y', -y_n') + 4 v(\tilde y', - y_n'/2).
+	\]
+	This is continuous at $y_n' = 0$, and $\partial \bar v$ is continuous at $y'_n = 0$. This can be defined on $B_- = B(y, r'') \cap \{y_n' < 0\}$.
+
+	We can check that $\bar v \in C^{1}$ on $B(y, r'')$, and
+	\[
+	\|\bar v\|_{W^{1, p}(B(y, r''))} \leq C \|v\|_{W^{1, p}(B_+)}.
+	\]
+	This is done by relating $\partial \bar v$ to $\partial v$. Define $\bar u = \bar v \circ \Phi$ on $B(x, r''')$, for $r''' > 0$.
+
+	Since $\Phi \in C^1$, $\bar u$ is $C^1$ on $B(x, r''')$ and
+	\[
+	\|\bar u\|_{W^{1, p}(B(x, r'''))} \leq C' \|u\|_{W^{1,p}(U \cap B(x, r'''))}.
+	\]
+	Now we want to reconstruct the entire function. Take a cover $V_l = B(x^l, r_l)$ for $x^l \in \partial U$, for $l = 1, \ldots, L$, and say
+	\[
+	U \setminus \left( \bigcup_{l= 1}^L V_l \right) \subseteq V_0 \subseteq \subseteq U.
+	\]
+	Take $(\xi_l)$ a partition of unity subordinate to $(V_l)$. Let $u^0 = u$ on $V_0$ and $u^l$ as the symmetrisation on $l = 1, \ldots, L$. Then let
+	\[
+	Eu = \sum_{l = 0}^{L} \xi_l u^{l}.
+	\]
+	Then $\mathrm{supp} Eu \subseteq V = \bigcup V_l \subseteq U$, and
+	\[
+	\|Eu\|_{W^{1,p}} \leq \sum_{l = 0}^L \|u^l\|_{W^{1,p}(V_l)} = C'' \|u\|_{W^{1,p}(U)}.
+	\]
+	We can now get rid of $u \in C^{\infty}(\overline{U})$, by using a density argument.
+
+	Let $u_j \in C^{\infty}(\overline{U})$ such that $u_j \to u$ in $W^{1, p}(U)$. $E$ is linear and bounded, so $(E u_j)$ is Cauchy. So $E u_j \to Eu$ in $W^{1, p}(V)$. Moreover the limit does not depend on the approximation as if $u_j^1, u_j^2 \to u$, then
+	\[
+	\|E(u_j^1 - u_j^2)\|_{W^{1, p}(V)} \to 0.
+	\]
+\end{proofbox}
+
+\begin{remark}
+	If we want to extend in $W^{k, p}(U)$, in our proof structure we need $\partial U \in C^k$, and a higher order symmetrisation,
+	\[
+	\bar v(y') = \sum_{m = 1}^k c_m v(\tilde y', - y_n'/m),
+	\]
+	and find suitable coefficients $c_m$.
+\end{remark}
+
+\begin{theorem}
+	Let $U \subseteq \mathbb{R}^n$ be open and bounded and with $\partial U$ $C^1$. Let $p \in [1, +\infty]$. Then there exists a linear bounded trace operator $T : W^{1, p}(U) \to L^{p}(\partial U)$ so that $T(u) = u|_{\partial U}$ for $u \in W^{1, p}(U) \in C^{\infty}(\overline{U})$.
+\end{theorem}
+
+\begin{remark}
+	\begin{enumerate}
+		\item[]
+		\item As $u \in C^{\infty}(\overline{U})$, we can extend $u$ on $\partial U$ by uniform continuity.
+		\item $T$ is bounded means that there is $C = C(U, p)$ so that
+			\[
+			\|Tu\|_{L^p(\partial U)} \leq C \|u\|_{W^{1,p}(U)}.
+			\]
+		\item If $u \in W^{k, p}(U)$, we can define the trace of $Du, D^2u, \ldots, D^{k-1}u$.
+		\item If $u \in W^{1,p}_{0}(U)$, i.e. within
+			\[
+			\overline{C_c^\infty(U)}^{W^{1, p}(U)},
+			\]
+			then $Tu = 0$ on $\partial U$ almost everywhere, since if $u_j \to u$ for $u_j \in C_c^{\infty}(U)$ then $Tu_j = 0$, and $T$ is bounded.
+
+			In fact, the converse is true: if $Tu = 0$ for $u \in W^{1, p}(U)$, then $u \in W^{1,p}_0(U)$.
+		\item This theorem is optimal for $p = 1$, but for $p \in (1, +\infty)$ the loss of derivatives is only $1/p$. In codimension $m$, the loss is $m/p$.
+	\end{enumerate}
+	
+\end{remark}
+
+\begin{proofbox}
+	We use the same structure again. To construct $T$, we use localization, flattening, deconstruction, and then relax $C^{\infty}(\overline{U})$.
+
+	In the flat boundary with the whole space, to show it is $L^p$ we have
+	\begin{align*}
+		\int_{\mathbb{R}^{n-1}} |v(\tilde y, 0)|^p \diff \tilde y &= \int_{\mathbb{R}^{n-1}} \int_0^{\infty} \partial y_n |v(\tilde y, y_n)|^p \diff \tilde y \diff y_n \\
+									  &= \int_{\mathbb{R}_+^n} p|v(y)|^{p-1} (\partial y_n v)(y) \sgn(v) \diff y.
+	\end{align*}
+\end{proofbox}
+
+% lecture 12
+
+\subsection{Sobolev Inequalities}%
+\label{sub:sobineq}
+
+Our goal is to integrate weak integrated regularity with classical regularity.
+
+We start with $W^{1, p}$, which $W^{k, p}$ is found inside. For $p > n$ we find H\"older functions.
+
+\begin{lemma}
+	Let $n \geq 2$, and $f_1, \ldots, f_n \in L^{n-1}(\mathbb{R}^{n-1})$. Then let
+	\[
+	f(x) = \prod_{i = 1}^n f_i(\tilde x_i),
+	\]
+	where $\tilde x_i = (x_1, \ldots, x_{i-1}, x_{i+1}, \ldots, x_n)$. This is integrable with
+	\[
+	\|f\|_{L^1(\mathbb{R}^n)} \leq \prod_{i = 1}^n \|f_i\|_{L^{n-1}(\mathbb{R}^{n-1})}.
+	\]
+\end{lemma}
+
+\begin{proofbox}
+	Our base case is $n = 2$. We use Fubini's; if $f(x) = f_1(x_2) f_2(x_1)$, then
+	\[
+	\|f\|_{L^1(\mathbb{R}^2)} = \|f_1\|_{L^1(\mathbb{R})} \|f_2\|_{L^1(\mathbb{R})}.
+	\]
+	Now we propagate from $n$ to $n + 1$. Let $f(x) = f_{n+1}(\tilde x_{n_1}) F(x)$, where $F(x) = f_1(\tilde x_1) \cdots f_n(\tilde x_n)$.
+
+	We apply step $n$ with $x_{n+1}$ frozen, so
+	\[
+	\int_{\mathbb{R}^n} |f(\cdot, x_{n+1})| \diff x_1 \cdots \diff x_n \leq \|f_{n+1}\|_{L^n(\mathbb{R}^n)} \|F(\cdot, x_{n+1})\|_{L^{n/(n-1)}}
+	\]
+	by H\"older. Then note
+	\[
+	F(\cdot, x_{n+1})^{n/(n-1)} = \prod_{i=  1}^n \tilde f_i,
+	\]
+	where $\tilde f_i(\cdot) = f_i(\cdot, x_{n+1})^{n/(n-1)}$. Then this has norm at most
+	\begin{align*}
+	& \qquad\|f_{n+1}\|_{L^{n}(\mathbb{R}^{n})} \left( \prod_{i = 1}^n \|\tilde f_i\|_{L^{n-1}(\mathbb{R}^{n-1})} \right)^{(n-1)/n} \\
+	&\leq \|f_{n_1}\|_{L^n} \prod_{i = 1}^n \|f_i(\cdot, x_{n+1})\|_{L^n(\mathbb{R}^n)}.
+	\end{align*}
+	Now we integrate this with respect to $x_{n+1}$, so
+	\begin{align*}
+		\int_{\mathbb{R}} LHS \diff x_{n+1} &\leq \|f_{n+1}\|_{L^n} \left( \prod_{i = 1}^n \int_{x_{n+1}} \|f_n(\cdot, x_{n+1})\|_{L^n}^n \right)^{1/n} \\
+						    &\leq \prod_{i = 1}^{n+1} \|f_i\|_{L^{n}(\mathbb{R}^{n})},
+	\end{align*}
+	again by H\"older.
+\end{proofbox}
+
+\begin{theorem}[Gagliardo-Norenberg-Sobolev]
+	Globally in $\mathbb{R}^n$, given $p \in [1, n)$, there is $C = C(n, p) > 0$ so that
+	\[
+	\|u\|_{L^{p^{\ast}}(\mathbb{R}^n)} \leq C \|Du\|_{L^p(\mathbb{R}^n)},
+	\]
+	for all $u \in W^{1, p}(\mathbb{R}^n)$, where $\frac{1}{p} = \frac{1}{n} + \frac{1}{p^{\ast}}$.
+
+	Locally away from a boundary, given $U \subseteq \mathbb{R}^n$ open and bounded, then there is $C = C(U, n, p) > 0$ such that
+	\[
+	\|u\|_{L^{p^\ast}(U)} \leq C \|Du\|_{L^p(U)},
+	\]
+	for all $u \in W^{1,p}_0(U)$.
+
+	We also have a local version up to the boundary: let $U \subseteq \mathbb{R}^n$ be open and bounded with $C^1$ boundary. Then there is $C = C(U, n, p) > 0$ such that
+	\[
+	\|u\|_{L^{p^\ast}(U)} \leq C \|u\|_{W^{1, p}(U)},
+	\]
+	for all $u \in W^{1, p}(U)$.
+\end{theorem}
+
+\begin{remark}
+	\begin{enumerate}
+		\item[]
+		\item Note $p^{\ast} > p$, so this shows higher integrability.
+		\item $Du$ is not changed by adding a constant to $u$, so $u \in L^p$ is needed in $\mathbb{R}^n$ to get $u \to 0$.
+	\end{enumerate}
+\end{remark}
+
+\begin{proofbox}
+	The idea is to write $u$ as an integral of partial derivatives, then use the previous lemma.
+
+	First we consider $p = 1$, and $u \in C_c^\infty(\mathbb{R}^n)$, in the global version. For all $i$,
+	\[
+	u(\bar x) = \int_{-\infty}^{\bar x_i} \partial_{x_i} u(x_1, \ldots, x_{i-1}, y_i, x_{i+1}, \ldots, x_n) \diff y_i.
+	\]
+	Then $|u(\bar x)| \leq g_i(\tilde x_i)$, where
+	\[
+	g_i(\tilde x_i) = \int_{-\infty}^{+\infty} |\partial_{x_i} u(\tilde x_i, y_i)| \diff y_i.
+	\]
+	Let $f(x) = |u(x)|^{n/(n-1)} \leq \prod f_i(\tilde x_i)$, where
+	\[
+	f_i(\tilde x_i) = g_i(\tilde x_i)^{1/(n-1)}.
+	\]
+	Then we find
+	\begin{align*}
+		\|f\|_{L^1} &= \|u\|^{n/(n-1)}_{L^{n/(n-1)}} \leq \prod_{i = 1}^n \|f_i\|_{L^{n-1}} \\
+			    &= \prod_{i = 1}^n \|g_i\|_{L^1}^{1/(n-1)} = \prod_{i = 1}^n \|\partial x_i u\|_{L^1}^{1/(n-1)} \\
+			    &\leq \|\nabla_U\|_{L^1}^{n/(n-1)}.
+	\end{align*}
+	Then note that $p^{\ast} = n/(n-1)$.
+
+	Now we wish to relax to $p \in (1, n)$. Apply the $p = 1$ step to $v = |u|^{\gamma}$, where
+	\[
+	\gamma = \frac{p(n-1)}{n - p}.
+	\]
+	Then $\partial_{x_i} v = \gamma \sgn(u) |u|^{1 - \gamma} \partial_{x_i} u$, and
+	\begin{align*}
+		\|v\|_{L^{n/(n-1)}} &\leq \|u\|^{\gamma}_{L^{pn/(n-p)}} = \prod_{i = 1}^n \|\gamma |u|^{\gamma - 1} \partial_{x_i} u\|_{L^1}^{1/n} \\
+				    &\leq \gamma \prod_{i = 1}^n \left( \|u\|_{L^{pn/(n-p)}}^{n(p-1)/(n-p)} \|\nabla u\|_{L^p} \right)^{1/n}.
+	\end{align*}
+	Collecting everything,
+	\[
+	\|u\|_{L^{pn/(n-p)}}^{\gamma - n(p-1)/(n-p)} \leq \gamma \|\nabla u\|_{L^p}.
+	\]
+	The top becomes $1$, and the bottom becomes $p^{\ast}$. Now $u \in C_c^{\infty}(\mathbb{R}^n)$ is reduced by using density of $C_c^{\infty}(\mathbb{R}^n)$ in $W^{1, p}(\mathbb{R}^n)$, by localizing to a small enough ball and then mollifying.
+
+	Now consider the local version in $W^{1,p}_0(U)$. Apply the fact that $W^{1, p}_0(U) = \overline{C_c^{\infty}(U)}^{W^{1,p}}$, and the previous calculation for $u \in C^{\infty}_c(U)$.
+
+	For the local version, we know there exists an extension operator $E : W^{1,p}(U) \to W^{1, p}(V)$. Then $Eu \in W^{1, p}(\mathbb{R}^n)$. Applying the global inequality to $Eu$,
+	\begin{align*}
+		\|u\|_{L^{p^{\ast}}(U)} &= \|Eu\|_{L^{p^{\ast}}(U)} \leq \|Eu\|_{L^{p^{\ast}}(\mathbb{R}^n)} \leq C \|Eu\|_{W^{1,p}(\mathbb{R}^{n})} \\
+					&= C \|Eu\|_{W^{1,p}(V)} \leq C C' \|u\|_{W^{1,p}(U)}.
+	\end{align*}
+\end{proofbox}
+
+\begin{theorem}[Morrey's Inequality]
+	Let $o \in (n, +\infty).$ Then there is $C = C(n, p) > 0$ so that
+	\[
+	\|u\|_{C^{0, \gamma}(\mathbb{R}^n)} \leq C \|u\|_{W^{1,p}(\mathbb{R}^n)}
+	\]
+	for $u \in C^{\infty}_c(\mathbb{R}^n)$, $\gamma \in (0, 1)$.
+
+	In other words, any $u \in W^{1,p}(\mathbb{R}^n)$ has a $C^{0, \gamma}$ representative.
+
+	Locally, if $U \subseteq \mathbb{R}^n$ is open and bounded, and $\partial U$ is $C^1$, then there is $C  = C(U, n, p) > 0$ such that
+	\[
+	\|u\|_{C^{0, \gamma} (U)} \leq C \|u\|_{W^{1,p}(U)}.
+	\]
+\end{theorem}
+
+\begin{proofbox}
+	The main idea is to show that $u$ is locally pointwise close to its averages.
+
+	If $\bar x \in \mathbb{R}^n$, and 
+	\[
+		Q_r(\bar x) = \{ |x_i - \bar x_i| \leq r/2 \text{ for all } i \},
+	\]
+	then we can define
+	\[
+	\bar u_{\bar x, r} = \frac{1}{|Q_r(\bar x)|} \int_{Q_r(\bar x)} u.
+	\]
+	We will show that $|u(\bar x) - \bar u_{\bar x, r}| \leq r^{\cdot} \|u\|_{W^{1,p}}$.
+\end{proofbox}
+
+
+% lecture 13
 
 \newpage
 

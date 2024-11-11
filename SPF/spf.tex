@@ -400,7 +400,7 @@ The linear term is the ``tangent'' to the manifold. We have a one-dimensional ta
 \[
 L(\mathsf{SO}(2)) = T_e(\mathsf{SO}(2)) = \left\{
 	\begin{pmatrix}
-		0 & -a & a & 0
+		0 & -a \\ a & 0
 	\end{pmatrix}
 \biggm| a \in \mathbb{R} \right\}.
 \]
@@ -691,6 +691,437 @@ We can check that this satisfies the group operations, and the Lie bracket satis
 \end{definition}
 
 % lecture 7
+
+\begin{definition}
+The trivial representation is
+\[
+d_0(X) = 0.
+\]
+\end{definition}
+
+\begin{definition}
+The fundamental representation is
+\[
+d_f(X) = X.
+\]
+\end{definition}
+
+\begin{definition}
+The adjoint representation is
+\[
+\mathrm{ad} : L(G) \to \mathfrak{gl}(L(G)),
+\]
+such that for all $X \in L(G)$, $\mathrm{ad}_X : L(G) \to L(G)$ such that
+\[
+	\mathrm{ad}_X Y = [X, Y].
+\]
+\end{definition}
+
+We can get representations of $L(G)$ from representations of $G$.
+
+As before, consider the tangent cuves in $G$:
+\[
+g(t) = e + t X + \cdots.
+\]
+Expand corresponding elements of our representation $D$ of $G$ as
+\[
+D(g(t)) = \id_V + t d (X) + \cdots.
+\]
+Then we can use this expansion to define $d$ from $D$. We can check the Lie bracket works. We know
+\[
+D(g_1^{-1} g_2^{-1} g_1 g_2) = D(g_1)^{-1} D(g_2)^{-1} D(g_1) D(g_2).
+\]
+Expanding $g_1(t) = e + T X_1 + \cdots$, $g_2(t) = e + t X_2 + \cdots$, we find the left-hand side gives
+\[
+	D(e + t^2[X_1, X_2] + \cdots),
+\]
+and the right-hand side is
+\[
+	\id_V + t^2[d(X_1), d(X_2)] + \cdots.
+\]
+Hence we see that
+\[
+	d([X_1, X_2]) = [d(X_1), d(X_2)].
+\]
+For example, in the adjoint representation $\mathrm{ad}_X$ from $\mathrm{Ad}_g$, for $Y \in L(G)$ note
+\begin{align*}
+	\mathrm{Ad}_g Y &= g Y g^{-1} = (I + tX) Y(I - tX) + \cdots \\
+			&= Y + t[X, Y] + \cdots \\
+			&= (I + t \mathrm{ad}_X + \mathcal{O}(t^2)) Y.
+\end{align*}
+So $\mathrm{ad}_X Y = [X, Y]$.
+
+\subsection{Useful Concepts}%
+\label{sub:use}
+
+\begin{definition}
+	Representations $D_1$ and $D_2$ of $G$, or $d_1$ and $d_2$ of $L(G)$, are \emph{equivalent}\index{equivalent} if there exists invertible linear maps $R$ and $S$ such that
+	\begin{align*}
+		D_2(g) &= R D_1(g) R^{-1}, \\
+		d_2(X) &= S d_1(X) S^{-1},
+	\end{align*}
+	for all $g \in G$ or $X \in L(G)$.
+\end{definition}
+
+\begin{definition}
+	A representation $d$ of $L(G)$ with representation space $V$ has an \emph{invariant subspace}\index{invariant subspace} $W \subseteq V$ if $d(X) w \in W$, for all $X \in L(G)$ and $w \in W$.
+\end{definition}
+
+\begin{exbox}
+	If all $d(X)$ are upper-triangular matrices, then $W = \{(z, 0)^{T}\}$ are invariant.
+\end{exbox}
+
+\begin{definition}
+	An \emph{irreducible representation}\index{irreducible representation} (irrep) is a representation with no nontrivial invariant subspaces. Otherwise the representation is \emph{reducible}\index{reducible}.
+\end{definition}
+
+\begin{definition}
+	A \emph{direct sum}\index{direct sum} of vector spaces $U$ and $W$, is
+	\[
+		U \oplus W = \{(u, w) \text{ or } u \oplus w \mid u \in U, w \in W\},
+	\]
+	where $(u_1, w_1) + (u_2, w_2) = (u_1 + u_2, w_1 + w_2)$ and $\alpha(u, w) = (\alpha u, \alpha w)$. Note that
+	\[
+	\dim U \oplus W = \dim U + \dim W.
+	\]
+\end{definition}
+
+\begin{definition}
+	A \emph{totally reducible representation}\index{totally reducible representation} $d$ of $L(G)$ can be decomposed into irreducible pieces, i.e. can be written as a direct sum with representation space
+	\[
+	V = W_1 \oplus W_2 \oplus \cdots \oplus W_k,
+	\]
+	such that $d(X) w_i \in W_i$ for all $X \in L(G)$. Then there exists some basis where
+	\[
+	d(X) =
+	\begin{pmatrix}
+		d_1(X) & 0 & \cdots & 0 \\
+		0 & d_2(X) & \cdots & 0 \\
+		\vdots & \vdots & \ddots & \vdots \\
+		0 & 0 & \cdots & d_n(X)
+	\end{pmatrix}
+	\]
+	is a block diagonal.
+\end{definition}
+
+\begin{definition}
+	An $N$-dimensional representation $D$ is \emph{unitary}\index{unitary theorem} if $D(g) \in \mathsf{U}(N)$, and $d(X) \in L(\mathsf{U}(N))$.
+
+	If all $D(g)$ are real, then $D(g) \in \mathsf{O}(N)$, and $D$ is said to be \emph{orthogonal}\index{orthogonal representation}.
+\end{definition}
+
+\begin{theorem}[Maschke]
+	A finite-dimensional unitary representation is either irreducible, or totally reducible.
+\end{theorem}
+
+\begin{proofbox}
+	Sketch.
+
+	We show that for each invariant subspace $W$, the orthogonal component $W_{\perp}$ is also invariant, i.e. $V = \oplus W + W_{\perp}$.
+
+	Then we can similarly decompose $W$ and $W_{\perp}$. As $V$ is finite dimensional, we must terminate.
+\end{proofbox}
+
+Maschke's theorem can be extended to:
+\begin{itemize}
+	\item All finite representations of discrete groups (by Weyl's trick).
+	\item All finite representations of compact Lie groups.
+\end{itemize}
+
+\begin{exbox}
+	Consider $V$ to be all $2\pi$-periodic functions, and a representation by
+	\[
+	D(\alpha) f(x) = f(x - \alpha).
+	\]
+% lecture 8
+	The following subspaces are invariant:
+	\[
+		W_n = \{a_n \cos n x + b_n \sin nx \mid a_n, b_n \in \mathbb{R} \},
+	\]
+	for each $n \in \mathbb{Z}_{\geq 0}$. This is invariant as
+	\[
+	a_n \cos n(x - \alpha) + b_n \sin n(x - \alpha) = a_n' \cos nx + b_n' \sin nx
+	\]
+	for some $a_n', b_n' \in \mathbb{R}$.
+
+	Recall the Fourier decomposition of any $2\pi$-periodic function: it can be written as
+	\[
+	f(x) = a_0 + \sum_{n = 1}^\infty (a_n \cos nx + b_n \sin nx).
+	\]
+	Hence we see
+	\[
+	V = W_0 \oplus W_1 + W_2 \oplus \cdots = \oplus_{n = 0}^{\infty} W_n.
+	\]
+	This is a direct sum of covariant derivatives, each occurring once.
+\end{exbox}
+
+\begin{definition}
+	Let $V, W$ be vector spaces. The \emph{tensor product space}\index{tensor product space} $V \otimes W$ is spanned by elements, which are product vectors $v \otimes w$ with $v \in V$, $w \in W$. Here,
+	\[
+	v \otimes (\lambda_1 w_1 + \lambda_2 w_2) = \lambda_ v \otimes w_1  + \lambda_2 v \otimes w_2.
+	\]
+	Hence, $\dim V \otimes W = (\dim V)(\dim W)$.
+
+	An element is in a \emph{product state}\index{product state} if it can be written $\phi = v\otimes w$. In general we can write $\phi_A = \phi_{a\alpha} = v_a w_\alpha$.
+
+	Not all elements of $V \otimes W$ are product states.
+\end{definition}
+
+\subsection{Tensor Products Representations}%
+\label{sub:tpr}
+
+Let $D^{(1)}$ and $D^{(2)}$ be representations of a group $G$ with vector spaces $V$ and $W$ such that
+\begin{align*}
+	D^{(1)}(g) : v_\alpha &\mapsto D^{(1)}(g)_{\alpha\beta} v_\beta, \\
+	D^{(2)}(g) : w_\alpha &\mapsto D^{(2)}(g)_{\alpha\beta} w_\beta.
+\end{align*}
+Then we get a tensor product representation $D^{(1)j \otimes D^{(2)}}$, by
+\[
+	(D^{(1)} \otimes D^{(2)})(g) (v \otimes w) = (D^{(1)}(g) v ) \otimes (D^{(2)}(g) w).
+\]
+Let $g_t \in G$ be a curve in the Lie group $G$ with $g_0 = e$, and $\dot g_0 = X \in L(G)$. Then,
+\begin{align*}
+	\frac{\diff}{\diff t} \left[ (D^{(1)} \otimes D^{(2)})(g_t) v \otimes w \right] &= \left[ \frac{\diff}{\diff t} D^{(1)}(g_t) v \right] \otimes w + v \otimes \left[\frac{\diff}{\diff t} D(g_t) w \right].
+\end{align*}
+Let $d^{(1)}$ and $d^{(2)}$ be Lie algebra representations corresponding to $D^{(1)}$ and $D^{(2)}$. Their tensor product is
+\[
+	(d^{(1)} \otimes d^{(2)})(X) = d^{(1)}(X) \otimes \id_W + \id_V \otimes d^{(2)}(X).
+\]
+
+Here is an important corollary to Maschke's theorem: representations of $d^{(1)} \otimes d^{(2)}$ can be, if finite, written as the direct sum of irreps of $L(G)$:
+\[
+d^{(1)} \otimes d^{(2)} = \tilde d_1 \oplus \cdots \oplus \tilde d_k = \bigoplus_{i = 1}^k \tilde d_i.
+\]
+This is decomposition into irreps. Note that the dimensions must be equal.
+
+\newpage
+
+\section{Angular Momentum}%
+\label{sec:am}
+
+$\mathsf{SO}(3)$ describes rotations in three-dimensions. This implies that angular momentum is quantized in QM.
+
+Sometimes we have half integer quantum numbers, which gives $\mathsf{SU}(2)$ representations.
+
+\subsection{Relationships between \texorpdfstring{$\mathsf{SO}(3)$}{SO(3)} and \texorpdfstring{$ \mathsf{SU}(2)$}{SU(2)}}%
+\label{sub:rels}
+
+Consider the Lie algebra of $\mathsf{SU}(2)$, the $2 \times 2$ traceless, anti-Hermitian matrices. We can choose a basis
+\[
+T_a = - \frac{i}{2} \sigma_a,
+\]
+for $a = 1, 2, 3$. These are the \emph{Pauli matrices}\index{Pauli matrices}. Recall that
+\[
+	\sigma_a \sigma_b = I \delta_{ab} + i \eps_{abc} \sigma_c \implies [T_a, T_b] = \eps_{abc} T_c.
+\]
+Hence the structure constants are
+\[
+f\indices{^{c}_{ab}} = \eps_{abc}.
+\]
+Similarly, $\mathfrak{so}(3) = L(\mathsf{SO}(3))$ are the $3 \times 3$ skew matrices, with basis
+\[
+\tilde T_1 =
+\begin{pmatrix}
+	0 & 0 & 0 \\
+	0 & 0 & -1 \\
+	0 & 1 & 0
+\end{pmatrix},
+\qquad \tilde T_2 =
+\begin{pmatrix}
+	0 & 0 & 1 \\
+	0 & 0 & 0 \\
+	-1 & 0 & 0
+\end{pmatrix},
+\qquad
+\tilde T_3 =
+\begin{pmatrix}
+	0 & -1 & 0 \\
+	1 & 0 & 0 \\
+	0 & 0 & 0
+\end{pmatrix}.
+\]
+i.e. $(\tilde T_a)_{bc} = - \eps_{abc}$. Then again
+\[
+	[\tilde T_a, \tilde T_b] = \eps_{abc} \tilde T_c,
+\]
+which gives the same structure constants as $\mathfrak{su}(2)$.
+
+To show an isomorphism between two Lie algebras $\mathfrak{g}$ and $\mathfrak{h}$, we need a linear isomorphism $\phi : \mathfrak{g} \to \mathfrak{h}$ such that
+\[
+	\phi([X, Y]) = [\phi(X), \phi(Y)],
+\]
+for all $X, Y \in \mathfrak{g}$. However, we find that $\mathfrak{su}(2)$ and $\mathfrak{so}(3)$ are not isomorphic.
+
+Let's look at the group manifolds of the Lie groups.
+\begin{itemize}
+	\item $\mathsf{SO}(3)$ was discussed earlier. This can be thought of as a $3$-ball of radius $\pi$, with antipodes identified.
+	\item $\mathsf{SU}(2)$ can be written as
+		\[
+		U = a_0 \cdot I + i \mathbf{a} \cdot \bm{\sigma},
+		\]
+		with $(a_0, \mathbf{a})$ real and $a_0^2 + |\mathbf{a}|^2 = 1$. This manifold is a unit sphere in $\mathbb{R}^4$, i.e. $S^3$.
+\end{itemize}
+
+\begin{definition}
+	Let $H$ be a subgroup of $G$. Then for any $g \in G$, we can form a \emph{left coset}\index{left coset} of $H$ as
+	\[
+		gH = \{gh \mid h \in H\},
+	\]
+	and the \emph{right coset}\index{right coset} as
+	\[
+		Hg = \{hg \mid h \in H\}.
+	\]
+\end{definition}
+
+\begin{definition}
+	$H \lhd G$ is a \emph{normal subgroup}\index{normal subgroup} of $G$, if $gH = Hg$ for all $g \in G$. Define a set $G/H$ to be
+	\[
+		G/H = \{g H \mid g \in G\}.
+	\]
+	Define coset multiplication as
+	\[
+		(g_2 H)(g_1 H) = (g_2 g_1)H.
+	\]
+\end{definition}
+
+\begin{theorem}
+	For $H \lhd G$, $G/H$ is a group under coset multiplication, with $H = eH$ as the identity of $G/H$. Such a group is called the \emph{quotient group}\index{quotient group}.
+\end{theorem}
+
+% lecture 9
+
+\begin{definition}
+	The \emph{centre}\index{centre} of a group is the set of all $x \in G$ which satisfy $xg = gx$ for all $g \in X$.
+\end{definition}
+
+\begin{theorem}
+	The centre $Z(G) \lhd G$ is a normal subgroup of $G$.
+\end{theorem}
+
+$\mathsf{SU}(2)$ has centre $Z(\mathsf{SU}(2)) = \{\pm I\}$. The cosets are
+\[
+	U Z(\mathsf{SU}(2)) = \{\pm U\}.
+\]
+The set of all such cosets forms the quotient group
+\[
+\mathsf{SU}(2) / \mathbb{Z}_2,
+\]
+whose manifold is $S^3$ with antipodes identified. The manifold of $\mathsf{SU}(2) / \mathbb{Z}_2$ is just the upper half of $S^3$, with opposite points on the equator identified. However this can be projected onto $\mathsf{SO}(3)$, showing
+\[
+\mathsf{SO}(3) \cong \mathsf{SU}(2) / \mathbb{Z}_2.
+\]
+We are able to show an explicit map. Define $p : \mathsf{SU}(2) \to \mathsf{SO}(3)$ by, for $A \in \mathsf{SU}(2)$, $p(A) = R$ where
+\[
+R_{ij} = \frac{1}{2} \tr(\sigma_i A \sigma_j A^{\dagger}).
+\]
+This is a two-to-one map, with $p(-A) = p(A)$. This is a \emph{double cover}\index{double cover} of $\mathsf{SO}(3)$. Hence $\mathsf{SU}(2)$ is the double cover of $\mathsf{SO}(3)$.
+
+\begin{proposition}
+	Every Lie algebra is the algebra of exactly one simply-connected Lie group.
+\end{proposition}
+
+For example, $\mathsf{U}(2)$ and $\mathsf{SU}(2)$ have the same Lie algebra, but $\mathsf{U}(2)$ is not connected.
+
+\begin{definition}
+	A manifold is \emph{simply connected}\index{simply connected} if any closed loop can be smoothly shrunk to a point, i.e. $\pi_1(X)$ is trivial.
+\end{definition}
+
+\subsection{Representations of \texorpdfstring{$\mathfrak{su}(2)$}{su(2)}}%
+\label{sub:rep_su2}
+
+It is convenient to enlarge our real vector space to the field $\mathbb{C}$. Given a vector space $V$, say
+\[
+	V = \{\lambda^a T_a \mid \lambda^a \in \mathbb{R}\} = \spn_{\mathbb{R}} \{T_a\}.
+\]
+The \emph{complexification}\index{complexification} of $V$ is
+\[
+	V_{\mathbb{C}} = \spn_{\mathbb{C}}\{T_a\}.
+\]
+
+\begin{exbox}
+	Recall
+	\[
+		\mathfrak{su}(n) = \{X \in \mathrm{Mat}_n(\mathbb{C}) \mid X^{\dagger} = -X, \Tr X = 0\}.
+	\]
+	Then the complexification is
+	\[
+		\mathfrak{su}(n)_{\mathbb{C}} = \{X \in \mathrm{Mat}_n(\mathbb{C}) \mid \Tr X = 0\} \cong \mathfrak{sl}(n, \mathbb{C}) = L(\mathsf{SL}(n, \mathbb{C})).
+	\]
+\end{exbox}
+
+Let $\mathfrak{g} = L(G)$ be a real Lie algebra, and denote its complexification by $\mathfrak{g}_{\mathbb{C}}$. Representations of $L(G)$ can be extended to $L(G)_{\mathbb{C}}$ by imposing
+\[
+d(X+ iY) = d(X) + i d(Y).
+\]
+Conversely, if we have a representation $d_{\mathbb{C}}$ of $L(G)_{\mathbb{C}}$, we can restrict to a representation of $L(G)$ by writing
+\[
+d(X) = d_{\mathbb{C}}(X)
+\]
+for $X \in L(G) \subseteq L(G)_{\mathbb{C}}$.
+
+\begin{definition}
+	A \emph{real form}\index{real form} of a complex Lie algebra $\mathfrak{h}$ is a real Lie algebra $\mathfrak{g}$ whose complexification is $\mathfrak{h}$.
+\end{definition}
+
+In general, a complex Lie algebra can have multiple nonisomorphic real forms. For $L(\mathsf{SU}(2))$,
+\[
+L(\mathsf{SU}(2))_{\mathbb{C}} = \spn_{\mathbb{C}} \{\sigma_a \mid a = 1, 2, 3\}.
+\]
+A more conveniant basis is
+\begin{align*}
+	H &= \sigma_3 =
+	\begin{pmatrix}
+		1 & 0 \\ 0 & -1
+	\end{pmatrix}
+	, \\
+	E_+ &= \frac{1}{2}(\sigma_1 + i \sigma_2) =
+	\begin{pmatrix}
+		0 & 1 \\ 0 & 0
+	\end{pmatrix}, \\
+	E_{-} &= \frac{1}{2}(\sigma_1 - i \sigma_2) =
+	\begin{pmatrix}
+		0 & 0 \\ 1 & 0
+	\end{pmatrix}.
+\end{align*}
+Then the commutation relations are
+\[
+	[H, E_{\pm}] = \pm 2 E\pm, \qquad [E_+, E_-] = H.
+\]
+This is the Canton-Weyl basis.
+
+Recall that $\mathrm{ad}_X Y = [X, Y]$, so $[H, E_{\pm}] = \mathrm{ad}_H E_{\pm} = \pm 2 E_{\pm}$. We also have that $\mathrm{ad}_H H = [H, H] = 0$.
+
+We see that $E_-, H, E_+$ are eigenvectors of $\mathrm{ad}_H$ with eigenvalues $-2, 0, 2$. These eigenvalues are the \emph{roots}\index{roots} of $L(\mathsf{SU}(2))$.
+
+Let $d$ be a finite dimensional irreducible representation (an irrep) of $\mathsf{SU}(2)$ with representation space $V$. Write an eigenvector of $d(H)$ as $v_\lambda$, where
+\[
+d(H) v_\lambda = \lambda v_\lambda.
+\]
+
+\begin{definition}
+	The eigenvectors of $d(H)$ are the \emph{weights}\index{weights} of $d$.
+\end{definition}
+
+The operators $d(E_{\pm})$ are \emph{ladder}\index{ladder} or \emph{step}\index{step} or \emph{raising}\index{raising} or \emph{lowering}\index{lowering} operators, as
+\[
+d(H) (d(E_{\pm})v_\lambda) = (\lambda \pm 2)(d(E_{\pm}) v_\lambda).
+\]
+Hence $d(E_{\pm})v_\lambda$ is an eigenvector of $d(H)$ with eigenvalue $\lambda \pm 2$, or $d(E_{\pm}) v_\lambda = 0$.
+
+
+% lecture 10
+
+If $d$ is a finite dimensional representation, then there is a finite number of eigenvalues. Hence there must be some $\Lambda$ such that
+\[
+	d(H) v_\Lambda = \Lambda v_\Lambda \qquad \text{and} \qquad d(E_+) v_\Lambda = 0.
+\]
+Such a $\Lambda$ is called a \emph{highest weight}\index{highest weight}. Applying $d(E_-)$ $n$ times,
+\[
+v_{\Lambda - 2n} = (d(E_-))^{n} v_\Lambda.
+\]
+This process must terminate for some $N$, so the eigenbasis for this representation is
+
+% lecture 11
 
 \newpage
 
