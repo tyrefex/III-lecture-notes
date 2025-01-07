@@ -1357,7 +1357,7 @@ Here $\Delta_{\vphi}$ is the \emph{scaling dimension}\index{scaling dimension} o
 \[
 \langle \vphi'(\mathbf{x}') \vphi'(0) \rangle = \zeta^{2 \Delta_{\vphi}} \langle \vphi(\mathbf{x}) \vphi(0) \rangle \sim \zeta^{2 \Delta_{\vphi}} / \Gamma^{d - 2 + \eta},
 \]
-at the critical point. But the ciritcal point is a fixed point, hence the left hand side scales as
+at the critical point. But the critical point is a fixed point, hence the left hand side scales as
 \[
 \frac{1}{(\Gamma')^{d - 2 + \eta}} = \frac{\zeta^{d - 2 + \eta}}{\Gamma^{d - 2 + \eta}} \implies \Delta_{\vphi} = \frac{d - 2}{2} + \frac{\eta}{2}.
 \]
@@ -1507,8 +1507,998 @@ To hit the GFP with $d < 4$, we need to tune at least two parameters $\mu^2$ and
 
 Previously, we saw that the saddle point approximation to the path integral lead to MFT with quadratic fluctutations. This is self-consistent only if the couplings of non-quadratic terms remain small, i.e. remain near the GFP. But if $d < 4$, $g_4$ does not remain small under RG, so the saddle point approximation cannot be trusted.
 
-
 % lecture 10
+
+\subsection{Dangerously Irrelevant Couplings}%
+\label{sub:dics}
+
+For $d > 4$ the GFP describes the Ising CP, but scaling gave us incorrect results for $\beta$ and $\delta$. Scaling $\vphi \sim t^{\beta}$, we get
+\[
+\beta = \frac{\Delta_{\vphi}}{\Delta_t},
+\]
+which is wrong for $d > 4$. Actually MFT told us that
+\[
+\vphi \sim \left( \frac{t}{g_4} \right)^{1/2}.
+\]
+For $d > 4$, $\vphi^{4}$ is irrelevant as $g_4 \to 0$ under RG. But we cannot ignore the denominator. If we assume that
+\[
+\vphi \sim \left( \frac{t}{g_4} \right)^{\beta},
+\]
+then we can show that $\beta = 1/2$.
+
+Usually irrelevant operators can be ignored at long distances as coupling $\to 0$ under RG. But if a coupling multiplies a quantity of interest and changes scaling, then it is \emph{dangerously irrelevant}\index{dangerously irrelevant}.
+
+\subsection{Symmetries and Breaking}%
+\label{sub:sab}
+
+We assumed $\mathbb{Z}_2$ symmetry, i.e. $F[\vphi] = F[-\vphi]$. This excludes $\vphi^{n}$. Then this symmetry is preserved by RG.
+
+Relax this assumption, so all odd $n$ are possible.
+\begin{itemize}
+	\item For $n = 1$, we get
+		\[
+		\int \Diff d x \, g_1 \vphi,
+		\]
+		where $g_1 = B$, Then
+		\[
+		\Delta_B = \frac{d+2}{2}
+		\]
+		at the GFP. This is relevant, so we must tune $B$ to tit the CP.
+	\item If $n = 3$,
+		\[
+		\int \Diff d x \, g_3 \vphi^3.
+		\]
+		This looks relevant for $d < 6$, but we can always set $g_3 = 0$ by redefining $\vphi \to \vphi + c$. Then the quartic term lets us eliminate the cubic term.
+\end{itemize}
+
+Moreover, we assumed that $F$ is invariant under all rotations in $\mathsf{O}(d)$. But the original lattice is invariant only under a finite subgroup, i.e. in the $d = 2$ we are invariant only under $G = D_8$.
+
+We should only demand that $F$ is invariant under $G$. For a cubic lattice, the lowest dimension operator that is invariant with respect to $G$ but not $\mathcal{O}(d)$ is
+\[
+\mathcal{O} = \vphi \sum_{i = 1}^d \partial_i^4 \vphi.
+\]
+We expect such terms to be present in $F$. But at GFP, this has
+\[
+\Delta_{\mathcal{O}} = 4 + 2 \Delta_{\vphi} = d + 2,
+\]
+which is irrelevant. Here $\mathcal{O}(d)$ is \emph{emergent}\index{emergent}: it is a symmetry of long-distance physics that is not present microscopically.
+
+\subsection{Renormalization with Interactions}%
+\label{sub:ri}
+
+We previously ignored $g_{0,n} \to g_{0,n} + \delta g_n$ under RG. Now we will do things properly. Start from
+\begin{align*}
+	F[\vphi] &= \int \Diff d x \, \left( \frac{1}{2} (\nabla \vphi)^2 + \frac{1}{2} \mu_0^2 \vphi^2 + g_0 \vphi^{4} \right) \\
+		 &= F_O[\vphi^{-}] + F_O[\vphi^{+}] + F_I[\vphi^{-}, \vphi^{+}].
+\end{align*}
+Then the free energy ecomes
+\[
+	e^{-F'[\vphi^{-}]} = e^{-F_O[\vphi^{-}]} \int \mathcal{D} \vphi^{+} \, e^{-F_O[\vphi^{+}]} e^{-F_I[\vphi^{-}, \vphi^{+}]}.
+\]
+The latter integral can be thought of as
+\[
+	\left \langle e^{-F_I [\vphi^{-}, \vphi^{+}]} \right \rangle_+.
+\]
+Normalize $\mathcal{D} \vphi^{+}$ such that $\langle 1 \rangle_+ = 1$. Hence $\langle \cdot \rangle_+$ is an expectation value treating $\vphi^{+}$ as a random variable with probability density $e^{-F_0[\vphi^{+}]}$, i.e. as a Gaussian. So,
+\[
+	F'[\vphi^{-}] = F_O[\vphi^{-}] - \log \left \langle e^{-F_I[\vphi^{-}, \vphi^{+}]} \right \rangle_+.
+\]
+To compute this, we assume that $g_0$ is small, and use perturbation theory. Using the Taylor series for $\log$,
+\begin{align*}
+	\log \langle e^{-F_I} \rangle &= \log \langle 1 - F_I + F_I^2/2 - \cdots \rangle_+ \\
+				      &= - \langle F_I \rangle_+ + \frac{1}{2} \left( \langle F_I^2\rangle_+ - \langle F_I\rangle^2_+ \right) + \cdots.
+\end{align*}
+We then get
+\begin{align*}
+	F_I &= g_0 \int \Diff d x \, \prod_{i = 1}^4 \int \frac{\Diff d \, k_i}{(2 \pi)^d} \vphi_{\mathbf{k}_i} e^{i \mathbf{k}_i \cdot \mathbf{x}} \\
+	    &= g_0 \int \left[ \prod_{i = 1}^4 \frac{\Diff d \, k_i}{(2 \pi)^d} (\vphi_{\mathbf{k}_i}^{+} + \vphi_{\mathbf{k}_i}^-) \right] (2 \pi)^d \delta^{(d)} \left( \sum \mathbf{k}_i \right).
+\end{align*}
+There are five types of terms:
+\begin{itemize}
+	\item $(\vphi^-)^{4}$. These expectations are trivial.
+	\item $4(\vphi^{-})^3 \vphi^{+}$. Odd, so gives $0$.
+	\item $6 (\vphi^{-})^2(\vphi^{+})^2$. These are interesting.
+	\item $4 \vphi^{-} (\vphi^{+})^3$. Again odd, so gives $0$.
+	\item $(\vphi^{+})^{4}$. Gives a constant term in $F'$.
+\end{itemize}
+
+Hence we need to compute
+\[
+\langle F_I\rangle_+ \supseteq 6g_0 \int \prod_{i = 1}^k \frac{\Diff d \, k_i}{(2 \pi)^{d}} \vphi_{\mathbf{k}_1}^{-} \vphi_{\mathbf{k}_2}^{-} \langle \vphi_{\mathbf{k}_3}^{+} \vphi_{\mathbf{k}_4}^{+} \rangle (2 \pi)^d \delta^{(d)} \left( \sum \mathbf{k}_i \right).
+\]
+Here we get the correlation function
+\[
+\langle \vphi_{\mathbf{k}}^+ \vphi_{\mathbf{k}'}^+ \rangle_+ = (2\pi)^d \delta^{(d)}(\mathbf{k} + \mathbf{k}') G_0(\mathbf{k}),
+\]
+where
+\[
+G_0 = \frac{1}{\mathbf{k}^2 + \mu_0^2}.
+\]
+Hence we get
+\[
+\langle F_I \rangle_+ \supseteq 6 g_0 \int_{0}^{\Lambda/\zeta} \frac{\Diff d \, \mathbf{k}}{(2 \pi)^{d}} \vphi_{\mathbf{k}}^{-} \vphi_{-\mathbf{k}}^{-} \int_{\Lambda/\zeta}^{\Lambda} \frac{\Diff d \, q}{(2 \pi)^{d}} \frac{1}{q^2 + \mu_0^2}.
+\]
+This generates a correction to the $(\vphi^{-})^2$ term in $F'$.
+
+% lecture 11
+
+We get a movement of coefficients
+\[
+\mu_0^2 \to \mu'^2 = \mu_0^2 + 12 g_0 \int_{\Lambda/\zeta}^\Lambda \frac{\Diff d q}{(2 \pi)^{d}} \frac{1}{q^2 + \mu_0^2}.
+\]
+The coefficient of $(\nabla \vphi^{-})^2$ and $(\vphi^{-})^{4}$ is unchanged at $\mathcal{O}(g_0)$. So under $\mathbf{k}' = \zeta \mathbf{k}$, we have $\vphi'$ changes as
+\[
+\mu^2(\zeta) = \zeta^2\left( \mu_0^2 + 12 g_0 \int_{\Lambda/\zeta}^{\Lambda} \frac{\Diff d q}{(2 \pi)^{d}} \frac{1}{q^2 + \mu_0^2} \right),
+\]
+and $g(\zeta) = \zeta^{4 - d} g_0$. Note $\mu^2$ does not scaled as a power of $\zeta$, so there is no well-defined scaling dimension. In general, he dimensions of the operators and couplings are defined by linearising around a fixed point.
+
+Consider linearising around the GFP, so $\mu_0^2, g_0$ are both small. Hence we find
+\[
+\mu^2(\zeta) = \zeta^2(\mu_0^2 + 12 g_0(I(\Lambda) - I(\Lambda/\zeta))) + \cdots,
+\]
+and $g(\zeta) = \zeta^{4 - d}g_0$, where
+\[
+	I(\Lambda) = \int_0^{\Lambda} \frac{\Diff d q}{(2 \pi)^{d}} \frac{1}{q^2} = \frac{\Omega_{d-1}}{(2 \pi)^{d} (d - 2)} \Lambda^{d-2},
+\]
+where $\Omega_n$ is the area of the $n$-sphere. We can rewrite this as
+\[
+\mu^2 = \zeta^2(\mu_0^2 + c \Lambda^{d-2} g_0) - c \Lambda^{d-2} \zeta^{4-d} g_0,
+\]
+for $c$ some positive constant. Hence we find
+\begin{align*}
+	\mu^2 + c \Lambda^{d-2} g &\propto \zeta^2, \\
+	g &\propto \zeta^{4 - d}.
+\end{align*}
+This has well-defined dimensions $(2, 4 -d)$ at the GFP. We can write $F'[\vphi]$ in terms of these couplings:
+\[
+\frac{1}{2} \mu^2 \vphi^2 + g \vphi^{4} = \frac{1}{2} \left(\mu^2 + c \Lambda^{d-2} g\right) \vphi^2 + g \left(\vphi^{4} - \frac{1}{2} c \Lambda^{d-2} \vphi^2\right).
+\]
+These have well-defined dimensions at the Gaussian fixed point. Since $\mu^2 + c \Lambda^{d-2} g$ is relevant, we need to tune this to reach the GFP. We identify this with $T - T_c$.
+
+If $d > 4$, $g$ is irrelevant, and so we get RG flow into the GFP. For $d < 4$, $g$ is relevant and perturbation theory breaks down.
+
+For $d = 4$, $g$ is marginal, so we need to got to $\mathcal{O}(g_0^2)$. This means looking at
+\[
+\frac{1}{2} ( \langle F_I^2 \rangle_+ - \langle F_I \rangle_+^2 ).
+\]
+The first term gives two types of terms:
+\[
+\left( \int \Diff d x \, f(x) \right)^2,
+\]
+which are cancelled by $\langle F_I \rangle_+^2$, and also
+\[
+\int \Diff d  x\, f(x),
+\]
+which are not cancelled. We focus on terms quartic in $\vphi^{-}$. Then we see
+\begin{align*}
+	\frac{1}{2} \langle F_I^2\rangle_+ &\supseteq \frac{1}{2} \binom 42 ^2 g_0^2 \int_0^{\Lambda/\zeta} \left( \prod_{i = 1}^4 \frac{\Diff d k_i}{(2 \pi)^{d}} \vphi_{k_i}^{-} \right) \int_{\Lambda/\zeta}^{\Lambda} \prod_{j=1}^{4} \frac{\Diff d q_j}{(2 \pi)^{d}} \langle \vphi^{+}_{q_1} \vphi^{+}_{q_2} \vphi^{+}_{q_3} \vphi^{+}_{q_4} \rangle_+ \\
+					   & \qquad \qquad \times (2 \pi)^{2d} \delta^{(d)}(k_1 + k_2 + q_1 + q_2) \delta^{(d)}(k_3 + k_4 + q_3 + q_4).
+\end{align*}
+
+We claim that
+\begin{align*}
+	\langle \vphi^{+}_{q_1} \vphi^{+}_{q_2} \vphi^{+}_{q_3} \vphi^{+}_{q_4} \rangle_+ &= \langle \vphi_{q_1}^+ \vphi_{q_2}^+ \rangle_+\langle \vphi_{q_3}^+ \vphi_{q_4}^+ \rangle_+ + \langle \vphi_{q_1}^+ \vphi_{q_3}^+ \rangle_+\langle \vphi_{q_2}^+ \vphi_{q_4}^+ \rangle_+ + \langle \vphi_{q_1}^+ \vphi_{q_4}^+ \rangle_+\langle \vphi_{q_2}^+ \vphi_{q_3}^+ \rangle_+.
+\end{align*}
+
+This is Wick's theorem. We use the fact hat
+\[
+\langle \vphi_q^{+} \vphi_{q'}^+ \rangle = (2 \pi)^{d} \delta^{(d)}(q + q') G_0(q).
+\]
+The first term in the expansion cancels. The second and third terms are
+\[
+	\binom 42 ^2 g_0^2 \int_{)}^{\Lambda/\zeta} \left( \prod_{i = 1}^4 \frac{\Diff d k_i}{(2 \pi)^{d}} \vphi_{k_i}^{-} \right) f(k_1 + k_2)(2 \pi)^{d} \delta^{(d)} \left( \sum_{i =1}^4 k_i \right),
+\]
+where
+\begin{align*}
+	f(k_1 + k_2) &= \int_{\Lambda /\zeta} ^{\Lambda} \frac{\Diff d q}{(2 \pi)^{d}} \frac{1}{q^2 + \mu_0^2} \frac{1}{(k_1 + k_2 + q)^2 + \mu_0^2} \\
+		     &= \int_{\Lambda /\zeta} ^{\Lambda} \frac{\Diff d q}{(2 \pi)^{d}} \frac{1}{(q^2 + \mu_0^2)} (1 + \mathcal{O}((k_1 + k_2)^2)).
+\end{align*}
+The latter term generates terms of order $k^2 \vphi^{-4} = (\vphi^{-})^2(\nabla \vphi^{-})^2$, which is irrelevant. So we get
+\[
+g_0 \to g_0' = g_0 - 36 g_0^2 \int_{\Lambda/\zeta}^{\Lambda} \frac{\Diff d q}{(2 \pi)^{d}} \frac{1}{(q^2 + \mu_0^2)^2}.
+\]
+The coefficient of $(\nabla \vphi^{-})^2$ changes at $\mathcal{O}(g_0^2)$, and
+\[
+\vphi_{k'}' = \zeta^{-(d+2)/2}(1 + \mathcal{O}(g_0^2)) \vphi_{k}^{-}.
+\]
+Hence we see
+\[
+	g(\zeta) = \zeta^{4- d} \left( g_0 - 36 g_0^2 \int \cdots \right).
+\]
+When $d = 4$, then at $\mathcal{O}(g_0)$ $g$ was marginal. But at order $\mathcal{O}(g_0^2)$, $g$ decreases under RG. We say that $g$ is \emph{marginally irrelevant}\index{marginally irrelevant} for $d = 4$.
+
+\subsection{Feynman Diagrams}%
+\label{sub:fd}
+
+Each term in $\langle F_I^{p}\rangle_+$ can be represented by a diagram. Terms with an integrand of the form $g_0^{p} (\vphi^{-})^{n} (\vphi^{d})^d$ can be represented by diagrams with:
+\begin{itemize}
+	\item $n$ external solid lines labelled by $k_i$.
+	\item $d$ internal solid lines labelled by $q_i$.
+	\item $p$ vertices where 4 lines meet.
+\end{itemize}
+
+% lecture 12
+
+Each diagram corresopnds to an integral.
+\begin{itemize}
+	\item A solid line corresponds to an integral over momentum:
+		\[
+		\begin{tikzpicture}
+\begin{feynman}
+\vertex (0) at (0, 0);
+\vertex (1) at (2, 0);
+\diagram*{
+	(0) --[fermion,edge label={\(\mathbf{k}\)}] (1)
+};
+\end{feynman}
+\end{tikzpicture} \leftrightarrow \int \frac{\Diff d \mathbf{k}}{(2 \pi)^d} \vphi_{\mathbf{k}}^{-}.
+		\]
+	\item A dotted line corresponds to a propagator:
+		\[
+		% https://feynman.srossd.com/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZABgBpiBdUkANwEMAbAVxiRBAF9T1Nd9CUARnJVajFm06iYUAObwioAGYAnCAFskZEDghJhIAMYALOivn7qDOgCMYDAAq88BNiqyzjOENXrNWiCAAOkHqdDjGNkrAAI4cPiAMWGABIHCGjGZSHEA
+\begin{tikzpicture}[baseline = (100.base)]
+\begin{feynman}[inline = (100.base)]
+\vertex (0) at (0, 0);
+\vertex (100) at (0, -0.08);
+\vertex (1) at (2, 0);
+\diagram*{
+	(0) --[charged scalar,edge label'={\(\mathbf{q}\)}] (1)
+};
+\end{feynman}
+\end{tikzpicture} \leftrightarrow G_0(\mathbf{q}).
+		\]
+	\item Each loop corresponds to
+		\[
+		\int_{\Lambda/\zeta < |\mathbf{q}| < \Lambda} \frac{\Diff d q}{(2 \pi)^d}.
+		\]
+	\item Each vertex corresponds to
+		\[
+			g_0 (2 \pi)^d \delta^{(d)} \left( \sum \text{momenta into vertex} \right).
+		\]
+		
+	\item We multiply each diagram by the symmetry factor: the number of topologically identical diagrams.
+\end{itemize}
+
+For example, at order $\mathcal{O}(g_0)$, we have
+\[
+% https://feynman.srossd.com/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZABgBpiBdUkANwEMAbAVxiRBAF9T1Nd9CUARlKCqtGACccMAB5soEHJ24gM2PASIAmcmPrNWidlx7r+20lr2MWbZab6aUZK9X22jnMTCgBzeESgAGYSEAC2SGQgOBBIwiAAxgAWdBL+cW42hiAAOjlhdDhJAEZBwADWHAD6WvYgIeFIOtGxiPHu2XkFRaUV1QDMINTJqeltJvWhEYj91DEZtFlsXYUlZZVVACxDiSlphoITDdObc63xI-sLYeEwYDhM0+zUN2F3D2EACrwaAiAMMCCSkyBmW+VWvQ2gi8HCAA
+	\begin{tikzpicture}[baseline = (4.base)]
+	\begin{feynman}[inline = (4.base)]
+\vertex (2) at (0, 4);
+\node[dot] (3) at (2, 2);
+\vertex (4) at (0 , 2);
+\vertex (5) at (4, 4);
+\vertex (6) at (4, 0);
+\vertex (7) at (0, 0);
+\diagram*{
+	(2) --[fermion,edge label={\(\mathbf{k}_2\)}] (3),
+	(5) --[fermion,edge label={\(\mathbf{k}_3\)}] (3),
+	(6) --[fermion,edge label={\(\mathbf{k}_4\)}] (3),
+	(7) --[fermion,edge label={\(\mathbf{k}_1\)}] (3)
+};
+\end{feynman}
+\end{tikzpicture} = 
+\int_0^{\Lambda/\zeta} \prod_{i = 1}^4 \frac{\Diff d k_i}{(2 \pi)^d} \vphi_{\mathbf{k}_i}^{-} g_0( 2\pi)^d \delta^{(d)} \left( \sum \mathbf{k}_i \right).
+\]
+Also we have
+\[
+% https://feynman.srossd.com/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZABgBoAmAXVJADcBDAGwFcYkQQBfU9TXfQigCMpIdTowATjhgAPdlAg4uPEBmx4CRchXEMWbRB268NAoiOJ6mrdl3EwoAc3hFQAM0kQAtkjIgcCCQREABjAAt6SRdgmn1bIwAdRO96HHCAI3dgAGtOAH0hFQ8vX0QdAKDEEIiomOq4m0MQZNT0rNyC8mKQTx9YyqQAZhoMmDAoJABaABYAThpGLDBmuFCmKJ6+spHBhpAllfY1jckQUfHJxFm5zkpOIA
+\begin{tikzpicture}[baseline = (1.base)]
+\begin{feynman}[inline = (1.base)]
+\vertex (0) at (0, 0);
+\node[dot] (1) at (2, 2);
+\vertex (2) at (4, 0);
+\vertex (3) at (2, 4);
+\diagram*{
+	(0) --[fermion,edge label={\(\mathbf{k}_1\)}] (1),
+	(2) --[fermion,edge label={\(\mathbf{k}_2\)}] (1),
+	(1) --[scalar,half right] (3),
+	(3) --[scalar,half right] (1)
+};
+\end{feynman}
+\end{tikzpicture} =
+\int_0^{\Lambda / \zeta} \prod_{i = 1}^2 \frac{\Diff d k_i}{(2 \pi)^{d}} \vphi_{\mathbf{k}_i}^{-} \int_{\Lambda / \zeta}^\Lambda \frac{\Diff d q}{ ( 2\pi )^d} G_0(q) g_0 (2 \pi)^{d} \delta^{(d)} (\mathbf{k}_1 + \mathbf{k}_2).
+\]
+
+The symmetry factor in this case is 6, as there are six ways of choosing which two of the four lines emerging from the vertex will be dotted. So we need to compute this integral, and multiply by $6$. We also have
+\[
+% https://feynman.srossd.com/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZARgBoAGAXVJADcYAnHGADyRCghxAF9T1MufIRQAmCtToBDADYBXGO178QGbHgJFyEmrVkKlPSTCgBzeEVAAzBhAC2SbSBwQkZEACMYYKEgAsAJw0MlhgioggcADGslIMILr64SAAOil2UjgAFh5WwACOPAD6xAkgUVlx5m7BUl4yAAqCGiIgDFimWdx81rYOiO4ujjRePv5BICFh7NGx8T0gNvbDzq6I4p7evogAtIHBocmzMnFlFVXh7nryyWkZ2bkFxaLKvcvrNEOITqPbexNTI4xE7zSg8IA
+\begin{tikzpicture}[baseline = (0.base)]
+\begin{feynman}[inline = (0.base)]
+\node[dot] (0) at (2, 0);
+\vertex (2) at (4, 0);
+\vertex (3) at (0, 0);
+\diagram*{
+	(0) --[charged scalar,half left,edge label'={\(\mathbf{q}_1\)}] (2),
+	(2) --[scalar,half left] (0),
+	(0) --[charged scalar,half right,edge label={\(\mathbf{q}_2\)}] (3),
+	(3) --[scalar,half right] (0)
+};
+\end{feynman}
+\end{tikzpicture} =
+g_0 \int_{\Lambda/\zeta}^\Lambda \frac{\Diff d \mathbf{q}_i}{(2 \pi)^{d}}
+\]
+Here we have $\delta^{(d)}(0)$. We interpret this as
+\[
+	(2 \pi)^{d} \delta^{(d)}(0) = \int \Diff d x \, e^{i \mathbf{x} \cdot (0)} = V,
+\]
+which forms a term in $F$. This has symmetry factor 3.
+
+To order $\mathcal{O}(g_0)^2$, we have for example
+\[
+% https://feynman.srossd.com/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZARgBpiBdUkANxgCccYAPJEKCHEAX1PU1z5CKAEzkqtBk1aJ2nHnxAZseAkQAMpERJoBDADYBXGGwX8VQjaXU6Dx073OC1KAMxbbRk7LNKBq4WR3G2o9LwcJGCgAc3giUAAzeggAWyRNEBwIJDIQACMYMCgkABYATmoAYwALXXpYnNC7bxAAHVaU3RxqvITgAEduAH1iEGp9LDAWuEqDOt8k1PTqLMaQGrqGxFyJqbYZufox-MLixABacqbw2XbO7t6B4ZEF5LTEMUzsxAyN+u9cmF7LcOl0en0ANbDUaOECLd7uL7LWjNNh3MGPKFDF6w+GlFbfXJ-LaA1Eg+7g4BY1yvJaIACsBLWQJa6IekOGJR4FG4QA
+\begin{tikzpicture}
+\begin{feynman}
+\node[dot] (0) at (2, 2);
+\node[dot] (1) at (4, 2);
+\vertex (2) at (0, 0);
+\vertex (3) at (0, 4);
+\vertex (4) at (6, 0);
+\vertex (5) at (6, 4);
+\diagram*{
+	(0) --[charged scalar,bend left=49,edge label={\(\mathbf{q}_1\)}] (1),
+	(0) --[charged scalar,bend right=49,edge label={\(\mathbf{q}_2\)}] (1),
+	(2) --[fermion,edge label={\(\mathbf{k}_1\)}] (0),
+	(3) --[fermion,edge label={\(\mathbf{k}_2\)}] (0),
+	(4) --[fermion,edge label={\(\mathbf{k}_3\)}] (1),
+	(5) --[fermion,edge label={\(\mathbf{k}_4\)}] (1)
+};
+\end{feynman}
+\end{tikzpicture}
+\]
+This has symmetry factor $\binom 42 \times 2 \times \binom 42$. We also have disconnected diagrams, but these always cancel out in $F'$. We also have two-loop diagrams, for example
+\[
+% https://feynman.srossd.com/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZABgBoAmAXVJADcBDAGwFcYkQQBfU9TXfQigCMpIdTowATjhgAPdlAg4uPEBmx4CRMsXEMWbRB268NAouVF6pM+UcXKTavpsHIAzFZr7W7LuJgoAHN4IlAAM0kIAFskMhAcCCQREABjAAt6SRDk7yZfIwAdQuj6HHSAI3DgAGtOAH0hFQio2MRLBKTEFIysnO68g3Zi0vKq2obyZpBImNzOpE8QCpgwKCQAFgBOGl7swxTGLDBDEDhUpiyQGmiY1ZxmNo5BgpARssrqgEcGpqdZtopRKLGgrNZIAC0212mX28yOJ3Y50ukmudHyp3eY2+k2mAJBC0QGxhfQONARp2RjCuoNW60Q7nit2i90efhemJKH3GP3q7jxrU2NGBDNp4IZ8T2-UOx0pF2pqM4lE4QA
+\begin{tikzpicture}[baseline = (1.base)]
+\begin{feynman}[inline = (1.base)]
+\vertex (0) at (0, 0);
+\node[dot] (1) at (2, 2);
+\vertex (4) at (0, 4);
+\node[dot] (5) at (4, 2);
+\vertex (6) at (6, 2);
+\diagram*{
+	(0) --[fermion,edge label={\(\mathbf{k}_1\)}] (1),
+	(4) --[fermion,edge label={\(\mathbf{k}_2\)}] (1),
+	(1) --[charged scalar,bend left=60,edge label={\(\mathbf{q}_1\)}] (5),
+	(1) --[charged scalar,bend right=60,edge label={\(\mathbf{q}_2\)}] (5),
+	(5) --[charged scalar,half left,edge label={\(\mathbf{q}_3\)}] (6),
+	(6) --[charged scalar,half left] (5)
+};
+\end{feynman}
+\end{tikzpicture}
+= g_0^2 \int \frac{\Diff d \mathbf{k}}{(2 \pi)^{d}} \frac 12 C(\zeta, \Lambda) \vphi_{\mathbf{k}}^{-} \vphi_{-\mathbf{k}}^{-}.
+\]
+\[
+% https://feynman.srossd.com/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZABgBpiBdUkANwEMAbAVxiRBAF9T1Nd9CUARnJVaMAE44YADzZQIOTtxAZseAkQDMI6vWatE7LjzX8iAJh1jJMuQs6iYUAObwioAGbiIAWyRkQHAgkYRAAYwALOnFXEN1GFjYAHSSfOhwIgCMPYABrDgB9QSVPbz9ES0DgxG1aBIMQFLSM7LzC8xBqBjpMmAYABV51ARBxLGcIxWpI6NjEQWMQL184qqRamZiDUIYsMAa4MMZokqWy1aD16l6wKCQAWgA2AM25nb2Do+7xU+Xy0MuNWuMFuSGe0yiW1Wu32bEOxx+HAoHCAA
+\begin{tikzpicture}[baseline = (0.base)]
+\begin{feynman}[inline = (0.base)]
+\vertex (0) at (0, 0);
+\node[dot] (1) at (2, 0);
+\vertex (2) at (6, 0);
+\node[dot] (3) at (4, 0);
+\diagram*{
+	(0) --[fermion,edge label={\(\mathbf{k}_1\)}] (1),
+	(2) --[fermion,edge label'={\(\mathbf{k}_2\)}] (3),
+	(1) --[charged scalar] (3),
+	(1) --[charged scalar,bend right=60] (3),
+	(1) --[charged scalar,bend left=60] (3)
+};
+\end{feynman}
+\end{tikzpicture}
+= g_0^2 \int \frac{\Diff d \mathbf{k}}{(2 \pi)^{d}} \frac{1}{2} A(\mathbf{k}, \zeta, \Lambda) \vphi_{\mathbf{k}}^{-} \vphi_{-\mathbf{k}}^{-}.
+\]
+These generate $\mathcal{O}(g_0)^2$ corrections to $\mu'^2$:
+\[
+\mu'^2 = \mu^2 + 12 g_0 \int_{\Lambda/\zeta}^\Lambda \frac{\Diff d q}{(2 \pi)^{d}} \frac{1}{q^2 + \mu_0^2} + g_0^2(C(\zeta, \Lambda) + A(0, \zeta, \Lambda)).
+\]
+But this also shifts the coefficients of $(\nabla \vphi)^2 \sim \mathbf{k}^2 \vphi^2$:
+\[
+F' \subset \int \frac{\Diff d \mathbf{k}}{(2 \pi)^d} \frac 12 (1 + g_0^2 A'' (0, \zeta, \Lambda)) \mathbf{k}^2 \vphi_{\mathbf{k}}^{-} \vphi_{-\mathbf{k}}.
+\]
+Hence
+\[
+\vphi'_{\mathbf{k}'} = \zeta^{-(d+1)/2} \left(1 + \frac 12 g_0^2 A''(0, \zeta, \Lambda) \right)^{1/2} \vphi_{\mathbf{k}}^{-} = \zeta^{-(d+1)/2} \left(1 + \frac 14 g_0^2 A''(0, \zeta, \Lambda) \right) \vphi_{\mathbf{k}}^{-}.
+\]
+This is the origin of anomalous dimensions. Recall that
+\begin{align*}
+	\Delta_f = \frac{d - 2 + \eta}{2} & \leftrightarrow \vphi'(\mathbf{x}') = \zeta^{(d - 2 + \eta)/2} \vphi(\mathbf{x}) \\
+					  & \leftrightarrow \vphi'_{\mathbf{k}'}=  \zeta^{-(d+2)/2 + \eta/2} = \zeta^{-(d+2)/2} e^{\log \zeta/2} \vphi_{\mathbf{k}}^{-} \\
+					  &\leftrightarrow \vphi_{\mathbf{k}'}' = \zeta^{-(d+2)/2} \left(1 + \frac 12 \log \zeta + \cdots \right) \vphi_{\mathbf{k}}^{-}.
+\end{align*}
+This gives $\eta = \mathcal{O}(g_0)^2$ at the fixed point $(\mu_0^2, g_0)$, so $\eta = 0$ at the GFP.
+
+\subsection{Beta Functions}%
+\label{sub:bfs}
+
+Consider RG flow starting at an arbitrary point in theory space, and write $\zeta = e^{s}$ for $s \geq 0$. Write
+\[
+\mathbf{g}(s) =
+\begin{pmatrix}
+	\mu^2(s) \\ g(s) \\ \vdots
+\end{pmatrix},
+\]
+an infinite-dimensional vector of all couplings after RG. RG satiafies
+\[
+	R[e^{s + \delta s}] = R[e^{\delta s}] R[e^{s}],
+\]
+so
+\[
+\mathbf{g}(s + \delta s) = \mathbf{g}(s) + \delta s \bm{\beta} (\mathbf{g}(s)),
+\]
+where $\bm{\beta}$ is a vector. The components of $\bm{\beta}$ are called \emph{beta functions}\index{beta functions}, and
+\[
+\frac{\diff \mathbf{g}}{\diff s} = \bm{\beta} (\mathbf{g}(s)).
+\]
+A fixed point $\mathbf{g}_\ast$ satisfies $\bm{\beta}(\mathbf{g}_\ast) = 0$. The dimensions of the couplings are defined by linearizing around $\mathbf{g}_\ast$. Say $\mathbf{g}(s) = \mathbf{g}_\ast + \delta \mathbf{g}(s)$. Then,
+\[
+\frac{\diff \delta g_a}{\diff s} = \sum_i (\partial_b\beta_a)(\mathbf{g}_\ast) \delta g_{b},
+\]
+i.e.
+\[
+\frac{\diff \delta \mathbf{g}}{\diff s} = M \delta \mathbf{g}.
+\]
+Assume that $M$ is diagonalizable, i.e. there exists a basis of eigenvector $\mathbf{v}_1, \mathbf{v}_2, \ldots$ with eigenvalues $\Delta_1 \leq \Delta_2 \leq \cdots$ and $M \mathbf{v}_i = \Delta_i \mathbf{v}_i$. Expand
+\[
+\delta \mathbf{g} = \sum_i f_i(s) \mathbf{v}_i \implies f_i(s) = c_i e^{\Delta_i s},
+\]
+so
+\[
+\delta \mathbf{g} = \sum_i c_i e^{\Delta_i s}.
+\]
+This describes RG flow near $\mathbf{g}_\ast$.
+
+% lecture 13
+
+Let the row vector $\mathbf{w}_1$ be a left eigenvector of $M$ with eigenvalue $\Delta_i$, i.e. $\mathbf{w}_i M = \Delta_i \mathbf{w}_i$. We can choose $\mathbf{w}_i$ such that $\mathbf{w}_i \mathbf{v}_j = \delta_{ij}$. Then,
+\begin{itemize}
+	\item $\mathbf{w}_i \cdot \delta \mathbf{g} = c_i e^{\Delta_i s}$.
+	\item The $\Delta_i$ are the scaling dimensions of the couplings at $\mathbf{g}_\ast$, and $\mathbf{w}_i \delta \mathbf{g}$ is the combination that has scaling dimension $\Delta_i$.
+\end{itemize}
+
+We found that
+\[
+\mu^2(\zeta) = \zeta^2 (\mu_0^2 + a g_0 + \mathcal{O}(g_0^2)), \qquad g(\zeta) = \zeta^{4 - d}(g_0- b g_0^2 + \mathcal{O}(g_0^3)),
+\]
+where the coefficients are
+\begin{align*}
+	a &= 12 \int_{\Lambda/\zeta}^\Lambda \frac{\Diff d q}{(2 \pi)^d} \frac{1}{\mu^2 + q^2} = \frac{12 \Omega_{d-1}}{(2 \pi)^d} \int_{\Lambda / \zeta}^{\Lambda} \frac{\diff q \, q^{d-1}}{q^2 + \mu_0^2}, \\
+	b &= 36 \int_{\Lambda/\zeta}^{\Lambda} \frac{\Diff d q}{(2 \pi)^{d}} \frac{1}{(q^2 + \mu_0^2)^2} = \frac{36 \Omega_{d-1}}{(2 \pi)^{d}} \int_{\Lambda/\zeta}^{\Lambda} \frac{\diff q \, q^{d-1}}{(q^2 + \mu_0^2)^2}.
+\end{align*}
+Note that
+\[
+\frac{\diff}{\diff s}\int_{\Lambda e^{-s}}^{\Lambda} \diff q \, f(q) = - f(\Lambda e^{-s}) \frac{\diff}{\diff s} (\lambda e^{-s}) = \Lambda e^{-s} f(\Lambda e^{-s}).
+\]
+This means we can show:
+\begin{align*}
+	\frac{\diff \mu^2}{\diff s} &= 2 \mu^2 + \frac{12 \Omega_{d-1}}{(2 \pi)^{d}} \Lambda^{d} \frac{g}{\Lambda^2 + \mu^2} + \mathcal{O}(g^2) = \beta_{\mu^2},\\
+	\frac{\diff g}{\diff s} &= (4 - d) g - \frac{36 \Omega_{d-1}}{(2 \pi)^d} \Lambda^{d} \frac{g^2}{(\Lambda^2 + \mu^2)^2} + \mathcal{O}(g^3) = \beta_{g}.
+\end{align*}
+These are the $\beta$-functions. For the fixed points:
+\begin{itemize}
+	\item If $d \geq 4$, then $\beta_g = 0$ means $g = 0$, so $\beta_{\mu^2} = 0$, hence $\mu^2 = 0$. This gives the GFP.
+	\item If $d < 4$, then $4 - d > 0$. Hence $\beta_g = 0$ gives either $g = 0$, or $g = (4 - d) \mathcal{O}(\Lambda^{4-d})$.
+\end{itemize}
+This sugests that there may be another fixed point, but this $g$ is not small, hence it lies outside our perturbative approximation.
+
+Linearizing around the GFP, we get
+\[
+\frac{\diff \delta \mu^2}{\diff s} = 2 \delta \mu^2 + \frac{12 \Omega_{d-1}}{(2 \pi)^d} \Lambda^{d-2} \delta g, \qquad \frac{\diff \delta g}{\diff s} = (4 - d) \delta g.
+\]
+This gives
+\[
+M =
+\begin{pmatrix}
+	2 & 2c \Lambda^{d-2} \\ 0 & 4 - d \end{pmatrix}
+\implies \Delta_1 = 2, \Delta_2 = 4 - d.
+\]
+Here we are dealing with only two couplings. But of course $\mathbf{g} = (\mu^2, g, \mathbf{h})$ for $\mathbf{h}$ the other couplings. We assume that $\mathbf{h}(0)= 0$, but we did not calculate $\mathbf{h}(s)$.
+
+We can repeat the analysis allowing small $\mathbf{h}(0)$, and treat this perturbatively. This gives corrections to $\beta_{\mu^2}, \beta_g$ by terms involving $\mathbf{h}$.
+\begin{exbox}
+	We could include
+	\[
+	h_6 \phi^{6} \leftrightarrow 
+	% https://feynman.srossd.com/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZABgBoBGAXVJADcBDAGwFcYkQQBfU9TXfQinIVqdJq3ZceIDNjwEiAJhE0GLNog7decgUTLFRaiZqk7+ClMsOrxGrdNkXBJUoqN3J2mX3kvl7rbqXqIwUADm8ESgAGYAThAAtkhkIDgQSOTe8UlIymkZiFnSOcmIAMw06ZnZCWUALFWFxbF1SACsTTUlbYgAbF1FnJScQA
+\begin{tikzpicture}[baseline = (10.base), scale = 0.4]
+\begin{feynman}[inline = (10.base)]
+\vertex (0) at (0, 2);
+\vertex (10) at (0, 1.7);
+\vertex (1) at (2, 2);
+\vertex (2) at (4, 2);
+\vertex (3) at (0, 4);
+\vertex (4) at (4, 4);
+\vertex (5) at (0, 0);
+\vertex (6) at (4, 0);
+\diagram*{
+	(0) --[plain] (1),
+	(2) --[plain] (1),
+	(3) --[plain] (1),
+	(4) --[plain] (1),
+	(5) --[plain] (1),
+	(6) --[plain] (1)
+};
+\end{feynman}
+\end{tikzpicture}
+	\]
+	This generates corrections to $\mu^2$ and $g$, given by connecting appropriate pairs of lines of order $\mathcal{O}(h_0)$:
+	\[
+	% https://feynman.srossd.com/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZABgBoBGAXVJADcBDAGwFcYkQQBfU9TXfQinIVqdJq3ZceIDNjwEiAJhE0GLNog7decgUWHFRaiZqk7+CoaUVHxGraJhQA5vCKgAZgCcIAWyRkIDgQSOTaIN5+SMpBIYhh0pH+8TTBSADMNABGMGBQSAC0ACwAnDSMWGD2cADGTPReZhE+yZmxodm5+YjFZSAVVey19Y3hSUhFqXHCIDl5haXlldV1jA1N4yntiJOzXQt9AysjXJScQA
+\begin{tikzpicture}[baseline = (10.base), scale = 0.4]
+\begin{feynman}[inline = (10.base)]
+\vertex (0) at (0, 2);
+\vertex (10) at (0, 1.7);
+\vertex (1) at (2, 2);
+\vertex (2) at (4, 2);
+\vertex (7) at (2, 4);
+\vertex (8) at (2, 0);
+\diagram*{
+	(0) --[plain] (1),
+	(2) --[plain] (1),
+	(1) --[scalar,bend right=49] (7),
+	(7) --[scalar,bend right=49] (1),
+	(8) --[scalar,bend right=49] (1),
+	(1) --[scalar,bend right=49] (8)
+};
+\end{feynman}
+\end{tikzpicture}, \qquad \qquad 
+	% https://feynman.srossd.com/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZABgBoBGAXVJADcBDAGwFcYkQQBfU9TXfQinIVqdJq3ZceIDNjwEiAJhE0GLNog7decgUTKLRaiZqk7+ClMsOrxGrdNkXByYcSN3JnUTCgBzeCJQADMAJwgAWyQyEBwIJHJtEDDIpGVY+MRE6RSoxABmGjiEpNykABYizOyQ8LzhDKQAVhoAIxgwKCQAWnKAThpGLDB7OABjJnpQs2S65qqEto6uxF6BkCGR9nHJ6e9OIA
+\begin{tikzpicture}[baseline = (10.base), scale = 0.4]
+\begin{feynman}[inline = (10.base)]
+\vertex (0) at (0, 2);
+\vertex (10) at (0, 1.6);
+\vertex (1) at (2, 2);
+\vertex (2) at (4, 2);
+\vertex (5) at (0, 0);
+\vertex (6) at (4, 0);
+\vertex (7) at (2, 4);
+\diagram*{
+	(0) --[plain] (1),
+	(2) --[plain] (1),
+	(5) --[plain] (1),
+	(6) --[plain] (1),
+	(1) --[scalar,bend right=49] (7),
+	(7) --[scalar,bend right=49] (1)
+};
+\end{feynman}
+\end{tikzpicture}
+	\]
+\end{exbox}
+
+In general, we get
+\[
+\beta_{h_a} = \tilde \Delta_a h_a + \mathcal{O}(h_{i > a}) + \mathcal{O}(h^2, hg, g^2),
+\]
+where $\tilde \Delta_a$ is the \emph{engineering dimension}\index{engineering dimension} of $a$. Hence at the GFP, we must have $\mu^2 = g = \mathbf{h} = 0$, and $\Delta_a = \tilde \Delta_a$ for all $a$, i.e. all couplings have scaling dimension equal to the engineering dimension.
+
+\subsection{Epsilon Expansion}%
+\label{sub:ee}
+
+In the above, we have $g = (4 - d) \mathcal{O}(\Lambda^{4 - d})$. This is not small.
+
+The crazy idea is to let $d = 4 - \eps$, where $\eps > 0$ is small. The hope is that setting $\eps = 1$ is valid and tells us something!
+
+Let $\tilde g = \Lambda^{-\eps} g$, which is dimensionless. Then
+\begin{align*}
+	\frac{\diff \mu^2}{\diff s} &= 2 \mu^2 + \frac{12 \Omega_{d-1}}{(2 \pi)^{d}} \frac{\Lambda^{4}}{\Lambda^2 + \mu^2} \tilde g + \mathcal{O}(\tilde g^2), \\
+	\frac{\diff \tilde g}{\diff s} &= \eps \tilde g - \frac{36 \Omega_{d-1}}{(2 \pi)^d} \frac{\Lambda^{4}}{(\Lambda^2 + \mu^2)^2} \tilde g^2 + \mathcal{O}(\tilde g^{4}).
+\end{align*}
+Since $d - 1 \approx 3$, we get
+\[
+\Omega_{d-1} = \frac{2 \pi^{d/2}}{\Gamma(d/2)}
+\]
+hence
+\[
+\frac{\Omega_{d-1}}{(2 \pi)^d} = \frac{1}{8 \pi^2} + \mathcal{O}(\eps).
+\]
+The fixed points are now:
+\begin{itemize}
+	\item $\mu^2 = g = 0$ (GFP).
+	\item $\mu_\ast^2$, $g_\ast$ with
+		\begin{align*}
+			\mu_\ast^2 &= - \frac{3}{4 \pi^2} \frac{\Lambda^{4}}{\Lambda^2 + \mu_0^2} \tilde g_\ast & \tilde g_{\ast} &= \frac{2 \pi^2}{9} \frac{( \Lambda^2 + \mu_\ast^2)}{\Lambda^{4}} \eps \\
+			\implies g_\ast &= \frac{2 \pi^2}{9} \eps + \mathcal{O}(\eps^2) & \tilde \mu_\ast^2 &= - \frac{1}{6} \Lambda^2 \eps + \mathcal{O}(\eps^2).
+		\end{align*}
+\end{itemize}
+This is the \emph{Wilson-Fisher}\index{Wilson-Fisher fixed point} fixed point, and is valid for $\eps \ll 1$. We can show that $\mathbf{h} = \mathcal{O}(\eps^2)$ or smaller.
+
+Linearizing around the fixed point, we find
+\[
+M =
+\begin{pmatrix}
+	2 - \eps/3 & M_{12} \\ 0 & -\eps
+\end{pmatrix},
+\qquad M_{12} = \frac{3}{2 \pi^2} \lambda^2 \left(1 + \frac{\eps}{6} \right).
+\]
+Hence the scaling dimensions are
+\[
+\Delta_1 = 2 - \frac{\eps}{3} + \mathcal{O}(\eps^2), \qquad \Delta_2 = - \eps + \mathcal{O}(\eps^2),
+\]
+which eigenvectors
+\[
+\mathbf{v}_1 =
+\begin{pmatrix}
+	1 \\ 0
+\end{pmatrix}
+, \qquad \mathbf{v}_2 =
+\begin{pmatrix}
+	a \\ 1
+\end{pmatrix},
+\]
+where $a = M_{12}/(\Delta_2 - \Delta_1)$. Then
+\[
+\mathbf{w}_1 =
+\begin{pmatrix}
+	1  & -a
+\end{pmatrix}
+, \qquad \mathbf{w}_2 =
+\begin{pmatrix}
+	0 & 1
+\end{pmatrix}.
+\]
+Tying this all together,
+\begin{align*}
+	\mathbf{w}_1
+	\begin{pmatrix}
+		\delta \mu^2 \\ \delta \tilde g
+	\end{pmatrix}
+	 &= c_1 e^{\Delta_1 s}  & &\implies  & \delta \mu^2 - a \delta \tilde g &\sim e^{\Delta_1 s} = e^{(2 - \eps/3)s}, \\
+	 \mathbf{w}_2
+	 \begin{pmatrix}
+	 	\delta \mu^2 \\ \delta \tilde g
+	 \end{pmatrix}
+	 &= c_2 e^{\Delta_2 s} & &\implies & \delta\tilde g &\sim e^{\Delta_2 s} = e^{-\eps s}.
+\end{align*}
+Hence $t = \mu^2 - a \tilde g$ is relevant, and $\tilde g$ is irrelevant. So we can reach this fixed point by tuning with a single parameter: we identify this with
+\[
+\frac{T - T_c}{T_c}.
+\]
+Here we get that
+\[
+\Delta_t = 2 - \frac{\eps}{3} + \mathcal{O}(\eps^2).
+\]
+We can draw this as a picture, with the GFP and WFFP. Note that the WFFP is a non-trivial fixed point with only one relevant parameter.
+
+We assumed $\eps \ll 1$. We expect qualitatively this to be the same for $d = 3$, i.e. $\eps = 1$. We can now calculate the critical exponents:
+\[
+\nu = \frac{1}{\Delta_t} = \frac{1}{2} + \frac{\eps}{12} + \mathcal{O}(\eps^2), \qquad \eta = \mathcal{O}(\eps^2) = \frac{\eps^2}{6} + \mathcal{O}(\eps^3).
+\]
+By scaling we find $\alpha, \beta, \gamma, \delta$. We can set $\eps = 1$, and find that the exponents are significantly better than in MFT.
+
+% lecture 14
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{c|cccccc}
+	& $\alpha$ & $\beta$ & $\gamma$ & $\delta$ & $\eta$ & $\nu$ \\
+\hline
+	MFT & 0 & 1/2 & 1 & 3 & 0 & 1/2 \\
+	$\eps = 1$ & 0.17 & 0.33 & 1.17 & 4 & 0 & 0.58 \\
+	$d = 3$ & 0.11 & 0.33 & 1.24 & 4.79 & 0.04 & 0.63
+\end{tabular}
+\caption{Predictions and Theoretical Critical Exponents}
+\end{table}
+
+How do we know that there exists RG flow from the GFP to the WFFP, for $d < 4$? In WF, there is one relevant coupling, so the critical surface has codimension one.
+
+In the GFP as $s$ increases, the irrelevant couplings decay, but as $s$ decreases the irrelevant coupling grow. So points that originate from the GFP at $s = -\infty$ for a two-dimensional surface in theory space.
+
+Generically, a codimension one surface will intersect a two-dimensional surface in a line.
+
+Return to the $d = 2$ case. Here
+\[
+F = \int \Diff 2 x \, \frac 12 (\nabla \vphi)^2 + \cdots.
+\]
+Note that $\Delta_\vphi = 0$ at the GFP, so $\vphi^n$ is relevant for all $n$. It turns out that there exist infinitely many fixed points: the rough idea is to flow to the $n$'th fixed point by turning on $\vphi^{2(n+1)}$.
+
+$\vphi^2, \vphi^{4}, \ldots, \vphi^{2n}$ are all generated by RG; we need to tune these coefficients to hit the fixed point which has $n$ relevant directions. Each fixed point has different operator dimensions, which are known and rational.
+
+\subsection{Conformal Symmetry}%
+\label{sub:cs}
+
+At a fixed point the theory is invariant under scale transformations $\mathbf{x}' = \mathbf{x}/\zeta$. However it turns out that the theory is also invariant under \emph{conformal transformations}\index{conformal transformations}: these are maps $\mathbf{x} \to \mathbf{x}'(s)$ such that
+\[
+	\delta_{ij} \frac{\partial {x'}^i}{\partial x^k} \frac{\partial {x'}^j}{\partial x^l} = f(\mathbf{x}) \delta_{kl},
+\]
+for some $f(\mathbf{x})$. These include translations, rotations, scale transformations and special conformal transforms:
+\[
+	{x'}^i = \frac{x^i - \mathbf{x}^2 a^i}{1 - 2 \mathbf{x} \cdot \mathbf{a} + \mathbf{a}^2 \mathbf{x}^2}.
+\]
+These form the \emph{conformal group}\index{conformal group} $\mathsf{SO}(d+1,1)$. In this framework, fields and correlators correspond to representations of this group. This is especially powerful for $d = 2$, where the group is infinite, and recent progress is happening in $d = 3$.
+
+\newpage
+
+\section{Continuous Symmetry}%
+\label{sec:cs}
+
+\subsection{Symmetry}%
+\label{sub:sss}
+
+We can characterize phases of matter by two symmetry groups:
+\begin{enumerate}
+	\item[G:] The symmetry of the affective free energy (symmetry of the theory).
+	\item[H:] The symmetry of the ground state.
+\end{enumerate}
+
+\begin{exbox}
+	If $B = 0$, then the Ising model has $\vphi \to -\vphi$ symmetry, so $G = \mathbb{Z}_2$. The disordered phase $\langle \vphi \rangle = 0$ as $H = \mathbb{Z}_2$, and the ordered phase $\langle \vphi \rangle = \pm m_0$ has $H = \{\id\}$.
+
+	If $B \neq 0$, then the Ising model has $G = \{\id\}$.
+\end{exbox}
+
+This is useful as:
+\begin{itemize}
+	\item For fixed $G$, having different $H$ tells us we are in different phases.
+	\item The nature of critical points (i.e. the universality class) is determined by $G$ and the number of different order parameters.
+\end{itemize}
+
+\subsection{\texorpdfstring{$\mathsf{O}(N)$}{O(N)} Models}%
+\label{sub:on}
+
+Suppose we have $N$ order parameters. Combine them into a vector
+\[
+\vphi_{(\ast)} = (\vphi_1^{(\ast)}, \ldots, \vphi_n^{(\ast)}).
+\]
+Assume that $F$ is invariant under $G = \mathsf{O}(N)$, which is unrelated to $\mathsf{O}(d)$, with $\vphi_a(\mathbf{x}) \mapsto R_{ab} \vphi_b(\mathbf{x})$ for $a, b = 1, \ldots, N$, and $R \in \mathsf{O}(N)$. Again write
+\[
+	F[\vphi] = \int \Diff d x \, \left( \frac 12 \gamma (\nabla \vphi)^2 + \frac 12 \mu^2 \vphi^2 + g(\vphi^2)^2 + \cdots\right).
+\]
+\begin{itemize}
+	\item If $N = 1$, this is just $\mathbb{Z}_2$ symmetry, which gives Ising again.
+	\item If $N = 2$, then it is better to think of $\vphi$ as complex:
+		\[
+		\psi(\mathbf{x}) = \vphi_1(\mathbf{x}) + i \vphi_2(\mathbf{x}).
+		\]
+		Then $\mathsf{O}(2) = \mathsf{U}(1)$ acts as $\psi \to e^{i \alpha} \psi$. So $F$ must take the form
+		\[
+			F[\psi] = \int \Diff d x\, \left( \frac \gamma 2 \nabla \psi^a \cdot \nabla \psi + \frac{\mu^2}2 |\psi|^2 + g|\psi|^{4} + \cdots \right).
+		\]
+		This is the \emph{XY model}\index{XY model}, which arises by coarse-graining a microscopic model of spins free to rotate in a plane:
+		\[
+		E = - J \sum_{\langle i j \rangle} \mathbf{s}_i \cdot \mathbf{s}_j,
+		\]
+		where $\mathbf{s}_i$ are two-dimensional unit vectors. This describes certain types of magnets, superfluids and Bose-Einstein condensate.
+	\item If $N = 3$, then we can obtain this theory by coarse-graining the \emph{Heisenberg model}\index{Heisenberg model}, which is the same energy but instead $\mathbf{s}_i$ is a three-dimensional unit vector.
+\end{itemize}
+
+Consider the ordered phase for $N \geq 2$. Then for $\mu^2 < 0$, $F$ is minimized by
+\[
+|\vphi| = M_0 = \sqrt{-\frac{\mu^2}{4g}}.
+\]
+But the direction of $\vphi$ is undetermined, so it can lie anywhere on $S^{n-1}$.
+
+There are also configurations that minimize the potential energy
+\[
+\frac{1}{2} \mu^2 |\vphi|^2 + g |\vphi|^4 + \cdots,
+\]
+i.e. have correct magnitude but with varying direction in space. These get energy only from the derivative terms e.g, $|\nabla \vphi|^2$ in $F$. We can lower this energy by increasing the length scale over which the variation occurs.
+
+These excitations, arising from spontaneous symmetry breaking of a continuous symmetry, are called \emph{Goldstone bosons}\index{Goldstone bosons}. They are said to be \emph{gapless}\index{gapless} if the energy ends to $0$ as the wavelength increases to $\infty$.
+
+% lecture 15
+
+The choice of $\vphi$ breaks $G = \mathsf{O}(N)$ to $H = \mathsf{O}(N-1)$. The space of all ground states is given by
+\[
+S^{N-1} = \mathsf{O}(N) / \mathsf{O}(N-1) = G/H,
+\]
+hence the number of Goldstone bosons is $\dim G - \dim H$.
+
+\begin{exbox}
+	\begin{enumerate}
+		\item Consider the XY-model, where
+			\[
+			f(\psi) = \frac 12 \mu^2 |\psi|^2 + g |\psi|^4.
+			\]
+			If $\mu^2 < 0$, then we have the Mexican hat potential. If $\psi(\mathbf{x}) = M(\mathbf{x}) e^{i \theta(\mathbf{x})}$, for $M \in \mathbb{R}$, then the ground state is given by
+			\[
+				M(\mathbf{x}) = M_0 = \sqrt{-\frac{\mu^2}{4g}}.
+			\]
+			$\theta = \theta_0$ is constant. Consider flucutations with $M(\mathbf{x}) = M_0 + \tilde M(\mathbf{x})$, and $\theta = \theta(\mathbf{x})$. Then
+			\begin{align*}
+				F = \int \Diff d x\, \biggl[ \frac{\gamma}{2} (\nabla \tilde M)^2 &+ |\mu|^2 \tilde M^2 + g \tilde M^4 + \frac{\gamma}{2} M_0^2 (\nabla \theta)^2 \\
+												 &+ \gamma M_0 \tilde M(\nabla \theta)^2 + \cdots \biggr].
+			\end{align*}
+			Here $\theta$ is the Goldstone boson; it only has derivative interactions.
+		\item If $N = 3$, write
+			\[
+			\vphi(\mathbf{x}) = M (\sin \theta \cos \phi, \sin \theta \sin \phi, \cos \theta).
+			\]
+			Consider fluctuations around the ground state. Then
+			\begin{align*}
+				F = \int \Diff d x\, \biggl[ \frac \gamma2 (\nabla \tilde M)^2 &+ |\mu^2|\tilde M^2 + g \tilde M^4 \\
+				  &+ \frac \gamma2 M_0^2 [(\nabla \theta)^2 + \sin^2 \theta (\nabla \phi)^2] + \cdots \biggr].
+			\end{align*}
+			Here $\theta, \phi$ are the Goldstone bosons.
+	\end{enumerate}	
+\end{exbox}
+
+\subsection{Critical Exponents}%
+\label{sub:ces}
+
+Include a term
+\[
+\int \Diff d x\, B_a(\mathbf{x}) \vphi_a(\mathbf{x})
+\]
+in $F$. For $B_a(\mathbf{x}) = B n_a$ a constant, let
+\[
+\chi = \frac{\partial (n_a \vphi_a)}{\partial B}.
+\]
+Let $\alpha, \beta, \gamma, \delta$ be the critical exponents of $c$, $\vphi$ with respect to $T$, $\chi$ with respect to $T$ and $\vphi$ with respect to $B$.
+
+If $N = 1$, then $\alpha, \beta, \gamma, \delta$ have the same values as for $N = 1$. For correlation functions, we use a quadratic approximation. For $T > T_c$, take
+\[
+	Z = e^{-F_{\mathrm{thermo}}} \exp \left[\frac 12 \int \Diff d x \Diff d y \, B_a(\mathbf{x}) G_0(\mathbf{x} - \mathbf{y}) B_a(\mathbf{y})\right],
+\]
+where
+\[
+G_0(\mathbf{x} - \mathbf{y}) = \int \frac{\Diff d \mathbf{k}}{(2 \pi)^d} \frac{e^{i \mathbf{k}\cdot(\mathbf{x} - \mathbf{y})}}{\gamma \mathbf{k}^2 + \mu^2},
+\]
+then we find
+\[
+\langle \vphi_a(\mathbf{x}) \vphi_b(\mathbf{y}) \rangle = \frac{\delta \log Z}{\delta B_a(\mathbf{x}) \delta B_b(\mathbf{y})} \biggr|_{B = 0} = \delta_{ab} G_0(\mathbf{x} - \mathbf{y}).
+\]
+If $T < T_c$, then assume that $\langle \vphi \rangle = (M_0, 0, \ldots, 0)$ without loss of generality. Then take $\tilde \vphi = \vphi - \langle \vphi \rangle$. To quadratic order,
+\[
+	\frac 12 \mu^2 \vphi^2 + g(\vphi^2)^2 = \text{const} + \frac 12 \mu_1^2 \tilde \vphi_1^2.
+\]
+We have $\mu_1^2 = -2 \mu^2$, as for $N = 1$. Note $\tilde \vphi_a^2$ for $a \geq 2$ are absent: these are the Goldstone bosons. To compute $\langle \tilde \vphi \tilde \vphi\rangle$, we introduce
+\[
+- \int \Diff d x\, \tilde B_a(\mathbf{x}) \tilde \vphi_a(\mathbf{x}).
+\]
+This gives
+\[
+	Z = e^{-F_{\mathrm{thermo}}} \exp \left[ \frac 12 \int \Diff d x \Diff d y \, (\tilde B_1(\mathbf{x}) G_L(\mathbf{x} - \mathbf{y}) \tilde B_1(\mathbf{y}) + \sum_{a = 2}^N \tilde B_a(\mathbf{x}) G_T(\mathbf{x} - \mathbf{y}) \tilde B_a(\mathbf{y})) \right]
+\]
+Here
+\[
+G_L(\mathbf{x} - \mathbf{y}) = \int \frac{\Diff d \mathbf{k}}{(2 \pi)^d} \frac{e^{ i \mathbf{k} \cdot (\mathbf{x} - \mathbf{y})}}{\gamma \mathbf{k}^2 + \mu_1^2}, \qquad G_T(\mathbf{x} - \mathbf{y}) = \int \frac{\Diff d \mathbf{k}}{(2 \pi)^d} \frac{e^{i\mathbf{k} \cdot (\mathbf{x} - \mathbf{y})}}{\gamma \mathbf{k}^2},
+\]
+so the correlation function is
+\[
+\langle \tilde \vphi_a(\mathbf{x}) \tilde \vphi_b(\mathbf{y}) \rangle = \frac{\delta \log Z}{\delta \tilde B_a(\mathbf{x}) \delta \tilde B_b(\mathbf{y})}\biggr|_{\tilde B = 0} =
+\begin{cases}
+	G_L(\mathbf{x} - \mathbf{y}) & a = b= 1, \\
+	G_T(\mathbf{x} - \mathbf{y}) & a = b \neq 1, \\
+	0 & \text{else}.
+\end{cases}
+\]
+The correlation function for $T > T_c$ and the correlation function for longitudinal modes for $T < T_c$ behaves just as for $N = 1$,
+\[
+G_{L}(\mathbf{x} - \mathbf{y}) \sim
+\begin{cases}
+	e^{-r/\xi} & r \gg \xi,\\
+	r^{-(d-2)} & r \ll \xi,
+\end{cases}
+\]
+where
+\[
+\xi^2 \sim \frac{1}{\mu^2} \sim \frac{1}{\mu_1^2} \sim \frac{1}{|T - T_c|}.
+\]
+We can define $\nu$ by
+\[
+\xi \sim \frac{1}{|T - T_c|^\nu} \implies \nu = \frac 12,
+\]
+the MFT prediction. Define $\eta$ by
+\[
+\langle \vphi_a(\mathbf{x}) \vphi_b(\mathbf{x}) \rangle \sim \frac{1}{r^{d - 2 + \eta}} \delta_{ab}
+\]
+at $T = T_c$, $\eta = 0$ is the MFT prediction.
+
+For $T < T_c$, $G_T$ has the same form as $G_{L}|_{T = T_c}$, so the Goldstone modes have infinite correlation length. I.e. in the spontaneous symmetry breaking of a continuous symmetry, there are long-range correlations in the broken phase, and this is not just at the critical point.
+
+The critical points with different values of $N$ describe different universality classes. We will see that $d_c = 4$ as for $N = 1$.
+
+Looking at numerical data for $d = 3$, we see the following:
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{c|cc}
+	& $\eta$ & $\nu$ \\
+\hline
+	MFT & 0 & 1/2 \\
+	$N = 1$ & 0.0363 & 0.6300 \\
+	$N = 2$ & 0.0385 & 0.6719 \\
+	$N = 3$ & 0.0386 & 0.7020
+\end{tabular}
+\caption{Predictions and Theoretical Critical Exponents}
+\end{table}
+
+Note $\alpha = 2 - 3 \nu$, so $\alpha < 0$ for $N \geq 2$. Hence $c$ exhibits a cusp, rather than a divergence. This is seen in liquid helium.
+
+% lecture 16
+
+We showed $G_T \sim r^{-(d-2)}$; we can show that this is exact for all $T < T_c$, so there is no anomalous dimension.
+
+Recall if $\vphi : \mathbb{R}^d \to \mathbb{R}^N$, then for $T < T_c$ we have $|\vphi| = M_0$. A change of coordinates induces a field redefinition $\vphi \to \vphi'(\vphi)$. Choosing coordinates, $(R, G_1, \ldots, G_{n-1})$, these $G_i$ are the Goldstone bosons, and they describe fluctuations tangential to $S^{n-1}$.
+
+With $\vphi_a = (M_0 + \tilde \vphi_1, \tilde \vphi_2, \ldots, \tilde \vphi_n)$, if $\tilde \vphi_a$ is small, then $\tilde \vphi_2, \ldots, \tilde \vphi_n$ are the Goldstone boson.
+
+\subsection{Mermin-Wagner Theorem}%
+\label{sub:mgt}
+
+If $d = 2$, then
+\[
+\int_0^\Lambda \frac{\Diff d k}{k^2} \sim \int_0^\Lambda \frac{k^{d-1} \diff k}{k^2} = \infty.
+\]
+Hence $G_T = \infty$. For $d \leq 2$ mean field theory implies phase transitions, but quadratic fluctuations diverge in the ordered phase, hence mean field theory is not reliable.
+
+\begin{theorem}[Mermin-Wagner]
+	There is no ordered phase for $d \geq 2$. Hence a spontaneous symmetry breaking of a continuous symmetry cannot occur for $d \leq 2$.
+\end{theorem}
+
+Thus there are no Goldstone bosons for $d \leq 2$, and the lower critical dimensino for the $\mathsf{O}(N)$ model is
+\[
+d_l =
+\begin{cases}
+	2 & N \geq 2, \\
+	1 & N = 1.
+\end{cases}
+\]
+
+\subsection{Renormalization Group Flow for \texorpdfstring{$\mathsf{O}(N)$}{O(N)}}%
+\label{sub:rgon}
+
+In the $\mathsf{O}(N)$ model,
+\[
+	F[\vphi] = \int \Diff d x \, \left( \frac 12 (\nabla \vphi)^2 + \frac 12 \mu^2 \vphi^2 + g(\vphi^2)^2 + \cdots \right).
+\]
+The Gaussian fixed point has $\mu^2 = g = \cdots = 0$, and at the GFP,
+\[
+\Delta_{\vphi} = \frac{d - 2}{2}, \qquad \Delta_1 = 2, \qquad \Delta_2 = 4 - d.
+\]
+We repeat what we did for $N = 1$, starting at $\mathbf{g}_0 = (\mu_0^2, g_0, 0, 0, \ldots)$, and use perturbation theory in $g_0$. Using Feynman diagrams again, note that for the order $g_0$ interaction we need a slightly different diagram, as there are now multiple fields. What we find is
+\[
+\langle \vphi^+_{a \mathbf{k}} \vphi^{+}_{b \mathbf{k}'} \rangle_+ = (2\pi)^d \delta^{(d)}(\mathbf{k} + \mathbf{k}')G_0(\mathbf{k}) \delta_{ab}.
+\]
+Hence at $\mathcal{O}(g_0)$, we have
+\begin{align*}
+	2 g_0 & \int_0^{\Lambda/\zeta} \prod_{i = 1}^2 \frac{\Diff d k_i}{(2 \pi)^d} \vphi^{-}_{a \mathbf{k}_1} \vphi^{-}_{b \mathbf{k}_2} \int_{\Lambda/\zeta}^{\Lambda} \frac{\Diff d q}{(2 \pi)^d} \delta_{cd} G_0(\mathbf{q}) \times (2 \pi)^d \delta_{ab} \delta_{cd} \delta^{(d)}(\mathbf{k}_1 + \mathbf{k}_2) \\
+	      &= 2 N g_0 \int_0^{\Lambda/\zeta} \frac{\Diff d k}{(2 \pi)^d} \vphi^{-}_{a \mathbf{k}} \vphi^{-}_{a -\mathbf{k}} \int_{\Lambda/\zeta}^{\Lambda} \frac{\Diff d q}{(2 \pi)^d} G_0(\mathbf{q}) = 2 N g_0 I.
+\end{align*}
+There is also another way to draw the Feynman diagram, which gives $4 g_0 I$. Hence after RG,
+\[
+	{\mu'}^2 = \mu_0^2 + 4(N + 2)g_0 \int_{\Lambda/\zeta}^{\Lambda} \frac{\Diff d q}{(2 \pi)^d}\frac{1}{q^2 + \mu_0^2}.
+\]
+We get a similar effect at $\mathcal{O}(g_0^2)$, to get
+\[
+g_0' = g_0 - 4(N+8) g_0^2 \int_{\Lambda/\zeta}^{\Lambda} \frac{\Diff d q}{(2 \pi)^d} \frac{1}{(q^2+\mu_0^2)^2}.
+\]
+The $\beta$ functions can be read off from the $N = 1$ results by adjusting the coefficients.
+
+If $d = 4 - \eps$, then $\tilde g = \Lambda^{-\eps} g$, and
+\begin{align*}
+	\frac{\diff \mu^2}{\diff s} &= 2 \mu^2 + \frac{N + 2}{2 \pi^2} \frac{\Lambda^{4}}{\Lambda^2 + \mu^2} \tilde g + \mathcal{O}(\tilde g^2), \\
+	\frac{\diff \tilde g}{\diff s} &= \eps \tilde g - \frac{N+8}{2 \pi^2} \frac{\Lambda^{4}}{(\Lambda^2 + \mu^2)^2} \tilde g^2 + \mathcal{O}(\tilde g^2).
+\end{align*}
+Linearizing around the GFP, $\Delta_1 = 1$ and $\Delta_2 = \eps$. Hence there is one relevant direction for $\eps < 0$, and this describes the critical point for $d > 4$.
+
+For $\eps = 0$ this is marginal. For positive $\eps$, we have the WF fixed points,
+\[
+\mu_\ast^2 = - \frac 12 \frac{N+2}{N+8} \Lambda^2 \eps + \mathcal{O}(\eps ^2), \qquad \tilde g_\ast = \frac{2 \pi^2}{N+8}\eps + \mathcal{O}(\eps^2).
+\]
+Linearizing around this,
+\[
+\Delta_1 = 2 - \frac{N+2}{N+8}\eps + \mathcal{O}(\eps^2), \qquad \Delta_2 = - \eps + \mathcal{O}(\eps^2).
+\]
+So there is one relevant direction. Note $\eta = \mathcal{O}(\eps^2)$ as before, by looking at two loops. $\nu$ scales as
+\[
+\nu = \frac{1}{\Delta_1} = \frac 12 + \frac{N+2}{4(N+8)}\eps + \mathcal{O}(\eps^2).
+\]
+\begin{table}[ht]
+\centering
+\begin{tabular}{c|ccc}
+	$\nu$ & $N=1$ & $N=2$ & $N=3$ \\
+	\hline
+	$\mathcal{O}(\eps)$ & 0.58 & 0.60 & 0.61 \\
+	$d = 3$ & 0.63 & 0.67 & 0.71
+\end{tabular}
+\caption{Predictions and Theoretical Values of $\nu$}
+\end{table}
+By scaling, we find
+\begin{align*}
+	\alpha &= \frac{4 - N}{2(N + 8)}\eps & \beta &= \frac 12 - \frac{3}{2(N+8)}\eps \\
+	\gamma &= 1 + \frac{N+2}{2(N+8)}\eps & \delta &= 3 + \eps
+\end{align*}
+This predicts the incorrect sign of $\alpha$ when $N = 2, 3$.
 
 \newpage
 

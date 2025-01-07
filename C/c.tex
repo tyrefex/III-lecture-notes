@@ -912,7 +912,7 @@ What if the size of our set is between two levels, i.e. $|X^{(\leq r)}| \leq |A|
 
 Our guess is to take $A$ with $X^{(\leq r)} \leq A \leq X^{(\leq r + 1)}$. If $A = X^{(\leq r)} \cup B$, where $B \subseteq X^{(r + 1)}$, then
 \[
-b(A) = (X^{(r+1)} - B) \cup \partial^{+}(B).
+B(A) = (X^{(r+1)} - B) \cup \partial^{+}(B).
 \]
 So we would take $B$ to be an initial segment of lex, by Kruskal-Katona.
 
@@ -974,7 +974,7 @@ A subset is \emph{$i$-compressed} if $C_i(A) = A$. Here a \emph{Hamming ball}\in
 	The final family $B = A_k$ satisfies $|B| = |A|$, and $|N(B)| \leq |N(A)|$, and is $i$-compressed for all $i$. 
 \end{proofbox}
 
-Does $B$ being $i$-compressed or all $i$ imply $B$ is an initial segment? No; a copy of $Q_2$ in $Q_3$. However,
+Does $B$ being $i$-compressed for all $i$ imply $B$ is an initial segment? No; consider a copy of $Q_2$ in $Q_3$. However,
 
 \begin{lemma}
 	Let $B \subseteq Q_n$ be $i$-compressed for all $i$, but not an initial segment of the simplicial order. Then either:
@@ -1177,12 +1177,696 @@ We have deduced concentration of measure from an isoperimetric family. Conversel
 \begin{proofbox}
 	The function $f(x) = d(x, A)$ is Lipschitz, and has $0$ as its median since at least half of the values take $0$. So
 	\[
-	\frac{|\{x \in G \mid x \not \in A_{(t)}|}{|G|} \leq \alpha.
+		\frac{|\{x \in G \mid x \not \in A_{(t)}\}|}{|G|} \leq \alpha.
 	\]
 \end{proofbox}
 
-
 % lecture 10
+
+\subsection{Edge-isoperimetric Inequalities}%
+\label{sub:eip}
+
+For a subset $A$ of vertices of a graph $G$, the \emph{edge-boundary}\index{edge-boundary} of $A$ is
+\[
+\partial_e A = \partial A = \{xy \in G \mid x \in A, y\notin A\}.
+\]
+An inequality of the form $|\partial A| \geq f(|A|)$ for all $A \subseteq G$ is an \emph{edge-isoperimetric inequality}\index{edge-isoperimetric inequality} on $G$.
+
+What happens in $Q_n$? Given $|A|$, which $A \subseteq Q_n$ could we take to maximize $|\partial A|$? For example, if $|A| = 4$, then the 
+
+\begin{center}
+\begin{tikzpicture}
+
+% Define colors for highlighting
+\definecolor{highlight1}{rgb}{0.8,0.2,0.2}
+\definecolor{highlight2}{rgb}{0.2,0.2,0.8}
+
+% Cube on the left
+\begin{scope}[xshift=-4cm, scale = 2]
+  % Define vertices of the left cube
+  \coordinate (A) at (0,0,0);
+  \coordinate (B) at (1,0,0);
+  \coordinate (C) at (1,1,0);
+  \coordinate (D) at (0,1,0);
+  \coordinate (E) at (0,0,1);
+  \coordinate (F) at (1,0,1);
+  \coordinate (G) at (1,1,1);
+  \coordinate (H) at (0,1,1);
+
+  % Draw edges of the left cube
+  \draw[thick] (A) -- (B) -- (C) -- (D) -- cycle; % Bottom face
+  \draw[thick] (E) -- (F) -- (G) -- (H) -- cycle; % Top face
+  \draw[thick] (A) -- (E);
+  \draw[thick] (B) -- (F);
+  \draw[thick] (C) -- (G);
+  \draw[thick] (D) -- (H);
+
+  % Highlight chosen vertex and adjacent vertices
+  \fill[highlight1] (A) circle (2pt); % Highlight vertex A
+  \fill[highlight1] (B) circle (2pt); % Adjacent vertex to A
+  \fill[highlight1] (D) circle (2pt); % Adjacent vertex to A
+  \fill[highlight1] (E) circle (2pt); % Adjacent vertex to A
+\end{scope}
+
+% Cube on the right
+\begin{scope}[xshift=4cm, scale = 2]
+  % Define vertices of the right cube
+  \coordinate (A') at (0,0,0);
+  \coordinate (B') at (1,0,0);
+  \coordinate (C') at (1,1,0);
+  \coordinate (D') at (0,1,0);
+  \coordinate (E') at (0,0,1);
+  \coordinate (F') at (1,0,1);
+  \coordinate (G') at (1,1,1);
+  \coordinate (H') at (0,1,1);
+
+  % Draw edges of the right cube
+  \draw[thick] (A') -- (B') -- (C') -- (D') -- cycle; % Bottom face
+  \draw[thick] (E') -- (F') -- (G') -- (H') -- cycle; % Top face
+  \draw[thick] (A') -- (E');
+  \draw[thick] (B') -- (F');
+  \draw[thick] (C') -- (G');
+  \draw[thick] (D') -- (H');
+
+  % Highlight vertices on the lower face
+  \fill[highlight2] (A') circle (2pt); % Lower face vertex
+  \fill[highlight2] (B') circle (2pt); % Lower face vertex
+  \fill[highlight2] (E') circle (2pt); % Lower face vertex
+  \fill[highlight2] (F') circle (2pt); % Lower face vertex
+\end{scope}
+\end{tikzpicture}
+\end{center}
+
+It follows that maybe subcubes are the best. What if we have $A \subseteq Q_n$ with $2^{k} < |A| < 2^{k+1}$? Then we should take $A = \mathcal{P}([k])$ along with some sets in $\mathcal{P}([k+1])$.
+
+So we define the following ordering: for $x, y \in Q_n$ and $x \neq y$, we say that $x < y$ in the \emph{binary ordering}\index{binary ordering} on $Q_n$ if $\max x \triangle y \leq y$. Equivalently,
+\[
+x < y \iff \sum_{i \in x} 2^{i} < \sum_{i \in y} 2^{i}.
+\]
+For example in $Q_3$, the sets are ordered
+\[
+\emptyset, 1, 2, 12, 3, 13, 23, 123.
+\]
+For $A \subseteq Q_n$ and $1 \leq i \leq n$, we define the \emph{$i$-binary-compression}\index{binary compression} $B_i(A) \subseteq Q_n$ by giving it $i$-sections:
+\begin{align*}
+(B_i(A))^{(i)}_- &= \text{initial segment of binary on } \mathcal{P}(X - i) \text{ of size } |A_-^{(i)}|, \\
+(B_i(A))^{(i)}_+ &= \text{initial segment of binary on } \mathcal{P}(X - i) \text{ of size } |A_+^{(i)}|.
+\end{align*}
+So $|B_i(A)| |A|$. We say that $A$ is \emph{$i$-binary-compressed} if $B_i(A) = A$.
+
+\begin{theorem}[Edge-isoperimetric Inequality in $Q_n$]
+	Let $A \subseteq Q_n$ and $C$ be the initial segment of binary on $Q_n$ with $|C| = |A|$. Then $|\partial C| \leq |\partial A|$. In particular, if $|A| = 2^{k}$, then $|\partial A| \geq 2^{k}(n-k)$.
+\end{theorem}
+
+\begin{remark}
+	This is sometimes called the theorem of Harper, Lindsey, Bernstein and Hart.
+\end{remark}
+
+\begin{proofbox}
+	We proceed by induction on $n$. $n = 1$ is trivial.
+
+	For $n > 1$, $A \subseteq Q_n$, $1 \leq i \leq n$, we claim that $|\partial B_i(A)| \leq |\partial A|$.
+
+	Indeed, write $B$ for $B_i(A)$. Then
+	\begin{align*}
+		|\partial A| &= |\partial(A_-)| + |\partial(A_+)| + |A_+ \triangle A_-|, \\
+		|\partial B| &= |\partial(B_-)| + |\partial(B_+)| + |B_+ \triangle B_-|.
+	\end{align*}
+	By induction, $|\partial(B_-)| \leq |\partial(A_-)|$ and $|\partial(B_+)| \leq |\partial(A_+)|$. Also, the set $B_+$ and $B_-$ are nested, as each is an initial segment of binary on $\mathcal{P}(X - i)$.
+
+	Therefore, certainly we have $|B_+ \triangle B_-| \leq |A_+ \triangle A_-|$. So $|\partial B| \leq |\partial A|$.
+
+	Define a sequence $A_0, A_1, \ldots \subseteq Q_n$ as follows. Set $A_0 = A$. Having defined $A_0, \ldots, A_k$, if $A_k$ is $i$-binary-compressed for all $i$, then stop the sequence. If not, choose $i$ with $B_i(A_k) \neq A_k$, and put $A_{k+1} = B_i(A_k)$.
+
+	This must terminate as the function
+	\[
+		k \mapsto \sum_{x \in A_k} (\text{position of $x$ in binary})
+	\]
+	is strictly decreasing. Now the final family $B = A_k$ satisfies $|B| = |A|$ and $|\partial B| \leq |\partial A|$.
+\end{proofbox}
+
+Note that $B$ need not be an initial segment of binary, for example take $\{\emptyset, 1, 2, 3\} \subseteq Q_3$. However these are the only counterexamples.
+
+\begin{lemma}
+	Let $B \subseteq Q_n$ be binary compressed for all $i$, that is not an initial segment of binary. Then
+	\[
+		B = \mathcal{P}(n - 1) - \{12 \ldots n-1\} \cup \{n\}.
+	\]
+\end{lemma}
+
+Then we are done, as clearly $|\partial B| \geq |\partial C|$, since $C = \mathcal{P}(n-1)$.
+
+\begin{proofbox}
+	As $B$ is not an initial segment there exists $x < y$ with $x \not \in B$, $y \in B$.
+
+	Thus for all $i$, we cannot have $i \in x, y$ or $i \notin x, y$, as $B$ is $i$-binary-compressed. So $y = x^{c}$.
+
+	Thus for each $y \in B$, there is at most one earlier $x \in B$, and for each $x \not \in B$ there is at most one later $y \in B$. So $B = \{z \mid z \leq y\} - \{x\}$, where $y$ is the predecessor of $y$ and $y = x^{c}$.
+
+	So we must have $y = \{n\}$.
+\end{proofbox}
+
+This concludes the proof of theorem 2.4.
+
+% lecture 11
+
+\begin{remark}
+	It is vital in this proof, and the proof of Harper's that the extremal sets were nested.
+\end{remark}
+
+The \emph{isoperimetric number}\index{isoperimetric number} of a graph  $G$ is
+\[
+	i(G) = \min \left\{ \frac{|\partial A|}{|A|} \mid A \subseteq G, \frac{|A|}{|G|} \leq \frac{1}{2} \right\}.
+\]
+
+\begin{corollary}
+	$i(Q_n) = 1$.
+\end{corollary}
+
+\begin{proofbox}
+	Taking $A = \mathcal{P}(n-1)$, we get that $i(Q_n) \leq 1$ (every edge is between $x$ and $x + n$).
+
+	To show that $i(Q_n) \geq 1$, we need to show that if $C$ is an initial segment of binary with $|C| \leq 2^{n-1}$, then $|\partial C| \geq |C|$. But $C \subseteq \mathcal{P}(n-1)$, so certainly $|\partial C| \geq |C|$.
+\end{proofbox}
+
+\subsection{Inequalities in the Grid}%
+\label{sub:ineq_gid}
+
+For any $k = 2, 3, \ldots$,  the \emph{grid}\index{grid} is the graph on $[k]^{n}$ in which $x$ is joined to $y$ if for some $i$, we have $x_j = y_j$ for $j \neq i$, and $|x_i - y_i| = 1$.
+
+For example, we can draw the 4 grid.
+
+Note that for $k = 2$, this is exactly $Q_n$. Do we have analogues of Sperner's and KK for the grid? We start with the vertex-isoperimetric problem; which sets $A \subseteq [k]^{n}$ (of a given size) minimise $|N(A)|$?
+
+In $[k]^2$, we can either consider a diagonal or a square. The diagonal cut seems to be better.
+
+This suggests that we go up in levels according to
+\[
+|x| = \sum_{i = 1}^n |x_i|,
+\]
+i.e. we take $\{x \in [k]^{n} \mid |x| \leq r\}$. What if
+\[
+|\{x \in [k]^{n} \mid |x| \leq r\}| < |A| < |\{x \in [k]^{n} \mid |x| \leq r+1\}|?
+\]
+In this case, we take $A = \{x \in [k]^{n} \mid |x| \leq r\}$, and some point with $|x| = r + 1$. The points we pick should be those which keep $x_1$ large.
+
+This suggests in the \emph{simplicial ordering}\index{simplicial ordering} on $[k]^{n}$, we set $x < y$ if either $|x| < |y|$ or $|x| = |y|$ and $x_i > y_i$ where $i$ is the minimal element where they differ.
+
+\begin{exbox}
+	On $[3]^2$, the ordering is
+	\[
+		(1,1), (2, 1), (1, 2), (3, 1), (2, 2), (1, 3), (3, 2), (2, 3), (3, 3).
+	\]
+	On $[4]^{3}$, the ordering is
+	\begin{align*}
+		(1, 1, 1), &(2, 1, 1), (1, 2, 1), (1, 1, 2), (3, 1, 1), (2, 2, 1), (2, 1, 2), (1, 3, 1), \\
+			   &(1, 2, 2), (1, 1, 3), (4, 1, 1), (3, 2, 1), \ldots
+	\end{align*}
+\end{exbox}
+
+For $A \subseteq [k]^{n}$ for some $k \geq 2$ and $1 \leq i \leq n$, the \emph{$i$-sections}\index{$i$-sections} of $A$ are the sets $A_1, \ldots, A_k \subseteq [k]^{n-1}$ defined by
+\[
+A_t = A_t^{(i)} = \{x \in [k]^{n-1} \mid (x_1, x_2, \ldots, x_{i-1}, t, x_i, x_{i+1}, \ldots, x_{n-1}) \in A \}.
+\]
+The \emph{$i$-compression}\index{$i$-compression} of $A$ is $C_i(A) \subseteq [k]^{n}$ defined by giving its $i$-sections:
+\[
+	C_i(A) = \text{initial segment of $[k]^{n-1}$ of size } |A_t|.
+\]
+Essentially, we are going layer by layer in the $i$'th direction, and shoving everything into an initial segment of simplicial.
+
+\begin{theorem}[Vertex-Isoperimetric Inequality in the Grid]
+	Let $A \subseteq [k]^{n}$, and let $C$ be the initial segment of simplicial of $[k]^{n}$ with $|C| = |A|$. 
+
+	Then $|N(C)| \leq |N(A)|$. In particular, if $|A| \geq |\{x \mid |x| \leq r\}$, then $|N(A)| \geq |\{x \mid |x| \leq r+1\}$.
+\end{theorem}
+
+\begin{proofbox}
+	We proceed by induction on $n$. $n = 1$ is trivial, if $A \subseteq [k]^{1} \neq \emptyset$, then $|N(A)| \geq |A| + 1 = |N(C)|$.
+
+	Given $n > 1$ and $A = [k]^{n}$, fix $1 \leq i \leq n$. We claim that $|N(C_i(A))| \leq |N(A)|$.
+
+	Indeed, write $B$ for $C_i(A)$. For any $1 \leq t \leq k$, we have
+	\[
+	N(A)_t = N(A_t) \cup A_{t-1} \cup A_{t+1},
+	\]
+	and similarly $N(B)_t = N(B_t) \cup B_{t-1} \cup B_{t+1}$. Now $|B_{t-1}| = |A_{t-1}|$, and $|B_{t+1}| = |A_{t+1}|$, and $|N(B_t)| \leq |N(A_t)|$, by the induction hypothesis. But the sets $B_{t-1}, B_{t+1}$ and $N(B_t)$ are nested as each is an initial segment of simplicial on $[k]^{n-1}$.
+
+	Hence $|N(B)_t| \leq |N(A)_t|$, so $|N(B)| \leq |N(A)|$.
+
+	Among all $B \subseteq [k]^{n}$ with $|B| = |A|$ and $|N(B)| \leq |N(A)|$, pick one with sum of simplicial positionings the smallest. Then $B$ is $i$-compressed for all $i$.
+
+	We are very far from being done. To continue, we split into two cases.
+
+	Case 1: $n = 2$. What we know is precisely that $B$ is a down-set.
+% lecture 12
+	Let $r = \min\{|x| \mid x \not \in B\}$, and $s = \max\{|x| \mid x \in B\}$. We may assume that $r \leq s$, since if $r = s + 1$, then $B = \{x \mid |x| \leq s\}$, hence $B = C$.
+
+	If $r = s$, then
+	\[
+		\{x \mid |x| \leq r - 1\} \subseteq B \subseteq \{x \mid |x| \leq r\},
+	\]
+	so clearly $|N(B)| \geq |N(C)|$.
+
+	If  $r < s$, then we cannot have $\{x \mid |x| = s\} \subseteq B$, because then also $\{x \mid |x| = r\} \subseteq B$ as $B$ is a down set.
+
+	So there is $y, y'$ with $|y| = |y'| = s$, $y \in B$ and $y' \not \in B$, and $y' = y \pm (e_1 - e_2)$, by DIVT.
+
+	Similarly, we cannot have $\{x \mid |x| = r\} \cap B = \emptyset$, otherwise $\{x \mid |x| = s\} \cap B = \emptyset$, again as $B$ is a down set. So there is $x, x'$ with $|x| = |x'| = r$, $x \not \in B$, $x' \in B$ and $x' = x \pm (e_1 - e_2)$.
+
+	Now let $B' = B \cup \{x\} - \{y\}$. From $B$ we lost at least one point in the neighbourhood, namely $y + e_1$ or $y + e_2$, and gained at most one point, so $|N(B')| \leq |N(B)|$. This contradicts the minimality of $B$.
+
+	Case 2: $n \geq 3$. For any $1 \leq i \leq n-1$ and any $x \in B$ with $x_n > 1$ and $x_i < k$, we must have that
+	\[
+	x - e_n + e_i \in B,
+	\]
+	as $B$ is $j$-compressed, for any $j \neq 1, n$.
+
+	So, considering the $n$-sections of $B$, we have that $N(B_t) \subseteq B_{t-1}$ for all $t = 2, \ldots, k$. Recall that $N(B)_t = N(B_t) \cup B_{t+1} \cup B_{t-1}$, so in fact $N(B)_t = B_{t-1}$. Thus,
+	\[
+	|N(B)| = |B_{k-1}| + |B_{k-2}| + \cdots + |B_1| + |N(B_1)| = |B| - |B_k| + |N(B_1)|.
+	\]
+	Similarly, $|N(C)| = |C| - |C_k| + |N(C_1)|$. So to show $|N(C)| \leq |N(B)|$, it is enough to show that $|B_k| \leq |C_k|$, and $|B_1| \geq |C_1|$, since $|N(C_1)|$ is minimal for its size.
+
+	To show $|B_k| \leq |C_k|$, define a set $D \subseteq [k]^{n}$  as follows: put $D_k = B_k$, and for $t = k-1, k-2, \ldots, 1$ set $D_t = N(D_{t-1})$.
+
+	Then $D \subseteq B$ so $|D| \leq |B|$, and in fact $D$ is an initial segment of simplicial so $D \subseteq C$, showing $|B_k| = |D_k| \leq |C_k|$.
+
+	To show $|B_1| \geq |C_1|$, define a set $E \subseteq [k]^{n}$ as follows: put $E_1 = B_1$, and for $t = 2, 3, \ldots, k$ set $E_t = \{x \in [k]^{n-1} \mid N(\{x\}) \subseteq E_{t-1}\}$.
+
+	Then $E \supseteq B$ so $|E| \supseteq |B|$ and $E$ is an initial segment of simplicial, so $E \supseteq C$, whence $|B_1| = |E_1| \geq |C_1|$.
+
+	This shows the theorem.
+\end{proofbox}
+
+\begin{corollary}
+	Let $A \subseteq [k]^{n}$ with $|A| \geq |\{x \mid |x| \leq r\}|$. Then $|A_{(t)}| \geq |\{x \mid |x| \leq r + t\}|$.
+\end{corollary}
+
+\begin{remark}
+	We can check from the corollary that for $k$ fixed, the sequence $([k]^{n})$ is a L\'evy family.
+\end{remark}
+
+We now look at the edge-isoperimetric inequality in the grid. Which set $A \subseteq [k]^{n}$ should we take to minimize $|\partial A|$? For example, in $[k]^2$, we can look at squares and triangles, which suggest that squares are the best.
+
+However, there are nasty things that happen as we grow the size of of $|A|$. When $|A|$ is 1/4 of the total size of $[k]^2$, the square does equally as well as the column, and for greater sizes columns do better.
+
+A similar thing occurs at $3/4$ of the total size, when the column equals a cosquare, and at large sizes the cosquare does the best. So we have phase transitions at $|A| = k^2/4$ and $3k^2/4$, when the extremal sets are not nested. This seems to rule out compression methods (insert image).
+
+And in $[k]^3$, we have even more phase transitions:
+\[
+	[a]^3 \to [a]^2 \times [k] \to [a] \times [k]^2 \to ([a]^2 \times [k])^{c} \to ([a]^3]^{c}.
+\]
+Hence in $[k]^{n}$, up to halfway we get $n - 1$ of these phase transitions.
+
+% lecture 13
+
+Note that if $A = [a]^{d} \times [k]^{n-d}$, then $|\partial A| = d a^{d-1} k^{n-d} = d |A|^{1 - 1/d} k^{n/d - 1}$.
+
+\begin{theorem}
+	Assuming that $A \subseteq [k]^{n}$ and $|A| \leq k^{n}/2$, then
+	\[
+		|\partial A| \geq \min \{ d |A|^{1 - 1/d} k^{n/d - 1} \mid 1 \leq d\leq n \}.
+	\]
+\end{theorem}
+
+This just says that some set of the form $[a]^{d} \times [k]^{n-d}$ is the best. The following is non-examinable.
+
+\begin{proofbox}
+	We give a sketch of the proof. The idea is induction on $n$: $n = 1$ is trivial.
+
+	Take $A \subseteq [k]^{n}$, with $|A| \leq k^{n}/2$ and $n > 1$. Without loss of generality, assume that $A$ is a down-set, by compressing in each direction $1 \leq i \leq n$. For any $1 \leq i \leq n$, define $C_i(A)$ by defining its sections:
+	\[
+		C_i(A)_t = \text{extremal set of size } |A_t| \text{ in } [k]^{n-1}.
+	\]
+	This will be a set of the form $[a]^{d} \times [k]^{n - 1 - d}$, or a complement. Say $B = C_i(A)$. We want to say something like $|\partial B| \leq |\partial A|$. Since $A$ is a down set, we can write
+	\[
+	|\partial A| = |\partial A_1| + \cdots + |\partial A_k| + |A_1| - |A_k|,
+	\]
+	since the sections of $A$ are nested. But for $B$, we do not have the same expression, since it is not a down-set: extremal sets may not be nested. Indeed, we may have $|\partial B| > |\partial A|$, by choosing the sections of $A$ on opposite sides of a phase transition.
+
+	The idea we have to solve this is to introduce a ``fake'' boundary $\partial'$, where $\partial' A \leq \partial A$ and $\partial' = \partial$ on extremal sets. Then we can try to show that $C_i$ decreases $\partial'$. Consider defining
+	\[
+	\partial' A = \sum_t |\partial A_t| + |A_1| - |A_k|,
+	\]
+	where $A_t$ is the $t$'th section in the $i$'th direction. Then $\partial' A \leq |\partial A|$ for all $A$, we have equality for extremal sets (as equality holds for down-sets), and $\partial' C_i(A) \leq \partial ' A$. However, for any $j \neq i$, $C_j(A)$ does not decrease the edge perimeter. One potential fix is trying
+	\[
+	\partial'' A = \sum_i (|A_1^{(i)}| - |A_k^{(i)}|).
+	\]
+	But this also fails, if we take e.g. $A$ to be the outer-shell of $[k]^{n}$. Collecting our results,
+	\begin{align*}
+		|\partial A| &\geq \partial ' A \geq \partial' B = \sum_t |\partial B_t| + |B_1| - |B_k| \\
+			     &= \sum_t f(|B_t|) + |B_1| - |B_k|,
+	\end{align*}
+	where $f$ is the extremal function in $[k]^{n-1}$. Note that $f$ is the pointwise minimum of functions of the form $c x^{1- 1/d}$ and $c (k^{n-1} - x)^{1 - 1/d}$, which are concave. So $f$ is concave.
+
+	Consider varying $|B_2|, \ldots, |B_{k-1}|$ while keeping $|B_2| + \cdots + |B_{k-1}|$ constant, and ensuring $|B_1| \geq |B_2| \geq \cdots \geq |B_{k-1}| \geq |B_k|$. To minimize this concave function, we should take
+	\[
+	C_t = 
+	\begin{cases}
+		B_1 & 1 \leq t \leq r, \\
+		B_k & r+1 \leq t \leq k,
+	\end{cases}
+	\]
+	for some $r$. Then we have
+	\begin{align*}
+		|\partial A| &= \partial' A \geq \partial' B \geq \partial C = r f(|B_1|) + (k - r) f(|B_k|) + |B_1| - |B_k|.
+	\end{align*}
+	But now $C$ is still not a down set. Now to improve this further, vary $|B_1|$ while keeping $r |B_1| + (k - r) |B_k|$ fixed (for fixed $r$), and $|B_1| \geq |B_k|$. This is concave in $|B_1|$, as it is a sum of concave functions. Hence we either make $|B_1|$ as big or as small as possible.
+
+	If we let $D$ be this set, then $D$ must have one of the following forms:
+	\begin{itemize}
+		\item $|B_1| = |B_k|$, i.e. $D_t = D_1$ for all $t$.
+		\item $|B_k| = 0$, so $D_t = D_1$ for all $t \leq r$, and $D_t = \emptyset$ for $t > r$.
+		\item $B_1$ is maximal, so $D_t = [k]^{n-1}$ for $t \leq r$, and $D_t = D_k$ for $t > r$.
+	\end{itemize}
+	But finally, this $D$ has become a down-set. Hence
+	\[
+	|\partial A| = \partial' A \geq \partial' B \geq \partial' C \geq \partial' D = |\partial D|.
+	\]
+	So we can compress by going directly $A \to D$. This allows us to finish as before.
+\end{proofbox}
+
+\begin{remark}
+	We were a bit sloppy as we assumed the sections $B_i$ were exactly of the form $[a]^{d} \times [k]^{n-d}$, however this may not be the case if $|B_i|$ is not of this form. To fix this, work instead in $[0, 1]^{n}$, and then take a discrete approximation.
+\end{remark}
+
+This concludes the non-examinable discussion.
+
+% lecture 14
+
+\begin{remark}
+	Very few isoperimetric inequalities are known (even approximately). For example, take isoperimetric in a layer: in $X^{(r)}$, join two vertices $x, y$ if $|x \cap y| = r - 1$. This is open; the nicest special case if $r = n/2$, where it is conjectured that balls are the best, i.e. sets of the form
+	\[
+		\{x \in [2r]^{(r)} \mid |x \cap [r]| \geq t\}.
+	\]
+\end{remark}
+
+\newpage
+
+\section{Intersecting Families}%
+\label{sec:if}
+
+\subsection{\texorpdfstring{$t$}{t}-intersecting Families}%
+\label{sub:tif}
+
+$A \subseteq \mathcal{P}(X)$ is called \emph{$t$-intersecting}\index{$t$-intersecting} if $|x \cap y| \geq t$, for all $x, y \in A$. How large can a $t$-intersecting family be?
+
+\begin{exbox}
+Take $t = 2$. We could take $\{x \mid 1, 2 \in x\}$, which has size $1/4 \cdot 2^{n}$.
+
+Or we could take $\{x \mid |x| \geq n/2 + 1\}$. This has size about $1/2 \cdot 2^{n}$.
+\end{exbox}
+
+\begin{theorem}[Katona's $t$-intersecting Theorem]
+	Let $A \subseteq \mathcal{P}(X)$ be $t$-intersecting, where $n + t$ is event. Then
+	\[
+	|A| \leq \left| X^{(\geq \frac{n+t}{2})} \right|.
+	\]
+\end{theorem}
+
+\begin{proofbox}
+	For any $x, y \in A$, we have $|x \cap y| \geq t$, so $d(x, y^{c}) \geq t$. So writing $\bar A$ for $\{y^{c} \mid y \in A\}$, we have $d(A, \bar A) \geq t$, i.e. $A_{(t - 1)}$ is disjoint from $\bar A$.
+
+	Suppose that $|A| \geq |X^{(\geq \frac{n+t}{2})}|$. Then by Harper,
+	\[
+	|A_{(t-1)}| \geq |X^{(\geq \frac{n+t}{2} - (t - 1)}| = |X^{(\geq \frac{n-t}{2} + 1)}|.
+	\]
+	But $A_{(t-1)}$ is disjoint from $\bar A$, which has size greater than $|X^{(\leq \frac{n-t}{2})}|$, contradicting $|A_{(t-1)}| + |\bar A|\leq 2^{n}$.
+\end{proofbox}
+
+What about $t$-intersecting families of $A \subseteq X^{(r)}$? We might guess that the best is
+\[
+	A_0 = \{x \in X^{(r)} \mid [t] \subseteq x\}.
+\]
+We could also try
+\[
+	A_\alpha = \{x \in X^{(r)} \mid |x \cap [t + 2\alpha]| \geq t + \alpha\},
+\]
+for $\alpha = 1, 2, \ldots, r - t$.
+\begin{exbox}
+	Take $2$-intersecting subsets of $[n]^{(4)}$.
+	\begin{itemize}
+		\item If $n = 7$, then $|A_0| = \binom 52 = 10$, $|A_1| = 1 + \binom 43 \binom 31 = 13$, $|A_2| = \binom 64 = 15$.
+		\item If $n = 8$, then $|A_0| = \binom 62 = 15$, $|A_1| = 1 + \binom 43 \binom 41 = 17$, $|A_2| = \binom 64 = 15$.
+		\item If $n = 9$, then $|A_0| = \binom 72 = 21$, $|A_1| = 1 + \binom 43 \binom 51 = 21$, $|A_2| = \binom 64 = 15$.
+	\end{itemize}
+	Note that $A_0$ grows quadratically, $A_1$ grows linearly, and $A_2$ is constant, so $A_0$ is the largest for $n$ large.
+\end{exbox}
+
+The fact that $A_0$ is the largest for $n$ large inspires the following:
+\begin{theorem}
+	Let $A \subseteq X^{(r)}$ be $t$-intersecting. Then, for $n$ sufficiently large, we have
+	\[
+		|A| \leq |A_0| = \binom{n-t}{r-t}.
+	\]
+\end{theorem}
+
+\begin{remark}
+	\begin{enumerate}
+		\item[]
+		\item The bound we get on $n$ is either $(16r)^r$ if we are crude, or $2tr^3$, if we are careful.
+		\item This is often called the second Erd\H{o}s-Ko-Rado theorem.
+	\end{enumerate}
+\end{remark}
+
+The idea of this proof is that $A_0$ has $r-t$ degrees of freedom.
+
+\begin{proofbox}
+	Extend $A$ to a maximal $t$-intersecting family, so we must have some $x, y \in A$ with $|x \cap y| = t$. If not, then by maximality, we have that for all $x \in A$, $i \in x$ and $j \not \in x$ then  $x + j - i \in A$, whence $A = X^{(r)}$.
+
+	We may assume that there exists $z \in A$ with $x \cap y \not \in z$, otherwise all $z \in A$ have $x \cap y \subseteq z$, and $x \wedge y$ is a $t$ set, whence
+	\[
+		|A| \leq \binom{n-t}{r-t} = |A_0|.
+	\]
+	So each $w \in A$ must meet $x \cup y \cup z$ in at least $t + 1$ points, so
+	\[
+		|A| \leq 2^{3r} \left( \binom n{r-t-1} + \binom n{r-t-2} + \cdots + \binom n0\right),
+	\]
+	which is a polynomial of degree $r - t - 1$, hence smaller than $|A_0|$.
+\end{proofbox}
+
+\subsection{Modular Intersections}%
+\label{sub:mis}
+
+For intersecting families, we banned $|x \cap y| = 0$. What if we banned $|x \cap y| = 0 \pmod k$ for some $k$?
+
+\begin{exbox}
+	Take $A \subseteq X^{(r)}$ with $|x \cap y|$ odd, for all distinct $x, y \in A$. Then for odd $r$, we can achieve
+	\[
+		|A| = \binom{\lfloor \frac{n-1}{2} \rfloor}{\frac{r-1}{2}},
+	\]
+	by taking the sets to contain $1$, and then unions of $\{2, 3\}$, $\{4, 5\}$, $\ldots$.
+
+	If we wanted $|x \cap y|$ even, we can achieve $n - r + 1$ by fixing an $r - 1$ set and then another element. This is only linear in $n$.
+
+	Similarly, if $r$ is even, then for $|x \cap y|$ even we can achieve
+	 \[
+		 |A| = \binom{\lfloor \frac{n}{2} \rfloor}{\frac r2},
+	\]
+	by again taking unions of $\{1,2\}$, $\{3, 4\}$, $\ldots$.
+
+	But for $|x \cap y|$ odd for all $x, y \in A$ we can again only achieve $n - r + 1$.
+\end{exbox}
+
+Is it possible to improve our linear bounds? It seems that $|x \cap y| = r \pmod 2$ forces the size of our set to be very small.
+
+% lecture 15
+
+Remarkably, we cannot beat linear.
+
+\begin{proposition}
+	Let $r$ be odd, and let $A \subseteq X^{(r)}$ have $|x \cap y|$ even for all distinct $x, y$. Then $|A| \leq n$.
+\end{proposition}
+
+The idea is to find $|A|$ linearly independent vectors in a vector space of dimension $n$, namely $Q_n$.
+
+\begin{proofbox}
+	We view $\mathcal{P}(X)$ as $\mathbb{Z}_2^{n}$, the $n$-dimensional vector space over $\mathbb{Z}_2$, by identifying each $x \in \mathcal{P}(X)$ with $\bar x$, its characteristic sequence.
+
+	Then $(\bar x, \bar x) \neq 0$ for all $x \in A$, as $x$ has odd size. Also, $(\bar x, \bar y) = 0$ for all distinct $x, y \in A$, as they have even intersection.
+
+	Hence the $\bar x$ for $x \in A$ are linearly independent: if $\sum \lambda_i \bar x_i = 0$, then dotting with $\bar x_j$ gives $\lambda_j = 0$ for all $j$, so $|A| \leq n$.
+\end{proofbox}
+
+\begin{remark}
+	Hence also if $A \subseteq X^{(r)}$, with $r$ even and $|x \cap y|$ odd for all distinct $x, y \in A$, then $|A| \leq n+1$: just add $n+1$ to each $x \in A$ and apply the previous proposition with $X = [n+1]$.
+\end{remark}
+
+Does this mod 2 behaviour generalise? We will now show that if we have $s$ allowed values for $|x \cap y| \pmod p$, then $|A|$ is bounded by a polynomial of size $s$.
+
+\begin{theorem}[Frankl-Wilson Theorem]
+	Let $p$ be prime, and let $A \subseteq X^{(r)}$ be such that for all distinct $x, y \in A$, we have that $|x \cap y| \equiv \lambda_i \pmod p$ for some $i$, where $\lambda_1, \ldots, \lambda_s$ ($s \leq r$) are integers with no $\lambda_i \equiv r \pmod p$. Then
+	\[
+	|A| \leq \binom ns.
+	\]
+\end{theorem}
+
+\begin{remark}
+	\begin{enumerate}
+		\item[]
+		\item This bound is a polynomial in $s$ that is independent of $r$.
+		\item This bound is essentially the best: if we let all $x \in A$ contain $[r - s]$, and $s$ other elements, then we have
+			\[
+				|A| = \binom{n-r+s}{s} \sim \binom ns.
+			\]
+		\item We do need that no $\lambda_i \equiv r \pmod p$. Otherwise, say $n = a + \lambda p$, then we can have $A \subseteq X^{(a + kp)}$ with $|A| = \binom \lambda k$ and all $|x \cap y| = a = r \pmod p$.
+	\end{enumerate}
+\end{remark}
+
+The idea is to try and find $|A|$ linearly independent points in a vector space of dimension $\binom ns$, by somehow applying the polynomial $(t - \lambda_1) \cdots (t - \lambda_s)$ to $|x \cap y|$.
+
+\begin{proofbox}
+	For each $i \leq j$, let $M(i, j)$ be the $\binom ni \times \binom nj$ matrix, where rows are indexed by $X^{(i)}$ and columns are indexed by $X^{(j)}$, with
+	\[
+	M(i, j)_{xy} =
+	\begin{cases}
+		1 & \text{if } x \subseteq y, \\
+		0 & \text{if not}.
+	\end{cases}
+	\]
+	Let $V$ be the vector space over $\mathbb{R}$ spanned by the rows of $M(s, r)$. Then $\dim V \leq \binom ns$.
+
+	For $i \leq s$, consider $M(i, s) M(s, r)$. Then each row belong to $V$, as we have premultiplied $M(s, r)$ by a matrix. For $x \in X^{(i)}$, $y \in X^{(r)}$,
+	\begin{align*}
+		M(i, s) M(s, r) &= \text{number of $s$-sets $z$ with $x \subseteq z$ and $z \subseteq y$} \\
+				&=
+				\begin{cases}
+					0 & \text{if } x \not \subseteq y, \\
+					\binom{r-i}{s-i} & \text{if } x \subseteq y.
+				\end{cases}
+	\end{align*}
+	Hence we see
+	\[
+		M(i, s) M(s, r) = \binom{r-i}{s-i} M(i, r),
+	\]
+	hence all rows of $M(i, r)$ belongs to $V$. Now let
+	\[
+	M(i) = M(i, r)^{T} M(i, r),
+	\]
+	whose rows again belong to $V$ as we have premultiplied. For $x, y \in X^{(r)}$, we have
+	\begin{align*}
+		M(i)_{xy} &= \text{number of $i$-sets $z$ with $z \subseteq x$, $z \subseteq y$} \\
+			  &= \binom{|x \cap y|}{i}.
+	\end{align*}
+	Consider the integer polynomial $(t - \lambda_1)\cdots (t - \lambda_s)$. Then we may write it as
+	\[
+		(t-  \lambda_1) \cdots (t - \lambda_s) = \sum_{i = 0}^s a_i \binom ti,
+	\]
+	where all $a_i \in \mathbb{Z}$. Moreover each $a_i$ must be positive, as
+	\[
+	t(t - 1) \cdots (t - i + 1) = n! \binom tn.
+	\] 
+	Now define
+	\[
+	M = \sum_{i = 0}^s a_i M(i).
+	\]
+	Then for all $x, y \in X^{(r)}$,
+	\[
+		M_{xy} = \sum_{i = 0}^s a_i \binom{|x \cap y|}i = (|x \cap y| - \lambda_1) \cdots (|x \cap y| - \lambda_s).
+	\]
+	So the submatrix of $M$ by spanned by the rows and columns corresopnding to the elements of $A$ is non-zero mod $p$ on the diagonal, and zero elsewhere. Hence the rows of $M$ corresponding to $A$ are linearly independent over $\mathbb{Z}_p$, so also over $\mathbb{Z}$, hence also over $\mathbb{Q}$ and $\mathbb{R}$.
+
+	But these rows are a subset of $V$, so
+	\[
+	|A| \leq \dim V \leq \binom ns.
+	\]
+\end{proofbox}
+
+% lecture 16
+
+\begin{remark}
+	We do need $p$ to be prime. Grolmusz constructed, for each $n$, a value of $r \neq 0 \pmod d$ and a family $A \subseteq [n]^{(r)}$ such that, for all distinct $x, y \in A$, we have $|x \cap y| \not = 0 \pmod d$, with
+	\[
+	|A| > n^{c \log n / \log \log n}.
+	\]
+\end{remark}
+
+\begin{corollary}
+	Let $A \subseteq [n]^{(r)}$ with $|x \cap y| \neq r \pmod p$ for each distinct $x, y \in A$, where $p < r$ is prime. Then
+	\[
+		|A| \leq \binom n{p-1}.
+	\]
+\end{corollary}
+
+\begin{proofbox}
+	We are allowed $p-1$ values of $|x \cap y|$ mod $p$, hence we are done by Frankl-Wilson.
+\end{proofbox}
+
+Note that two $n/2$ sets in $[n]$ typically meet in about $n/4$ points. But $|x \cap y| = n/4$ is very unlikely. Remarkably, we have the following result:
+
+\begin{corollary}
+	Let $p$ be prime, and $A \subseteq [4p]^{(2p)}$ have $|x \cap y|\neq p$ for all distinct $x, y \in A$. Then
+	\[
+		|A| \leq 2 \binom{4p}{p-1}.
+	\]
+\end{corollary}
+
+Note that $\binom{4p}{p-1}$ is a tiny fraction of $\binom{4p}{2p}$. Indeed,
+\[
+	\binom{n}{n/2} \sim c \frac{2^{n}}{\sqrt n}, \qquad \binom{n}{n/4} \leq 2 e^{-n/32} 2^{n}.
+\]
+
+\begin{proofbox}
+	Halving $|A|$ if necessary, we may assume that no $x, x^{c} \in A$. Then for $x, y \in A$ distinct,
+	\[
+	|x \cap y| \neq 0, p \implies |x \cap y| \neq 0 \pmod p.
+	\]
+	Hence $|A| \leq \binom{4p}{p-1}$ by corollary 3.1.
+\end{proofbox}
+
+\subsection{Borsuk's Conjecture}%
+\label{sub:borsum}
+
+Let $S$ be a bounded subset of $\mathbb{R}^n$. How few pieces can we break $S$ into, such that each has a smaller diameter than that of $S$?
+
+The example of a regular simplex in $\mathbb{R}^n$, which are $n + 1$ all equidistant, shows that we may need at least $n + 1$ pieces.
+
+\textbf{Borsuk's Conjecture:} $n + 1$ pieces are always sufficient.
+
+This is known for $n = 1, 2$ and $3$, and also for $S$ a smooth convex body or a symmetric convex body in $\mathbb{R}^n$.
+
+However, Borsuk is massively false.
+
+\begin{theorem}[Kahn, Kalai]
+	For all $n$, there exists bounded $S \in \mathbb{R}^n$ such that to break $S$ into pieces of smaller diameter, we need at least $c^{\sqrt n}$ pieces, for some constant $c > 1$.
+\end{theorem}
+
+\begin{remark}
+	\begin{enumerate}
+		\item[]
+		\item Our proof will show that Borsuk is false for $n \geq 2000$.
+		\item We will prove this for $n$ of the form $\binom{4p}{2}$, where $p$ is prime.
+	\end{enumerate}
+\end{remark}
+
+\begin{proofbox}
+	We find $S \subseteq Q_n \subseteq \mathbb{R}^n$. In fact, we can take $S \subseteq [n]^{(r)}$, for some $r$.
+
+	Since $S \subseteq [n]^{(r)}$, for all $x, y \in S$,
+	\[
+	\|x-y\|^n = 2 (r - |x \cap y|).
+	\]
+	So we seek $S$ with $\min |x \cap y| = k$, but every subset of $S$ with $\min |x \cap y| > k$ is very small.
+
+	Identify $[n]$ with the edge set of $K_{4p}$, the complete graph on $4p$ pieces. For each $x \in [4p]^{(2p)}$, let $G_x$ be the complexe bipartite graph with vertex classes $x$ and $x^{c}$. Let $S = \{G_x \mid x \in [4p]^{(2p)}\}$, so $S \subseteq [n]^{(4p^2)}$, and $|S| = \frac 12 \binom{4p}{2p}$.
+
+	Now,
+	\[
+	|G_x \cap G_y| = |x \cap y|^2 + |x^{c} \cap y|^2 = d^2 + (2p - d)^2,
+	\]
+	where $d = |x \cap y|$, which is minimized when $d = p$, i.e. when $|x \cap y| = p$.
+
+	Now let $S' \subseteq S$ have a smaller diameter than that of $S$, and say $S' = \{G_x \mid x \in A\}$. Then for all $x, y \in A$ distinct, $|x \cap y| \neq p$. Thus,
+	\[
+		|A| \leq 2 \binom{4p}{p-1}.
+	\]
+	The conclusion is that the number of pieces needed is at least
+	\[
+		\frac{|S|}{\max |A|} = \frac 12 \binom{4p}{2p} \cdot \frac 12 \binom{4p}{p-1}^{-1} \geq \frac{c \cdot 2^{4p}\sqrt p}{e^{-p/8}2^{4p}}
+	\]
+	for some $c$. But this is at least $(c')^{p} = (c'')^{\sqrt n}$ for some $c', c'' > 1$.
+\end{proofbox}
+
 
 \newpage
 

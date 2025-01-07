@@ -1579,7 +1579,7 @@ We start with $W^{1, p}$, which $W^{k, p}$ is found inside. For $p > n$ we find 
 \end{proofbox}
 
 \begin{theorem}[Morrey's Inequality]
-	Let $o \in (n, +\infty).$ Then there is $C = C(n, p) > 0$ so that
+	Let $p \in (n, +\infty).$ Then there is $C = C(n, p) > 0$ so that
 	\[
 	\|u\|_{C^{0, \gamma}(\mathbb{R}^n)} \leq C \|u\|_{W^{1,p}(\mathbb{R}^n)}
 	\]
@@ -1605,10 +1605,613 @@ We start with $W^{1, p}$, which $W^{k, p}$ is found inside. For $p > n$ we find 
 	\bar u_{\bar x, r} = \frac{1}{|Q_r(\bar x)|} \int_{Q_r(\bar x)} u.
 	\]
 	We will show that $|u(\bar x) - \bar u_{\bar x, r}| \leq r^{\cdot} \|u\|_{W^{1,p}}$.
+% lecture 13
+
+	Alright let's start again. The global condition implies the local condition by the extension theorem. Then from density, there exists $u_j \in C_c^{\infty}$ such that $u_j \to u$ in $W^{1, p}(\mathbb{R}^n)$.
+
+	Then $(u_j)$ is Cauchy in the uniform norm, so $u_j \to u$ for $u \in C^{0, \gamma}$.
+
+	Globally in $\mathbb{R}^n$ for $u \in C_c^\infty(\mathbb{R}^n)$, for $\bar x \in \mathbb{R}^n$ let
+	\[
+		Q_r(\bar x) = \{ |x_i - \bar x_i| \leq r/2 \mid i = 1, \ldots, n\}.
+	\]
+	So we can define
+	\[
+	\bar u_{\bar x, r} = r^{-n} \int_{Q_r(\bar x)} u(x) \diff x.
+	\]
+	The difference is
+	\begin{align*}
+		|u(\bar x) - \bar u_{\bar x, r}| &= \left| r^{-n} \int_{Q_r(\bar x)} (u(x) - u(\bar x)) \diff x\right| \\
+						 &\leq r^{-n} \int_{Q_r(\bar x)} |u(x) - u (\bar x)| \diff x \\
+						 &\leq r^{-n} \int_0^1 \int_{Q_r(\bar x)} |x - \bar x| |\nabla u(\bar x + t(x - \bar x))| \diff x \diff t \\
+						 &\leq \frac{r^{1-n}}{2} \int_0^1 t^{-n} \left( \int_{Q_{tr}(\bar x)} |\nabla u(y)| \diff y \right) \diff t \\
+						 &\leq \frac{r^{1-n}}{2} \int_0^1 t^{-n} \|\nabla u\|_{L^p(Q_{tr}(\bar x))} |Q_{tr}(\bar x)|^{1/q} \diff t \\
+						 &\leq \|\nabla u\|_{L^p(\mathbb{R}^n)} \frac{r^{1 -n + n/q}}{2} \int_0^1 t^{-n + n/q} \diff t \\
+						 &\leq \|\nabla u\|_{L^p(\mathbb{R}^n)} \frac{r^{1 - n/p}}{2} \frac{1}{(1 - n/p)}.
+	\end{align*}
+	Now we take a supremum bound, with $r = 1$, to get that
+	\begin{align*}
+		|u(\bar x)| &\leq |u(\bar x) - \bar u_{\bar x, 1}| | + |\bar u_{\bar x, 1}| \\
+			    &\leq \frac{1}{2(1 - n/p)} \|\nabla u\|_{L^p(\mathbb{R}^n)} + \int_{Q_1(\bar x)} |u(x)| \diff x.
+	\end{align*}
+	The last integral is at most $\|u\|_{L^p(\mathbb{R}^n)}$. So
+	\[
+	|u(\bar x)| \leq C \|u\|_{W^{1, p}(\mathbb{R}^n)}.
+	\]
+	Consider $x, y \in \mathbb{R}^n$, with $|x - y| =  r/2$. Then $Q_r(x)$ contains $y$, and $Q_r(y)$ contains $x$, so
+	\begin{align*}
+		|u(x) - u(y)| & \leq |u(x) - \bar u_{x, r}| + |u(y) - \bar u_{y, r}| + |\bar u_{x, r} - \bar u_{y, r}|.
+	\end{align*}
+	The first and second integrals are at most
+	\[
+	\frac{r^{1 - n/p}}{2(1 - n/p)} \|u\|_{W^{1,p}(\mathbb{R}^n)}.
+	\]
+	The third integral is at most
+	\begin{align*}
+		I_3 &\leq r^{-n} \int_{Q_r(x)} |u(z + (y - x)) - u(z)| \diff z \\
+		    &\leq r^{-n} \int_{Q_r(x)} \int_0^1 |y - x| |\nabla u(z + t(y - x))| \diff t \diff z \\
+		    &\leq \frac{r^{1-n}}{2} \int_0^1 \int_{(1 - t)Q_r(x)+ tQ_r(y)} |\nabla u(\tilde z)| \diff \tilde z \\
+		    &\leq \frac{r^{1-n}}{2} \left( \int_0^1 |(1 - t) Q_r(x) + t Q_r(y)|^{1/q} \diff t \right) \|\nabla u\|_{L^{p}(\mathbb{R}^n)} \\
+		    &\leq \frac{r^{1 - n/p}}{2} \left( \int_0^1 t^{n/q} \diff t \right) \|\nabla u\|_{L^p(\mathbb{R}^n)} \\
+		    &\leq \frac{r^{1-n/p}}{2(1 + n/q)} \|\nabla u\|_{L^p(\mathbb{R}^n)}.
+	\end{align*}
+	In conclusion,
+	\[
+	\|u\|_{C^{0, \gamma}(\mathbb{R}^n)} \leq C \|u\|_{W^{1,p}(\mathbb{R}^n)},
+	\]
+	where $\gamma = 1 - n/p$.
 \end{proofbox}
 
+\subsection{Compactness of Sobolev Spaces}%
+\label{sub:cpt_sob}
 
-% lecture 13
+\begin{theorem}[Rellich-Kondrashov]
+	Given $U \subseteq \mathbb{R}^n$ open, bounded with $C^1$ boundary and $p \in [1, +\infty)$, then $W^{1, p}(U)$ is compactly embedded in $L^q(U)$ for $q \in [1, p^{\ast})$. We write
+	\[
+	W^{1,p}(U) \subseteq \subseteq L^q(U).
+	\]
+	In other words, bounded subsets of $W^{1,p}(U)$ are relatively compact.
+\end{theorem}
+
+\begin{proofbox}
+	We know the Arzel\'a-Ascoli theorem: if a set of functions $K \subseteq \mathbb{R}^n \to \mathbb{R}$ is equicontinuous and equibounded, then it is relatively compact in the uniform norm.
+
+	Moreover $W^{1, p}(U) \subseteq L^q(U)$ by Sobolev inequalities. Indeed, for $q < p^{\ast}$,
+	\[
+	L^q \leq (L^p)^{\cdot} (L^{p^{\ast}})^{\cdot \cdot},
+	\]
+	for $U$ bounded.
+
+	Since we have a metric space, we can prove compactness via sequences. Consider $u_j \in W^{1, p}(U)$ bounded. Then let $v_j = E u_j$ bounded in $W^{1, p}(\mathbb{R}^n)$ with compact support $V \supseteq \supseteq U$ and $\bar V$ compact. Let $(\vphi_{\eps})$ be standard mollifiers. Define
+	\[
+	v_j^{\eps} = \vphi_\eps \ast v_j,
+	\]
+	which has support uniformly included in $\tilde V$.
+
+	To show the first claim, note that $v_j^{\eps} \to v_j$ uniformly in $j \geq 1$, in $L^q(\mathbb{R}^n)$. The proof, by density and the fact that $v_j$ is smooth, is
+	\begin{align*}
+		|v_j^{\eps}(x) - v_j(x)| &= \left| \int_{B(0,1)} \vphi(y) [v_j(x - \eps y) - v_j(x)] \diff y \right| \\
+					 &\leq \eps \int_{B(0, 1)} \vphi(y) \int_0^1 |\nabla v_j(x - \eps ty)| \diff t \diff y,
+	\end{align*}
+	so overall,
+	\begin{align*}
+		\int_{\mathbb{R}^n} |v_j^{\eps}(x) - v_j(x)| \diff x &\leq \eps \int_{B(0, 1)} \vphi(y) \int_0^1 \int_{\mathbb{R}^n} |\nabla v_j(x - t \eps y) |\diff t \diff x \diff y \\
+								     &\leq \eps \|\nabla v_j\|_{L^1(\mathbb{R}^n)} \\
+								     &\leq C \eps \|\nabla v_j\|_{L^p(\mathbb{R}^n)}.
+	\end{align*}
+	By interpolation, we get
+	\[
+	\|v_j^{\eps} - v_j\|_{L^{p^{\ast}}(\mathbb{R}^n)}
+	\]
+	is bounded by Sobolev. So by Holder inequality,
+	\[
+	\|v_j^\eps - v_j\|_{L^q} \leq C \eps^{\theta} \|v_j\|_{W^{1,q}(\mathbb{R}^n)},
+	\]
+	where $\theta$ is so that $\frac{1}{q} = \theta + \frac{1 - \theta}{p^{n}}.$
+
+	For the second claim, for fixed $\eps > 0$, $(v_j^{\eps})$ satisfies the assumptions of Arzel\'a-Ascoli, so
+	\begin{align*}
+		\|v_j^{\eps}\|_{L^\infty} &\leq \|\vphi_\eps\|_{L^\infty} \|v_j\|_{L^1} \leq C \eps^{-n} \|v_j\|_{L^p}, \\
+		\|\nabla v_j^\eps\|_{L^\infty} &\leq \|\nabla \vphi_\eps\|_{L^\infty} \|v_j\|_{L^1} \leq C \eps^{-n - 1} \|v_j\|_{L^p}.
+	\end{align*}
+	We do a diagonal argument. Take $\delta_n \to 0$. Choose $\eps_n$ small enough so that $\|v_j^{\eps_m} - v_j\|_{L^q} \leq \delta_m/2$. Then apply AA to give a subsequence and so
+	\[
+	\|v_{j_k}^{\eps} - v_{j_l}^{\eps}\|_{L^q} \leq \frac{\delta_m}{2},
+	\]
+	for $k, p \geq L$. We induct and re extract our subsequence so that
+	\[
+	\|v_{j_k} - v_{j_l}\|_{L^q} \leq \delta_m.
+	\]
+\end{proofbox}
+
+% lecture 14
+
+\newpage
+
+\section{Ellipticity}%
+\label{sec:ell}
+
+We let $U \subseteq \mathbb{R}^n$ be open, non-empty, bounded and $\partial U$ being $C^1$.
+
+\subsection{Notion of Ellipticity}%
+\label{sub:noe}
+
+We have learnt that ellipticity for a linear differential operator means there are no characteristic hypersurfaces, i.e. $\sigma_p(x, \xi) \neq 0$ for all $x \in U$, $\xi \neq 0$.
+
+For a particular case, take $a_{ij}, b_i , c : U \to \mathbb{R}$ and let
+\[
+Lu = - \partial_{x_i} (a_{ij} \partial x_j u) + b_i \partial_{x_i} u + cu.
+\]
+Here we are using Einstein summation notation. This is the \emph{divergence form}\index{divergence form}, as the higher-order term looks like a divergence. The non-divergence form is
+\[
+Lu = - a_{ij} \partial^2_{x_i x_j} u + \tilde b_i \partial_{x_i} u + cu.
+\]
+When $a_{ij}$ is differentiable, one can navigate between the two forms:
+\[
+\tilde b_i = \partial_{x_j}(a_{ij}) + b_i.
+\]
+When we have
+\[
+\partial^2_{x_i x_j} u = \partial^2_{x_j x_i} u,
+\]
+then it is possible to rewrite the higher-order term with a symmetric matrix:
+\[
+\partial_{x_i}(a_{ij} \partial_{x_j} u) = \partial x_i (a_{ij}^s \partial_{x_j} u) + \partial_{x_i} (a_{ij}^{as}) \partial_{x_j} u,
+\]
+and we have
+\[
+a_{ij} \partial^2_{x_i x_j u} = a_{ij}^s \partial^2_{x_i x_j} u.
+\]
+\begin{definition}
+	$L$ of this form is \emph{elliptic}\index{elliptic} if $a_{ij}(x) \xi_i \xi_j > 0$ for all $x \in U$, $\xi \in \mathbb{R}^n_{\ast}$.
+
+	$L$ is \emph{uniformly elliptic}\index{uniformly elliptic} if there exists $\theta > 0$ so that $a_{ij}(x) \xi_i \xi_j \geq \theta |\xi|^2$ for all $x \in U$, $\xi \in \mathbb{R}^n$.
+\end{definition}
+
+The goal of this chapter is to solve $Lu = f$ with uniform ellipticity, where we prescribe $u_{|\partial U} = 0$. This is a Dirichlet condition.
+
+\subsection{Solving the Dirichlet Problem}%
+\label{sub:sdp}
+
+The idea is to reformulate the Dirichlet problem as a geometric problem: more explicitly, we are representing a linear form in a Hilbert space.
+
+We let $L$ be in divergence form. The weak or dual formulation is as follows:
+
+Here is an observation. If $u \in C^2(\bar U)$ solves this problem, then for any $v \in C^2(\bar U)$ and $v|_{\partial U} = 0$, we have by integrating $Lu=  f$ against $v$,
+\begin{align*}
+	\int_U f v &= \int_U \left(- \partial_{x_i} (a_{ij} \partial_{x_j} u)) v + b_i (\partial_{x_i} u) v + c uv \right) \\
+		   &= \int_U \left( a_{ij} (\partial_{x_i} u) (\partial_{x_j} v) + b_i (\partial_{x_i} u) v + c u v \right) = B[u, v],
+\end{align*}
+where the equation $B[u, v] = \langle f, v\rangle$ still makes sense for $u, v \in H^1_0(U)$.
+
+\begin{definition}
+	$u \in H^1_0(U)$ is a \emph{weak solution}\index{weak solution} to the Dirichlet problem if for all $v \in H^1_0(U)$,
+	\[
+		B[u, v] = \langle f, v\rangle,
+	\]
+	for $f \in L^2(U)$.
+\end{definition}
+
+\begin{remark}
+	We should take $f \in H^{-1}_0(U) = (H^1_0(U))^{\ast}$.
+\end{remark}
+
+\begin{proposition}
+	$u \in H^1_0(U) \cap C^2(\bar U)$ is a weak solution for $f \in C^0(U)$ if and only if $u$ is a classical solution to $(\ast\ast)$.
+\end{proposition}
+
+\begin{remark}
+	We always want our weakened notions of solutions to agree with the stronger ones when enough regularity is available.
+\end{remark}
+
+\begin{proofbox}
+	If $u$ is classical, then we may do our integration by parts and hence $u \in H^1_0(U)$ is a weak solution.
+
+	For the forwards direction, we test $(\ast\ast\ast)$ for $v \in C^\infty_c(U)$. This gives
+	\[
+	\int_U(Lu - f)v = 0.
+	\]
+	So $Lu = f$ in $U$ everywhere. Hence $u \in H^1_0(U)$, $u|_{\partial U} = T(u) = 0$ in $L^2(\partial U)$.
+\end{proofbox}
+
+The main tool is the following.
+
+\begin{theorem}[Lax-Milgram]
+	Let $H$ be a real Hilbert space with inner product $(\cdot, \cdot)$ and $B : H \times H \to \mathbb{R}$ a bilinear form that is:
+	\begin{itemize}
+		\item bounded: $|B[u, v]| \leq \alpha \|u\|_H \|v\|_H$ for $\alpha > 0$,
+		\item coercive: $B[u, u] \geq \beta \|u\|^2$ for $\beta > 0$.
+	\end{itemize}
+	Let $F \in H^{\ast}$ be a bounded linear form. Then there exists unique $u \in H$ such that $B[u, \cdot] = F$. Moreover $\|u\|\leq \| F\|$.
+\end{theorem}
+
+We can apply this to the simplest case of the Dirichlet problem
+
+\begin{corollary}
+	Let $L$ be in divergence form with $b_i = 0$ and $c \geq 0$, with $a_{ij}$ bounded and uniformly elliptic.
+
+	Then Lax-Milgram applies with $H = H^1_0(U)$, with $B$ defined in the weak formulation and $F = \langle f , \cdot \rangle$ in $L^2$.
+
+	Then there exists a unique $u \in H^1_0(U)$ weak solution.
+\end{corollary}
+
+We first prove the corollary.
+
+\begin{proofbox}
+	We check three things: $B$ is bounded as a bilinear form $H^1_0 \times H^1_0 \to \mathbb{R}$; $B$ is coercive on $H^1_0$; and $F$ is bounded as a linear form on $H^1_0$.
+
+	(i) Note that
+	\begin{align*}
+		B[u, v] &= \int (\alpha_{ij} (\partial_{x_i} u) (\partial_{x_j} v) + cuv) \\
+			&\leq \bar a \|\nabla u\|_{L^2} \|\nabla v\|_{L^2} + \bar c \|u\|_{L^2} \|v\|_{L^2} \\
+			&\leq \alpha \|u\|_{H^1_0} \|v\|_{H^1_0}.
+	\end{align*}
+	
+	(ii) Look at $B[u, u]$:
+	\begin{align*}
+		B[u, u] &= \int (a_{ij} (\partial_{x)i} u)(\partial_{x_j} u) + c u^2) \\
+			&\geq \theta \|\nabla u\|^2_{L^2} \geq C \theta \|u\|^2_{H^1_0},
+	\end{align*}
+	from $\|u\|_{L^{2^{\ast}}} \leq C \|\nabla u\|_{L^2}$ for $u \in W^{1,2}_0(U)$.
+
+	Then (iii) gives
+	\begin{align*}
+		|F(v)| &= \left| \int_U f v\right| \leq \|f\|_{L^2} \|v\|_{L^2} \\
+		       &\leq C \|f\|_{L^2} \|v\|_{H^1_0}.
+	\end{align*}
+\end{proofbox}
+
+Now lets prove Lax-Milgram.
+
+\begin{proofbox}
+	Assume that $B[u, v] = B[v, u]$ by symmetrising. The boundedness and symmetry and coercivity means that $B$ defines anther inner product, equivalent to the first one.
+
+	So Riesz representation theorem in $H^1_0(U)$ endowed with an inner product $B$ and $F$ is uniquely represented by $u \in H^1_0(U)$, hence $B[u, \cdot] = F$.
+% lecture 15
+
+	If $B$ is not symmetric, given $u \in H$, $v \mapsto B[u, v]$ is bounded and linear, so it is uniquely represented by some $w \in H$, so 
+	\[
+		B[u, \cdot] = (w, \cdot).
+	\]
+	Let $A$ be the map $u \mapsto w$, from $H \to H$. Then $A$ is linear as $u \mapsto B[u, \cdot]$ is linear, and $A$ is bounded, since
+	\[
+		\|Au\|^2 = B[u, Au] \leq \beta \|u\| \|A u\|,
+	\]
+	so $\|A u\| \leq \beta \|u\|$. Moreover $A$ is coercive, as by testing on $u$,
+	\[
+		\alpha \|u\|^2 \leq B[u, u] = (Au, u) \leq \|Au\| \|u\|,
+	\]
+	hence $\|Au\| \geq \alpha \|u\|$. This shows injectivity.
+
+	Observe that $(\Img A)^{\perp} = \{0\}$. Indeed if $v \perp \Img A$, then $0 = (v, Av) = B[v, v] \geq \alpha \|v\|^2$, so $v = 0$.
+
+	Moreover $\Img (A)$ is closed, as if $(A u_n)$ is Cauchy, then by coercivity $(u_n)$ is Cauchy, so $u_n \to u_\infty$, hence $A u_n \to A u_{\infty}$.
+
+	So $\Img (A)$ is a closed subspace with trivial orthogonal space, so $\Img (A) = H$. To conclude, we see that $A : H \to H$ is linear and invertible, since $\|A^{-1}\| \leq \alpha^{-1}$. So $F \in H^{\ast}$ is uniquely isometrically represented by $w \in H$, and the solution is $u = A^{-1}w$. Moreover
+	\[
+	\|u\|_H \leq \|A^{-1}\| \|w\|_H \leq \alpha^{-1} \|F\|_{H^{\ast}}.
+	\]
+\end{proofbox}
+
+\begin{remark}
+	Lax-Milgram is related to the calculus of variations. Taking $B$ symmetric and coercive, then $B[u, \cdot] = F(\cdot)$ is the Euler-Lagrange equation of
+	\[
+		\inf_{H_0} \frac{B[u, u]}{2} - F(u).
+	\]
+\end{remark}
+
+\subsection{Dirichlet Problem in the Degenerate Case}%
+\label{sub:dir_deg}
+
+Let $L$ be in divergence form, $b_i \neq 0$, $c$ having no sign and being $\theta$-elliptic.
+
+We can prove the following energy estimate: for $u \in H^1_0(U)$, then
+\[
+	B[u, u] \geq \beta \|u\|^2_{H^1(U)} - \gamma \|u\|^2_{L^2(U)},
+\]
+for some $\beta, \gamma > 0$.
+
+\begin{proofbox}
+	We have
+	\begin{align*}
+		B[u, u] &= \int_U \left[ a_{ij}(\partial_i u) (\partial_j u) + b_i(\partial_i u) u + c u^2 \right] \\
+			&\geq \theta \int_U |\nabla u|^2 - \bar b \sum_{i = 1}^n \int|\partial_i u| |u| - \bar c \int u^2 \\
+			&\geq \frac{\theta}{2} \int |\nabla u|^2 - \left( \frac{\bar b^2}{2} \frac{n}{\theta} + \bar c \right) \int u^2,
+	\end{align*}
+	where $\bar b$ is the upper bound on all $|b_i|$, and $\bar c$ being $|c|$.
+\end{proofbox}
+
+\begin{remark}
+	If this is true with $\gamma = 0$, then $L_\mu u = Lu + \mu u$ satisfies $\gamma_\mu = 0$ for $\mu \geq \gamma$. Indeed,
+	\[
+		B_\mu[u, v] = B[u, v] + \mu \int uv,
+	\]
+	so Lax-Milgram applies to $L_\mu u = f$, $u|_{\partial U} = 0$ for $\mu \geq \gamma$.
+\end{remark}
+
+\begin{definition}
+	Let $H$ be a Hilbert space. Then a bounded linear operator $K : H \to H$ is said to be \emph{compact}\index{compact} if $(u_m)$ bounded in $H$ means that $(K u_m)$ has a subsequence converging strongly.
+\end{definition}
+
+\begin{remark}
+	\begin{enumerate}
+		\item[]
+		\item Compact operators are infinite dimensional extensions of matrices. Operators are compact $\iff$ they are a limit of finite rank operators.
+		\item By Rellich-Kondrashov theorem, if $K : L^2(U) \to L^2(U)$ is linear and bounded and $K$ is bounded $L^2(U) \to H^1(U)$, then $K$ is compact $L^2 \to L^2$.
+	\end{enumerate}
+\end{remark}
+
+\begin{theorem}[Fredholm Theory for Compact Operators]
+	Let $K : H \to H$ be compact in $H$ real Hilbert. Then,
+	\begin{enumerate}[\normalfont(i)]
+		\item If $T = \id - K$, then $\Ker T$ is finite dimensional.
+		\item $\Img T$ is closed.
+		\item $\Img T = (\Ker T^{\ast})^{\perp}$, where $T^{\ast} = \id - K^{\ast}$, and $(K^{\ast} u, v) = (u, K v)$ for all $u, v \in H$.
+		\item $\Ker T = \{0\} \iff \Img T = H$.
+		\item $\dim \Ker T = \dim \Ker T^{\ast}$.
+	\end{enumerate}
+\end{theorem}
+
+\begin{proofbox}
+	
+	
+	(i) Recall Riesz lemma, that the unit ball is compact if and only if it is finite dimensional.
+
+	Consider $\Ker T$ as a subspace of $H$, and $(u_m)$ be a bounded sequence in $\Ker T$. Then $(u_m) = (K u_m)$, but as $K$ is compact it has a convergent subsequence.
+
+	But then $(u_m)$ has a convergent subsequence, which means $\Ker T$ is finite dimensional.
+
+	(ii) Consider $(u_m)$ a converging sequence in $\Img T$, so there exists $(v_m)$ in $H$ so that
+	\[
+	u_m = v_m - K v_m.
+	\]
+	Note that $H = (\Ker T) \oplus (\Ker T)^{\perp}$, so we can decompose $v_m = w_m + h_m$, where $w_m \in \Ker T$, $h_m \perp \Ker T$.
+
+	If $h_m$ is bounded, then $u_m = h_m - K h_m$. But as $K$ is compact, the latter converges so $(h_m)$ has a subsequence that is convergent, hence $h_{m_k} \to h_\infty$. Then $u_\infty = T h_\infty \in \Img T$.
+
+	If $(h_m)$ is not bounded, we find a subsequence so that $0 \leq \|h_{m_k}\| \uparrow \infty$, and then $\tilde h_{m_k} = h_{m_k} / \|h_{m_k}\|$ satisfies
+	\[
+	\tilde h_{m_k} - K \tilde h_{m_k} = \frac{u_{m_k}}{ \|h_{m_k}\|} \to 0.
+	\]
+	But $h_{m_k}$ is bounded, so a subsequence converges to $h_\infty$ with unit norm, and $h_\infty \perp \Ker T$. Taking the limit, $h_\infty - K h_\infty = 0$, which is a contradiction as $h_\infty \in \Ker T$ as well.
+
+	(iii) We always have $(\Ker T^{\ast}) = (\Img T)^{\perp}$, so
+	\[
+	\Img T = \overline{\Img T} = ((\Img T)^{\perp})^{\perp} = (\Ker T^{\ast})^{\perp}.
+	\]
+
+	(iv) Observe that by (iii) and $K^{\ast}$ compact, we only need to prove
+	\[
+		\Img T = H \implies \Ker T = \{0\},
+	\]
+
+	as we can apply this to the adjoint problem. There exists a smallest $k_0 \geq 0$ such that $\Ker T^{k_0} = \Ker T^{k_0 + 1}$. If $k_0 \geq 1$, we have a contradiction.
+% lecture 16
+
+	So we claim there exists a smallest $k_0 \geq 0$ such that
+	\[
+	\Ker T^{k_0} = \Ker T^{k_0 + 1}.
+	\]
+	If not, choose an orthonormal sequence $(u_k)$, with $u_k \in \Ker T^{k+1}$. Then for $k \geq 0$, $l \geq 1$,
+	\[
+	K u_{k + l} - K u_k = T u_k - T u_{k+l} - u_k + u_{k+l} \in \Ker T^{k+l} + u_{k+l}.
+	\]
+	Hence we find that
+	\[
+	\|K u_{k+l} - K u_k\|^2 \geq \|u_{k+;}\|^2 = 1.
+	\]
+	So the sequence $(K u_k)$ has no converging subsequence, contradiction. So $k_0$ can be defined above.
+
+	Let us prove that $k_0 = 0$ to conclude that $\{0\} = \Ker T^{0} = \Ker T$. If $k_0 \geq 1$, then there exists $u \in \Ker T^{k_0} \setminus \Ker T^{k_0 - 1}$.
+
+	Since $\Img T = H$, there exists $v$ with $Tv = u$. Then $v \in \Ker T^{k_0 + 1} = \Ker T^{k_0}$, so in fact $u \in \Ker T^{k_0 - 1}$, which is a contradiction.
+
+	(v) We want to prove that
+	\[
+	\dim \Ker T = \dim \Ker T^{\ast}.
+	\]
+	We know that if one is zero, then the other must be zero, from (iii) and (iv). Let $m_1 = \dim \Ker T$, $m_2 = \dim \Ker T^{\ast}$, where $m_1, m_2 \geq 1$. Then denote $(f_k)_{k = 1}^{m_1}$, $(g_k)_{k = 1}^{m_2}$ to be orthonormal bases of each kernels. Then let
+	\[
+	\tilde K = K + (\cdot, f_1) g_1, \qquad \tilde K^{\ast} = K^{\ast} + (\cdot, g_1) f_1.
+	\]
+	We can check that
+	\[
+	\dim \Ker (\id - \tilde K) = m_1 - 1, \qquad \dim \Ker (\id - \tilde K^{\ast}) = m_2 - 1.
+	\]
+	$\tilde K$, $\tilde K^{\ast}$ are compact operators, as they are finite rank modifications of compact operators. We can continue until the index is zero, then both must be zero.
+\end{proofbox}
+
+We have the following application.
+
+\begin{corollary}[Fredholm Alternative for Dirichlet]
+	Consider $Lu = f$ for $u$ open bounded, and $u|_{\partial U} = 0$, where $\partial U$ is $C^1$.
+
+	Let $f \in L^2(U)$, and $a_{ij}, b_j, c \in L^{\infty}(U)$, where $L$ is uniformly elliptic. Then either:
+	\begin{itemize}
+		\item There is a unique weak solution $u \in H_0^1 (U)$ to the equation for all $f \in L^2(U)$,
+		\item Or the homogeneous problem $f = 0$ has at least one non-zero weak solution.
+	\end{itemize}
+	In the second case the set of homogeneous weak solutions $N$ is finite dimensional, non-trivial, with the same dimension as $N^{\ast}$, the set of homogeneous weak solutions to $L^{\ast} u = 0$, where $\langle Lu, v\rangle = \langle u, L^{\ast} v\rangle$, so $B^{\ast}[u, v] = B[v, u]$.
+
+	Finally the Dirichlet problem $(\ast)$ with RHS $f \in L^2(U)$ has weak solutions if and only if $f \perp N^{\ast}$. Here solutions are $u_0 + N$, where $u_0$ is a particular weak solution.
+\end{corollary}
+
+\begin{remark}
+	This looks like solving $Ax = b$; there is a unique solution if $b$ is not in the kernel of $A$.
+\end{remark}
+
+\begin{proofbox}
+	We know that $B$ in the weak formulation satisfies the energy estimate, so that
+	\[
+	L_\mu w = Lw + \mu w = f
+	\]
+	has a unique weak solution $w \in H_0^1(U)$ for all $f \in L^2(U)$, for $\mu = \gamma + 1$. Recall the energy estimate:
+	\[
+		B[u, u] \geq C \|\nabla u\|^2_{L^2} - \gamma \|u\|^2_{L^2}.
+	\]
+	Hence there is $w = L_\mu^{-1} g \in H^1_0(U)$ that is constructed. Recall that
+	\[
+	\|w\|_{H^1_0(U)} \leq C \|g\|_{L^2(U)},
+	\]
+	so the linear operator $L_\mu^{-1}$ is bounded and compact by Rellich-Kondrashov.
+
+	Rewrite the Dirichlet problem $Lu = f$ as
+	\[
+	L_\mu u = \mu u + f.
+	\]
+	Hence we are searching for $u \in H^1_0(U)$, such that
+	\[
+		\mu = L_\mu^{-1} f + \mu L_\mu^{-1} u \iff (\id - \mu L_{\mu}^{-1})u = L_\mu^{-1} f = \mu^{-1} K f, \tag{$\ast\ast$}
+	\]
+	where $K = \mu L_{\mu}^{-1}$. Thus applying (iv) from the last theorem in $H = L^2(U)$, either $\Ker (\id - K) = \{0\}$ and $\Img (\id - K) = H$, so $(\ast\ast)$ always has a solution, or $\Ker (\id - K)$ is non-trivial.
+
+	If we have a solution $u$ to $(\ast\ast)$, this corresponds to a weak solution to the initial problem. Otherwise, let $\Ker(\id - K) = N$ in $L^2(U)$. If $u = \mu L_\mu^{-1} u$, then $u \in H^1_0(U)$, and by definition $\tilde u = \mu L_{\mu}^{-1}u$ satisfies
+	\[
+		B[\tilde u, \cdot] + \mu (\tilde u, \cdot) = \mu (u, \cdot),
+	\]
+	which as $\mu = \tilde \mu$ rewrites as $B[u, \cdot] = 0$, so $u$ is a homogeneous solution to the initial problem.
+
+	Similarly $\Ker(\id - K^{\ast}) = N^{\ast}$.
+
+	The first case corresponds to $N = N^{\ast} = \{0\}$, and $\Img (\id - K) = H$, so the solution provided is
+	\[
+	u = (\id - K)^{-1} \mu K f \in H^1_0(U).
+	\]
+	In the other case, $\dim N = \dim N^{\ast} \geq 1$, and
+	\[
+	\Img (\id - K) = \Ker (\id - K^{\ast})^{\perp} = (N^{\ast})^{\perp}.
+	\]
+	We show $Kf \perp N^{\ast} \iff f \perp N^{\ast}$.
+% lecture 17
+	Indeed, $v \in N^{\ast} \iff v = K^{\ast} v$. For all $v \in N^{\ast}$,
+	\[
+		(f, v) = (f, K^{\ast} v) = (Kf, v).
+	\]
+\end{proofbox}
+
+\begin{remark}
+	The arguments above imply that for all $\lambda \in \mathbb{R}$,
+	\[
+	L_{-\lambda}u = (L - \lambda)u = f
+	\]
+	has either a unique solution for all $f$, or no solutions or multiple solutions.
+\end{remark}
+
+Note that we can complexify everything, by letting
+\[
+	(u, v)_{L^2(U)} = \int_U \bar u v,
+\]
+for $u, v$ $\mathbb{C}$-valued, and
+\[
+\langle u, v \rangle_{H^1_0(U)} = \int_U (\bar u v + \overline{D u} Dv ).
+\]
+This is useful as $\mathbb{C}$ is algebraically closed, and not $\mathbb{R}$, so we miss rotation matrices working over $\mathbb{R}$.
+
+We claim that after complexifying, everything we have proven still works.
+
+\begin{theorem}[Spectrum of $L$]
+	With all the assumptions as before, after complexifying,
+	\begin{enumerate}[\normalfont(i)]
+		\item There is at most countably many $\lambda \in \Sigma \subseteq \mathbb{C}$ so that
+			\[
+				(L - \lambda) u = f
+			\]
+			does not have a unique $u \in H^1_0(U)$ solution for all $f \in L^2$.
+		\item If $\Sigma$ is infinite, then we can write it as a sequence $(\lambda_k)$ where $|\lambda_k| \to \infty$.
+		\item Each $\lambda \in \Sigma$ corresponds to a finite dimensional space eigenspace, $\mathcal{C}(\lambda)$,
+			\[
+				\mathcal{C}(\lambda) = \{ u \in H^1_0(U) \mid (L - \lambda) u = 0 \iff B[u, \cdot] = \lambda(u, \cdot) \}.
+			\]
+		\item If $a_{ij} = \overline{a_{ji}}$ for all $i, j$, $b_i = 0$ and $c = \bar c$, then
+			\[
+			\Sigma \subset [c, +\infty) \subset \mathbb{R}.
+			\]
+	\end{enumerate}	
+\end{theorem}
+
+\begin{remark}
+	\begin{enumerate}
+		\item[]
+		\item If we have an unbounded operator $L$, then $L : L^2 \not L^2$, for $u \in L^2$.
+		\item The proof establishes a resolvent estimate:
+			\[
+			\|L_{\mu}^{-1}\|_{L^2(U) \to L^2(U)} \leq \frac{C}{1 + \mu},
+			\]
+			as $\mu \to \infty$. In the symmetric case,
+			\[
+			\|L_\mu^{-1}\| \leq \frac{1}{d(\mu, \Sigma)}.
+			\]
+		\item If $L = - \Delta$ in $U$ open bounded and $C^1$ boundary, then $\Sigma = \{(\lambda_k)\} \subseteq \mathbb{R}_+$, and we can order it as $0 < \lambda_1 < \cdots < \lambda_k$ are the \emph{harmonic frequencies}\index{harmonic frequencies} of the domain.
+
+			This can be thought of as the frequencies of a $U$-shaped drum. Is the shape determined by the sequence of harmonic frequencies, i.e. can you hear the shape of a drum?
+
+			If $U$ is compact analytic, then the answer is yes by Zelditch, and no for convex polygons.
+	\end{enumerate}	
+\end{remark}
+
+\begin{proofbox}
+	Given $\lambda \in \mathbb{C}$, if $\Re \lambda \leq - \gamma$, where recall $\gamma$ is the constant in our energy estimate, then $L_{-\lambda} = L - \lambda$ is coercive, i.e.
+	\[
+		B_{-\lambda}[u, u] \geq \frac{\theta}{2} \|Du\|_{L^2}^2.
+	\]
+	Hence there exists unique $u \in H^1_0(U)$ for all $f \in L^2(U)$ with
+	\[
+		(L - \lambda) u = f \iff B_{-\lambda}[u, \cdot] = (f, \cdot).
+	\]
+	So $\Sigma \subseteq \{\Re \lambda \geq -\gamma\}$.
+
+	To prove (iii), use the previous theorem
+	\[
+		(L - \lambda) u = f \iff [\id - (\mu + \lambda)K]u = K f,
+	\]
+	where $K = L_{\mu}^{-1}$, and $\mu = \gamma \vee |\lambda| + 1$. If the space of homogeneous solutions is not trivial, then $N, N^{\ast}$ are not trivial, but we know that $\dim N < \infty$.
+
+	To prove (i) and (ii), we claim the following: for all $M >0$, $\Sigma \cap B_{\mathbb{C}}(0, M)$ is finite. This proves both statements.
+
+	The proof is by contradiction. Assume we have $(\lambda_k)$ infinite and pairwise distinct in $\Sigma \cap B(0, M)$. Choose $\mu = \gamma \vee M + 1$. Then we can reformulate $(L - \lambda_k)  u = f$ as
+	\[
+		(\id - (\lambda_k + \mu)K)u = Kf,
+	\]
+	where $K = L_\mu^{-1}$, for all $k \geq 1$. Since $\lambda_k \in \Sigma$, $N$ is not trivial. Here
+	\[
+	N = \ker (\id - (\lambda_k + \mu)K).
+	\]
+	This means that $(\lambda_k + \mu)^{-1} = \tilde \lambda_{k}$ is an eigenvalue with a finite-dimensional eigenspace, of $K$.
+
+	Pick inductively $u_k \in L^2(U) \setminus \{0\}$ such that
+	\[
+	K u_ = \frac{1}{\lambda_k + \mu} u_k,
+	\]
+	and $u_k$ is at distance at least $1/2$ of the span of $\{u_1, \ldots, u_{k-1}\}$. Hence
+	\begin{align*}
+		\|K u_{k+l} - K u_k\|_{L^2(U)} &= \|\tilde \lambda_{k + l} u_{k+l} - \tilde \lambda_{k} u_k\| \\
+					       &= |\tilde \lambda_{k+l}| \left\|u_{k+l} - \frac{\tilde \lambda_k}{\tilde \lambda_{k+l}} u_k\right\| \\
+					       &\geq \frac{1}{2(\mu + M)},
+	\end{align*}
+	which means that $(Ku_k)$ has no converging subsequence, a contradiction to $K$ being compact.
+
+	(iv) If $\overline{a_{ij}} = a_{ji}$, $b_i = 0$ and $c = \bar c$, then $K = K^{\ast}$, which we can check. So,
+	\[
+	\tilde \lambda_k = \overline{\tilde \lambda_k} \implies \lambda_k \in \mathbb{R}.
+	\]
+\end{proofbox}
+
+\subsection{Regularity Theory of Dirichlet Problem}%
+\label{sub:rtp}
+
+Take the problem $Lu = f$. This we solved in $H^1_0(U)$. When can we show that this is a strong solution in $C^2$ or $C^k$?
+
+We begin with the core idea in a simplified setting: if $u \in C_c^\infty(U)$ and $-\Delta u = f \in L^2$, then 
+\begin{align*}
+	\int_U f^2 &= \int_U (\Delta u)^2 = \int \left( \sum_{i = 1}^n \partial_{ii}^2 u \right) \left( \sum_{j = 1}^n \partial_{jj}^2 u \right).
+\end{align*}
+Now we can do integration by parts twice to find that
+\begin{align*}
+	\int f^2 &= \int (\Delta u)^2 = \int \sum_{i,j = 1}^n (\partial_{ij}^2 u)^2.
+\end{align*}
+This shows we can control the full second-order regularity of $f$, with the $L^2$ of $\Tr \nabla u^2$ and $\nabla u^2$.
+
+% lecture 18
 
 \newpage
 

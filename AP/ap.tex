@@ -996,7 +996,7 @@ So if $X$ is a martingale, $|X|$ is a non-negative submartingale.
 \begin{theorem}[Doob's Maximal Inequality]
 	Let $X$ be a non-negative submartingale, and $X_n^\ast = \sup_{0\leq k \leq n} X_k$. Then for all $\lambda \geq 0$,
 	\[
-		\lambda \mathbb{P}[X_n\ast \geq \lambda] \leq \mathbb{E}[X_n \mathbbm{1}(X_n^\ast \geq \lambda)] \leq \mathbb{E}[X_n].
+		\lambda \mathbb{P}[X_n^\ast \geq \lambda] \leq \mathbb{E}[X_n \mathbbm{1}(X_n^\ast \geq \lambda)] \leq \mathbb{E}[X_n].
 	\]
 \end{theorem}
 
@@ -1995,7 +1995,7 @@ We will list the following statements which we have proven for discrete time mar
 Let $\mathcal{D}_n = \{k 2^{-n} \mid 0 \leq k \leq 2^{n}\}$, and $\mathcal{D} = \bigcup \mathcal{D}_n$.
 
 \begin{theorem}
-	Let $(X_t)_{t \in \mathcal{D}}$ be a $\mathbb{R}$-valued process. Suppose that there exists $p, s > 0$ so that
+	Let $(X_t)_{t \in \mathcal{D}}$ be a $\mathbb{R}$-valued process. Suppose that there exists $p, \eps > 0$ so that
 	\[
 		\mathbb{E}[|X_s - X_t|^{p}]] \leq C |t - s|^{1 + \eps},
 	\]
@@ -2043,7 +2043,7 @@ Let $\mathcal{D}_n = \{k 2^{-n} \mid 0 \leq k \leq 2^{n}\}$, and $\mathcal{D} = 
 	\[
 	|X_t - X_s| \leq 2 \sum_{n \geq r + 1} M 2^{-n \alpha} = 2 M \frac{2^{-(r+1)\alpha}}{1 - 2^{-\alpha}}.
 	\]
-	Set $M' = 2M / (1 - 2^{-\alpha})$. THen we get
+	Set $M' = 2M / (1 - 2^{-\alpha})$. Then we get
 	\[
 	|X_t - X_s| \leq M' 2^{-(r+1)\alpha} \leq M' |t - s|^{\alpha}.
 	\]
@@ -2057,7 +2057,7 @@ Let $\mathcal{D}_n = \{k 2^{-n} \mid 0 \leq k \leq 2^{n}\}$, and $\mathcal{D} = 
 Let $(M, d)$ be a metric space equipped with the Borel $\sigma$-algebra.
 
 \begin{definition}
-	Let $(\mu_n)$ be a sequence of probability measures on $M$. We say that $\mu_n \to \mu$ \emph{weakly}\index{weak convergence} if $\mu_n(f) \to \mu(f)$ for all $f$ bounded, continuous.
+	Let $(\mu_n)$ be a sequence of probability measures on $M$. We say that $\mu_n \to \mu$ \emph{weakly}\index{weak convergence} if $\mu_n(f) \to \mu(f)$ for all $f$ bounded, continuous, and write $\mu_n \implies \mu$.
 \end{definition}
 
 \begin{exbox}
@@ -2123,9 +2123,1641 @@ Let $(M, d)$ be a metric space equipped with the Borel $\sigma$-algebra.
 
 	(ii) $\implies$ (iii): This is easy to see as the complement of an open set is closed. Similarly (iii) $\implies$ (ii).
 % lecture 14
+
+	(ii) and (iii) $\implies$ (iv): Fix a set $A$, and let $\mathring A$ and $\bar{A}$ be the interior and closure of $A$. Then
+	\[
+	\mu(\partial A) = \mu(\bar{A} \setminus \mathring A) = 0 \implies \mu(\mathring A) = \mu(\bar{A}) = \mu(A).
+	\]
+	Thus we have
+	\[
+	\limsup_n \mu_n(\bar A) \leq \mu(A) \leq \liminf_n \mu_n(\mathring A),
+	\]
+	from (ii) and (iii). But since $\mathring A \subseteq \bar A$, we have equality, which implies (iv).
+
+	(iv) $\implies$ (i): Let $f : M \to \mathbb{R}_+$ be continuous and bounded. Then
+	\begin{align*}
+		\int_M f(x) \diff \mu_n(x) &= \int_M \left( \int_0^\infty \mathbbm{1}_{(t \leq f(x))} \diff t \right) \diff \mu_n(x) \\
+					   &= \int_0^K \mu_n(\{f \geq t\}) \diff t, \qquad (\text{Fubini})
+	\end{align*}
+	where $K = \|f\|_\infty$.
+
+	We claim that for Lebesgue almost-everywhere $t$, we have that
+	\[
+		\mu(\partial\{f \geq t\}) = 0.
+	\]
+	Indeed, $\partial\{f \geq t\} \subseteq \{f = t\}$, as $\{f \geq t\}$ is closed and $\{f > t\}$ is open and contained in the interior of $\{f \geq t\}$.
+
+	Now the number of $t$ such that $\mu(\{f = t\}) > 0$ is countable, since
+	\[
+	\{ t \mid \mu(\{f = t\}) > 0\} = \bigcup_n \{t \mid \mu(\{f = t\}) > 1/n\},
+	\]
+	and $|\{t \mid \mu(\{f = t\} \geq 1/n\}| \leq n$. Hence by property (iv) and DCT applied to
+	\[
+		\int_0^K \mu_n(\{f \geq t\}) \diff t,
+	\]
+	we get that $\mu_n(f) \to \mu(f)$ as $n \to \infty$. For general $f : M \to \mathbb{R}$ bounded and continuous, apply the above to $f^+$ and $f^-$ (this is a version of the Portmanteau theorem).
 \end{proofbox}
 
+For $\mu$ a finite measure on $\mathbb{R}$, define
+\[
+	F_\mu(x) = \mu((-\infty, x])
+\]
+for $x \in \mathbb{R}$ to be its \emph{distribution function}\index{distribution function}.
+
+\begin{proposition}
+	Let $(\mu_n)$ be a sequence of probability measures on $\mathbb{R}$. The following are equivalent:
+	\begin{enumerate}[\normalfont(i)]
+		\item $\mu_n \implies \mu$ as $n \to \infty$.
+		\item For all $x \in \mathbb{R}$ wherever $F_\mu$ is continuous at $x$,
+			\[
+			F_{\mu_n}(x) \to F_\mu(x)
+			\]
+			as $n \to \infty$.
+	\end{enumerate}
+\end{proposition}
+
+\begin{proofbox}
+	
+
+	(i) $\implies$ (ii): Let $x$ be a continuity point of $F_\mu$. Then,
+	\begin{align*}
+		\mu(\partial(-\infty, x]) &= \mu(\{x\}) = \mu((-\infty, x]) - \lim_{n \to \infty} \mu((-\infty, x - 1/n]) \\
+					  &= F_\mu(x) - \lim_{n \to \infty} F_\mu\left( x - \frac{1}{n} \right) = 0.
+	\end{align*}
+	Hence we see that
+	\[
+		F_{\mu_n}(x) = \mu_n((-\infty, x]) \to \mu((-\infty, x]) = F_\mu(x).
+	\]
+	(ii) $\implies$ (i): Since the distribution function is increasing, it can have at most countably many discontinuities, hence the set of continuity points is dense. Let
+	\[
+	G = \bigcup_k(a_k, b_k) \subseteq \mathbb{R}
+	\]
+	be open, where we take disjoint intervals. Then
+	\[
+	\mu_n(G) = \sum_k \mu_n((a_k, b_k)).
+	\]
+	For a generic interval $(a, b)$, then
+	\[
+	\mu_n((a, b)) = F_{\mu_n}(b^-) - F_{\mu_n}(a) \geq F_{\mu_n}(b;) - F_{\mu_n}(a'),
+	\]
+	where $a < a' < b' < b$, where $a', b'$ are continuity points. Now
+	\[
+	\liminf_{n \to \infty} \mu_n((a, b)) \geq F_\mu(b') - F_{\mu}(a') = \mu((a', b')).
+	\]
+	Let $a' \downarrow a$, $b' \uparrow b$ along the continuity points of $F_\mu$. Then
+	\[
+	\liminf_{n \to \infty} \mu_n((a, b)) \geq \mu((a, b)).
+	\]
+	Finally,
+	\begin{align*}
+		\liminf_{n \to \infty}\mu_n(G) &= \liminf_{n \to \infty} \sum_k \mu_n((a_k, b_k)) \geq \sum_k \liminf_{n \to \infty} \mu_n((a_k, b_k)) \quad(\text{Fatou}) \\
+					       &\geq \sum_k \mu((a_k, b_k)) = \mu(G).
+	\end{align*}
+\end{proofbox}
+
+\begin{definition}
+	Let $(X_n)$ be a sequence of random variables with values in $(M, d)$, but defined possibly on different probability spaces.
+
+	We say that $(X_n)$ \emph{converges in distribution}\index{convergence in distribution} to a random variables $X$ if $\mathcal{L}(X_n) \implies \mathcal{L}(X)$ as $n \to \infty$.
+
+	In other words, if $(X_n)$ are defined on $(\Omega_n, \mathcal{F}_n, \mathbb{P}_n)$ and $X$ is defined on $(\Omega, \mathcal{F}, \mathbb{P})$ then this is equivalent to
+	\[
+	\mathbb{E}_{\mathbb{P}_n}[f(X_n)] \to \mathbb{E}_{\mathbb{P}}[f(X)],
+	\]
+	for all $f : M \to \mathbb{R}$ bounded and continuous.
+\end{definition}
+
+\begin{proposition}
+	\begin{enumerate}[\normalfont(i)]
+		\item[]
+		\item Let $(X_n)$ be a sequence of random variables which converge in probability to $X$. Then $X_n \to X$ in distribution.
+		\item Let $(X_n)$ be a sequence of random variables which converge in distribution to a constant $c$. Then $X_n \to c$ in probability.
+	\end{enumerate}
+\end{proposition}
+
+\begin{proofbox}
+	This is on the example sheet.
+\end{proofbox}
+
+\begin{exbox}
+	Let $(X_n)$ be IID in $\mathcal{L}^2$ with $\mu = \mathbb{E}[X]$ and $\sigma^2 = \Var(X)$.
+
+	Set $S_n = X_1 + \cdots + X_n$. Then
+	\[
+	\frac{S_n - n\mu}{\sigma \sqrt n} \overset d\to N(0,1),
+	\]
+	in distribution.
+\end{exbox}
+
+\subsection{Tightness}%
+\label{sub:tight}
+
+\begin{definition}
+	A sequence of probability measures $(\mu_n)$ on $(M, d)$ is \emph{tight}\index{tight} if for all $\eps > 0$, there exists $K \subseteq M$ compact such that
+	\[
+	\sup_n \mu_n (M \setminus K) < \eps.
+	\]
+\end{definition}
+
+Note that if $(M, d)$ is compact, then any sequence of probability measures is tight.
+
+\begin{theorem}[Prokhorov's Theorem]
+	Let $(\mu_n)$ be a tight sequence of probability measures. There exists a subsequence $(\mu_{n_k})$ of $(\mu_n)$ and a probability measure $\mu$ on $M$ so that $\mu_{n_k} \implies \mu$.
+\end{theorem}
+
+\begin{proofbox}
+	
+	We sketch a proof only for $M = \mathbb{R}$. Hence we can take $F_{\mu_n}$ to be the distribution function for $\mu_n$.
+
+	We will pass to a diagonal subsequence $(F_{\mu_{n_k}})$ of $(F_{\mu_n})$ such hat $F_{\mu_{n_k}}(x)$ converges for all $x \in \mathbb{Q}$. We can use this to construct $F_\mu$, and show that $F_{\mu_{n_k}} \to F_{\mu}$ for all continuity points.
+
+	The tightness condition will be used to show that $F_\mu$ is actually the distribution function for some random variable.
 % lecture 15
+
+	So, let $F_{\mu_n} = F_n$ be the distribution function for $\mu_n$. First, we find a subsequence $(n_k)$ such that $F_{n_k}(x) \to F(x)$ for all $x \in \mathbb{Q}$.
+
+	Let $(x_j)$ be an enumeration of $\mathbb{Q}$. Note that $F_n(x_j) \in [0, 1]$ for all  $n, j$, so we can find a subsequence $(n_k^1)$ such that $(F_{n_k^1}(x_1))$ converges.
+
+	Given that we have defined $(n_k^{j})$ for $1 \leq j \leq m$, such that $(F_{n_k^j}(x_i))$ converges for $1 \leq i \leq j$, let $(n_k^{m+1})$ be a subsequence of $(n_k^m)$ so that $(F_{n_k^{m+1}}(x_{m+1}))$ converges.
+
+	Let $n_k = n_k^k$. Then $(F_{n_k}(x_j))$ converges for all $j$, to say $F(x)$.
+
+	Now $F_n$ is non-decreasing, so $F$ is non-decreasing, so we may set
+	\[
+		F(x) = \lim_{\substack{q \downarrow x \\ q \in \mathbb{Q}}} F(q),
+	\]
+	for all $x \in \mathbb{R}$. Then $F$ is right-continuous and monotone, hence is cadlag.
+
+	The next step is to show that if $t$ is a continuity point, then
+	\[
+	\lim_{k \to \infty} F_{n_k}(t) = F(t).
+	\]
+	Let $s_1 < t < s_2$ with $s_1, s_2 \in \mathbb{Q}$, so that
+	\[
+	|F(t) - F(s_i)| < \frac{\eps}{2}.
+	\]
+	Then we have
+	\begin{align*}
+		F(t) - \eps &< F(s_i) - \frac{\eps}{2} < F_{n_k}(s_i) \leq F_{n_k}(t) \\
+			    &\leq F_{n_k}(s_2) < F(s_2) + \frac{\eps}{2} < F(t) + \eps,
+	\end{align*}
+	for all $k$ large enough, which gives the required condition.
+
+	Finally we need to show that $F$ is a distribution function, i.e.
+	\[
+	\lim_{x \to -\infty} F(x) = 0, \qquad \lim_{x \to \infty} F(x)= 1.
+	\]
+	From tightness, we know that for all $\eps > 0$, there is $N$ such that for all $n \geq N$,
+	\[
+		\mu_k([-n, n]^{c}) < \eps,
+	\]
+	for all $k$. Choose continuity points $a < -N$, $b > N$. Then we must have $F(a) \leq \eps$, $F(b) \geq 1 - \eps$.
+
+	Finally we show there exists a probability measure $\mu$ so that $F = F_\mu$. First set
+	\[
+		\mu((a, b]) = F(b) - F(a).
+	\]
+	We can extend this to $\mathcal{B}(\mathbb{R})$ by applying Caratheodory's extension theorem.
+\end{proofbox}
+
+\subsection{Characteristic Functions}%
+\label{sub:cf}
+
+\begin{definition}
+	Let $X$ be a random variable with values in $\mathbb{R}^d$, with $\mu = \mathcal{L}(X)$. The \emph{characteristic function}\index{characteristic function} $\vphi = \vphi_X$ is, for all $u \in \mathbb{R}^d$,
+	\[
+	\vphi(u) = \mathbb{E}[\exp(i \langle u, X \rangle)] = \int_{\mathbb{R}^d} \exp(i \langle u, x \rangle) \diff \mu (x).
+	\]
+\end{definition}
+
+The characteristic function has the following properties:
+\begin{itemize}
+	\item $\vphi(0) = 1$.
+	\item $\vphi$ is continuous (DCT).
+	\item $\vphi$ determines the law of $X$ (from properties of the Fourier transform).
+\end{itemize}
+
+\begin{theorem}[Levy]
+	Let $(X_n)$ be a sequence of random variables with values in $\mathbb{R}^d$. Then,
+	\begin{enumerate}[\normalfont(i)]
+		\item $\mathcal{L}(X_n) \to \mathcal{L}(X)$ as $n \to \infty$ implies $\vphi_{X_n}(\xi) \to \vphi_X(\xi)$ for all $\xi \in \mathbb{R}^d$.
+		\item Assume that $(X_n)$ is a sequence of random variables with values in $\mathbb{R}^d$ such that there is $\psi : \mathbb{R}^d \to \mathbb{C}$ with $\psi(0) = 1$, $\psi$ continuous at $0$, and
+			\[
+			\psi_{X_n}(\xi) = \psi(\xi)
+			\]
+			 for all $\xi \in \mathbb{R}^d$. Then $\psi = \vphi_X$ for some random variables $X$, and hence $\mathcal{L}(X_n) \to \mathcal{L}(X)$.
+	\end{enumerate}
+\end{theorem}
+
+\begin{lemma}
+	Suppose that $X$ is a random variable with values in $\mathbb{R}^d$. Then,
+	\[
+		\mathbb{P}( \|X\|_\infty \geq k) \leq C \left( \frac k2\right)^d \int_{[-k^{-1}, k^{-1}]^{d}} (1 - \vphi_X(\xi)) \diff \xi,
+	\]
+	where $C = (1 - \sin 1)^{-1}$.
+\end{lemma}
+
+\begin{proofbox}
+	Let $\mu = \mathcal{L}(X)$. Then,
+	\begin{align*}
+		\int_{[-\lambda, \lambda]^{d}} \vphi_X(u) \diff u &= \int_{[-\lambda, \lambda]^{d}} \left( \int e^{i \langle u, x \rangle} \diff \mu(x) \right) \diff u \\
+								  &= \int \left( \prod_{j = 1}^{d} \int_{[-\lambda, \lambda]} e^{iu_j x_j} \diff u_j \right) \diff \mu(x) \\
+								  &= \int \left( \prod_{j = 1}^d \frac{1}{i x_j} \left( e^{i \lambda x_j} - e^{-i \lambda x_j} \right) \right) \diff \mu(x) \\
+								  &= \int \prod_{j = 1}^d \frac{2 \sin (\lambda x_j)}{x_j} \diff \mu(x),
+	\end{align*}
+	hence we find that
+	\[
+		\frac{1}{\lambda^{d}} \int_{[-\lambda, \lambda]^{d}} (1 - \vphi_X(u)) \diff u = 2^{d} \int_{\mathbb{R}^d} \left(1 - \prod_{j = 1}^d \frac{\sin(\lambda x_j)}{\lambda x_j} \right) \diff \mu(x).
+	\]
+	If $x \geq 1$, then $|\sin x| \leq x - \sin(1)$. So $f : \mathbb{R}^d \to \mathbb{R}$ given by
+	\[
+	f(u) = \prod_{j = 1}^d \frac{\sin u_j}{u_j}
+	\]
+	satisfies $|f(u)| \leq \sin 1$ for $\|u\|_\infty \geq 1$. Hence $\mathbbm{1}(\|u\|_\infty \geq 1) \leq C (1 - f(u))$, for $C = (1 - \sin 1)^{-1}$. So,
+	\begin{align*}
+		\mathbb{P}(\|X\|_\infty \geq k) &= \mathbb{P}(\|X/k\|_\infty \geq 1) \leq C \mathbb{E}\left[ 1 - \prod_{j= 1}^d \frac{\sin(X_j/k)}{X_j/k}\right]\\
+						&= C \int 1 - \prod_{j = 1}^d \frac{\sin(x_j/k)}{x_j/k} \diff \mu(x) \\
+						&= C \left( \frac{k}{2} \right)^d \int_{[-k^{-1}, k^{-1}]^{d}} (1 - \vphi_X(u)) \diff u.
+	\end{align*}
+\end{proofbox}
+
+Now we can prove Levy's theorem.
+
+\begin{proofbox}
+	
+
+	(i) First, if $\mathcal{L}(X_n) \implies \mathcal{L}(X)$, then $\mu_n(f) \to \mu(f)$ for all $f$ continuous and bounded. In particular we can apply this to $f(x) = \exp(i \langle \xi, x \rangle)$.
+
+	(ii) We show that $(\mathcal{L}(X_n)) = (\mu_n)$ is tight. From the lemma, note that
+	\[
+		\mathbb{P}(\|X_n\|_\infty \geq k) \leq C \left( \frac{k}{2} \right)^d \int_{[-k^{-1}, k^{-1}]^{d}} (1 - \vphi_{X_n}(\xi)) \diff \xi.
+	\]
+	Note that $1 - \Re(\vphi_{X_n}(u)) \leq 2$ for all $n$, so the integrand is bounded. Hence by DCT,
+	\[
+		\lim_{n \to \infty} \int_{[-k^{-1}, k^{-1}]^{d}} (1 - \vphi_{X_n}(u)) \diff u = \int_{[-k^{-1}, k^{-1}]^{d}} (1 - \psi(u)) \diff u.
+	\]
+	$\psi$ is continuous at $0$, and $\psi(0) = 1$, so we can choose $k$ large enough so that
+	\[
+	\mathbb{P}(\|X_n\|_\infty \geq k) \leq \eps
+	\]
+	for all $n$.
+
+	This implies that we can use Prokhorov's theorem, so we can find a subsequence $(n_k)$ with $\mathcal{L}(X_{n_k}) \to \mathcal{L}(X)$ for some $X$, hence $\vphi_{X_{n_k}} \to \vphi_X$, but hence $\vphi_X = \psi$, so $\psi$ is a characteristic function.
+
+	Now we conclude. If $\mathcal{L}(X_n) \neq \mathcal{L}(X)$, then there is a subsequence $(n_k)$ and $f$ bounded and continuous with
+	\[
+	|\mathbb{E}[f(X_{n_k})] - \mathbb{E}[f(X)]| > \eps.
+	\]
+	But $(\mathcal{L}(X_{n_k}))$ is tight, so we can find a further subsequence $(X_{n_k'})$ such that $\mathcal{L}(X_{n_k'}) \implies \mathcal{L}(Y)$, for some random variable $Y$. But then $\psi = \vphi_Y$, a contradiction to the uniqueness of characteristic functions.
+\end{proofbox}
+
+% lecture 16
+
+\newpage
+
+\section{Large Deviations}%
+\label{sec:ld}
+
+Let $(X_n)$ be IID in $\mathcal{L}^1$ with
+\[
+\bar x = \mathbb{E} X_1, \qquad S_n = \sum_{i = 1}^n X_i.
+\]
+From the strong law of large numbers,
+\[
+	\frac{1}{n} S_n \to \bar x \qquad \text{a.s.}
+\]
+In this section we are interested in the asymptotics $\mathbb{P}(S_n \geq an)$, for some $a > \bar x$.
+
+\begin{exbox}
+	Let $(X_n)$ be IID $N(0, 1)$. Then as $S_n \sim N(0, n)$, we see
+	\[
+		\mathbb{P}(S_n \geq an) = \mathbb{P}(X_1 \geq a \sqrt n) \sim \frac{1}{a \sqrt{2 \pi n}} e^{-a^2n/2}.
+	\]
+	In other words,
+	\[
+	-\frac{1}{n} \log \mathbb{P}(S_n \geq an) \to I(a) = \frac{a^2}{2}.
+	\]
+\end{exbox}
+
+\subsection{Cramer's Theorem}%
+\label{sub:ct}
+
+Our goal is to prove similar bounds to the above example for $\mathbb{P}(S_n \geq an)$, using the \emph{moment generating function}\index{moment generating function} for $X_1$:
+\[
+M(\lambda) = \mathbb{E} e^{\lambda X_1}, \qquad \psi(\lambda) = \log M(\lambda).
+\]
+Note that $\psi(0) = 0$ as $M(0) = 1$. The idea is, for some $\lambda \geq 0$, that
+\begin{align*}
+	\mathbb{P}(S_n \geq an) &= \mathbb{P}( e^{\lambda S_n} \geq e^{\lambda an} ) \leq e^{-\lambda na} \mathbb{E} e^{\lambda S_n} \\
+				&= (e^{-\lambda a} M(\lambda))^{n} = \exp (-n (\lambda a - \psi(\lambda))).
+\end{align*}
+The best possible bound is by optimizing $\lambda a - \psi(\lambda)$. The \emph{Legendre transform}\index{Legendre transform} of $\psi$ is
+\[
+\psi^{a} = \sup_{\lambda \geq 0} (\lambda a - \psi(\lambda)) \geq -\psi(0) = 0.
+\]
+Then we find that
+\[
+\mathbb{P}(S_n \geq an) \leq e^{-n \psi^{\ast}(a)} \implies \liminf_{n \to \infty} - \frac 1n \log \mathbb{P}(S_n \geq an) \geq \psi^{\ast}(a).
+\]
+
+\begin{theorem}[Cramer]
+	Let $(X_n)$ be IID $\mathcal{L}^1$ random variables with $\bar x = \mathbb{E}X_1$, $S_n = \sum_{i=1}^n X_i$. Then
+	\[
+	\lim_{n \to \infty} - \frac{1}{n} \log \mathbb{P}(S_n \geq na) = \psi^{\ast} (a)
+	\]
+	for all $a \geq \bar x$.
+\end{theorem}
+
+\begin{lemma}
+	$M(\lambda), \psi(\lambda)$ are continuous on $D = \{ \lambda \mid M(\lambda) < \infty\}$, and differentiable in $\mathring D$ with
+	\[
+	M'(\lambda) = \mathbb{E}[X e^{\lambda X}], \qquad \psi^{\ast}(\lambda) = \frac{M'(\lambda)}{M(\lambda)}.
+	\]
+\end{lemma}
+
+\begin{proofbox}
+	Note that $D$ is an interval: if $\lambda_1, \lambda_2 \in D$ and $\lambda_1 < \lambda < \lambda_2$, then $\lambda \in D$ since
+	\[
+	e^{\lambda x} \leq e^{\lambda_1 x} + e^{\lambda_2x}.
+	\]
+	Using this inequality and DCT, both $M(\lambda)$ and $\psi(\lambda)$ are continuous.
+
+	We prove differentiability. Fix $\eta \in \mathring D$. Note
+	\begin{align*}
+		\frac{M(\eta + \eps) - M(\eta)}{\eps} &= \mathbb{E}\left[ \frac{e^{(\eta + \eps) X} - e^{\eta X}}{\eps} \right].
+	\end{align*}
+	For all $\delta > 0$, and $\eps \in (-\delta, \delta)$, we have that, by convexity of $\exp$,
+	\[
+	\left| \frac{e^{(\eta + \eps)X} - e^{\eta X}}{\eps} \right| \leq e^{\eta X} \left( \frac{e^{\delta|X|} - 1}{\delta} \right).
+	\]
+	Since $\eta \in \mathring D$, we can take $\delta > 0$ sufficiently small so that $[\eta - \delta, \eta + \delta] \subseteq D$, hence by this bound and DCT, we get differentiability of $M(\lambda)$. $\psi(\lambda)$ is similar.
+\end{proofbox}
+
+Using this, we can prove Cramer's.
+
+\begin{proofbox}
+	We have already shown that
+	\[
+	\liminf_{n \to \infty} - \frac 1n \log \mathbb{P}(S_n \geq an) \geq \psi^{\ast}(a).
+	\]
+	Set $\tilde X_i = X_i - a$, and $\tilde S_n = \sum_{i = 1}^n \tilde X_i$, so
+	\[
+	\mathbb{P}(S_n \geq na) = \mathbb{P}(\tilde S_n \geq 0).
+	\]
+	The MGF transforms likes
+	\[
+	\tilde M (\lambda) = \mathbb{E}[e ^{\lambda \tilde X_1}]=  e^{-\lambda a} M(\lambda),
+	\]
+	\[
+	\implies \tilde \psi(\lambda) = \log \tilde M(\lambda) = \psi(\lambda) = \lambda a.
+	\]
+	So we need to show that
+	\[
+	- \frac 1n \log \mathbb{P}(S_n \geq 0) \to \tilde \psi^{\ast}(0) = \sup_{\lambda \geq 0} (- \tilde \psi^{\ast}(\lambda)).
+	\]
+	That is, after removing the tildes, we need to show that
+	\[
+		\liminf_{n \to \infty} \frac 1n \log \mathbb{P}(S_n \geq 0) \geq \inf_{\lambda \geq 0} \psi(\lambda). \tag{$\ast$}
+	\]
+	If $\mathbb{P}(X_1 \leq 0) = 1$, then
+	\[
+	\inf_{\lambda \geq 0} \psi(\lambda) \leq \lim_{\lambda \to \infty} \psi(\lambda) = \log \mathbb{P}(X_1 = 0).
+	\]
+	Hence in this case $(\ast)$ holds. So without loss of generality, assume that $\mathbb{P}(X_1 > 0) > 0$. Assume that $M(\lambda) < \infty$ for all $\lambda$. Define $\mu_\theta$ by, if $\mu$ is $\mathcal{L}(X_1)$, the law of the random variables, then
+	\[
+	\frac{\diff \mu_\theta}{\diff \mu}(x) = \frac{e^{\theta x}}{M(\theta)} \implies \mathbb{E}_\theta[f(X_1)] = \int f(x) \frac{e^{\theta x}}{M(\theta)} \diff \mu(x).
+	\]
+	More generally, we have
+	\[
+	\mathbb{E}_\theta[f(X_1, \ldots, X_n)] = \int f(x_1, \ldots, x_n) \prod_{i = 1}^n e^{\theta x_i} \frac{\diff \mu(x_1) \cdots \diff \mu(x_n)}{(M\theta)^n}.
+	\]
+	We want to choose $\theta$ so that are random variables are unmeaned. Let $g(\theta) = \mathbb{E}_\theta[X_1]$, so $g(0) = \bar x < 0$. Also, $g(\theta) = \psi'(\theta)$. Now $M(\theta) \uparrow \infty$ as $\theta \uparrow \infty$, hence $\psi(\theta) \uparrow \infty$ as $\theta \uparrow \infty$.
+
+	So there exists $\theta_0 > 0$ such that $\psi'(\theta_0) = g(\theta_0) > 0$. Also $g$ is continuous on $[0, \theta_0]$, so by IVT there is $\theta \in [0, \theta_0]$ with $g(\theta) = 0 = \mathbb{E}_\theta[X_1]$. Now note
+	\begin{align*}
+		\mathbb{P}(S_n \geq 0 &\geq \mathbb{P}(S_n \in (0, \eps n)) \geq \mathbb{E}[e^{\theta(S_n - \eps n)} \mathbbm{1}_{S_n \in [0, \eps n]}] \\
+				      &= M(G)^{n} e^{-\theta \eps n} \mathbb{P}_\theta (S_n \in [0, \eps n]).
+	\end{align*}
+	From the central limit theorem, as $S_n$ has mean $0$,
+	\[
+		\mathbb{P}_\theta (S_n \in [0, \eps n] ) \to \frac 12 > 0.
+	\]
+	Hence we find that
+	\[
+	\liminf_{n \to \infty} \frac 1n \log \mathbb{P}(S_n \geq 0) \geq \psi(\theta) - \theta \eps.
+	\]
+	As $\eps > 0$ was arbitrary, we can send $\eps \downarrow 0$ to get $(\ast)$, at least when $M(\lambda) < \infty$, for all $\lambda$.
+
+	In the general case, we will take our exponential variables, truncate them, and show that the conclusion still holds.
+
+	Let $\mu_n = \mathcal{L}(S_n)$, and let $\nu$ be the law of $X_1$, given $|X_1| \leq K$, for $K > 0$ large. Moreover let $\nu_n$ be the law of $S_n$ given $|X_i| \leq k$ for all $1 \leq i \leq n$. Then
+	\[
+		\mathbb{P}(S_n \geq 0) = \mu_n([0, \infty)) \geq \nu_n([0, \infty)) \cdot \mu([-k, k])^{-1}.
+	\]
+	We set
+	\[
+	\psi^{k}(\lambda) = \log \int_{-k}^k e^{\lambda x} \diff \mu(x).
+	\]
+	Note that
+	\[
+		\log \int_{-\infty}^{\infty} e^{\lambda x} \diff \nu(x) \geq \psi_k(\lambda) - \log \mu([-k,k]).
+	\]
+	Hence we find
+	\begin{align*}
+		\liminf_{n \to \infty} \frac 1n \log \mu_n[0, \infty) &\geq \liminf_{n \to \infty} \frac 1n \log \nu_n [0, \infty) + \log \mu([-k, k]) \\
+								      &\geq \inf_{\lambda \geq 0} \psi_k(\lambda) = J_k,
+	\end{align*}
+	where we use $(\ast)$ for random variables with $M(\lambda) < \infty$ for all $\lambda$. Note $\psi_k \uparrow \psi$ as $k \to \infty$ and similarly $J_k \uparrow J$. Hence
+	\[
+	\liminf_{n \geq 0} \frac 1n \log \mu_n[0, \infty) \geq J.
+	\]
+	Now note
+	\[
+	J_k = \inf_{\lambda \geq 0} \psi_k(\lambda) \leq \psi_k(0) \leq \psi(0) = 0 \implies J \leq 0.
+	\]
+	For $k$ large enough, $\mu([0, k]) > 0$, so $J_k > -\infty$, hence $J>  -\infty$. We have $\psi_k$ continuous and $\psi_k(\lambda) \to \infty$  as $\lambda \to \infty$. Moreover, note that $\{\lambda \geq 0 \mid \psi_k(\lambda) \leq J\}$ is compact and non-empty.
+
+	Hence there exists
+	\[
+		\lambda_0 \in \bigcap_k \{ \lambda \geq 0 \mid \psi_k(\lambda) \leq J\}
+	\]
+	therefore
+	\[
+	\psi(\lambda_0) = \lim_{k \to \infty} \psi_k(\lambda_0) \leq J.
+	\]
+	This shows that
+	\begin{align*}
+		\liminf \frac 1n \log \mu_n[0, \infty) \geq J \geq \psi(\lambda_0) \geq \inf_{\lambda \geq 0} \psi(\lambda).
+	\end{align*}
+\end{proofbox}
+
+% lecture 17 (guest lecture by Perla Sousi)
+
+\newpage
+
+\section{Brownian Motion}%
+\label{sec:b}
+
+\begin{definition}
+	Let $B = (B_t)_{t \geq 0}$ be a continuous process in $\mathbb{R}^{d}$. $B$ is called a \emph{Brownian motion}\index{Brownian motion} started from $x \in \mathbb{R}^{d}$ if:
+	\begin{enumerate}[(i)]
+		\item $B_0 = x$.
+		\item For all $s < t$, $B_t - B_s \sim N(0, (t - s)I_d)$.
+		\item $B$ has independent increments, i.e. for all $s$,
+			\[
+			B_{t - s} - B_s \indep \sigma(B_u \mid u \leq s).
+			\]
+	\end{enumerate}
+\end{definition}
+
+\begin{remark}
+	If $x = 0$, we call this a standard Brownian motion.
+\end{remark}
+
+\begin{exbox}
+	Let $B$ be a standard Brownian motion in one dimension, and $U \sim U[0, 1]$ be independent of $B$. Then set
+	\[
+	X_t =
+	\begin{cases}
+		B_t & t \neq U, \\
+		0 & t = U.
+	\end{cases}
+	\]
+	This satisfies the above properties, but it not continuous.
+\end{exbox}
+
+\begin{theorem}[Wiener]
+	There exists Brownian motion on some probability space.
+\end{theorem}
+
+\begin{proofbox}
+	First, we find Brownian motion in one-dimension, on the interval $[0, 1]$. We then patch these to get BM on $\mathbb{R}^+$.
+
+	Let $\mathcal{D}_0 = \{0, 1\}$, $\mathcal{D}_n = \{k 2^{-n} \mid 0 \leq k \leq 2^n\}$, and
+	\[
+	\mathcal{D} = \bigcup \mathcal{D}_n,
+	\]
+	the dyadic rationals. Our procedure is as follows:
+	\begin{itemize}
+		\item Construct inductively the procedure on $\mathcal{D}$.
+		\item Show $\alpha$-Holder for $\alpha < 1/2$, to extend continuously.
+	\end{itemize}
+	Let $(Z_d)_{d \in \mathcal{D}}$ be IID $N(0, 1)$. Set
+	\[
+	B_0 = 0,\qquad B_1 = Z_1.
+	\]
+	Suppose we have defined $(B_d)$ for $d \in \mathcal{D}_{n-1}$, satisfying properties (ii) and (iii) above. We want to construct $(B_d)$ for $d \in \mathcal{D}_n$.
+
+	Let $d \in \mathcal{D}_n \setminus \mathcal{D}_{n-1}$. Set $d_- = d - 2^{-n}$, $d_+ = d + 2^{-n}$, and note that $d_-, d_+ \in \mathcal{D}_{n-1}$. Set
+	\[
+	B_d = \frac{B_{d_+} + B_{d_-}}{2} + \frac{Z_d}{2^{(n+1)/2}}.
+	\]
+	We need to check this definition of $(B_d)$ satisfies (ii) and (iii), which is equivalent to showing that
+	\[
+	B_{d} - B_{d_-} \indep B_{d_+} - B_d,
+	\]
+	and are jointly Gaussian with correct variance. Note that
+	\[
+	B_{d} - B_{d_-} = \frac{B_{d_+} - B_{d_-}}{2} + \frac{Z_d}{2^{(n+1)/2}}, \qquad B_{d_+} - B_d = \frac{B_{d_+} - B_{d_-}}{2} - \frac{Z_d}{2^{(n+1)/2}}.
+	\]
+	Now $(B_{d_+} - B_{d_-})$ and $Z_d$ are independent, and the former has variance
+	\[
+	N(0, 2^{-(n-1)}/4)
+	\]
+	by assumption (ii). Moreover $Z_d/2^{(n+1)/2}$ has variance $1/2^{n+1}$. Hence the covariance of these two quantities are
+	\begin{align*}
+		\Cov(B_d - B_{d_-} , B_{d_+} - B_d) &= \Var \left( \frac{B_{d_+} - B_{d_-}}{2} \right) - \Var \left( \frac{Z_d}{2^{(n+1)/2}} \right) = 0.
+	\end{align*}
+	Thus they are independent as they are jointly Gaussian.
+
+	For two general intervals that are not necessarily adjacent, we can write each increment as $1/2$ of the increment of the previous iteration, plus an independent Gaussian, which gives the required variance.
+
+	This construct $(B_d)$ for $d \in \mathcal{D}_n$, and hence for all $d \in \mathcal{D}$. Now note that
+	\[
+	\mathbb{E}[|B_t - B_s|^{p}] = |t - s|^{p/2} \mathbb{E}[|N(0, 1)|^{p}],
+	\]
+	for $t, s \in \mathcal{D}$, and $p > 0$. By Kolmogorov's continuity criterion, we get that $(B_d, d \in \mathcal{D})$ is $\alpha$-H\"older for all $\alpha < 1/2$.
+
+	Let $t \in [0, 1]$, and let $(d_i)$ be a sequence of dyadic rationals, with $d_i \to t$. Set
+	\[
+	B_t = \lim_{i \to \infty} B_{d_i}.
+	\]
+	We can check that $(B_t)$ is $\alpha$-H\"older for all $\alpha < 1/2$. We need to check that $(B_t)$ satisfies (ii) and (iii).
+
+	Let $0 = t_0 < t_1 < \cdots < t_k$. We need to show that $(B_{t_i} - B_{t_{i-1}})$ are independent with $N(0, t_{i} - t_{i-1})$, which defines the finite probability distributions.
+
+	Let $t_i^n \in \mathcal{D}$, with $0 \leq t_0^n \leq t_1^n \leq \cdots \leq t_k^n$, and $t_i^n \to t_i$. Now
+	\begin{align*}
+		\mathbb{E}\left[ \exp \left( i \sum_{j = 0}^k u_j (B_{t_j^n} - B_{t_{j-1}^n}) \right) \right] &= \exp \left( - \frac{1}{2} \sum_{j = 0}^k u_j^2(t_{j}^n - t_{j-1}^n) \right) \\
+													      &\to \prod_{j = 0}^k \exp \left( - \frac{u_j^2(t_j - t_{j-1})}{2} \right).
+	\end{align*}
+	By continuity, $B_{t_i}$ is the limit of $B_{t_i^n}$. By L\'evy's convergence theorem, $(B_{t_i} - B_{t_{i-1}})$ are independent Gaussians with the correct variance. So, $(B_t)_{t \in [0, 1]}$ is a Brownian motion.
+
+	Let $(B_t^i)_{t \in [0, 1]}$ be independent Brownian motions, for $i  = 0, 1, \ldots$. For all $t > 0$, define
+	\[
+	B_t = \sum_{i = 0}^{\lfloor t \rfloor - 1} B_1^i + B_{t - \lfloor t \rfloor}^{\lfloor t \rfloor}.
+	\]
+	This satisfies the conditions.
+
+	To extend to $d$-dimensions, let $B^1, \ldots, B^d$ be one-dimensional Brownian motions, and set $B_t = (B_t^1, \ldots, B_t^d)$.
+\end{proofbox}
+
+Brownian motion satisfies the following properties. Let $B$ be a standard Brownian motion in $\mathbb{R}^d$. Then:
+\begin{enumerate}
+	\item If $U$ is an orthogonal matrix, then $UB$ is also a standard Brownian motion.
+	\item For any $\lambda > 0$, $B_{\lambda t} \cdot \lambda^{-1/2}$ is also a standard Brownian motion (the scaling property).
+	\item For any $s$, $B_{t + s} - B_s$ is also a standard Brownian motion, independent of $\mathcal{F}_s^B = \sigma(B_u \mid u \leq s)$ (the simple Markov property).
+\end{enumerate}
+
+Another example of invariance is time inversion. Let $B$ be a standard Brownian motion in $\mathbb{R}$. Let
+\[
+X_t =
+\begin{cases}
+	0 & t = 0, \\
+	t B_{1/t} & t > 0.
+\end{cases}
+\]
+Then $X$ is a standard BM.
+
+\begin{proofbox}
+	Note
+	\begin{align*}
+		\Cov(X_t, X_s) &= \Cov(t B_{1/t}, s B_{1/s}) = ts \Cov(B_{1/t}, B_{1/s}) = ts \min(1/t, 1/s) \\
+			       &= \min(s, t).
+	\end{align*}
+	Hence $X$ has the same finite marginals as BM.
+
+	The last thing to show is that $X$ is continuous. This is obvious for $t > 0$, so we need to show $X$ is continuous as $t = 0$. Note that
+	\[
+		(X_t, t \geq 0, t \in \mathbb{Q}) \overset{\mathcal{L}}= (B_t, t \geq 0, t \in \mathbb{Q}).
+	\]
+	As these have the same laws,
+	\[
+		\lim_{\substack{t \downarrow 0 \\ t \in \mathbb{Q}}} X_t = 0 \qquad \text{a.s.}
+	\]
+	Since $X$ is continuous at $t > 0$, this shows $\lim_{t \to 0} X_t = 0$.
+\end{proofbox}
+
+This also shows that:
+\begin{corollary}
+	We have
+	\[
+		\lim_{t \to \infty} \frac{B_t}{t} = 0 \qquad\text{\normalfont{a.s.}}
+	\]
+\end{corollary}
+
+% lecture 18
+
+\begin{definition}
+	Let $(\mathcal{F}_t^B)$ be the natural filtration of $(B_t : t \geq 0)$, and 
+	\[
+	\mathcal{F}_t^{+} = \bigcap_{s > t} \mathcal{F}_s^B.
+	\]
+\end{definition}
+\begin{theorem}
+	For each $s \geq 0$, $(B_{t+s} - B_s \mid t \geq 0)$ is independent of $\mathcal{F}_s^{+}$.
+\end{theorem}
+
+\begin{proofbox}
+	Let $(s_n)$ be a strictly decreasing sequence with $s_n \downarrow s$. By continuity,
+	\[
+	B_{t + s} - B_s = \lim_{n \to \infty}(B_{t + s_n} - B_{s_n}).
+	\]
+	Let $A \in \mathcal{F}_s^{+}$, and fix $t_1, \ldots, t_m \geq 0$, $f$ bounded and continuous on $(\mathbb{R}^{d})^{m}$. We have that
+	\begin{align*}
+		& \qquad\mathbb{E}[f(B_{t_1 + s} - B_s, \ldots, B_{t_m+s} - B_s) \mathbbm{1}_{A}] \\
+		&= \lim_{n \to \infty} \mathbb{E}[f(B_{t_1 + s_n} - B_{s_n}, \ldots, B_{t_m + s_n} - B_n) \mathbbm{1}_{A}].
+	\end{align*}
+	Since $A \in \mathcal{F}_s^{+}$, $A \in \mathcal{F}_{s_n}^B$ for all $n$, so
+	\begin{align*}
+		& \qquad \mathbb{E}[f(B_{t_1 + s_n} - B_{s_n}, \ldots, B_{t_m + s_n} - B_{s_n}) \mathbbm{1}_{A}] \\
+		&= \mathbb{P}(A) \mathbb{E}[f(B_{t_1+s_n} - B_{s_n}, \ldots, B_{t_m+s_n} - B_{s_n})].
+	\end{align*}
+	Insert this in and take limits to conclude.
+\end{proofbox}
+
+\begin{theorem}[Blumenthal's 0-1 Law]
+	$\mathcal{F}_0^+$ is trivial, i.e.
+	\[
+		A \in \mathcal{F}_0^+ \implies \mathbb{P}(A) \in \{0, 1\}.
+	\]
+\end{theorem}
+
+\begin{proofbox}
+	Let $A \in \mathcal{F}_0^+$. Then $A \in \sigma(B_t \mid t \geq 0)$. So by the theorem above, $A$ is independent of $\mathcal{F}_0^+$.
+
+	Hence $\mathbb{P}(A) = \mathbb{P}(A \cap A) = \mathbb{P}(A)^2$, so $\mathbb{P}(A) \in \{0, 1\}$.
+\end{proofbox}
+
+\begin{theorem}
+	Suppose that $(B_t \mid t \geq 0)$ is a Brownian motion in $\mathbb{R}$. Let
+	\[
+		\tau = \inf \{ t \geq 0 \mid B_t > 0\}, \qquad \sigma = \inf\{t > 0 \mid B_t = 0\}.
+	\]
+	Then,
+	\[
+	\mathbb{P}(\tau = 0) = \mathbb{P}(\sigma = 0) = 1.
+	\]
+\end{theorem}
+
+\begin{proofbox}
+	For all $n$, note that
+	\begin{align*}
+		\{\tau = 0\} &= \bigcap_{k \geq n} \left\{ B_\eps > 0 \mid 0 < \eps < 1/k\right\} \\
+		\implies \{\tau = 0\} & \in \mathcal{F}_{1/n}^B \text{ for all } n \\
+		\implies \{\tau = 0\} &\in \mathcal{F}_0^+.
+	\end{align*}
+	Hence $\mathbb{P}(\tau = 0) \in \{0, 1\}$. We need to show that $\mathbb{P}(\tau = 0) > 0$.
+
+	Note that $\mathbb{P}(\tau \leq t) \geq \mathbb{P}(B_t > 0) = 1/2$, so $\mathbb{P}(\tau = 0) \geq 1/2 \implies \mathbb{P}(\tau = 0) = 1$.
+
+	Similarly, we get that $\inf\{ t \geq 0 \mid B_t < 0\} = 0$ almost surely, hence $B_i$ has times $a, b$ close to zero where $B_a > 0$, $B_b < 0$, so since $B$ is continuous $\mathbb{P}(\sigma = 0) = 1$.
+\end{proofbox}
+
+\begin{proposition}
+	Suppose that $(B_t)$ is a BM in $\mathbb{R}$. Let
+	\[
+	S_t = \sup_{0 \leq s \leq t} B_s, \qquad I_t = \inf_{0 \leq s \leq t} B_s.
+	\]
+	\begin{enumerate}[\normalfont(i)]
+		\item For all $\eps > 0$, we have both $S_\eps > 0$, $I_\eps < 0$ almost surely, hence almost surely there is $t \in (0, \eps)$ with $B_t = 0$, for all $\eps$.
+		\item Almost surely, $\sup_{t \geq 0} B_t = \infty$, and $\inf_{t \geq 0} B_t = -\infty$.
+	\end{enumerate}
+\end{proposition}
+
+\begin{proofbox}
+	Note that
+	\[
+		S_\infty = \sup_{t \geq 0} B_t = \sup_{\substack{t \geq 0 \\ \lambda > 0}} B_{\lambda t} = \sqrt{\lambda} \sup_{t \geq 0} B_t = \sqrt{ \lambda} S_\infty.
+	\]
+	Hence we get that $\mathbb{P}(S_\infty \geq x)$ does not depend on the value of $x$, so since $\mathbb{P}(S_\infty > 0) = 1$, we have $\mathbb{P}(S_\infty \geq x) = 1$ for all $x > 0$, so
+	\[
+	\mathbb{P}(S_\infty = \infty) = 1.
+	\]
+\end{proofbox}
+
+\begin{proposition}
+	Suppose that $(B_t \mid t \geq 0)$ is a $d$-dimensional Brownian motion. Let $A$ be a non-empty, open set in the $(d-1)$-dimensional space in $\mathbb{R}^d$, and let
+	\[
+		C = \{t u \mid t > 0, u \in A\}, \qquad H_C = \inf\{t > 0 \mid B_t \in C\}.
+	\]
+	Then $\mathbb{P}(H_C = 0) = 1$.
+\end{proposition}
+
+\begin{remark}
+	$C$ is a cone.
+\end{remark}
+
+\begin{proofbox}
+	Note that $\mathbb{P}(B_t \in C) = \mathbb{P}(B_1 \in C)$ by scaling, and moreover $\mathbb{P}(B_1 \in C) > 0$ since $C$ has non-empty interior. So by Blumenthal 0-1 law, $H_C = 0$ almost-surely.
+\end{proofbox}
+
+\begin{theorem}
+	Let $T$ be an almost-surely finite stopping time. Then $(B_{T+t} - B_T \mid t \geq 0)$ is a standard Brownian motion independent of $\mathcal{F}_T^{+}$.
+\end{theorem}
+
+\begin{proofbox}
+	We first prove this for $T_n = 2^{-n} \lceil 2^{n} T \rceil$, where $T_n \downarrow T$. Write
+	\[
+	B_t^{(k)} = B_{t + k2^{-n}} - B_{k 2^{-n}}, \qquad B_\ast(t) = B_{t + T_n} - B_{T_n}.
+	\]
+	Then we claim that $B_\ast$ is a Brownian motion independent of $\mathcal{F}_{T_n}^{+}$. Let $E \in \mathcal{F}_{T_n}^+$ and consider an event $\{B_\ast \in A\}$. Then,
+	\begin{align*}
+		\mathbb{P}(\{B_\ast \in A\} \cap E) &= \sum_{k = 0}^\infty \mathbb{P}(\{B^{(k)} \in A\} \cap E \cap \{T_n = k 2^{-n}\}) \\
+						    &= \sum_{k = 0}^{\infty} \mathbb{P}(B^{(k)} \in A) \mathbb{P}(E \cap \{T_n = k 2^{-n}\}),
+	\end{align*}
+	since $B^{(k)}$ is independent of $\mathcal{F}_{k 2^{-n}}^+$, and $E \cap \{T_n = k 2^{-n}\} \in \mathcal{F}_{k2^{-n}}^+$. Since $B^{(k)}$ is a BM,
+	\[
+	\mathbb{P}(B^{(k)} \in A) = \mathbb{P}(B \in A)
+	\]
+	does not depend on $k$. So,
+	\[
+		\mathbb{P}(\{B_\ast \in A\} \cap E) = \mathbb{P}(B \in A) \mathbb{P}(E).
+	\]
+	Taking $E = \infty$ shows that $B_\ast$ is a BM, and since
+	\[
+		\mathbb{P}(\{B_\ast \in A\} \cap E) = \mathbb{P}(B_\ast \in A) \mathbb{P}(E),
+	\]
+	for all $A, E$, we have that $B_\ast$ is independent of $\mathcal{F}_{T_n}^{\ast}$.
+
+	Our goal is to derive for $T$ in place of $T_n$ by taking a limit. From continuity,
+	\[
+	B_{t + s + T} - B_{s + T} = \lim_{n \to \infty} (B_{s + t + T_n} - B_{s + T_n}).
+	\]
+	Now since $B_{s + t + T_n} - B_{s + T_n} \sim N(0, t)$, we have $B_{t + s + T} - B_{s + T} \sim N(0, t)$ (things that converge a.s. converge in probability, converge in distribution).
+
+	Applying the same for the increment of $B_{t + T} - B_T$ and using that $(B_{t + T} - B_T \mid t \geq0)$ is continuous, we see that this is a Brownian motion. We finally need to show that $(B_{t + T} - B_T \mid t \geq 0)$ is independent of $\mathcal{F}_T^{+}$.
+% lecture 19
+
+	Suppose that $A \in \mathcal{F}_T^{+}$, and $t_1, \ldots, t_k \geq 0$, and let $f : (\mathbb{R}^d)^{k} \to \mathbb{R}$ be continuous and bounded. Then,
+	\begin{align*}
+		& \qquad \mathbb{E}[f(B_{t_1 + T_n} - B_{T_n}, \ldots, B_{t_k + T_n} - B_{T_n}) \mathbbm{1}_{A}] \\
+		&= \mathbb{P}(A) \mathbb{E}[f(B_{t_1+T_n} - B_{T_n}, \ldots, B_{t_k + T_n} - B_{T_n})],
+	\end{align*}
+	since $T_n \geq T$ and so $A \in \mathcal{F}_{T_n}^{+}$. Hence by continuity and DCT,
+	\begin{align*}
+		& \qquad \mathbb{E}[f(B_{t_1 + T} - B_{T}, \ldots, B_{t_k + T} - B_{T}) \mathbbm{1}_{A}] \\
+		&= \lim_{n \to \infty} \mathbb{E}[f(B_{t_1+T_n} - B_{T_n}, \ldots, B_{t_k + T_n} - B_{T_n}) \mathbbm{1}_{A}] \\
+		&= \mathbb{P}(A) \lim_{n \to \infty} \mathbb{E}[f(B_{t_1 + T_n} - B_{T_n}, \ldots, B_{t_k + T_n} - B_{T_n})] \\
+		&= \mathbb{P}(A) \mathbb{E}[f(B_{t_1+T} - B_{T}, \ldots, B_{t_k + T} - B_{T})].
+	\end{align*}
+\end{proofbox}
+
+\begin{theorem}[Reflection Principle]
+	Let $T$ be an almost-surely finite stopping time, and $(B_t)$ a standard BM. The process
+	\[
+	\tilde B_t = B_t \mathbbm{1}(t \leq T) + (2 B_T - B_t) \mathbbm{1}(T > t)
+	\]
+	is a standard Brownian motion.
+\end{theorem}
+
+\begin{proofbox}
+	By the strong Markov property, we have that
+	\[
+	B^{(T)} = (B_{t + T}- B_T)
+	\]
+	is a standard Brownian motion independent of $(B_t \mid 0 \leq t \leq T)$. Hence $-B^{(T)}$ is a standard BM independent of $(B_t \mid 0 \leq t \leq T)$. So,
+	\[
+		((B_t \mid 0 \leq t \leq T), B^{(T)}) \overset d = ((B_t \mid 0 \leq t \leq T), - B^{(T)})
+	\]
+	Define the concatenation operation at the time $T$ between the continuous paths $X, Y$ by
+	\[
+	\psi_T(X, Y)(t) = X_t \mathbbm{1}(t \leq T) + (X_T + Y_{t - T}) \mathbbm{1}(t > T).
+	\]
+	Applying $\psi_T$ to $(B, B^{(T)})$ gives $B$, and to $(B, - B^{(T)})$ gives $\tilde B$.
+
+	Let $\mathcal{A}$ be the product $\sigma$-algebra on the space $\mathcal{C}$ of continuous functions on $[0, \infty)$. Then,
+	\[
+	\psi_T : (\mathcal{C} \times \mathcal{C} \times \mathbb{R}_+, \mathcal{A} \otimes \mathcal{A} \otimes \mathcal{B}(\mathbb{R}_+)) \to (\mathcal{C}, \mathcal{A})
+	\]
+	is a measurable map, so $B \overset d= \tilde B$ (to see its measurable, note that $\mathcal{A}$ is defined by finite sample distributions. Then the inverse image of finite sample distribution gives finitely many intervals on where $T$ could be, and also finite sample distributions of $X$ and $Y$, which are elements of $A$).
+\end{proofbox}
+
+\begin{corollary}
+	Let $B$ be a standard Brownian motion in $\mathbb{R}$, $b > 0$ and $a \leq b$. Let
+	\[
+	S_t = \sup_{0 \leq s \leq t} B_t.
+	\]
+	Then,
+	\[
+	\mathbb{P}(S_t \geq b, B_t \leq a) = \mathbb{P}(B_t \geq 2b - a).
+	\]
+\end{corollary}
+
+\begin{proofbox}
+	For all $x > 0$, set
+	\[
+		T_x = \inf\{t \geq 0 \mid B_t = x\}.
+	\]
+	Since we have
+	\[
+	S_\infty = \sup_{t \geq 0} B_t = \infty \implies T_x < \infty.
+	\]
+	Since Brownian motions are continuous, $B_{T_x} = x$. Now note that $\{S_t \geq b\} = \{T_b \leq t\}$. Consider the reflection principle applied at $T_b$. This gives
+	\begin{align*}
+		\mathbb{P}(S_t \geq b, B_t \leq a) &= \mathbb{P}(T_b \leq t, 2b - B_t \geq 2b - a) \\
+						   &= \mathbb{P}(T_b \leq t, \tilde B_t \geq 2b - a),
+	\end{align*}
+	since $\tilde B_t = 2b - B_t$, for all $t \geq T_b$. Since $a \leq b$, $\{\tilde B_t \geq 2b - a\}  \supseteq \{T_b \leq t\}$. Hence
+	\[
+	\mathbb{P}(S_t \geq b, B_t \leq a) = \mathbb{P}(\tilde B_t \geq 2b - a) = \mathbb{P}(B_t \geq 2b - a).
+	\]
+\end{proofbox}
+
+\begin{corollary}
+	For all $t \geq 0$, $S_t \overset d= |B_t|$.
+\end{corollary}
+
+\begin{proofbox}
+	Fix $a > 0$. Then,
+	\begin{align*}
+		\mathbb{P}(S_t \geq a) &= \mathbb{P}(S_t \geq a, B_t \leq a) + \mathbb{P}(S_t \geq a, B_t > a) = 2 \mathbb{P}(B_t \geq a) \\
+				       &= \mathbb{P}(|B_t| \geq a).
+	\end{align*}
+\end{proofbox}
+
+\subsection{Martingales and Brownian Motions}%
+\label{sub:mgbm}
+
+\begin{proposition}
+	Let $B_t$ be a standard BM in $\mathbb{R}$. Then,
+	\begin{enumerate}[\normalfont(i)]
+		\item $(B_t)$ is an $(\mathcal{F}_t^+)$-martingale.
+		\item $(B_t^2 - t)$ is an $(\mathcal{F}_t^+)$-martingale.
+	\end{enumerate}
+\end{proposition}
+
+\begin{proofbox}
+	
+
+	(i) For $s \leq t$, note that
+	\[
+	\mathbb{E}[B_t - B_s | \mathcal{F}_s^+] = \mathbb{E}[B_t - B_s] = 0,
+	\]
+	since $B_t - B_s$ is independent of $\mathcal{F}_s^+$.
+	
+	(ii) Note that
+	\begin{align*}
+		\mathbb{E}[B_t^2 - t | \mathcal{F}_s^+] &= \mathbb{E}[(B_t - B_s)^2 | \mathcal{F}_s^+] + 2 \mathbb{E}[B_t B_s | \mathcal{F}_s^+] - \mathbb{E}[B_s^2 | \mathcal{F}_s^+] - t \\
+							&= (t - s) + 2 B_s^2 - B_s^2 - t = B_s^2 - s.
+	\end{align*}
+\end{proofbox}
+
+\begin{proposition}
+	Let $B$ be a standard BM in $\mathbb{R}$, and $x, y > 0$. Then
+	\[
+	\mathbb{P}(T_{-y} < T_x) = \frac{x}{x + y}, \qquad \mathbb{E}[T_x \wedge T_{-y}] = xy.
+	\]
+\end{proposition}
+
+\begin{proofbox}
+	This is by using OST with $B$ and with $B_t^2 - t$.
+\end{proofbox}
+
+\begin{proposition}
+	Let $B$ be a standard BM in $\mathbb{R}^d$. Then for all $u = (u_1, \ldots, u_d) \in \mathbb{R}^d$,
+	\[
+		M_t^u = \exp \left[ \langle u, B_t \rangle - \frac{|u|^2t}{2} \right]
+	\]
+	is an $(\mathcal{F}_t^+)$-martingale.
+\end{proposition}
+
+\begin{proofbox}
+	Note that
+	\[
+	\mathbb{E}[\exp ( \langle u, B_t \rangle)] = \exp \left( \frac{|u|^2 t}{2} \right)
+	\]
+	from the point distributions of $B_t$, hence $M_t^u \in \mathcal{L}^1$ for all $t > 0$. So,
+	\begin{align*}
+		\mathbb{E}[M_t^u | \mathcal{F}_s^+] &= e^{-|u|^2t/2} \mathbb{E}[\exp [\langle u, B_t - B_s + B_s \rangle ] | \mathcal{F}_s^+] \\
+						    &= e^{-|u|^2t/2} e^{\langle u, B_s\rangle} \mathbb{E}[\exp [\langle u, B_t - B_s \rangle] | \mathcal{F}_s^+] \\
+						    &= e^{-|u|^2t/2} e^{\langle u, B_s\rangle} e^{|u|^2(t-s)/2} \\
+						    &= M_s^u.
+	\end{align*}
+\end{proofbox}
+
+Suppose that $f$ is a nice function. Consider $f(B_t)$. What should we subtract from $f(B_t)$ to get a martingale? For example, we saw that if $f(x) = x^2$, we should subtract $t$. What happens more generally?
+
+Consider a simple random walk $S_n$ on $\mathbb{Z}$. Then,
+\begin{align*}
+	\mathbb{E}[f(S_n + 1) | S_1, \ldots, S_n] - f(S_n) &= \frac{1}{2} (f(S_n + 1) + f(S_n - 1) - 2 f(S_n)) \\
+							   &= \frac{1}{2} \tilde \Delta f(S_n),
+\end{align*}
+where we take the \emph{discrete Laplacian}\index{discrete Laplacian}
+\[
+\tilde \Delta f(x) = f(x + 1) - f(x - 1) - 2f(x).
+\]
+Hence we see that
+\[
+f(S_n) - \frac{1}{2} \sum_{k = 0}^{n-1} \tilde \Delta f(S_k)
+\]
+is a martingale. We want a continuum analog of this, with Brownian motion in place of the simple random walk. Hence we will work with $\tilde \Delta$ replaced with the \emph{Laplacian}\index{Laplacian},
+\[
+\Delta = \sum_{i = 1}^d \frac{\partial^2}{\partial x_i^2}.
+\]
+
+% lecture 20
+
+\begin{theorem}
+	Let $B$ be a Brownian motion in $\mathbb{R}^d$. Let $f \in C_b^{1,2}(\mathbb{R}_+ \times \mathbb{R}^d)$ (continuously differentiable in time and twice continuously differentiable in space, where $f$ and its derivatives are bounded).
+
+	Then the process
+	\[
+	M_t = f(t, B_t) - f(0, B_0) - \int_0^t \left( \frac{\partial}{\partial t} + \frac 12 \Delta \right) f(s, B_s) \diff s
+	\]
+	is an $(\mathcal{F}_t^+)$-martingale. In particular,
+	\[
+		\left( \frac{\partial}{\partial t} + \frac 12 \Delta\right) f = 0 \implies f(t, B_t) \text{ is a martingale}.
+	\]
+\end{theorem}
+
+\begin{proofbox}
+	$M_t \in \mathcal{L}^1$ follows from the boundedness assumptions made on $f$.
+
+	Fix $s, t \geq 0$. Then,
+	\begin{align*}
+		M_{t+s} - M_s &= f(t+s, B_{t+s}) - f(s, B_s) - \int_{s}^{s + t} \left( \frac{\partial}{\partial r} + \frac 12 \Delta \right) f(r, B_r) \diff r \\
+			      &= f(t + s, B_{t+s}) - f(s, B_s) - \int_0^t \left( \frac{\partial}{\partial r} + \frac 12 \Delta\right) f(r+s, B_{r+s}) \diff r.
+	\end{align*}
+	We will show that the conditional expectation satisfies the correct assumptions. Recall that $(B_{t+s} - B_s \mid t \geq 0)$ is a Brownian motion independent of $\mathcal{F}_s^+$, and $B_s$ is obviously $\mathcal{F}_s^+$ measurable. Let
+	\[
+		p_s(z, y) = \frac{1}{(2 \pi s)^{d/2}} \exp \left[ - |z-y|^2/2s \right]
+	\]
+	be the transition density for Brownian motion. We have
+	\begin{align*}
+		\mathbb{E}[f(t+s, B_{t+s})|\mathcal{F}_s^+] &= \mathbb{E}[f(t+s, B_{t+s}-B_s+B_s)|\mathcal{F}_s^+] \\
+							    &= \int_{\mathbb{R}^d} f(t+s, B_s+x) p_t(0, x) \diff x.
+	\end{align*}
+	Moreover,
+	\begin{align*}
+		&\mathbb{E}\left[ \int_0^t \left( \frac{\partial}{\partial r} + \frac 12 \Delta \right) f(r+s, B_{r+s}) \diff r | \mathcal{F}_s^+ \right] \\
+				 &= \int_0^t \mathbb{E} \left[ \left( \frac{\partial}{\partial r} + \frac 12 \Delta \right) f(r + s, B_{r+s}) |\mathcal{F}_s^+ \right] \diff r \qquad \text{(Fubini)} \\
+				 &= \int_0^t \int_{\mathbb{R}^d} \left( \frac{\partial}{\partial r} + \frac 12 \Delta\right) f(r + s, x + B_s) p_r(0, x) \diff x \diff r \\
+				 &= \lim_{\eps \to 0}\int_\eps^t \int_{\mathbb{R}^d} \left( \frac{\partial}{\partial r} + \frac 12 \Delta \right) f(r + s, x + B_s) p_r(0, x) \diff x \diff r \qquad \text{(DCT)}.
+	\end{align*}
+	Now note that this is, by integration by parts,
+	\begin{align*}
+		\int_{\mathbb{R}^d} (& f(t+s, x + B_s) p_t(0, x) - f(\eps + s, x + B_s) p_\eps(0, x)) \diff x \\
+				     &- \int_{\mathbb{R}^d} \int_\eps^t \frac{\partial}{\partial r} p_r(0, x) f(r + s, x + B_s) \diff r \diff x \\
+				     &+ \int_\eps^t \int_{\mathbb{R}^d} \frac 12 \Delta p_r(0, x) f(r + s, x + B_s) \diff x \diff r. 
+	\end{align*}
+	Since
+	\[
+	\left( \frac{\partial}{\partial r} - \frac 12 \Delta\right) p = 0,
+	\]
+	the above just becomes
+	\[
+	\int_{\mathbb{R}^d} f(t + s, x + B_s) p_t(0, x) - f(\eps + s, x + B_s) p_\eps(0, x) \diff x.
+	\]
+	Now notice that
+	\[
+	\int_{\mathbb{R}^d} f(\eps + s, x + B_s) p_\eps(0, x) \diff x = \mathbb{E}[f(s + \eps, B_{s + \eps}) | \mathcal{F}_s^+] \to f(s, B_s)
+	\]
+	by the dominated convergence theorem. Hence we get
+	\[
+		\mathbb{E}[M_{t+s} - M_s | \mathcal{F}_s^+] = 0 \qquad \text{a.s.}
+	\]
+	
+\end{proofbox}
+
+\subsection{Recurrence and Transience}%
+\label{sub:rat}
+
+If $B$ is a Brownian motion starting from $x \in \mathbb{R}^d$, then this can be written as
+\[
+B_t = x + \tilde B_t,
+\]
+where $\tilde B$ is a Brownian motion starting from $0$. Denote by $\mathbb{P}_x$ the law of a Brownian motion starting from $x$.
+
+\begin{theorem}
+	Let $B$ be a Brownian motion in $\mathbb{R}^d$. Then,
+	\begin{enumerate}[\normalfont(i)]
+		\item If $d = 1$, then $B$ is \emph{point recurrent}\index{point recurrent}: for all $x$, the set $\{t \geq 0 \mid B_t = x\}$ is almost-surely unbounded.
+		\item If $d = 2$, $B$ is \emph{neighbourhood recurrent}\index{neighbourhood recurrent}: for all $x, z$, under $\mathbb{P}_x$, $\{t \geq 0 \mid |B_t - z| \leq \eps\}$ is unbounded almost-surely, for all $\eps > 0$.
+
+			But $B$ does not hit points: $\mathbb{P}_x(\exists \, t > 0 \mid B_t = z) = 0$ for all  $x, z \in \mathbb{R}^2$.
+		\item If $d \geq 3$, then $B$ is transient, as $|B_t| \to \infty$ as $t \to \infty$ $\mathbb{P}_x$-almost surely.
+	\end{enumerate}	
+\end{theorem}
+
+\begin{proofbox}
+	
+
+	(i) This follows since
+	\[
+	\limsup_{t \to \infty} B_t = +\infty, \qquad \limsup_{t \to \infty} B_t =- \infty.
+	\]
+
+	(ii) By translation invariance, without loss of generality $z = 0$. Let $\vphi \in C_b^2(\mathbb{R}^2)$ be such that
+	\[
+	\vphi(y) = \log |y| \qquad \forall \, \eps \leq |y| \leq R,
+	\]
+	for some $R > \eps > 0$. Then $\Delta \vphi(y) = 0$ for $\eps < |y| < R$. Assume that $B_0 = x$ with $\eps < |x| < R$. Then from before,
+	\[
+	M_t = \left( \vphi(B_t) - \int_0^t \frac 12 \Delta \vphi(B_s) \diff s \right)_{t \geq 0}
+	\]
+	is a martingale. For each $r > 0$, set
+	\[
+	T_r = \inf\{t \geq 0 \mid |B_t| = r\}.
+	\]
+	Then $H = T_\eps \wedge T_R$ is an almost-surely finite stopping time, so
+	\[
+		(M_{t \wedge H})_{t \geq 0} = (\log |B_{t \wedge H}|)_{t \geq 0}
+	\]
+	is a bounded martingale. Hence from the optional stopping theorem, since $H < \infty$ almost-surely,
+	\[
+	\mathbb{E}_x[\log |B_{H}|] = \log |x|,
+	\]
+	hence we find
+	\[
+		(\log \eps) \mathbb{P}_x(T_\eps < T_R) + (\log R) \mathbb{P}_x(T_R < T_\eps) = \log|x|.
+	\]
+	We find that
+	\[
+	\mathbb{P}_x(T_\eps < T_R) = \frac{\log R - \log|x|}{\log R - \log \eps}.
+	\]
+	As $R \to \infty$, $T_R \to \infty$, but the right-hand side goes to one, so $\mathbb{P}_x(T_\eps < \infty) = 1$. Hence
+	\[
+	\mathbb{P}_x(\exists \, t \geq 0 \mid |B_t| \leq \eps) = 1.
+	\]
+	We want to show the points where it is $\eps$-close is unbounded. Note that
+	\begin{align*}
+		\mathbb{P}_x(\exists \, t \geq n \mid |B_t| \leq \eps) &= \mathbb{P}_x(\exists \, t \geq 0 \mid |B_{t+n} - B_n + B_n| < \eps) \\
+								       &= \int_{\mathbb{R}^2} \mathbb{P}_0(\exists \, t \geq 0 \mid |B_t + y| \leq \eps) p_n(x, y) \diff y \\
+								       &= \int_{\mathbb{R}^2} \mathbb{P}_y(\exists \, t \geq 0 \mid |B_t| \leq \eps) p_n(x, y) \diff y=  1.
+	\end{align*}
+	We have thus proven that
+	\[
+	\mathbb{P}_x(\exists \, t \geq n \mid |B_t| < \eps) = 1,
+	\]
+	for all $x, n$ and $\eps$. Hence $\{t \mid |B_t| < \eps\}$ is unbounded $\mathbb{P}_x$-almost surely. Hence it is neighbourhood recurrent.
+
+	Note that $\mathbb{P}_x(T_\eps < T_R) \to 0$ as $\eps \to 0$. Send $R \to \infty$, we get that
+	\[
+	\mathbb{P}_x(\exists \, t > 0 \mid B_t = 0) = 0,
+	\]
+	for all $x \neq 0$. We need to show that
+	\[
+	\mathbb{P}_0(\exists \, t > 0 \mid B_t = 0) = 0.
+	\]
+	Fix $a > 0$ small. We look at $\mathbb{P}_)(\exists \, t \geq a \mid B_t = 0)$. This is
+	\[
+	\int_{\mathbb{R}^2} \mathbb{P}_0(\exists \, t \geq 0 \mid B_{t + a} - B_a + y = 0) p_a(0, y) \diff y = 0,
+	\]
+	as the first element is $0$ almost-everywhere. This completes the proof that the Brownian motion does not hit points in $d = 2$, by taking a limit as $a \downarrow 0$.
+% lecture 21
+
+	(iii) A Brownian motion in $\mathbb{R}^d$ where $d \geq 3$ has first 3 coordinates give a Brownian motion in $\mathbb{R}^3$, so it suffices to show this for $d = 3$.
+
+	Let $\vphi \in C_b^2(\mathbb{R}^3)$ be given by $\vphi(y) = 1/|y|$ for $\eps \leq |y| \leq R$, for $R > \eps > 0$. Then $\Delta \vphi(y) = 0$ for $\eps < |y| < R$.
+
+	Let $B$ be a Brownian motion with $B_0 = x$ with $\eps \leq |x| \leq R$, and let $T_r = \inf\{t \geq 0 \mid |B_t| = r\}$. As before, we have
+	\[
+	\mathbb{P}_x(T_\eps < T_R) = \frac{|x|^{-1} - |R|^{-1}}{\eps^{-1} - R^{-1}} \to \frac{\eps}{|x|}
+	\]
+	as $R \to \infty$, hence $\mathbb{P}_x(T_\eps < \infty) = \eps/|x|$ for $|x| \geq \eps$.
+
+	We need to show now that $\mathbb{P}_0(|B_t| \to \infty) = 1$. To do this, let
+	\[
+		A_n = \{|B_t| > n \mid \forall \, t \geq T_{n^3}\}.
+	\]
+	Since Brownian motion is unbounded, $\mathbb{P}_0(T_{n^3}< \infty) = 1$. Now
+	\begin{align*}
+		\mathbb{P}_0(A_n^{c}) &= \mathbb{P}_0(|B_{t + T_{n^3}} - B_{T_{n^3}} + B_{T_{n^3}}| \leq n \text{ for some } t \geq 0) \\
+				      &= \mathbb{E}_0[ \mathbb{P}_{B_{T_{n^3}}}(T_n < \infty)] = \frac{n}{n^3} = \frac 1{n^2}.
+	\end{align*}
+	This is summable, so by Borel-Cantelli, almost-surely only finitely many $A_n^{c}$ occur, hence $|B_t| \to \infty$ as $t \to \infty$ almost-surely.
+\end{proofbox}
+
+\subsection{Dirichlet Problem}%
+\label{sub:dps}
+
+\begin{definition}
+	Let $D \subseteq \mathbb{R}^d$ be open. We say that $D$ is a \emph{domain}\index{domain} if it is connected.
+
+	$D$ satisfies the \emph{Poincar\'e cone condition}\index{Poincar\'e cone condition} at $x \in \partial D$ if there exists non-empty cone $C$ centered at $x$ so that there exists $r > 0$ with $C \cap B(x, r) \subseteq D^{c}$.
+\end{definition}
+
+For example $\mathbb{D} \setminus [-i, 0]$ does not satisfy the condition at $0$.
+
+\begin{theorem}[Dirichlet Problem]
+	Let $D$ be a bounded domain in $\mathbb{R}^d$ such that every point in $\partial D$ satisfies the Poincar\'e cone condition.
+
+	Let $\vphi : \partial D \to \mathbb{R}$ be continuous and
+	\[
+		\tau(\partial D) = \inf \{t \geq 0 \mid B_t \in \partial D\} < \infty \qquad \text{\normalfont{a.s.}}
+	\]
+	Then
+	\[
+	u(x) = \mathbb{E}_x[\vphi(B_{\tau(\partial D)})]
+	\]
+	for $x \in \bar D$ is the unique continuous function $\bar D \to \mathbb{R}$ that solves the Dirichlet problem:
+	\begin{align*}
+		 \Delta u &= 0 & &\text{on } D, \\
+		 u &= \vphi & &\text{on } \partial D.
+	\end{align*}
+\end{theorem}
+
+\begin{theorem}
+	Let $\Delta \subseteq \mathbb{R}^d$ be a bounded domain, and $U$ measurable and locally bounded. The following are equivalent:
+	\begin{enumerate}[\normalfont(i)]
+		\item $u \in C^2(D)$, $\Delta u = 0$ on $D$.
+		\item For all $B(x, r) \subseteq D$, we have that
+			\[
+			u(x) = \frac{1}{|B(x, r)|} \int_{B(x, r)} u(y) \diff y.
+			\]
+			
+		\item For all $B(x, r) \subseteq D$,
+			\[
+			u(x) = \frac{1}{\sigma_{x,r}(\partial B(x, r))} \int_{\partial B(x, r)} u(y) \diff \sigma_{x, r}(y),
+			\]
+			where $\sigma_{x,r}$ is the surface area measure.
+	\end{enumerate}
+\end{theorem}
+
+\begin{theorem}[Maximum Principle]
+	Let $u : D \to \mathbb{R}^d$ be harmonic on $D \subseteq \mathbb{R}^d$.
+	\begin{enumerate}[\normalfont(i)]
+		\item If $u$ attains its maximum in $D$, then $u$ is constant in $D$.
+		\item If $u$ is continuous on $\bar D$ and $D$ is bounded, then
+			\[
+			\max_{x \in \bar D} u(x) = \max_{x \in \partial D} u(x).
+			\]
+	\end{enumerate}
+\end{theorem}
+
+We will prove this.
+\begin{proofbox}
+	
+	(i) Let $M = \sup_{x \in D} u(x)$. Then $V = \{x \in D \mid u(x) = M\}$ is closed in $D$. Since $D$ is open, there exists $r > 0$ such that $B(x, r) \subseteq D$.
+
+	If $u(x) = M$, then
+	\[
+	M = u(x) = \frac{1}{|B(x, r)|} \int_{B(x, r)} u(y) \diff y \leq M.
+	\]
+	Hence $u(y) = M$ for almost-all $y \in B(x, r)$. Since $u$ is continuous, $u(y) = M$ for all $y \in B(x, r)$. Since $B(x, r) \subseteq V$, $V$ is open, closed and non-empty in $D$, hence $V = D$ as $D$ is connected.
+
+	(ii) Say $u$ is continuous. Since $\bar D$ is closed and bounded, $u$ attains its maximum in $\bar D$. By (i), the maximum is attained in $\partial D$.
+\end{proofbox}
+
+\begin{corollary}
+	Let $u_1, u_2$ be harmonic on a bounded domain $D$, and continuous on $\bar D$. If
+	\[
+	u_1|_{\partial D} = u_2|_{\partial D},
+	\]
+	then $u_1 = u_2$.
+\end{corollary}
+
+\begin{proofbox}
+	Consider the maximum principle applied to $u_1 - u_2$. Then
+	\[
+	\max_{x \in \bar D} (u_1(x) - u_2(x)) = \max_{x \in \partial D} (u_1(x) - u_2(x)) = 0.
+	\]
+	Hence $u_1 \leq u_2$ on $\bar D$. By symmetry $u_2 \leq u_1$, and so $u_1 = u_2$.
+\end{proofbox}
+
+We now prove Dirichlet's problem.
+
+\begin{proofbox}
+	Since $D$ is bounded, $\partial D$ is compact, so $\vphi$ is bounded, hence $u$ is bounded.
+
+	We will prove that $\Delta u = 0$ using (iii) of the characterization of harmonic functions. Let $x \in D$, and $r > 0$ such that $\overline{B(x, r)} \subseteq D$, and let
+	\[
+		\tau = \inf\{t \geq 0 \mid B_t \not \in B(x, r)\}.
+	\]
+	By definition,
+	\begin{align*}
+		u(x) &= \mathbb{E}_x[\vphi(B_{\tau(\partial D)})] = \mathbb{E}_x[\mathbb{E}_x[\vphi(B_{\tau(\partial D)}) | \mathcal{F}_\tau]] \\
+		     &= \mathbb{E}_x[ \mathbb{E}_{B_{\tau}}[\vphi(B_{\tau(\partial D)})]] \\
+		     &= \mathbb{E}_x[u(B_\tau)] = \frac{1}{\sigma_{x, r}(\partial B(x, r))} \int_{\partial B(x, r)} u(y) \diff \sigma_{x, r}(y).
+	\end{align*}
+	Hence $u$ satisfies characterization (iii). Upon proving continuity, uniqueness follows from the corollary.
+
+	So we need to show $u$ is continuous on $\bar D$. We know $u$ is continuous on $D$ as it solves the Dirichlet equation so is $C^2$, hence we show $u$ is continuous on $\partial D$.
+
+	Let $z \in \partial D$. $D$ satisfies the Poincar\'e cone condition at $z$, so we can find $h > 9$ and cone $C_z$ centered at $z$ so that
+	\[
+	C_z \cap B(z, h) \subseteq D^{c}.
+	\]
+	$\vphi$ is continuous on $\partial D$, hence for all $\eps > 0$, there is $0 < \delta \leq h$ such that
+	\[
+	|y - z| < \delta, y \in \partial D \implies |\vphi(y) - \vphi(z)| < \eps.
+	\]
+	Let $x \in \bar D$ such that $|x - z| \leq 2^{-k} \delta$ for some $k$. Then
+	\[
+	|u(x) - u(z)| = \left| \mathbb{E}_x[\vphi(B_{\tau(\partial D)}) - \vphi(z)] \right| \leq \mathbb{E}_x[|\vphi(B_{\tau(\partial D)}) - \vphi(z)|].
+	\]
+	We can consider two possibilities. Either, we exit the domain before we exit the ball of radius $\delta$ around $z$, in which case the difference is at most $\eps$. In the other case the exit is far away. Hence we can upper bound this by
+	\begin{align*}
+		\eps &z\mathbb{P}_x(\tau (\partial D) < \tau_{\partial B(z, \delta)}) + 2 \|\vphi\|_\infty \mathbb{P}_x(\tau_{\partial B(z, \delta)} < \tau(\partial D)) \\
+		     &\leq \eps \mathbb{P}_x(\tau(\partial D) < \tau_{\partial B(z, \delta)}) + 2 \|\vphi\|_\infty \mathbb{P}_x(\tau_{\partial B(z, \delta)} < \tau_{C_z}).
+	\end{align*}
+	Under the law of $x$,
+	\[
+	\mathbb{P}_x(\tau_{\partial B(z, \delta)} < \tau_{C_z}) \leq a^{k},
+	\]
+	for some $a \in (0, 1)$. This is because
+	\[
+	B(z, 2^{-k} \delta) \subseteq B(z, 2^{-k+1} \delta) \subseteq \cdots \subseteq B(z, \delta),
+	\]
+	and in each of these intervals the Brownian motion has the same positive chance to hit the cone (by scaling). Hence if we choose $k$ to be sufficiently large, we get continuity of $u$ at $z$.
+\end{proofbox}
+
+% lecture 22
+
+\subsection{Donsker's Invariance Principle}%
+\label{sub:dip}
+
+Let $(X_n)$ be IID with $\mathbb{E} X_1 = 0$, and $\mathbb{E} X_1^2 = \sigma^2 < \infty$. By CLT,
+\[
+\frac{S_n}{\sigma \sqrt n} \to N(0, 1),
+\]
+where $S_n = \sum_{j = 1}^n X_j$. Our goal is to prove simultaneous convergence of $S_n$ for all times.
+\begin{theorem}
+	In the setting described above, extend $S_n$ to define a continuous process by linear interpolation:
+	\[
+		S_t = (1 - \{t\})S_{[t]} + \{t\} S_{[t] + 1},
+	\]
+	where $[t]$ is the integer part of $t$, $\{t\}$ is the fractional part. Then,
+	\[
+	S^{(N)} = \left( \frac{S_{Nt}}{ \sigma N^{1/2}} \right)_{0 \leq t \leq 1}
+	\]
+	converges to a standard Brownian motion on $[0, 1]$ as $N \to \infty$ in distribution. That is, for all $F : C([0, 1], \mathbb{R}) \to \mathbb{R}$ bounded and continuous, we have
+	\[
+		\mathbb{E}[ f(S^{(N)})] \to \mathbb{E}[f(B)]
+	\]
+	as $N \to \infty$, where $B$ is a standard Brownian motion on $[0, 1]$.
+\end{theorem}
+
+\begin{theorem}[Skorokhod Embedding]
+	Let $\mu$ be a probability measure on $\mathbb{R}$ with mean $0$ and variance $\sigma^2 < \infty$. Then there exists a probability space $(\Omega, \mathcal{F}, \mathbb{P})$ with filtration $(\mathcal{F}_t)$ and an $(\mathcal{F}_t)$-Brownian motion $B$ with a sequence of stopping times $0 = T_0 \leq T_1 \leq T_2 \leq \cdots$, such that if $S_n = B_{T_n}$, then
+	\begin{enumerate}[\normalfont(i)]
+		\item $(T_n)$ is a random walk with steps with mean $\sigma^2$.
+		\item $(S_n)$ is a random walk with step distribution $\mu$.
+	\end{enumerate}
+\end{theorem}
+
+\begin{proofbox}
+	The idea is the following: $(T_n)$ will be the exit times of a Brownian motion from some randomly chosen intervals. Let
+	\[
+	\mu_{\pm}(A) = \mu(\pm A),
+	\]
+	for $A \in \mathcal{B}([0, \infty)]$. There exists a probability space which has a Brownian motion $B$ and a sequence $((X_n, Y_n))$ independent of $B$ and IID with law
+	\[
+	\nu(\diff x, \diff y) = C (x + y) \mu_-(\diff x) \mu_+(\diff y),
+	\]
+	for some normalizing constant $C$. Set
+	\[
+	\mathcal{F}_0 = \sigma((X_n, Y_n) \mid n \in \mathbb{N}), \qquad \mathcal{F}_t = \sigma(\mathcal{F}_0, \mathcal{F}_t^B).
+	\]
+	Set $T_0 = 0$ and inductively set
+	\[
+		T_{n+1} = \inf\{t \geq T_n \mid B_t - B_{T_n} \in \{-X_{n+1}, Y_{n+1}\}\}.
+	\]
+	Then $T_n$ is a stopping time for all $n$. Now,
+	\[
+	0 = \mathbb{E} \mu = \int_{-\infty}^0 x \diff \mu(x) + \int_0^\infty y \diff \mu(y),
+	\]
+	and
+	\begin{align*}
+		1 &= \int \diff \nu(x + y) = \int \int C (x + y) \diff \mu_{-}(x) \diff \mu_+(y) \\
+		  &= C \int \left( \int x \diff_{\mu_-}(x) + y \mu_{-}(\mathbb{R}_+) \right) \diff \mu_{+}(y) \\
+		  &= C \int x \diff \mu_{-}(x) \mu_+(\mathbb{R}_+) + C \int y \diff \mu_+(y) \mu_-(\mathbb{R}_+).
+	\end{align*}
+	As the mean is 0,
+	\[
+	\int x \diff \mu_- (x) = \int y \diff \mu_+(y),
+	\]
+	and also $\mu_+(\mathbb{R}_+) + \mu_-(\mathbb{R}_+) = \mu(\mathbb{R}) = 1$. Hence
+	\[
+	C \int_{-\infty}^0 (-x) \diff \mu(x) = C \int_0^\infty y \diff \mu(y) = 1.
+	\]
+	Write $T = T_1$, $X = X_1$, $Y = Y_1$. Then $T < \infty$ a.s. and
+	\[
+	\mathbb{P}(B_T = Y | X, Y) = \frac{X}{X+Y}, \qquad \mathbb{E}[T|X, Y] = XY.
+	\]
+	For $A \in \mathcal{B}([0, \infty)]$, then
+	\begin{align*}
+		\mathbb{P}(B_T \in A) &= \int_A \int_0^\infty \frac{x}{x + y} \cdot C(x + y) \diff \mu_{-}(x) \diff \mu_+(y) = \mu(A).
+	\end{align*}
+	Similarly for $A \in \mathcal{B}((-\infty, 0])$, $\mathbb{P}(B_T \in A) = \mu(A)$. Hence, $B_T$ has distribution $\mu$.
+
+	Next, note that
+	\begin{align*}
+		\mathbb{E}[T] &= \int_0^\infty \int_0^\infty xy \cdot C(x + y) \diff \mu_-(x) \diff \mu_+(y) \\
+			      &= \int_{-\infty}^0 (-x)^2 \diff \mu(x) + \int_0^\infty y^2 \diff \mu(y) = \sigma^2.
+	\end{align*}
+	By the simple Markov property, $(B_{T_n + t} - B_{T_n})$ is a Brownian motion independent of $\mathcal{F}_{T_n}^B$, so $B_{T_{n_1}} - B_{T_n} \sim \mu$, and $\mathbb{E}[T_{n+1} - T_n] = \sigma^2$, independent of $\mathcal{F}_{T_n}^B$.
+\end{proofbox}
+
+Using this we can prove Donsker's invariance principle.
+
+\begin{proofbox}
+	Without loss of generality, let $\sigma = 1$. 
+
+	Let $B$ be a Brownian motion, $(T_n)$ be stopping times as in the Skorokhod embedding theorem. Then $B_{T_n}$ is a random walk with law $S_n$.
+
+	Let $S_t$ be the linear interpolation as in the statement, and set
+	\[
+	B_t^{(N)} = N^{1/2} B_{N^{-1} t} \overset d = B.
+	\]
+	Apply Skorokhod embedding with $B$ replaced with $B^{(N)}$. We get stopping times $T_n^{(N)}$, and $S_n^{(N)} = B_{T_n^{(N)}}^{(N)}$, interpolated linearly. Then
+	\[
+		((T_n^{(N)}), (S_t^{(N)})) \overset d = ((T_n), (S_t)).
+	\]
+	Now set $\tilde T_n^{(N)} = N^{-1} T_n^{(N)}$, and $\tilde S_t^{(N)} = N^{-1/2} S_{Nt}^{(N)}$. Then
+	\[
+		(\tilde S_t^{(N)}) \overset d = (S_t^{(N)}),
+	\]
+	and moreover
+	\[
+	\tilde S_{n/N}^{(N)} = B_{\tilde T_n^{(N)}}.
+	\]
+	We need to show that for $f$ bounded and continuous that
+	\[
+	\mathbb{E}[f(S^{(N)})] \to \mathbb{E}[f(B)]
+	\]
+	as $N \to \infty$. We will show that
+	\[
+	\mathbb{P}\left( \sup_{0 \leq t \leq 1} |\tilde S_t^{(N)} - B_t| > \eps\right) \to 0
+	\]
+	as $N \to \infty$.
+
+	Recall that $(T_n)$ is a random walk with intervals with mean 1. Hence $T_n/n \to 1$ as $n \to \infty$ a.s., by SLLN. Hence $N^{-1} \sup_n |T_n - n| \to 0$ as $N \to \infty$, so for all $\delta > 0$,
+	\[
+	\mathbb{P}\left( \sup_{n \in \mathbb{N}} |\tilde T_n^{(N)} - n/N| > \delta \right) \to 0
+	\]
+	as $N \to \infty$. Since $\tilde S_{n/N}^{(N)} = B_{\tilde T_n^{(N)}}$ for all $n$, we have that whenever $n/N \leq t \leq n+1/N$, there is $\tilde T_n^{(N)} \leq u \leq \tilde T_{n+1}^{(N)}$ such that $\tilde S_t^{(N)} = B_u$. Then,
+	\begin{align*}
+		\left\{ \sup_{0 \leq t \leq 1} |\tilde S_t^{(N)} - B_t| > \eps \right\} &\subseteq \left\{|\tilde T_n^{(N)} - n/N | > \delta \text{ for some } n \leq N\right\} \\
+											& \!\!\!\!\!\cup \{|B_u - B_t| > \eps \text{ for some } t \in [0, 1], |u - t| \leq \delta + 1/N\} \\
+											&= A_1 \cup A_2.
+	\end{align*}
+	Now a Brownian motion on $[0, 1]$ is uniformly continuous, hence for all $\eps > 0$, there is $\delta > 0$ such that $\mathbb{P}(A_2) < \eps/2$, and we can choose $N$ large enough so that $\mathbb{P}(A_1) < \eps/2$.
+\end{proofbox}
+
+% lecture 23
+
+\subsection{Zeroes of Brownian Motion}%
+\label{sub:zob}
+
+\begin{theorem}
+	Let $B$ be a Brownian motion in $\mathbb{R}$. Then
+	\[
+	Z = \{t \geq 0 \mid B_t = 0\}
+	\]
+	is a closed set without isolated points.
+\end{theorem}
+
+\begin{remark}
+	If $X \subseteq \mathbb{R}$ is closed, non-empty and without isolated points, then $X$ is uncountable. Consequently, $Z$ is almost-surely uncountable.
+\end{remark}
+
+\begin{proofbox}
+	$B$ is almost-surely continuous, hence $Z$ is almost-surely closed.
+
+	For each $q \in \mathbb{Q}_+$, let $\tau_q = \inf\{t \geq q \mid B_t = 0\}$. Then $\tau_q$ is a stopping time for $B$, and $\tau_q < \infty$ almost surely.
+
+	Since $B_{\tau_q} = 0$, $\tau_q \in Z$ almost-surely. Recall that
+	\[
+	\sup_{0 \leq t \leq \eps} B_t > 0, \qquad \inf_{0 \leq t \leq \eps} B_t < 0
+	\]
+	for all $\eps > 0$ almost-surely, hence $0$ is not isolated in $Z$ from the right. From the simple Markov property, $\tau_q$ is not isolated from the right in $Z$.
+
+	Since $\mathbb{Q}_+$ is countable, $\tau_q$ is not isolated from the right in $Z$ for all $q \in \mathbb{Q}_+$ almost-surely.
+
+	We need to show that $t \in Z \setminus \{\tau_q \mid q \in \mathbb{Q}_+\}$ is not isolated from the left.
+
+	For such $t$, take a sequence $(q_n)$ in $\mathbb{Q}_+$ with $q_n \uparrow t$. Then $q_n \leq \tau_{q_n} \leq t$, hence $\tau_{q_n} \uparrow t$ as $n \to \infty$. Hence $t$ is not isolated in $Z$ from the left.
+\end{proofbox}
+
+\begin{remark}
+	By the simple Markov property applied to the stopping time
+	\[
+		T_x = \inf\{t \geq 0 \mid B_t = x\},
+	\]
+	the conclusion of the theorem applies also to
+	\[
+		Z_x = \{t \geq 0 \mid B_t = x\},
+	\]
+	for all $x \in \mathbb{R}$.
+\end{remark}
+
+We can also show the following:
+\begin{theorem}
+	Fix $t \geq 0$. Then the Brownian motion is almost-surely not differentiable at $t$.
+\end{theorem}
+
+The proof is on the example sheet; I think the idea is that $(\mathcal{F}_t^+)$ is $(\mathcal{F}_t)$-trivial, and right differentiability is in this $\sigma$-algebra. So probability of being differentiable is either 0 or 1.
+
+Then we can use the fact $B_t/\sqrt t$ is unbounded as $t \to 0$.
+
+\begin{theorem}[Paly, Wiener, Zygmod]
+	Almost-surely, a Brownian motion in $\mathbb{R}$ is nowhere differentiable.
+\end{theorem}
+
+One thing to wonder if being nowhere differentiable is even a measurable event. Note that
+\[
+	\{f \in C([0, 1], \mathbb{R}) \text{ nowhere differentiable}\}
+\]
+is not a Borel set. But it is in the completion of the Borel $\sigma$-algebra with respect to the Wiener measure, i.e. it is a subset of a null set.
+
+\newpage
+
+\section{Poisson Random Measures}%
+\label{sec:prm}
+
+\subsection{Properies of the Poisson Distribution}%
+\label{sub:propp}
+
+Recall that $Z$ is \emph{Poisson}\index{Poisson random variable} with parameter $\lambda \in (0, \infty)$, and write $Z \sim P(\lambda)$, if
+\[
+\mathbb{P}(Z = n) = e^{-\lambda} \frac{\lambda^{n}}{n!},
+\]
+for all $n \geq 0$.
+
+If $Z \sim P(0)$, then $Z = 0$ almost-surely, and if $Z \sim P(\infty)$, then $Z = \infty$ almost-surely.
+
+The characteristic function of $P(\lambda)$ is
+\[
+\phi(\theta) = \exp [\lambda (e^{i\theta} - 1)].
+\]
+\begin{proposition}[Addition Property]
+	If $(X_k)$ are independent random variables with $X_k \sim P(\lambda_k)$, then
+	\[
+	\sum_k X_k \sim P \left( \sum_k \lambda_k \right).
+	\]
+\end{proposition}
+
+\begin{proofbox}
+	Take the characteristic function:
+	\begin{align*}
+		\mathbb{E}\left[\exp \left[i \theta \sum_k X_k\right]\right] &= \lim_{n \to \infty} \mathbb{E}\left[ \exp \left[ i\theta \sum_{k = 1}^n X_k \right] \right] = \lim_{n \to \infty} \prod_{k = 1}^n \exp [\lambda_k (e^{i\theta} - 1 )] \\
+									     &= \exp \left( \left( \sum_k \lambda_k \right) (e^{i\theta} - 1 ) \right).
+	\end{align*}
+\end{proofbox}
+
+\begin{proposition}[Thinning/Splitting]
+	Let $N$ and $Y_n$ be independent random variables with $N \sim P(\lambda)$ for some $\lambda < \infty$, and let $\mathbb{P}(Y_n = j) = p_j$ for $1 \leq j \leq k$.
+
+	If $N_j = \sum_{n = 1}^N \mathbbm{1}_{Y_n = j)}$, then $N_1, \ldots, N_k$ are independent with
+	\[
+	N_j \sim P(\lambda p_j).
+	\]
+\end{proposition}
+
+\subsection{Constructing Poisson Random Measures}%
+\label{sub:conprm}
+
+\begin{definition}
+	Let $(E, \mathcal{E}, \mu)$ be a $\sigma$-finite measure space. A \emph{Poisson random measure}\index{Poisson random measure} with intensity $\mu$ is a map
+	\[
+	M : \Omega \times \mathcal{E} \to \mathbb{Z}_+ \cup \{+\infty\},
+	\]
+	such that for all disjoint sequences $(A_k)$ in $\mathcal{E}$:
+	\begin{enumerate}[(i)]
+		\item $M(\bigcup_k A_k) = \sum_k M(A_k)$.
+		\item $M(A_k)$ for $k \in \mathbb{N}$ are independent random variables.
+		\item $M(A_k) \sim P(\mu(A_k))$.
+	\end{enumerate}
+\end{definition}
+
+Let $E^{\ast}$ be the set of $\mathbb{Z}_+ \cup \{+\infty\}$-valued measures on $(E, \mathcal{E})$ and define, for $A \in \mathcal{E}$,
+\[
+	X : E^{\ast} \times \mathcal{E} \to \mathbb{Z}_+ \cup\{+\infty\}, \qquad X_A : E^{\ast} \to \mathbb{Z}_+ \cup\{+\infty\},
+\]
+by
+\[
+X(m, A) = X_A(m) = m(A).
+\]
+We can then let
+\[
+\mathcal{E}^{\ast} = \sigma(X_A \mid A \in \mathcal{E}).
+\]
+\begin{theorem}
+	There is a unique probability measure $\mu^{\ast}$ on $(E^{\ast}, \mathcal{E}^{\ast})$ such that under $\mu^{\ast}$, $X$ is a Poisson random measure with intensity $\mu$.
+\end{theorem}
+
+\begin{proofbox}
+	We start off with uniqueness. This will be showing that it is unique on a generating $\pi$-system.
+
+	Let $A_1, \ldots, A_k$ be disjoint in $\mathcal{E}$, and $n_1, \ldots, n_k \in \mathbb{Z}_+$. Let
+	\[
+		A^{\ast} = \{m \in E^{\ast} \mid m(A_1) = n_1, \ldots, m(A_k) = n_k\}.
+	\]
+	If $\mu^{\ast}$ makes $X$ a Poisson random measure with intensity $\mu$, then
+	\begin{align*}
+		\mu^{\ast}(A^{\ast}) &= \prod_{j = 1}^k e^{-\mu(A_j)} \frac{\mu(A_j)^{n_j}}{n_j!}. 
+	\end{align*}
+	The collection of such sets form a $\pi$-system for $\mathcal{E}^{\ast}$. Hence $\mu^{\ast}$ is uniquely determined on $\mathcal{E}^{\ast}$ by this.
+
+	Now we look at showing existence. There are several steps:
+	\begin{enumerate}
+		\item First assume that $\mu$ is finite; since $\mu$ is $\sigma$-finite.
+		\item Pick $\mu \sim P(\mu(E))$.
+		\item Pick a sequence $(x_j)$ IID from $\mu$ normalized by $\mu(E)$.
+		\item Set $M(A)$ to be the number of elements of $\{x_j\}$ which are in $A$.
+	\end{enumerate}
+	Then for a usual Poisson line process, this corresponds to a Poisson random measure with the Lebesgue measure.
+% lecture 24
+
+	First assume that $\lambda = \mu(E) < \infty$. Then there exists a probability space $(\Omega, \mathcal{F}, \mathbb{P})$ on which we have independent random variables $N$ and $Y_n$ such that $N \sim P(\lambda)$ and $Y_n \sim \mu/\lambda$ are IID. Set
+	\[
+	M(A) = \sum_{n = 1}^N \mathbbm{1}(Y_n \in A),
+	\]
+	for $A \in \mathcal{E}$. For $M$ to be a Poisson random measure, we need that for all $(A_k)$ in $\mathcal{E}$ disjoint,
+	\begin{enumerate}[(i)]
+		\item $M(\bigcup A_k) = \sum M(A_k)$.
+		\item $M(A_k)$ are independent random variables.
+		\item $M(A_k) \sim P(\mu(A_k)).$
+	\end{enumerate}
+	(i) is clearly true from definition. We need to check (ii) and (iii).
+
+	Suppose that $A_1, \ldots, A_k \in \mathcal{E}$ are disjoint. Let $X_n = j$ whenever $Y_n \in A_j$. Then $X_n$ are independent of $N$. So
+	\[
+	N_j = M(A_j) = \sum_{n = 1}^N \mathbbm{1}(X_n = j)
+	\]
+	are independent, showing (ii), and by splitting they have distribution
+	\[
+	P(\lambda \cdot \mu(A_j)/\lambda) = P(\mu(A_j)).
+	\]
+	Now assume that $(E, \mathcal{E}, \mu)$ is $\sigma$-finite. Then there exists $(E_k)$ in $\mathcal{E}$ disjoint, with $\bigcup_k E_k = E$ and $\mu(E_k) < \infty$.
+
+	We can construct independent Poisson random measures $M_k$ with intensity $\mu|_{E_k}$. Then set
+	\[
+	M(A) = \sum_k M_k(A \cap E_k),
+	\]
+	for $A \in \mathcal{E}$. By the addition property, this is a Poisson random measure with intensity $\mu$.
+\end{proofbox}
+
+\begin{proposition}
+	Let $M$ be a Poisson random measure with intensity $\mu$ on $(E, \mathcal{E})$. Then $M(A) \sim P(\mu(A))$ for all $A \in \mathcal{E}$.
+
+	Moreover, given $M(A) = k$, $M|_{A}$ has the same form as
+	\[
+	\sum_{j = 1}^k \delta_{x_j},
+	\]
+	where $(x_j)$ are IID with laws $\mu(C \cap A)/\mu(A)$ for $C \subseteq A$.
+
+	If $A, B \in \mathcal{E}$ are disjoint, then $M|_A, M|_B$ are independent random variables.
+\end{proposition}
+
+\subsection{Integrals of Poisson Random Measures}%
+\label{sub:int_prm}
+
+\begin{theorem}
+	Let $M$ be a Poisson random measure with intensity $\mu$. Then for $f \in \mathcal{L}^1(\mu)$, we have that $M(f) \in \mathcal{L}^1$, where
+	\[
+	M(f) = \int_E f \diff M,
+	\]
+	and
+	\[
+	\mathbb{E}[M(f)] = \int_E f \diff \mu, \qquad \Var(M(f)) = \int_E f^2 \diff \mu.
+	\]
+	If $f : E \to \mathbb{R}_+$ is measurable, then for $u > 0$,
+	\[
+		\mathbb{E}[ \exp (-u M(f))] = \exp \left[ - \int_E (1 - e^{-u f(y)}) \diff \mu(y) \right].
+	\]
+	If $f \in \mathcal{L}^1(\mu)$, then for all $u$,
+	\[
+		\mathbb{E}[e^{i u M(f)}] = \exp \left[ \int_E \left( e^{i u f(y)} - 1 \right) \diff \mu(y) \right].
+	\]
+\end{theorem}
+
+\begin{proofbox}
+	Assume that $f = \mathbbm{1}_{A}$ for $A \in \mathcal{E}$. Then $M(f) = M(A)$ is a random variable.
+
+	By linearity, simple functions satisfy $M(f)$ is a random variable. For $f \geq 0$, $M(f) = \lim_n M(f_n)$, where $f_n = 2^{-n} \lceil 2^{n} f \rceil \wedge n$. Hence $M(f)$ is a random variable. For $f = f^{+} - f^{-}$ and $f \in \mathcal{L}(\mu)$, then
+	\[
+	M(f) = M(f^{+}) - M(f^{-})
+	\]
+	is a random variable.
+
+	Write $E = \bigcup E_k$, for $(E_k)$ disjoint in $\mathcal{E}$ and $\mu(E_k) < \infty$. Then $M(f \mathbbm{1}_{E_n})$ is a random variable for all $n$, and summing gives a random variable.
+
+	Let $f \in \mathcal{L}^1(\mu)$ and $f = \mathbbm{1}_{A}$. Then it is clear that the mean and variance formula holds since
+	\[
+	M(f) = M(A) \sim P(\mu(A)).
+	\]
+	By linearity, the same holds for $f$ simple functions, and for general $f \in \mathcal{L}^1(\mu)$ we can use the $f_n$ approximation for $f^+$ and $f^-$, and use the fact that $M(f^+)$, $M(f^{-})$ are independent (since their supports are distinct).
+
+	Now we prove the generating function formulas. Given that $M(E_n) = k$, we have
+	\[
+	M|_{E_n} \overset d = \sum_{i = 1}^k \delta_{x_i},
+	\]
+	where $(x_i)$ are IID with law $\mu(C \cap E_n) / \mu(E_n)$. Then
+	\begin{align*}
+		\mathbb{E}[\exp(-u M(f \mathbbm{1}_{E_n})] &= \sum_{k = 0}^\infty \mathbb{E}[\exp[-u M(f \mathbbm{1}_{E_n})] | M(E_n) = k] \mathbb{P}(M(E_n) = k) \\
+							   &= \sum_{k = 0}^\infty \left( e^{-\mu(E_n)} \frac{\mu(E_n)^k}{k!} \right) \left( \int_{E_n} e^{-uf(x)} \frac{\diff \mu(x)}{\mu(E_n)} \right)^{k} \\
+							   &= e^{-\mu(E_n)} \exp \left[ \int_{E_n} e^{-u f(x)} \diff \mu(x) \right] \\
+							   &= \exp \left[ - \int_{E_n}  \left( 1 - \exp[-uf(x)] \right) \diff \mu(x)\right].
+	\end{align*}
+	The random variables $M(f \mathbbm{1}_{E_n})$ are independent over $n$, s by taking product and MCT we get the moment generating function.
+
+	For $f \in \mathcal{L}^1(\mu)$, the derivation of $\mathbb{E}[\exp[i u M(f)]]$ is the same.
+\end{proofbox}
+
+
 
 \newpage
 

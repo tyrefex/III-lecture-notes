@@ -1202,6 +1202,28 @@ This generalizes.
 									     &= \Delta_{12} \Delta_{34} + \Delta_{13} \Delta_{24} + \Delta_{14} \Delta_{23}.
 			\end{align*}
 			We can also write this pictorially.
+%\[
+%\feynmandiagram [inline = (4.base), small, horizontal= 1 to 3]
+%{
+%1 [particle=\(1\)] -- 2 -- 3 [particle=\(2\)],
+%4 -- [draw = none] 5 -- [draw = none] 6,
+%7 [particle=\(3\)] -- 8 -- 9 [particle=\(4\)],
+%};
+%+
+%\feynmandiagram [inline = (5.base), small, vertical= 1 to 2]
+%{
+%1 [particle=\(1\)] -- 2 -- 3 [particle=\(3\)],
+%4 -- [draw = none] 5 -- [draw = none] 6,
+%7 [particle=\(2\)] -- 8 -- 9 [particle=\(4\)],
+%};
+%+
+%\feynmandiagram [inline = (5.base), small, vertical= 1 to 2]
+%{
+%1 [particle=\(1\)] -- 2 -- 3 [particle=\(4\)],
+%4 -- [draw = none] 5 -- [draw = none] 6,
+%7 [particle=\(2\)] -- 8 -- 9 [particle=\(3\)],
+%};
+%\]
 		\item Consider a cubic interaction term
 			\[
 			\mathcal{L}_{\mathrm{int}} = \frac{g}{3!} \phi^3,
@@ -1220,7 +1242,8 @@ This generalizes.
 			\begin{align*}
 				\braket{\phi_1 \phi_2 \phi_3} &= \int \Diff 4 x \, \delta(x - x_1) \braket{\phi_x \phi_2 \phi_3} \\
 							      &= i \int \Diff 4 x \, \Delta_{x1} (\nabla_x + m^2) \braket{\phi_x \phi_2 \phi_3} \\
-							      &= \frac{ig}{2} \int \Diff 4 x \, \Delta_{x1} \braket{\phi_x \phi_x \phi_2 \phi_3} + \int \Diff 4 x \, \Delta_{x1} (\delta(x = x_2) \braket{\phi_3} + \delta(x - x_3) \braket{\phi_2}).
+							      &= \frac{ig}{2} \int \Diff 4 x \, \Delta_{x1} \braket{\phi_x \phi_x \phi_2 \phi_3} \\
+							      & \qquad + \int \Diff 4 x \, \Delta_{x1} (\delta(x = x_2) \braket{\phi_3} + \delta(x - x_3) \braket{\phi_2}).
 			\end{align*}
 			Here we will use a couple of approximations, by relating the one-point and four-point functions to either their free-theory results, or results from previous calculation, to firs order in $g$. This gives
 			\begin{align*}
@@ -1234,14 +1257,148 @@ This generalizes.
 				&\qquad + \frac{ig}{2} \int \Diff 4 x \, \Delta_{xx} (\Delta_{x1} \Delta_{23} + \Delta_{12} \Delta_{3x} + \Delta_{13} \Delta_{2x}) + \mathcal{O}(g^2).
 			\end{align*}
 			We can repeat our diagram drawing.
+\begin{align*}
+& ig
+\begin{tikzpicture}[baseline = (0.base), scale = 0.3]
+\begin{feynman}[inline = (0.base)]
+\vertex (0) at (0, 2) {\(1\)};
+\vertex (1) at (4, 4) {\(2\)};
+\vertex (2) at (4, 0) {\(3\)};
+\vertex (3) at (2, 2);
+\diagram*{
+	(0) --[plain] (3),
+	(3) --[plain] (1),
+	(3) --[plain] (2)
+};
+\end{feynman}
+\end{tikzpicture} \\
++ &\frac{ig}{2} \Biggl(
+\begin{tikzpicture}[baseline = (0.base), scale = 0.3]
+\begin{feynman}[inline = (0.base)]
+\vertex (0) at (0, 2) {\(1\)};
+\vertex (1) at (2, 2);
+\vertex (4) at (4, 2);
+\vertex (5) at (6, 4) {\(2\)};
+\vertex (6) at (6, 0) {\(3\)};
+\diagram*{
+	(0) --[plain] (1),
+	(1) --[plain,half left] (4),
+	(4) --[plain,half left] (1),
+	(5) --[plain] (6)
+};
+\end{feynman}
+\end{tikzpicture}
++
+\begin{tikzpicture}[baseline = (0.base), scale = 0.3]
+\begin{feynman}[inline = (0.base)]
+\vertex (0) at (0, 2) {\(2\)};
+\vertex (1) at (2, 2);
+\vertex (4) at (4, 2);
+\vertex (5) at (6, 4) {\(3\)};
+\vertex (6) at (6, 0) {\(1\)};
+\diagram*{
+	(0) --[plain] (1),
+	(1) --[plain,half left] (4),
+	(4) --[plain,half left] (1),
+	(5) --[plain] (6)
+};
+\end{feynman}
+\end{tikzpicture}
++
+\begin{tikzpicture}[baseline = (0.base), scale = 0.3]
+\begin{feynman}[inline = (0.base)]
+\vertex (0) at (0, 2) {\(3\)};
+\vertex (1) at (2, 2);
+\vertex (4) at (4, 2);
+\vertex (5) at (6, 4) {\(1\)};
+\vertex (6) at (6, 0) {\(2\)};
+\diagram*{
+	(0) --[plain] (1),
+	(1) --[plain,half left] (4),
+	(4) --[plain,half left] (1),
+	(5) --[plain] (6)
+};
+\end{feynman}
+\end{tikzpicture}
+\Biggr)
+\end{align*}
 		\item Finally we can find our two-point function:
 			\begin{align*}
-				\braket{\phi_1 \phi_2} &= i \int \Diff 4 x \, \Delta_{1x} \left( \frac{g}{2} \braket{ \phi_x^2 \phi_2} - i \delta(x - x2) \right) \\
-						       &= \Delta_{12} + \frac{ig}{2} \int \Diff 4 x \int \Diff 4 y \, \delta(y = x_2) \Delta_{1x} \braket{\phi_x^2 \phi_y} \\
+				\braket{\phi_1 \phi_2} &= i \int \Diff 4 x \, \Delta_{1x} \left( \frac{g}{2} \braket{ \phi_x^2 \phi_2} - i \delta(x - x_2) \right) \\
+						       &= \Delta_{12} + \frac{ig}{2} \int \Diff 4 x \int \Diff 4 y \, \delta(y - x_2) \Delta_{1x} \braket{\phi_x^2 \phi_y} \\
 						       &= \Delta_{12} + \frac{ig}{2} \int \Diff4 x \Diff 4 y \, i \Delta_{1x} \Delta_{2y} \left( \frac{g}{2} \braket{\phi_x^2 \phi_y^2} - 2i \delta(x - y) \braket{\phi_x}\right) \\
 						       &= \Delta_{12} + \frac{(ig)^2}{4} \int \Diff 4 x \Diff 4 y \, (\Delta_{1x} \Delta_{2y} \Delta_{xx} \Delta_{yy} + 2 \Delta_{1x} \Delta_{2y} \Delta_{xy} \Delta_{xy} \\
 						       & \qquad + 2 \Delta_{1x} \Delta_{2x} \Delta_{xy} \Delta_{yy}) + \mathcal{O}(g^3).
 			\end{align*}
+			\begin{align*}
+& \qquad \qquad \qquad \qquad 
+\begin{tikzpicture}[baseline = (4.base), scale = 0.3]
+\begin{feynman}[inline = (4.base)]
+\vertex (4) at (0, 0) {\(1\)};
+\vertex (5) at (4, 0) {\(2\)};
+\diagram*{
+	(4) --[plain] (5)
+};
+\end{feynman}
+\end{tikzpicture}
+\\
++ & \frac{(ig)^2}{4} \Biggl(
+\begin{tikzpicture}[baseline = (100.base), scale = 0.3]
+\begin{feynman}[inline = (100.base)]
+\vertex (100) at (0, 0.7);
+\vertex (4) at (0, 0) {\(1\)};
+\vertex (5) at (2, 0);
+\vertex (6) at (0, 2) {\(2\)};
+\vertex (14) at (4, 0);
+\vertex (15) at (2, 2);
+\vertex (16) at (4, 2);
+\diagram*{
+	(4) --[plain] (5),
+	(5) --[plain, half right] (14),
+	(14) --[plain,half right] (5),
+	(6) --[plain] (15),
+	(15) --[plain,half right] (16),
+	(16) --[plain,half right] (15)
+};
+\end{feynman}
+\end{tikzpicture}
++ 2 \cdot
+\begin{tikzpicture}[baseline = (4.base), scale = 0.3]
+\begin{feynman}[inline = (4.base)]
+\vertex (4) at (0, 0) {\(1\)};
+\vertex (5) at (2, 0);
+\vertex (6) at (6, 0) {\(2\)};
+\vertex (9) at (4, 0);
+\vertex (10) at (8, 0);
+\vertex (11) at (10, 0);
+\diagram*{
+	(4) --[plain] (5),
+	(5) --[plain,half right] (9),
+	(9) --[plain,half right] (5),
+	(6) --[plain] (9),
+};
+\end{feynman}
+\end{tikzpicture}
++ 2 \cdot
+\begin{tikzpicture}[baseline = (100.base), scale = 0.3]
+\begin{feynman}[inline = (100.base)]
+\vertex (4) at (0, 0) {\(1\)};
+\vertex (5) at (2, 0);
+\vertex (100) at (2, 1);
+\vertex (6) at (4, 0) {\(2\)};
+\vertex (12) at (2, 2);
+\vertex (13) at (2, 4);
+\diagram*{
+	(4) --[plain] (5),
+	(5) --[plain] (12),
+	(5) --[plain] (6),
+	(12) --[plain,half right] (13),
+	(13) --[plain,half right] (12)
+};
+\end{feynman}
+\end{tikzpicture}
+\Biggr)
+\end{align*}		
 	\end{enumerate}
 	
 \end{exbox}
@@ -1267,9 +1424,288 @@ We have two terms: the field propagation, and the contraction. Let us draw these
 
 % lecture 12
 
+%\[
+%\begin{tikzpicture}[baseline = (9.base)]
+%	\begin{feynman}[inline = (9.base)]
+%\vertex (5) at (-1, 1) {\(1\)};
+%\vertex (6) at (1, -1) {\(4\)};
+%\vertex (7) at (1, 1) {\(2\)};
+%\vertex (8) at (-1, -1) {\(3\)};
+%\vertex (9) at (0, 0);
+%\diagram*{
+%	(5) --[plain] (7),
+%	(8) --[plain] (6)
+%};
+%\end{feynman}
+%\end{tikzpicture}
+%\]
 
+\subsection{Scalar Yukawa Theory}%
+\label{sub:syt}
+
+The scalar Yukawa theory has $\mathcal{L} = \mathcal{L}_0 + \mathcal{L}_{\mathrm{int}}$, where
+\begin{align*}
+	\mathcal{L}_0 &= \frac{1}{2} \partial_\mu \phi \partial^\mu \phi - \frac{1}{2} m^2 \phi^2 + \partial_\mu \psi^{\dagger} \partial^\mu \psi - M^2 \psi^{\dagger} \psi, \\
+	\mathcal{L}_{\mathrm{int}} &= - g \psi^{\dagger} \psi \phi,
+\end{align*}
+with $g \ll M, m$. The goal is to infer the Feynman rules by evaluating the $S$-matrix. This consists of:
+\begin{itemize}
+	\item First examining the free theory.
+	\item Then looking at the interacting picture.
+\end{itemize}
+
+For the scalar field, we know
+\[
+	\phi(x) = \int \frac{\Diff 3 p}{(2 \pi)^3} \frac{1}{\sqrt{2 \omega_p}} \left( a_p e^{-ipx} + a_p^{\dagger} e^{ipx} \right),
+\]
+where $\omega_p = \sqrt{p^2 + m^2}$, and the complex scalar is
+\[
+	\psi(x) = \int \frac{\Diff 3 p}{(2 \pi)^3} \frac{1}{\sqrt{2 \tilde\omega_p}} \left(b_p e^{-ipx} + c_p^{\dagger} e^{ipx}\right),
+\]
+where $\tilde\omega_p = \sqrt{p^2 + M^2}$. The canonical quantization gives commutation relationships
+\begin{align*}
+	[\phi(\mathbf{x}, t), \partial_ \phi(\mathbf{y}, t)] &= i \delta(\mathbf{x} - \mathbf{y}), \\
+	[\psi(\mathbf{x}, t), \Pi_\psi (\mathbf{y}, t)] &= i \delta(\mathbf{x} - \mathbf{y}), \\
+	[\psi^{\ast}(\mathbf{x}, t), \Pi_{\psi^{\ast}}(\mathbf{y}, t)] &= i \delta(\mathbf{x} - \mathbf{y}).
+\end{align*}
+Here $\Pi_\psi = \partial_t \psi^{\ast}$, and $\Pi_{\psi^{\ast}} = \partial_t \psi$. This gives commutation relations for the $a, b, c$ as
+\begin{align*}
+	[a_p, a_{p'}^{\dagger}] &= (2 \pi)^3 \delta( \mathbf{p} - \mathbf{p}'), \\
+	[b_p, b_{p'}^{\dagger}] &= (2 \pi)^3 \delta( \mathbf{p} - \mathbf{p}'), \\
+	[c_p, c_{p'}^{\dagger}] &= (2 \pi)^3 \delta( \mathbf{p} - \mathbf{p}').
+\end{align*}
+
+The Hamiltonian (which is normal ordered) is
+\[
+H_0 = \int \frac{\Diff3p}{(2\pi)^3} \left( \omega_p a_p^{\dagger} a_p + \tilde \omega_p b_p^{\dagger} b_p + \tilde \omega_p c_p^{\dagger} c_p \right).
+\]
+We also have the charge associated to $\psi \to e^{i\alpha} \psi$, given by
+\begin{align*}
+	Q &= i \int \Diff 3x \normalorder{( \dot \psi^{\dagger} \psi - \psi^{\dagger} \dot \psi)} = \int \frac{\Diff 3p}{(2 \pi)^3} (c_p^{\dagger} c_p - b_p^{\dagger} b_p),
+\end{align*}
+and $[H_0, Q] = 0$. Next we look at the Fock space. The vacuum state is $\ket 0$, with
+\[
+a_p \ket 0 = b_p \ket 0 = c_p \ket 0 = 0 \implies H_0 \ket 0 = 0.
+\]
+We also have one-particle states. The meson states $\ket \phi$ are acted on by $a_p^{\dagger}$, so
+\[
+\ket \phi = a_p^{\dagger} \ket 0, \qquad H_0 \ket \phi = \omega_p \ket \phi, Q \ket \phi = 0.
+\]
+We also have nucleon states, generated by
+\[
+\ket \psi = c_p^{\dagger} \ket 0 \implies H \ket \psi = \tilde \omega_p \ket \psi, Q \ket \psi = + \ket \psi,
+\]
+and similar an anti-nucleon $\ket{\psi^{\ast}}$,
+\[
+	\ket{\psi^{\ast}} = b_p^{\dagger} \ket 0 \implies H_0 \ket{\psi^{\ast}} = \tilde \omega_p \ket{\psi^{\ast}}, Q \ket{\psi^{\ast}} = - \ket{\psi^{\ast}}.
+\]
+We can also consider multi-particle states.
+
+The last thing in the free theory to consider is the Feynman propagator,
+\[
+	\Delta_F(x_1 - x_2) = \braket{\phi_1 \phi_2} = \int \frac{\Diff 4 p}{2 \pi)^4} \frac{1}{p^2 - m^2 + i \eps} e^{-ip(x_1 - x_2)} = \Delta_{12},
+\]
+and for the $\psi$ states we have propagator
+\begin{align*}
+	\Delta^{\psi}_F(x_1 - x_2) &= \braket{\Omega | T \psi(x_1) \psi^{\dagger}(x_2) | \Omega} = \int \frac{\Diff 4 p}{(2 \pi)^{4}} \frac{1}{p^2 - M^2 + i \eps} e^{-ip(x_1 - x_2)} = \hat \Delta_{12}.
+\end{align*}
+The reason we only consider this propagator is because
+\[
+\langle \psi_1 \psi_2 \rangle = \langle \psi_1^{\dagger} \psi_2^{\dagger} \rangle = 0.
+\]
+Do this above computation.
+
+The reason why $\braket{\psi_1 \psi_2^{\ast}} \neq 0$ is because,
+\begin{align*}
+	\sqrt{2 \omega_p} b_p^{\dagger} &= - i \int \Diff 3 x \, e^{-ipx} \partial_t \psi^{\dagger}, \\
+	\sqrt{2 \omega_p} b_p &= i \int \Diff 3 x \, e^{ipx} \partial_t \psi, \\
+	\sqrt{2 \omega_p} c_p^{\dagger} &= -i \int \Diff 3x \, e^{ipx} \partial_t \psi, \\
+	\sqrt{2 \omega_p} c_p &= i \int \Diff 3 x \, e^{-ipx} \partial_t \psi^{\dagger}.
+\end{align*}
+
+Now we move on to the interacting theory. We start with Schwinger-Dyson. The equations of motion in this field are:
+\begin{align*}
+	(\square + m^2) \phi - (-g \psi^{\dagger} \psi) &= 0, \\
+	(\square + M^2) \psi - (-g \phi \psi) &= 0, \\
+	(\square + M^2)\psi^{\dagger} - (-g \phi \psi^{\dagger}) &= 0.
+\end{align*}
+The Schwinger-Dyson equations are:
+\begin{align*}
+(\square_x + m^2) \langle\phi_x \phi_1 \cdots \phi_n \psi_1 \cdots \psi_m \psi_1^{\dagger} \cdots \psi_p^{\dagger}\rangle &= -g \langle \psi_x \psi_x^{\dagger} \phi_1 \cdots \phi_n \psi_1 \cdots \psi_m \psi_1^{\dagger} \cdots \psi_p^{\dagger}\rangle \\
+- i \sum_{j= 1}^n \delta(x - x_j) &\langle \phi_1 \cdots \phi_{j-1} \phi_{j+1} \cdots \phi_n \psi_1 \cdots \psi_m \psi^{\dagger}_1 \cdots \psi_p^{\dagger}\rangle,\\
+(\square_x + M^2) \langle\phi_1 \cdots \phi_n \psi_x \psi_1 \cdots \psi_m \psi_1^{\dagger} \cdots \psi_p^{\dagger}\rangle &= -g \langle \phi_1 \cdots \phi_n  \phi_x \psi_x \psi_1 \cdots \psi_m \psi_1^{\dagger} \cdots \psi_p^{\dagger}\rangle \\
+- i \sum_{j= 1}^p \delta(x - x_j) &\langle \phi_1 \cdots \phi_n \psi_1 \cdots \psi_m \psi^{\dagger}_1 \cdots \psi_{j-1}^{\dagger} \psi_{j+1}^{\dagger} \cdots \psi_p^{\dagger}\rangle.
+\end{align*}
+
+To infer the Feynman diagram, we look at the three-point function,
+\begin{align*}
+	\braket{\phi_1 \psi_2^{\dagger} \psi_3} &= -ig \int \Diff 4 x \, \Delta_{1x} \langle \psi_x \psi_x^{\dagger} \psi_2^{\dagger} \psi_3 \rangle \\
+						&= -ig \int \Diff 4 x \, \Delta_{1x} (\hat \Delta_{xx} \hat \Delta_{23} + \hat \Delta_{x2} + \hat \Delta_{3x}) + \mathcal{O}(g^2),
+\end{align*}
+by looking at the correlation in the free theory. Now when drawing Feynman diagram, we need to distinguish our propagators. $\Delta_{12}$ will be drawn as a dashed line, whereas $\hat \Delta_{12}$ will be drawn as an arrow, to ensure we remember that it is a propagator between $\psi$ and $\psi^{\dagger}$.
+\[
+-ig \Biggl(
+\begin{tikzpicture}[baseline = (100.base), scale = 0.3]
+\begin{feynman}[inline = (100.base)]
+\vertex (100) at (0, 0.6);
+\vertex (4) at (0, 0) {\(1\)};
+\vertex (6) at (0, 2) {\(2\)};
+\vertex (17) at (4, 2) {\(3\)};
+\vertex (19) at (2, 0);
+\vertex (20) at (4, 0);
+\diagram*{
+	(4) --[scalar] (19),
+	(6) --[fermion] (17),
+	(19) --[fermion,half right] (20),
+	(20) --[fermion,half right] (19)
+};
+\end{feynman}
+\end{tikzpicture}
++
+% https://feynman.srossd.com/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZABgBoBGAXVJADcBDAGwFcYkRyQBfU9TXfIRQAmUsWp0mrdsO68QGbHgJFRwiQxZtEIAMxy+SwUXIUNU7SG4SYUAObwioAGYAnCAFskZEDghJdGkYsMEs4AGMmelcDEDdPJFNff0RAkHCAC2iHRJ4Xdy9Umj8kUXSs1xzEci5KLiA
+\begin{tikzpicture}[baseline = (4.base), scale = 0.3]
+	\begin{feynman}[inline = (4.base)]
+\vertex (4) at (0, 2) {\(1\)};
+\vertex (6) at (4, 4) {\(2\)};
+\vertex (17) at (4, 0) {\(3\)};
+\vertex (19) at (2, 2);
+\diagram*{
+	(4) --[scalar] (19),
+	(6) --[fermion] (19),
+	(19) --[fermion] (17)
+};
+\end{feynman}
+\end{tikzpicture}
+\Biggr)
+\]
+
+Now that we have done Schwinger-Dyson, we can do scattering. We want to evaluate
+\[
+	\braket{\text{final}|\text{initial}} = \braket{f|S|i}.
+\]
+Our assumptions are as before, so asymptotic states at $\pm \infty$ match the free theory. Hence to evaluate $S$, we need for example
+\[
+	\sqrt{2 \tilde \omega_p} (b_p^{\dagger}(\infty) - b_p^{\dagger}(-\infty)) = - i \int \Diff 4 x \, e^{-ipx} (\square_x + M^2)\psi^{\dagger}(x),
+\]
+and similarly for $a_p, a_p^{\dagger}, b_p, c_p, c_p^{\dagger}$.
 
 % lecture 13
+
+First, we look at nucleon scattering, so $\ket{\psi \psi} \to \ket {\psi \psi}$. This corresponds to initial states
+\[
+	\lim_{ t \to -\infty} \sqrt{2 \tilde \omega_{p_1}} \sqrt{2 \tilde \omega_{p_2}} c_{p_1}^{\dagger}(t) c_{p_2}^{\dagger}(t) \ket \Omega,
+\]
+and final state
+\[
+	\lim_{t \to \infty} \sqrt{2 \tilde \omega_{p_3}} \sqrt{2 \tilde \omega_{p_4}} c_{p_3}^{\dagger}(t) c_{p_4}^{\dagger}(t) \ket \Omega.
+\]
+The $S$-matrix gives
+\begin{align*}
+	\braket{\text{final}|\text{initial}} &= \braket{f|S|i} \\
+					     &= i^{4} \prod_{j = 1}^4 \int \Diff 3 x_j e^{-ip_1 x_1} (\square_1 + M^2) e^{-i p_2 x_2} (\square_2 + M^2) \\
+					     & \qquad \qquad \times e^{ip_3 x_3} (\square_3 + M^2) e^{i p_4 x_4} (\square_4 + M^2) \\
+					     & \qquad \qquad \times \braket{\Omega | T \psi(x_1) \psi(x_2) \psi^{\dagger}(x_3) \psi^{\dagger}(x_4) | \Omega}.
+\end{align*}
+We need $\braket{\psi_1 \psi_2 \psi_3^{\dagger} \psi_4^{\dagger}}$. We will use Feynman diagrams, to leading order. To order $g_0$, we have
+\[
+% https://feynman.srossd.com/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZABgBpiBdUkANwEMAbAVxiRAEYQBfU9TXfIRRl2VWoxZsATN14gM2PASLtyY+s1aIQAZll9FglaVHUNk7QBZuYmFADm8IqABmAJwgBbJGRA4ISFLUAMYAFnRujkjsPK4e3oiqfgGIOiHhkVoxFFxAA
+	\begin{tikzpicture}[baseline = (100.base), scale = 0.3]
+	\begin{feynman}[inline = (100.base)]
+\vertex (100) at (0, 1.8);
+\vertex (4) at (0, 4) {\(1\)};
+\vertex (6) at (0, 0) {\(2\)};
+\vertex (17) at (4, 4) {\(3\)};
+\vertex (21) at (4, 0) {\(4\)};
+\diagram*{
+	(17) --[fermion] (4),
+	(21) --[fermion] (6)
+};
+\end{feynman}
+\end{tikzpicture}
++
+	\begin{tikzpicture}[baseline = (100.base), scale = 0.3]
+	\begin{feynman}[inline = (100.base)]
+\vertex (100) at (0, 1.8);
+\vertex (4) at (0, 4) {\(1\)};
+\vertex (6) at (0, 0) {\(2\)};
+\vertex (17) at (4, 4) {\(4\)};
+\vertex (21) at (4, 0) {\(3\)};
+\diagram*{
+	(17) --[fermion] (4),
+	(21) --[fermion] (6)
+};
+\end{feynman}
+\end{tikzpicture}
+\]
+To order $g$, there are no possibilities. To order $g^2$, there are two possibilities:
+\begin{itemize}
+	\item Disconnected diagrams. Here we get
+		\[
+		% https://feynman.srossd.com/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZABgBoAmAXVJADcBDAGwFcYkQBGEAX1PU1z5CKMgGZqdJq3bkefEBmx4CRchQkMWbRCFFz+SoatLiam6ToAs+hQOXDkHdWanaQNxYJUonHDa-YPOyMfUmJ-LUDuCRgoAHN4IlAAMwAnCABbJDIQHAgkNRAAYwALelSEpABaDl4U9KzEJ1z8xFEaUvLKxBq6kDTMpEsaPKQAVhpGLDA3OCKmcpsBxomWpAA2DrKK7WaAIxgwKGr14j7ljZHW1YOjk5zOnaRaym4gA
+\begin{tikzpicture}[baseline = (4.base), scale = 0.3]
+\begin{feynman}[inline = (4.base)]
+\vertex (4) at (0, 2) {\(1\)};
+\vertex (6) at (0, 0) {\(2\)};
+\vertex (17) at (4, 2) {\(3\)};
+\vertex (21) at (4, 0) {\(4\)};
+\vertex (22) at (2, 2);
+\vertex (23) at (2, 4);
+\vertex (24) at (2, 6);
+\diagram*{
+	(17) --[fermion] (4),
+	(21) --[fermion] (6),
+	(22) --[scalar] (23),
+	(23) --[fermion,half right] (24),
+	(24) --[fermion,half right] (23)
+};
+\end{feynman}
+\end{tikzpicture}
++
+\begin{tikzpicture}[baseline = (4.base), scale = 0.3]
+\begin{feynman}[inline = (4.base)]
+\vertex (4) at (0, 2) {\(1\)};
+\vertex (6) at (0, 0) {\(2\)};
+\vertex (17) at (4, 2) {\(4\)};
+\vertex (21) at (4, 0) {\(3\)};
+\vertex (22) at (2, 2);
+\vertex (23) at (2, 4);
+\vertex (24) at (2, 6);
+\diagram*{
+	(17) --[fermion] (4),
+	(21) --[fermion] (6),
+	(22) --[scalar] (23),
+	(23) --[fermion,half right] (24),
+	(24) --[fermion,half right] (23)
+};
+\end{feynman}
+\end{tikzpicture}
++
+% https://feynman.srossd.com/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZABgBpiBdUkANwEMAbAVxiRAEYQBfU9TXfIRRl2VWoxZsATN14gM2PASIBmcmPrNWiECtl9Fg1aVHVNknQBZ98-kqHIp6sxO0gbCgcpTtn4rWzcYjBQAObwRKAAZgBOEAC2SE4gOBBIltQAxgAWdDHhSOw80XGJiACs1KlIZCA5eQWIRXKxCelVaRVZufnaviAARjBgUOkAnMUgrWUZKZ2VIAxYYG5wmYx5INRDI0gAtJYTLaVIanOF3Q19XBRcQA
+\begin{tikzpicture}[baseline = (100.base), scale = 0.3]
+\begin{feynman}[inline = (100.base)]
+\vertex (100) at (0, 1);
+\vertex (4) at (0, 2) {\(1\)};
+\vertex (6) at (0, 0) {\(2\)};
+\vertex (17) at (6, 2) {\(3\)};
+\vertex (21) at (6, 0) {\(4\)};
+\vertex (25) at (4, 2);
+\vertex (26) at (2, 2);
+\diagram*{
+	(17) --[fermion] (25),
+	(26) --[fermion] (4),
+	(25) --[fermion,bend left=60] (26),
+	(25) --[scalar,bend right=60] (26),
+	(21) --[fermion] (6)
+};
+\end{feynman}
+\end{tikzpicture}
++ \text{permutations.}
+\]
+		
+\end{itemize}
+
+
+% lecture 14
 
 \newpage
 
