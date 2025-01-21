@@ -406,7 +406,7 @@ This has two parts:
 	\]
 	For the second part of the statement, we have
 	\[
-	Q = \int \Diff 3 x \, j_0.
+	Q = \int \Diff 3 x \, j^0.
 	\]
 	Then the total time derivative is
 	\[
@@ -777,7 +777,7 @@ hence
 \[
 	1 = \int \frac{\Diff3p}{(2\pi)^3} \ket{\mathbf{p}}\bra{\mathbf{p}}.
 \]
-This integral is manifestly not Lorentz invariant, de to the measure we are taking the integral over. Instead, we transform
+This integral is manifestly not Lorentz invariant, due to the measure we are taking the integral over. Instead, we transform
 \begin{align*}
 	\int \frac{\Diff3p}{(2\pi)^3} &\to \int \Diff4p \, \delta^{4}(\mathbf{p}^2-m^2) \Theta(p^0) = \int \Diff3p\, \frac{1}{2\sqrt{\mathbf{p}^2 + m^2}} \\
 				      &= \int \Diff3 p \frac{1}{2 \omega_p}.
@@ -1701,11 +1701,1030 @@ To order $g$, there are no possibilities. To order $g^2$, there are two possibil
 \end{tikzpicture}
 + \text{permutations.}
 \]
-		
+\item Connected diagrams.
+% https://feynman.srossd.com/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZABgBpiBdUkANwEMAbAVxiRAEYQBfU9TXfIRTtS7KrUYs23XiAzY8BIgCZy4+s1aIQAZhl8FgomR3rJWkMv1z+iochHKzm6TwMClKVaeoap2gBZucRgoAHN4IlAAMwAnCABbJDIQHAgkERAAYwALOliIpABadjcQOMSM6jSkVWy8gq0SsoqkxB1q9MQA6lz8wsRm2VakHtSugFZehoGhmPi2sZrETIYsMAs4LMZ84K4gA
+	\[
+\begin{tikzpicture}[baseline = (6.base), scale = 0.4]
+	\begin{feynman}[inline = (6.base)]
+\vertex (0) at (0, 6) {\(1\)};
+\vertex (1) at (2, 4);
+\vertex (2) at (4, 6) {\(3\)};
+\vertex (3) at (0, 0) {\(2\)};
+\vertex (4) at (2, 2);
+\vertex (5) at (4, 0) {\(4\)};
+\vertex (6) at (4, 3);
+\diagram*{
+	(0) --[anti fermion] (1),
+	(1) --[anti fermion] (2),
+	(3) --[anti fermion] (4),
+	(4) --[anti fermion] (5),
+	(4) --[scalar] (1)
+};
+\end{feynman}
+\end{tikzpicture} +
+\begin{tikzpicture}[baseline = (6.base), scale = 0.4]
+	\begin{feynman}[inline = (6.base)]
+\vertex (0) at (0, 6) {\(1\)};
+\vertex (1) at (2, 4);
+\vertex (2) at (4, 6) {\(4\)};
+\vertex (3) at (0, 0) {\(2\)};
+\vertex (4) at (2, 2);
+\vertex (5) at (4, 0) {\(3\)};
+\vertex (6) at (4, 3);
+\diagram*{
+	(0) --[anti fermion] (1),
+	(1) --[anti fermion] (2),
+	(3) --[anti fermion] (4),
+	(4) --[anti fermion] (5),
+	(4) --[scalar] (1)
+};
+\end{feynman}
+\end{tikzpicture}
+\]
 \end{itemize}
+We only take the connected diagrams to get
+\[
+	\braket{\psi_1 \psi_2 \psi_3^{\dagger} \psi_4^{\dagger}} = (-ig)^2 \int \Diff4x \int \Diff4 y \left( \hat \Delta_{1x} \hat \Delta_{x3} \Delta_{xy} \hat \Delta_{2y} \hat \Delta_{y4} + \hat \Delta_{1x} \hat \Delta_{x4} \Delta_{xy} \hat \Delta_{2y} \hat \Delta_{y3}  \right) + \mathcal{O}(g^3).
+\]
+What is going on to get this? When we take
+\[
+	(\square_1 + M^2) \braket{\psi_1 \psi_2 \psi_3^{\dagger} \psi_4^{\dagger}} \sim \int (\square_1 + M^2) (\hat \Delta_{1x} \cdots + \hat \Delta_{1y}\cdots),
+\]
+we get delta functions. So substituting this into the equation for the transition probability, we find a probability of
+\begin{align*}
+	i^{4}(-i g)^2 \int \Diff4 x \int \Diff 4 y &\biggl( (-i e^{-ip_1 x} ) (-i e^{-i p_2 y}) \Delta_{xy} (-i e^{i p_3 y} ) (-i e^{i p_4 y})  \\
+&+ (-i e^{-i p_1 x})(-i e^{-i p_2 y}) \Delta_{xy} (-i e^{ip_3 y})(-i e^{i p_4 x}) \biggr) + \mathcal{O}(g^3).
+\end{align*}
+Next step, we substitute in the integral value of the propagator, to get
+\[
+	(-i g)^2 \int \Diff 4 x\int \Diff 4 y \int \frac{\Diff 4 p}{p^2 = m^2 + i \eps} \left( e^{-i x(p_1 + p - p_3} e^{-i y (p_3 - p - p_4)} + (3 \leftrightarrow 4) \right).
+\]
+We can do the integrals to get delta functions, which gives
+\begin{align*}
+	\braket{f|S|i} &= (-ig)^2 \int \frac{\Diff 4 p}{(2 \pi)^4} \frac{i}{p^2 - m^2} (2 \pi)^{4} \delta(p_1 + p - p_3) (2 \pi)^4 \delta(p_2 - p - p_3) + (3 \leftrightarrow 4) \\
+		       &= (-ig)^2 (2 \pi)^4 \delta(p_1 + p_2 - p_3 - p_4) \left( \frac{i}{(p_3 - p_1)^2 - m^2} + \frac{i}{(p_2 - p_4)^2 + m^2} \right) + \mathcal{O}(g^3).
+\end{align*}
+What does this mean for the Feynman diagrams? If we assign a momentum and a direction to each internal line, then each vertex must have a sum of momenta equalling 0. Then we must do an integral over internal lines, along with a measure term of $i/(p^2 - m^2)$.
 
+The meson in the middle is the \emph{virtual particle}\index{virtual particle} that lets the particles talk. This is related to forces; forces arise when particles are exchanging a particle.
 
 % lecture 14
+
+\subsection{Feynman Rules}%
+\label{sub:frules}
+
+We recap the above rules; recall they only hold for the scalar Yukawa theory, and we do not care about the identity term, so we are actually calculated $\braket{f|S - 1|i}$.
+\begin{enumerate}[1.]
+	\item Draw the Feynman diagrams for the relevant process. Here, dotted liens represent mesons $(\phi)$, backwards dashed lines represent nucleons $(\psi)$, and forwards dashed lines represent anti-nucleons $(\psi^{\dagger})$. Vertices meet at a joining point of a meson, nucleon and anti-nucleon:
+		\[
+		% https://feynman.srossd.com/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZABgBoBGAXVJADcBDAGwFcYkQQBfU9TXfQinIVqdJq3ZceIDNjwEiAJlLFRDFm0QduvOQKWlFa8Zu2iYUAObwioAGYAnCAFskZEDghJhIRljCmcADGTPQOUvZOrojKHl6IPn4B7HYwDs76NEEAFmHW3jogji7eNJ5IAMxZuQ75CZyUnEA
+\begin{tikzpicture}
+\begin{feynman}
+\vertex (0) at (0, 2);
+\vertex (1) at (2, 2);
+\vertex (2) at (4, 4);
+\vertex (3) at (4, 0);
+\diagram*{
+	(0) --[scalar] (1),
+	(2) --[fermion] (1),
+	(1) --[fermion] (3)
+};
+\end{feynman}
+\end{tikzpicture}
+		\]
+	\item For each diagram, its contribution to the $S$-matrix is:
+		\begin{itemize}
+			\item First assign a momenta to each line, where mesons have direction assigned arbitrarily.
+			\item For internal mesons, they correspond to
+				\[
+				\int \frac{\Diff 4 p}{(2 \pi)^4} \frac{i}{p^2 - m^2 - i \eps}.
+				\]
+				Internal nucleons can represent
+				\[
+				\int \frac{\Diff 4 k}{(2 \pi)^4} \frac{i}{k^2 - M^2 - i \eps}.
+				\]
+			\item External lines, we do nothing.
+			\item To each vertex, we write the factor, if the internal momenta are $p_1, p_2, p_3$,
+				\[
+					(-i g) (2 \pi)^4 \delta(p_1 - p_2 + p_3).
+				\]
+		\end{itemize}
+	\item We sum over all the diagrams, and integrate over the internal momenta.
+\end{enumerate}
+
+Note that the assignment of arrows to mesons does not change the final answer: as the measure is invariant under $p \to -p$, and also $\delta(x) = \delta(-x)$. Also sometimes we are allowed to drop the $i \eps$ term, as we will see.
+
+A few comments about neutron scattering:
+\begin{enumerate}
+	\item The external particles are on shell, so $p_i^2 = M^2$. However, the internal (virtual) particles are not, so $k^2 \neq m^2$.
+	\item What we computed is a tree-level diagram. This is equivalent to the absence of loops, and these are the leading connected contribution in the perturbation.
+\end{enumerate}
+
+\subsection{Nucleon-anti nucleon scattering}%
+\label{sub:nans}
+
+We look at a new scattering pattern: $\psi^{\dagger} \psi \to \psi^{\dagger} \psi$, to leading order.
+
+First, let us draw the relevant, connected tree-like diagrams. The leading order terms are
+\[
+% https://feynman.srossd.com/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZAJgBoAGAXVJADcBDAGwFcYkQBmEAX1PU1z5CKAIykR1Ok1bsefEBmx4CRchUkMWbRCBFz+SoUTHEN07SH0KBy4cjUczW9sSuLBKlGUc1NMnQAsPJIwUADm8ESgAGYAThAAtkhqIDgQSGIgAMYAFvSxERm8MfFJiJlpSGTZeQXaIsUgcYkZNJWIHDSMWGAWcFlM+VbNZQFt6R00ufmF5Y0jSJ2pEwCsU7WzDZTcQA
+	\begin{tikzpicture}[baseline = (0.base), scale = 0.4]
+	\begin{feynman}[inline = (0.base)]
+\vertex (4) at (4, 6) {\(3\)};
+\vertex (5) at (2, 4);
+\vertex (6) at (0, 6) {\(1\)};
+\vertex (7) at (2, 2);
+\vertex (8) at (0, 0) {\(2\)};
+\vertex (9) at (4, 0) {\(4\)};
+\vertex (0) at (0, 3);
+\diagram*{
+	(4) --[fermion] (5),
+	(5) --[fermion] (6),
+	(5) --[scalar] (7),
+	(8) --[fermion] (7),
+	(7) --[fermion] (9)
+};
+\end{feynman}
+\end{tikzpicture} +
+% https://feynman.srossd.com/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZABgBpiBdUkANwEMAbAVxiRAEYQBfU9TXfIRTtS7KrUYs23XiAzY8BImQBM4+s1aIQKmXwWCiK0eslaQeuf0VDkAZnKnNbO5fkClKB2uoap2gBZucRgoAHN4IlAAMwAnCABbJDIQHAgkERAAYwALOliIjJ4Y+KTETLSkY2y8gq12YpA4xKQHVPTEAOpc-MLyxuaygFZqSsQ2nrqi2UGM0Y62hiwwczgsxnzgriA
+\begin{tikzpicture}[baseline = (1.base), scale = 0.4]
+	\begin{feynman}[inline = (1.base)]
+\vertex (0) at (0, 4) {\(1\)};
+\vertex (1) at (2, 2);
+\vertex (2) at (0, 0) {\(2\)};
+\vertex (3) at (4, 2);
+\vertex (5) at (6, 4) {\(3\)};
+\vertex (6) at (6, 0) {\(4\)};
+\diagram*{
+	(0) --[fermion] (1),
+	(1) --[fermion] (2),
+	(3) --[fermion] (5),
+	(6) --[fermion] (3),
+	(1) --[scalar] (3)
+};
+\end{feynman}
+\end{tikzpicture}
+\]
+To these we associate equations:
+\begin{align*}
+	& \int \frac{\Diff 4 p}{(2 \pi)^4} \frac{1}{p^2 - m^2 - i \eps} (-ig)^2 (2 \pi)^8 \biggl [\delta(p_1 - k - p_3)  \delta(k + p_2 - p_4) \\
+	& \qquad \qquad  \qquad \qquad \qquad \qquad \qquad  + \delta(p_1 + p_2 - k) \delta(-k - p_3 - p_4) \biggr] \\
+	=& (-ig)^2 (2 \pi)^4 \delta(p_1 + p_2 - p_3 - p_4) \left( \frac{i}{(p_1 - p_3)^2 - m^2 - i \eps} + \frac{i}{(p_1 + p_2)^2 - m^2 - i \eps} \right) + \mathcal{O}(g^3).
+\end{align*}
+The second diagram  has an interesting momentum dependence. Lets draw these particles from the view of the center of mass frame; we are essentially colliding $\psi$ with $\psi^{\dagger}$. In the center of mass frame,
+\[
+	(p_1 + p_2)^2 = 4(M^2 + \overrightarrow p_1^2),
+\]
+then we get $(p+1 + p_2)^2 - m^2 = 4(M^2 + \overrightarrow p_1^2) - m^2$. If $m < 2M$, then this right hand side will never be zero, so we may remove the $i \eps$ term. If $m \geq 2M$, this could happen for some values of $\overrightarrow p_1$.
+
+So we get a pole in our function, which lets us discover mesons or general particles by varying $\overrightarrow p_1$. In general there is no pole, as we are only considering tree-like diagrams.
+
+\subsection{Mandelstam Variables}%
+\label{sub:mvars}
+
+Consider a collision process, with $p_1, p_2$ ingoing and $p_3, p_4$ outgoing. We must have $p_1 + p_2 = p_3 + p_4$. It is useful to define
+\begin{align*}
+	s &= (p_1 + p_2)^2 = (p_3 + p_4)^2, \\
+	t &= (p_1 - p_3)^2 = (p_2 - p_4)^2, \\
+	u &= (p_1 - p_4)^2 = (p_2 - p_3)^2.
+\end{align*}
+
+What do these variables mean? They have kinetic meaning. For simplicity, assume the particles have the same mass $m$, and start in the center of mass frame of $p_1, p_2$.
+
+Then $p_1 = (E, p \hat z)$, $p_2 = (E, -p \hat z)$, and say $p_3 = (E, \overrightarrow p)$, $p_4 = (E, - \overrightarrow p)$, with $\overrightarrow p = (0, p \sin \theta, p \cos \theta)$, which we can do by rotating. Then,
+\begin{align*}
+	s &= 4 E^2, \\
+	t &= -2p^2(1 - \cos \theta), \\
+	u &= -2p^2(1 + \cos \theta).
+\end{align*}
+We also have $s + t + u = 4m^2$, so there is some degeneracy.
+
+% lecture 15
+
+\newpage
+
+\section{The Dirac Equation}%
+\label{sec:de}
+
+What we did in the previous sections is:
+\begin{itemize}
+	\item Start with a classical system.
+	\item Quantize it.
+	\item Consider interactions.
+\end{itemize}
+
+We have looked at one classical system, which resulted in spin 0 particles. We are now going to introduce the concept of spin, and we will derive spin and its properties from symmetries.
+
+\subsection{Lorentz Group Representations}%
+\label{sub:lgreps}
+
+The definition of a field was a function that transformed under Lorentz:
+\[
+	\phi^a(x) \to D[\Lambda]\indices{^{a}_{b}} \phi_b (\Lambda^{-1} x).
+\]
+Our goal is to identify or consider a more interesting representation $D[\Lambda]$:
+\[
+	D[\Lambda] = \exp \left( \frac 12 \Omega_{\rho\sigma} R^{\rho\sigma} \right),
+\]
+where $\Omega$ are the parameters (of which there are 6), and $R$ are the generators.
+
+The generators $R^{\rho\sigma}$, by definition of Lorentz, satisfy
+\[
+	[R^{\rho\sigma}, R^{\delta\nu}] = \eta^{\sigma\delta} R^{\rho\nu} - \eta^{\rho\delta} R^{\sigma\nu} + \eta^{\rho\nu} R^{\sigma\delta} - \eta^{\sigma\nu} R^{\rho\delta}.
+\]
+
+\begin{exbox}
+	\begin{enumerate}
+		\item We can take an infinite dimensional representation on functional space, given by
+			\[
+			L^{\rho\sigma} = X^{\rho} \partial^{\sigma} - X^{\sigma} \partial^{\rho}.
+			\]
+			We can check that these $L$'s comply with the commutation relation.
+		\item We have a $4 \times 4$ representation with generators
+			\[
+				(\mathcal{M}^{\rho\sigma})\indices{^{\mu}_{\nu}} = \eta^{\rho\mu} \delta\indices{^{\sigma}_{\nu}}- \eta^{\sigma\mu} \delta\indices{^{\rho}_{\nu}}.
+			\]
+			We can check that these comply with the commutation relation, and moreover
+			\[
+				\Lambda = D[\Lambda] = \exp \left( \frac 12 \Omega_{\rho\sigma} \mathcal{M}^{\rho\sigma} \right)
+			\]
+			act on vectors by
+			\[
+				V^{\mu} \to D[\Lambda]\indices{^{\mu}_{\nu}} V^{\nu} = \Lambda\indices{^{\mu}_{\nu}} V^{\nu}.
+			\]
+			This gives the usual representation we have seen.
+	\end{enumerate}
+\end{exbox}
+
+Let's consider a new representation, the \emph{spinor representation}\index{spinor representation}. Consider the Clifford algebra, defined by
+\[
+	\{ \gamma^\mu , \gamma^\nu\} = 2\eta^{\mu\nu} 1,
+\]
+for $\mu = 0, 1, 2, 3$. Here $\{\gamma^\mu, \gamma^{\nu}\}$ is the anticommutator. Essentially, we get
+\begin{itemize}
+	\item $\gamma^{\mu} \gamma^{\nu} = - \gamma^{\nu} \gamma^{\mu}$ if $\mu \neq \nu$,
+	\item $(\gamma^0)^2 = 1$.
+	\item $(\gamma^{i})^2 = -1$.
+\end{itemize}
+
+An example representation, the \emph{chiral representation}\index{chiral representation}, is
+\[
+\gamma^0 =
+\begin{pmatrix}
+	0 & \id_{2 \times 2} \\
+	\id_{2 \times 2} & 0
+\end{pmatrix}, \qquad
+\gamma^{i} =
+\begin{pmatrix}
+	0 & \sigma^i \\
+	-\sigma^i & 0
+\end{pmatrix}.
+\]
+Here $\sigma^i$ are the Pauli matrices. What is the relation to Lorentz? The claim is that
+\[
+	S^{\rho\sigma} = \frac 14 [\gamma^{\rho}, \gamma^{\sigma}]
+\]
+forms a representation of the Lorentz algebra.
+
+\begin{proofbox}
+	The proof is just by plugging it in. First show that
+	\[
+		[S^{\mu\nu}, S^{\sigma\rho}] = \frac 12 [S^{\mu\nu}, \gamma^{\rho} \gamma^{\sigma}] = \frac 12 [S^{\mu\nu} \gamma^{\rho}] \gamma^{\sigma} + \frac 12 \gamma^{\rho} [S^{\mu\nu}, \gamma^{\sigma}].
+	\]
+	Then we can show
+	\[
+		[S^{\mu\nu}, \gamma^{\rho}] = \gamma^{\mu} \eta^{\nu\rho} - \gamma^{\nu} \eta^{\rho\mu}.
+	\]
+	We combine this to get the commutation relation.
+\end{proofbox}
+
+Therefore, we have
+\[
+	S[\Lambda]\indices{^{a}_{b}} = \exp \left( \frac 12 \Omega_{\rho\sigma} (S^{\rho\sigma})\indices{^{a}_{b}} \right).
+\]
+What transforms under $S[\Lambda]$? These objects are \emph{spinors}\index{spinors} $\psi^{a}(x)$, and its defining feature is that under Lorentz,
+\[
+	\psi^{a}(x) \to S[\Lambda]\indices{^{a}_{b}} \psi^{b}(\Lambda^{-1} x).
+\]
+What did we do? Did we create a different representation than our previous one? We will look at properties of this new representation.
+\begin{itemize}
+	\item First, look at rotations. This corresponds to taking an $\Omega_{ij}$, hence we inspect $S^{ij}$. In particular rotation along the $z$-axis gives
+		\[
+			S^{12} = \frac{-i}2
+			\begin{pmatrix}
+				\sigma^{3} & 0 \\
+				0 & \sigma^3
+			\end{pmatrix}.
+		\]
+		Recall that $\sigma^{i} \sigma^{j} = \delta^{ij} + \eps^{ijk} \sigma^{k}$. Thus we can write the group element as
+		\[
+			S[\Lambda] = \exp \left( \frac 12 \Omega_{12} S^{12} \right) = \exp \left( -i\frac{\Omega_{12}}{2}
+				\begin{pmatrix}
+					\sigma^{3} & 0 \\
+					0 & \sigma^{3}
+				\end{pmatrix}
+				\right).
+		\]
+		Pick $\Omega_{12} = 2 \pi$. Then $S[\Lambda]$ corresponds to $-\id_{4 \times 4}$, by properties of the $\sigma^{3}$ matrix. Hence this object is \emph{not a vector}, as it does not transform like a vector!
+	\item Now we look at boosts. Along the $x$-axis,
+		\[
+		S^{01} = \frac 12
+		\begin{pmatrix}
+			-\sigma^{1} & 0 \\
+			0 & \sigma^{1}.
+		\end{pmatrix}
+		\]
+		We find that
+		\[
+			S[\Lambda] =
+			\begin{pmatrix}
+				e^{\eta_i \sigma^i/2} & 0 \\
+				0 & e^{- \eta_i \sigma^i / 2}
+			\end{pmatrix}
+			=
+			\begin{pmatrix}
+				e^{\overrightarrow \eta \cdot \overrightarrow \sigma/2} & 0 \\
+				0 & e^{-i \overrightarrow\eta \cdot \overrightarrow \sigma/2}
+			\end{pmatrix}
+		\]
+		This is very different from a vector.
+\end{itemize}
+
+\subsection{Actions}%
+\label{sub:spin_acts}
+
+We have that
+\[
+	\psi(x) \to S[\Lambda] \psi(\Lambda^{-1} x).
+\]
+Actions are Lorentz invariant, and hence are numbers. To construct a Lorentz invariant action from $\psi$, we need something which transforms as $S[\Lambda]^{-1}$.
+
+We first see what $\psi^{\dagger}(x)$ is. We know that
+\[
+	\psi^{\dagger}(x) = \psi^{\dagger}(\Lambda^{-1} x) S[\Lambda]^{\dagger}.
+\]
+How is $S[\Lambda]^{\dagger}$ related to $S[\Lambda]^{-1}$? Note that
+\begin{align*}
+	S[\Lambda]^{\dagger} &= \exp \left( \frac 12 \Omega_{\rho\sigma} (S^{\rho\sigma})^{\dagger} \right).
+\end{align*}
+In the chiral representation,
+\[
+	(\gamma^0)^{\dagger} = \gamma^0, \qquad (\gamma^i)^{\dagger} = - \gamma^i \implies \gamma^0 \gamma^\mu \gamma^0 = (\gamma^\mu)^{\dagger}.
+\]
+Hence
+\[
+	(S^{\rho\sigma})^{\dagger} = \frac 14 [(\gamma^0)^{\dagger}, (\gamma^{\rho})^{\dagger}] = - \gamma^0 S^{\sigma\rho} \gamma^0.
+\]
+This gives
+\[
+	S[\Lambda]^{\dagger} = \exp \left( - \frac 12 \Omega_{\rho\sigma} \gamma^0 S^{\rho\sigma} \gamma^0 \right) = \gamma^0 S[\Lambda]^{-1} \gamma^0.
+\]
+This tell us that for example, $\psi^{\dagger} \psi$ is not Lorentz invariant.
+
+% lecture 16
+
+We will adopt the shorthand
+\[
+\sigma^\mu = (1, \sigma^i), \qquad \bar \sigma^\mu = (1, -\sigma^i),
+\]
+so the $\gamma$ matrices can be written as
+\[
+\gamma^{\mu} =
+\begin{pmatrix}
+	0 & \sigma^{\mu} \\ \bar \sigma^\mu & 0
+\end{pmatrix}.
+\]
+Based on the above, we will guess what transforms at $S[\Lambda]^{-1}$. We claim that
+\[
+\bar \psi_{(x)} = \psi^{\dagger}(x) \gamma^{0},
+\]
+the \emph{adjoint spinor}\index{adjoint spinor}, satisfies that $\bar \psi \psi$ is Lorentz invariant.
+
+\begin{proofbox}
+	Note that
+	\begin{align*}
+		\bar \psi \psi &= \psi^{\dagger}(x) \gamma^0 \psi(x) \mapsto \psi^{\dagger}(\Lambda^{-1}x) \gamma^0 S[\Lambda]^{-1} \gamma^0 \gamma^0 S[\Lambda] \psi(\Lambda^{-1} x) \\
+			       &\to \bar \psi \psi(\Lambda^{-1} x).
+	\end{align*}
+\end{proofbox}
+
+Moreover, we can show that $\bar \psi \gamma^\mu \psi$ transforms like a vector.
+
+\begin{proofbox}
+	Again,
+	\begin{align*}
+		\bar \psi \gamma^\mu \psi &\mapsto \bar \psi S[\Lambda]^{-1} \gamma^\mu S[\Lambda] \psi \overset{\mathrm{WTS}}= \Lambda\indices{^{\mu}_{\nu}} \bar \psi \psi^{\nu} \psi \\
+		\implies S[\Lambda]^{-1} \gamma^\mu S[\Lambda] &= \Lambda\indices{^{\mu}_{\nu}} \gamma^{\nu}.
+	\end{align*}
+	This is just an algebraic identity. The elegant way to do this is perturbatively, so treat $\Omega$ small. Hence
+	\begin{align*}
+		S[\Lambda] &= 1 + \frac 12 \Omega_{\rho\sigma} S^{\rho\sigma} + \cdots, \\
+		S[\Lambda]^{-1} &= 1 - \frac 12 \Omega_{\rho\sigma} S^{\rho\sigma} + \cdots, \\
+		\Lambda &= 1 + \frac 12 \Omega_{\rho\sigma} \mathcal{M}^{\rho\sigma} + \cdots.
+	\end{align*}
+	To first order in $\Omega$, this equation is equivalent to
+	\[
+		[S^{\rho\sigma}, \gamma^{\mu}] = (\mathcal{M}^{\rho\sigma})\indices{^{\mu}_{\nu}} \gamma^{\nu} = \gamma^\sigma \eta^{\rho\mu} - \eta^{\sigma\mu} \gamma^{\rho},
+	\]
+	which is true.
+\end{proofbox}
+
+We can further show that:
+\begin{itemize}
+	\item $\bar \psi \gamma^\mu \gamma^\nu \psi$ transforms as a 2-vector.
+	\item $\bar \psi \partial_\mu \psi$ transforms as a covector.
+\end{itemize}
+
+To construct our action, we want it to be:
+\begin{itemize}
+	\item Lorentz invariant.
+	\item To start, minimal, with a minimal amount of derivatives.
+	\item Reality.
+\end{itemize}
+Combining these ingredients, the minimal action we can write is
+\[
+S = \int \Diff 4 x \left( \bar \psi i \gamma^\mu \partial_\mu \psi - m \bar \psi \psi \right).
+\]
+This is the \emph{Dirac action}\index{Dirac action}. We can check this is real:
+\begin{align*}
+	(\bar \psi i \gamma^\mu \partial_\mu \psi)^{\dagger} &= -i \partial_\mu \psi^{\dagger} (\gamma^\mu)^{\dagger} (\gamma^0)^{\dagger} \psi \\
+							     &= -i \partial_\mu \psi^{\dagger} \gamma^0 \gamma^\mu \gamma^0 \psi \\
+							     &= -i \partial_\mu \bar \psi \gamma^\mu \psi \\
+							     &= -i \partial_\mu (\bar \psi \gamma^\mu \psi) + i \bar \gamma \gamma^\mu \partial_\mu \gamma,
+\end{align*}
+where the total derivative disappears in the integral, and we are left with our original action.
+
+The equation of motion, varying with respect to $\psi$ and $\bar \psi$, is
+\begin{align*}
+	i \gamma^\mu \partial_\mu \psi - m \psi &= 0,\\
+	-i \gamma^\mu \partial_\mu \bar \psi - m \bar \psi &= 0.
+\end{align*}
+These give the \emph{Dirac equation}\index{Dirac equation}. Importantly, they arise from a \emph{first order action}, due to the introduction of $\gamma^\mu$. A useful second order equation is
+\begin{align*}
+	(i \gamma^\nu \partial_\nu + m)(i \gamma^\mu \partial_\mu - m) \psi &= 0, \\
+	(- \gamma^\mu \gamma^\nu \partial_\mu \partial_\nu - m^2) \psi = 0,
+\end{align*}
+where by commutating the derivatives we can introduce $\{\gamma^\mu, \gamma^\nu\} = \eta^{\mu\nu}$ to give
+\[
+	(\square + m^2)\psi = 0.
+\]
+A lot of times we will see tensors contracted with $\gamma$. For example $\gamma^\mu \partial_\mu$. For such a quantity, we write $\slashed{\partial}$, and similarly $\gamma^\mu A_\mu = \slashed{A}$.
+
+\subsection{Symmetries}%
+\label{sub:spin_sym}
+
+There are three symmetries that are present in this action:
+\begin{itemize}
+	\item Lorentz.
+	\item $\mathsf{U}(1)$ internal symmetry.
+	\item Translations.
+\end{itemize}
+To these, we can apply N\"oether's theorem to get conserved quantities:
+\begin{itemize}
+	\item Angular momentum.
+	\item Charge $Q$.
+	\item Stress tensor, energy and momentum.
+\end{itemize}
+For translations, if $x^\mu \to x^\mu + \eps ^\mu$, then $\delta \partial \to \eps^\mu \partial_\mu \psi$, giving energy momentum tensor
+\[
+T^{\mu\nu} = \bar \psi i \gamma^\mu \partial^\nu \psi.
+\]
+Under Lorentz, if $x^\mu \to \Lambda\indices{^{\mu}_{\nu}} x^\nu$, then
+\[
+\sigma \psi_a = - \omega^{\mu\nu} \left(x_\nu \partial_\mu \psi_a - \frac 12 (S_{\mu\nu})\indices{^{b}_{a}} \psi_b \right).
+\]
+The current turns out to be
+\[
+	(J^{\mu})\lambda\nu = - x^{\nu} T^{\mu\lambda} + x^{\lambda} T^{\mu\nu} + i \bar \psi \gamma^\mu S^{\lambda\nu} \psi.
+\]
+We also have an internal symmetry $\psi \to e^{i \alpha} \psi$, and $\bar \psi \to e^{-i\alpha} \bar \psi$. This gives associated current
+\[
+J^\mu = \bar \psi \gamma^\mu \psi,
+\]
+and gives the conserved quantity
+\[
+Q = \int \Diff 3 x \bar \psi \gamma^0 \psi,
+\]
+which will turn out to be the electric charge.
+
+
+\subsection{Plane Wave Solutions}%
+\label{sub:pws}
+
+We will find solutions to the Dirac equation (and hence the Klein-Gordon equation). From the latter,
+\[
+\psi(x) \sim u(\overrightarrow p) e^{-ipx} + v(\overrightarrow p) e^{ipx},
+\]
+with $p^2 = m^2$. If we replace this in the Dirac equation,
+\begin{align*}
+	(- \slashed{p} + m) u(\overrightarrow p) &= 0, \\
+	(\slashed{p} + m) v(\overrightarrow p) &= 0,
+\end{align*}
+where we are using slashed notation. In the chiral representation, the first equation looks like
+\begin{align*}
+	\begin{pmatrix}
+		m \id & - p \cdot \sigma \\
+		p \cdot \bar\sigma & m \id
+	\end{pmatrix}
+	\begin{pmatrix}
+		u_1 \\ u_2
+	\end{pmatrix}
+	= 0,
+\end{align*}
+which gives the equation $m u_1 = p \cdot \sigma u_2$. There is only one equation, as the other follows from the fact that $m^2 = (p \cdot \sigma)(p \cdot \bar \sigma)$. Hence we get that
+\[
+	\sqrt{p \cdot \sigma} u_2 = \sqrt{p \cdot \bar \sigma} u_1,
+\]
+and so we can characterize
+\[
+u^{s}(\overrightarrow p) =
+\begin{pmatrix}
+	\sqrt{p \cdot \sigma} \xi^{s} \\
+	\sqrt{p \cdot \bar \sigma} \xi^{s}
+\end{pmatrix},
+\]
+where $\xi^{s}$ for $s = 1, 2$ are vectors with
+\[
+\xi^1 =
+\begin{pmatrix}
+	1 \\ 0
+\end{pmatrix}, \qquad \xi_2 =
+\begin{pmatrix}
+	0 \\ 1
+\end{pmatrix}.
+\]
+A similar equation for the second equation gives
+\[
+	v^{s}(\overrightarrow p) =
+	\begin{pmatrix}
+		\sqrt{p \cdot \sigma} \eta^s \\
+		- \sqrt{p \cdot \bar \sigma} \eta^s
+	\end{pmatrix},
+\]
+where $\eta^s = \xi^s$. Note the square root of a matrix is given in terms of its diagonalization.
+
+% lecture 17
+
+\subsection{Chiral (Weyl) Spinors}%
+\label{sub:ch_sp}
+
+Recall the representations
+\[
+	S[\Lambda_{\mathrm{rot}}] =
+	\begin{pmatrix}
+		e^{i \overrightarrow \phi \cdot \overrightarrow \sigma/2} & 0 \\
+		0 & e^{i \overrightarrow \phi \cdot \overrightarrow \sigma/2}
+	\end{pmatrix}, \qquad S[\Lambda_{\mathrm{boost}}] =
+	\begin{pmatrix}
+		e^{\overrightarrow \chi \cdot \overrightarrow \sigma/2} & 0 \\
+		0 & e^{- \overrightarrow \chi \cdot \overrightarrow \sigma/2}
+	\end{pmatrix}.
+\]
+The Dirac representation is reducible, with
+\[
+\psi_{(x)} =
+\begin{pmatrix}
+	u_+ \\ 0
+\end{pmatrix} + 
+\begin{pmatrix}
+	0 \\ u_-
+\end{pmatrix},
+\]
+where $u_+$ and $u_-$ are two-component spinors, which are the \emph{Weyl spinors}\index{Weyl spinors} (or \emph{chiral spinors}\index{chiral spinors}). Under rotations,
+\begin{align*}
+	u_+ &\to e^{i \overrightarrow{\phi} \cdot \overrightarrow{\sigma}/2} u_+, \\
+	u_- &\to e^{i \overrightarrow{\phi} \cdot \overrightarrow{\sigma}/2} u_-.
+\end{align*}
+Under boosts,
+\begin{align*}
+	u_+ &\to e^{\overrightarrow{\chi} \cdot \overrightarrow{\sigma}/2}u_+, \\
+	u_- &\to e^{-\overrightarrow{\chi} \cdot \overrightarrow{\sigma}/2} u_-,
+\end{align*}
+with opposite sign. From the chiral representation
+\[
+\gamma^{\mu} =
+\begin{pmatrix}
+	0 & \sigma^{\mu} \\
+	\bar \sigma^\mu & 0
+\end{pmatrix},
+\]
+this split is obvious.
+
+A more general way to identify the two Weyl spinors is by introducing
+\[
+\gamma^s = -i \gamma^0 \gamma^{1} \gamma^{2} \gamma^{3} \sim \eps_{\mu\nu\lambda\rho} \gamma^{\mu} \gamma^{\nu} \gamma^{\lambda} \gamma^{\rho},
+\]
+which satisfies
+\[
+	[\gamma^{s}, \gamma^{\mu}] = 0, \qquad (\gamma^{s})^2 = 1,
+\]
+which gives $[S^{\mu\nu}, \gamma^{s}] = 0$, hence a Lorentz invariant. We can define the projection
+\begin{align*}
+	P_+ &= \frac 12 (1 + \gamma^{s}) =
+	\begin{pmatrix}
+		\id & 0 \\ 0 & 0
+	\end{pmatrix}, \\
+	P_- &= \frac 12 (1 - \gamma^{s}) =
+	\begin{pmatrix}
+		0 & 0 \\ 0 & \id
+	\end{pmatrix}.
+\end{align*}
+We get that $P_{\pm}^2 = P_{\pm}$ and $P_+ P_- = 0$, with
+\[
+\psi_+ = P_+ \psi, \qquad \psi_- = P_- \psi.
+\]
+The reason we did not start with Weyl spinors is due to the Lagrangian:
+\begin{align*}
+	\mathcal{L} &= \bar \psi(i \slashed{\partial} - m) \psi \\
+		    &= i u_-^{\dagger} \sigma^\mu \partial_\mu u_- + i u_+^{\dagger} \bar \sigma^{\mu} \partial_\mu u_+ - m (u_+^{\dagger} u_- + u_-^{\dagger} u_+).
+\end{align*}
+For a massive particle, we need the interaction of $u_+$ and $u_-$; a massless particle can be described with only a two-dimensional representation. We cannot simplify the $u_+^{\dagger} u_-$ terms into similar Lorentz invariant terms.
+
+\newpage
+
+\section{Quantizing the Dirac Field}%
+\label{sec:qdf}
+
+\subsection{Canonical Quantization}%
+\label{sub:cq_dir}
+
+Recall our Lagrangian
+\[
+\mathcal{L} = i \bar \psi \gamma^\mu \partial_\mu \psi - m \bar \psi \psi.
+\]
+We follow the principles from the scalar theory: we aim to construct a Fock space with energy states that are bounded below.
+
+First, we need to figure out the commutation relation:
+\[
+\pi = \frac{\partial \mathcal{L}}{\partial \partial_t \psi} = i \bar \psi \gamma^0 = i \psi^{\dagger}.
+\]
+There are two routes to figuring out the commutation relation: first, we could impose
+\begin{align*}
+	i [\psi_a(\overrightarrow{x}, t), \psi_b^{\dagger}(\overrightarrow{y}, t)] = [\psi_a(\overrightarrow{x}, t), \pi_b(\overrightarrow{y}, t)] &= i \delta_{ab} \delta(\overrightarrow{x} - \overrightarrow{y}), \\
+	[\psi_a(\overrightarrow{x}, t), \psi_b(\overrightarrow{y}, t)] &= 0.
+\end{align*}
+The second route is imposing anticommutation relations:
+\begin{align*}
+	\{\psi_a(\overrightarrow x, t), \psi_b^{\dagger}(\overrightarrow y, t)\} &= \delta_{ab}\delta(\overrightarrow{x} - \overrightarrow{y}), \\
+	\{\psi_a(\overrightarrow{x}, t), \psi_b(\overrightarrow{y}, t)\} &= 0.
+\end{align*}
+For both routes, we find
+\[
+	\psi(x) = \sum_s \int \frac{\Diff 3 p}{(2 \pi)^3} \frac{1}{\sqrt{2 \omega_p}} \left( b_p^s u^{s}(\overrightarrow{p}) e^{-ipx} + c_p^{s\dagger} v^{s}(\overrightarrow{p}) e^{ipx} \right),
+\]
+where
+\begin{align*}
+	b^{s}_p &= \frac{1}{\sqrt{2\omega_p}} \int \Diff 3 x \, e^{ipx} \bar u^{s}(\overrightarrow{p})\gamma^{0} \psi(x), & c_p^{s} &= \frac{1}{\sqrt{2 \omega_p}} \int \Diff 3 x \, e^{ipx} \bar \psi \gamma^{0} v^{s} (\overrightarrow{p}), \\
+	b_p^{s\dagger} &= \frac{1}{\sqrt{2 \omega_p}} \int \Diff 3 x \, e^{-ipx} \bar \psi(x) \gamma^{0} u^{s}(\overrightarrow{p}), & c_p^{s\dagger} &= \frac{1}{\sqrt{2 \omega_p}} \int \Diff 3 x \, e^{-ipx} \bar v^{s}(\overrightarrow{p}) \gamma^{0} \psi.
+\end{align*}
+Here $\bar u = u^{\dagger} \gamma^{0}$, and similarly for $v$. For both routes, we find the Hamiltonian
+\begin{align*}
+	H &= \int \Diff 3 x \, \pi \dot \psi = i \int \Diff 3 x \, \psi^{\dagger} \dot \psi \\
+	  &= \sum_s \int \frac{\Diff 3 p}{(2 \pi)^3} \omega_p(b_p^{s\dagger} b_p^{s} - c_p^s c_p^{s\dagger}).
+\end{align*}
+Now we look at the difference between the two approaches. For the first,
+\begin{align*}
+	[b_p^{s}, b_{p'}^{s'\dagger}] &= (2\pi)^3 \delta^3(\overrightarrow{p} - \overrightarrow{p}') \delta_{ss'}, \\
+	[c_p^{s}, c_{p'}^{s'\dagger}] &= - (2\pi)^3\delta^3(\overrightarrow{p} - \overrightarrow{p}') \delta_{ss'}.
+\end{align*}
+In the second we get
+\begin{align*}
+	\{b_p^{s}, b_{p'}^{s'\dagger}\} &= (2\pi)^3 \delta^3(\overrightarrow{p} - \overrightarrow{p}') \delta_{ss'}, \\
+	\{c_p^{s}, c_{p'}^{s'\dagger}\} &= (2\pi)^3\delta^3(\overrightarrow{p} - \overrightarrow{p}') \delta_{ss'}.
+\end{align*}
+Hence for the first route, we see
+\[
+	[H, b_p^{s\dagger}] = \omega_p b_p^{s\dagger}, \qquad [H, c_p^{s\dagger}] = \omega_p c_p^{s\dagger}.
+\]
+If $b^{\dagger}$ and $c^{\dagger}$ create, then energy is positive, however the norms of states will be negative, since $[c_p, c_p^{\dagger}]$ has negative commutator. We do not like this.
+
+If we instead create with $b^{\dagger}$ and $c$, then note $[H, c_p^{s}] = - \omega_p c_p^{s}$, giving negative energies (not bounded below).
+
+In the second route, again
+\[
+	[H, b_p^{s\dagger}] = \omega_p b_p^{s\dagger}, \qquad [H, c_p^{s\dagger}] = \omega_p c_p^{s\dagger}.
+\]
+With this, we can construct a healthy Fock space.
+
+There are two comments to be made:
+\begin{enumerate}
+	\item First, we have the spin statistics theorem. Our representation of the Lorentz group gives either bosonic particles (where the creation operators commute), or fermionic particles (where the creation operators anticommute).
+
+		For example, the scalar particles with spin 0 must be bosons, and we have shown that the spin $1/2$ particles given by spinors are fermions.
+
+		There are three ingredients that contribute to this fact:
+		\begin{itemize}
+			\item Stability: we want our Hamiltonian to be bounded.
+			\item Causality: $[\mathcal{O}(x), \mathcal{O}(y)] = 0$ if $(x - y)^2 < 0$.
+		\item Lorentz invariance of the $S$-matrix. This implies that $\braket{T \theta_1 \cdots \theta_n}$ needs to be Lorentz invariant.
+		\end{itemize}
+	\item Look again at the Hamiltonian
+		\[
+		H = \sum_s \int \frac{\Diff 3 p}{(2 \pi)^3} \omega_p (b_p^{s\dagger} b_p^{s} + c_p^{s\dagger} c_p^{s}) - \int \frac{\Diff 3 p}{(2 \pi)^3} \omega_p 2 (2 \pi)^3 \delta^3(\overrightarrow{0}),
+		\]
+		where we have now normal ordered. For the scalar field, we added an infinity instead of subtracting the infinity. Interestingly, if we have a theory with one spinor and four scalars, these infinities cancel out, giving zero vacuum energy. Four is also the number of independent components for our spinor theory (we have two $b_p$, and two $c_p$).
+\end{enumerate}
+
+% lecture 18
+
+The normal ordered Hamiltonian is
+\[
+H = \sum_s \int \frac{\Diff 3 p}{(2 \pi)^3} \omega_p (b_p^{s\dagger} b_p^{s} + c_p^{s\dagger} c_p^{s}),
+\]
+after dropping the vacuum energy. For normal ordering fermions, we need to be mindful of signs, so for example
+\[
+\normalorder{b_q c_q b_k^{\dagger}} = (-1)^2 b_k^{\dagger} b_q c_q = (-1) b_k^{\dagger} c_q b_q.
+\]
+To construct the Fock space, we define the vacuum state $\ket 0$ such that
+\[
+b_p^{s} \ket 0 = c_p^{s} \ket 0 = 0,
+\]
+and so $H \ket 0 = 0$. This is the ground state. The one particle states are
+\begin{align*}
+	\ket b &= \sqrt{2\omega_p} b_p^{s\dagger} \ket 0, \\
+	\ket c &= \sqrt{2 \omega_p} c_p^{s\dagger} \ket 0,
+\end{align*}
+so $H \ket b = \omega_p \ket b$ and $H \ket c = \omega_p \ket c$.
+
+We have a conserved quantity given by the $\mathsf{U}(1)$ charge,
+\[
+Q = \sum_s \int \frac{\Diff 3 p}{(2 \pi)^3}(b_p^{s\dagger} b_p^{s} - c_p^{s\dagger} c_p^{s}),
+\]
+where $Q \ket b = b$ and $Q \ket c = - \ket c$. This gives charge.
+
+There is also angular momentum. If $J_z$ is the rotation along the $x$ and $y$ axes, then acting in the rest frame when $\overrightarrow p = 0$,
+\[
+	J_z \ket{b^{s}} = \pm \frac 12 \ket{b^{s}},
+\]
+where $s = 1$ gives a positive sign, and $s = -1$ a negative sign. Similarly $J_z \ket {c^{s}} = \pm \frac{1}{2} \ket {c^{s}}$.
+
+Then we have multi-particle states by acting multiple times with $b^{\dagger}$ and $c^{\dagger}$. Note we have Fermi statistics, so for example
+\[
+	\ket{p_1, s_1; p_2 , s_2} = b_{p_1}^{s_1\dagger} b_{p_2}^{s_2\dagger} \ket 0 = - b_{p_2}^{s_2\dagger} b_{p_1}^{s_1\dagger} \ket 0 = - \ket{p_2, s_2; p_1, s_1}.
+\]
+The next thing we look at is the propagator in this theory. First we inspect the correlation functions,
+\[
+	\braket{0|\psi_a(x) \bar \psi_b(y)|0},
+\]
+with the aim of getting an expression for
+\[
+	\ket{0|T \psi(x) \bar \psi(y)| 0},
+\]
+the Feynman propagator for the Dirac spinor. This should be Lorentz invariant. To compute, first recall that
+\[
+	\psi(x) = \sum_s \int \frac{\Diff 3 p}{(2\pi)^3} \frac{1}{\sqrt{2 \omega_p}}\left( b_p^{s} u^{s}(p) e^{-ipx} + c_p^{s\dagger} v(p) e^{ipx} \right).
+\]
+Replacing this in the first formula, we find
+\begin{align*}
+	\ket{0|\psi_a(x) \bar \psi_b(y)|0} &= \sum_{s, s'} \int \frac{\Diff 3p}{(2\pi)^3} \int \frac{\Diff 3 p'}{(2 \pi)^3} e^{-ipx} e^{ipy} u_a^{s}(p) \bar u_b^{s'}(p') \\
+					   &= \int \frac{\Diff 3 p}{(2\pi)^3} \frac{1}{2 \omega_p} (\slashed{p} + m)_{ab} e^{-ip(x - y)} \\
+					   &= (i \slashed{\partial}_x + m)_{ab} \int \frac{\Diff 3 p}{(2 \pi)^3} \frac{1}{2\omega_p} e^{-ip(x-y)} = (i \slashed{\partial}_x + m)_{ab} D(x - y),
+\end{align*}
+where we compute $u_a^{s}(p) \bar u^{s'}(p')$ as $\braket{0|b_p^{s} b_{p'}^{s'}|0}$. We can also compute the reverse:
+\begin{align*}
+	\braket{0|\bar \psi_b(y) \psi_a(x)|0} &= \int \frac{\Diff 3 p}{(2 \pi)^3} \frac{1}{2\omega_p} (\slashed{p} - m)_{ba} e^{-ip(y - x}) \\
+					      &= -(i \slashed{\partial}_x + m) D(y - x).
+\end{align*}
+The minus sign is an indication that we should define
+\[
+T \psi_a(x) \bar \psi_b(y) =
+\begin{cases}
+	\psi_a(x) \bar \psi_b(y) & x^{0} > y^{0}, \\
+	- \bar \psi_b(y) \psi_a(x) & y^{0} > x^{0}.
+\end{cases}
+\]
+With this,
+\[
+	\braket{0|T \psi(x) \bar \psi(y)|0} = (i \partial_x + m) \Delta_F(x - y) = S_F(x - y).
+\]
+It follows that
+\[
+	(i \slashed{\partial}_x - m) S_F(x - y) = i \delta^{4}(x - y),
+\]
+since
+\[
+	(\square_x + m^2) \Delta_F(x - y) = - i \delta^{4}(x - y).
+\]
+Also,
+\[
+	S_F(x - y) = (i \overleftarrow{\slashed{\partial}_y} + m) = - i \delta^{4}(x - y).
+\]
+Finally, we can state Wick's theorem for spinors. Note that
+\[
+	T \psi(x) \bar \psi(y) = \normalorder{\psi(x) \bar \psi(y)} + \overbrace{\psi \bar \psi},
+\]
+where the latter expression is $S_F(x - y)$. Note that we need to be careful when time ordering: if $x_3^{0} > x_1^{0} > x_4^{0} > x_2^{0}$,
+\[
+T(\psi_1 \psi_2 \psi_3 \psi_4) = (-1)^3 \psi_3 \psi_1 \psi_4 \psi_2.
+\]
+\subsection{Interactions}%
+\label{sub:dirac_int}
+
+We look at the Yukawa theory, where
+\begin{align*}
+	\mathcal{L}_0 &= \frac 12 \partial_\mu \phi \partial^\mu \phi - \frac 12 \mu^2 \phi^2 + \bar \psi(i \gamma^\mu \partial_\mu - m)\psi, \\
+	\mathcal{L}_{\mathrm{int}} &= - \lambda \phi \bar \psi \psi.
+\end{align*}
+We inspect the theory by looking at the units: recall that $[\mathcal{L}] = 4$, $[\partial_\mu] = 1$, $[\phi] = 1$ and $[\mu] = 1$.
+
+From this, we find that $[\psi] = 3/2$, $[m] = 1$ and $[\lambda = 0]$, hence our theory is marginal.
+
+We want to derive the Feynman rules, through the same process as for the scalar field, through the LSZ formula and Schwinger-Dyson. We will not do all of this, for the purposes of brevity.
+
+Consider nucleon-anti nucleon scattering, where
+\begin{align*}
+	\ket{i, -\infty} &= \sqrt{2\omega_p} \sqrt{\omega \omega_q} b_p^{s\dagger} (-\infty) c_q^{s\dagger}(-\infty) \ket{\Omega}, \\
+	\ket{f, +\infty} &= \sqrt{2\omega_{p'}} \sqrt{2 \omega_{q'}} b_{p'}^{s'\dagger} (+\infty) c_{q'} ^{s'\dagger} (+\infty) \ket{\Omega}.
+\end{align*}
+Then we want to find
+\begin{align*}
+	\ket{f|S|i} &= \sqrt{2 \omega_p} \cdots \sqrt{2 \omega_{q'}} \langle \Omega | T(c_{q'}^{s'}(+\infty) b_{p'}^{s'}(+\infty) b_p^{s\dagger}(-\infty) c_q^{s}(-\infty))| \Omega\rangle.
+\end{align*}
+We want to find
+\[
+b_p^{s\dagger}(-\infty) - b_p^{s\dagger}(+\infty).
+\]
+Consider
+\[
+	i \int \Diff 4 x \bar \psi(x) (i \overleftarrow{\slashed{\partial}} + m) u_s(p) e^{-ipx}.
+\]
+Recall that $(\slashed{p} - m) u_s (p) = 0$, and $\omega_p = \sqrt{p^2 + m^2}$.
+
+% lecture 19
+
+We can write this as
+\begin{align*}
+	i \int \Diff 4 x &\bar \psi (x) (i \gamma^0 \overleftarrow \partial_0 + i \gamma^i \overleftarrow \partial_i + m) u_s(p) e^{-ipx} \\
+			 &\overset{IBP}= i \int \Diff 4 x \bar \psi(x) (i \gamma^0 \partial_0 - i \gamma^i (i p^i) + m) u_s(p) e^{-ipx} \\
+			 &= i \int \Diff 4 x \bar \psi(i \gamma^0 \overleftarrow \partial_0 + p^0 \gamma^0) u_s(p) e^{-ipx} \\
+			 &= i \int \Diff 4 x \bar \psi(i \gamma^0 \overleftarrow \partial_0 + i \gamma^0 \overrightarrow \partial_0) u_s(p) e^{-ipx} \\
+			 &= - \int \Diff 4 x \partial_0(\bar \psi \gamma^0 u_s(p) e^{-ipx}) \\
+			 &= - \sqrt{2 \omega_p}(b_p^{s\dagger}(+\infty) - b_[^{s\dagger}(-\infty)).
+\end{align*}
+We get similar expressions for all the quantities:
+\begin{align*}
+	\sqrt{2 \omega_p} (b_p^{s\dagger} (+\infty) - b_p^{s\dagger}(-\infty)) &= i \int \Diff 4 x \bar \psi (i \overleftarrow{\slashed{\partial}} + m) u_s(p) e^{-ipx},\\
+	\sqrt{2 \omega_p} (b_p^{s} (+\infty) - b_p^{s}(-\infty)) &= i \int \Diff 4 x e^{ipx} \bar u_s(p) (-i \overleftarrow{\slashed{\partial}} + m) \psi,\\
+	\sqrt{2 \omega_p} (c_p^{s\dagger} (-\infty) - c_p^{s\dagger}(+\infty)) &= -i \int \Diff 4 x e^{-ipx} \bar v_s(p) (-i \overleftarrow{\slashed{\partial}} + m) \psi,\\
+	\sqrt{2 \omega_p} (c_p^{s} (+\infty) - c_p^{s}(-\infty)) &= -i \int \Diff 4 x \bar \psi (i \overleftarrow{\slashed{\partial}} + m) v_s(p) e^{ipx}.
+\end{align*}
+Using this, we can write:
+\begin{align*}
+	\braket{f|S|i} &= \prod_{j = 1}^4 i \int \Diff 4 x_j (e^{ip' x_3} \bar u_{s'}(p') (-i \slashed{\partial}_3 + m)) (e^{-iq x_2} \bar v_{r}(q) (-i \slashed{\partial}_2 + m)) \\
+		       &\qquad \braket{\Omega| T \bar \psi(x_4) \psi(x_3) \bar \psi(x_1) \psi(x_2) | \Omega} \\
+		       & \qquad ((i \overleftarrow{\slashed{\partial}}_1 + m) u_s(p) e^{-ipx_1}) ((i \overleftarrow{\slashed{\partial}}_4 + m) v_{p'}(q') e^{iq'x_4}).
+\end{align*}
+The Feynman rules are as follows: to compute the connected contributions to $\braket{f|S|i}$,
+\begin{enumerate}
+	\item For incoming fermions,
+		\[
+		% https://feynman.srossd.com/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZARgBoAGAXVJADcBDAGwFcYkQQBfU9TXfQigBMFanSat2XHiAzY8BIuVE0GLNohAAjAPpoAesAA6RqPQDm5mACdO03vIFLSxMWsmaAxnsMmzlmztuB35FFDJXVQkNDmDZPgVBZBFI8XUpTjEYKCsEFFAAM2sIAFskZRAcCCQyEE8AC3prKxqaEtKYMBxmEoAFBKdNRhgCnBA2jq6e9jQdYgQaRnotGEZ+xzCQayxzerGo9M1mHTgACjQASnsQItKkABYaKqQAVhoGppbEAFpa9pLOt0yppZvNxmkPCATFomgACWgnc5XRbLVbrUKCLY7PZcSicIA
+\begin{tikzpicture}
+\begin{feynman}
+\vertex (0) at (2, 2);
+\vertex (1) at (4, 2);
+\vertex (2) at (0, 2) {\(b^{\dagger}\)};
+\vertex (3) at (0, 0) {\(c^{\dagger}\)};
+\vertex (4) at (2, 0);
+\vertex (5) at (4, 0);
+\diagram*{
+	(0) --[fermion,edge label'={\(u_s(p)\)},momentum={\(p_1s\)}] (1),
+	(4) --[anti fermion,edge label'={\(\bar v_s(p)\)},momentum={\(p_1s\)}] (5)
+};
+\end{feynman}
+\end{tikzpicture}
+		\]
+	\item For outgoing fermions,
+		\[
+	% https://feynman.srossd.com/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZARgBoAGAXVJADcBDAGwFcYkQQBfU9TXfQigBMFanSat2XHiAzY8BIuVE0GLNohAAdHVum95ApaWJi1kzbr3cD-RSjKnVEjRxuy+CwchFPx6qXc5O28AZhV-CxAAI30PQ3tkcL9zVwBjLjEYKABzeCJQADMAJwgAWyRlEBwIJDIQNIALemK8upoy8pgwHGYygAVPI01GGEKcEA6unr72NAB9YgQaRnpomEZBhMEQYqwcxonnAMstaJaAAmZ5uAAKNABKOJLypAAWGhqkAFYaJpa2ogALT1Tplbq9CqaBZLSaRVy0G73J4rNYbLYhdh7A4TTiUThAA
+\begin{tikzpicture}
+\begin{feynman}
+\vertex (0) at (2, 2);
+\vertex (1) at (4, 2);
+\vertex (4) at (2, 0);
+\vertex (5) at (4, 0);
+\vertex (7) at (6, 2) {\(b\)};
+\vertex (8) at (6, 0) {\(c\)};
+\diagram*{
+	(0) --[fermion,edge label'={\(\bar u_s(p)\)},momentum={\(p_1s\)}] (1),
+	(4) --[anti fermion,edge label'={\(v_s(p)\)},momentum={\(p_1s\)}] (5)
+};
+\end{feynman}
+\end{tikzpicture}	
+		\]
+	\item At a vertex,
+		\[
+		% https://feynman.srossd.com/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZABgBoBGAXVJADcBDAGwFcYkQQBfU9TXfQinIVqdJq3ZceIDNjwEiAJlLFRDFm0QduvOQKWlFa8Zu3TZ-BSgDMImuolaAvF1EwoAc3hFQAMwBOEAC2SGQgOBBIwiCMWGCmcADGTPT+IDRBwTBgOMwhWmgA+uRSfoH50RFIyiCJABapXkgAtNGZQdm5QQAKfPKCMTC+OOkg7Z157EWKpSABwVE0VYi2Y1k5eb16ViD+WB51IxnrXVOF1q6cQA
+			\begin{tikzpicture}[baseline = (1.base)]
+	\begin{feynman}[inline = (1.base)]
+\vertex (0) at (0, 2);
+\vertex (1) at (2, 2);
+\vertex (3) at (4, 4);
+\vertex (4) at (4, 0);
+\diagram*{
+	(0) --[scalar,momentum={\(p_1\)}] (1),
+	(1) --[anti fermion,momentum={\(p_2\)}] (3),
+	(1) --[plain,momentum'={\(p_3\)}] (4)
+};
+\end{feynman}
+\end{tikzpicture}
+= (-i \lambda) (2 \pi)^{4} \delta(p_1 - p_2 - p_3).
+		\]
+	\item For each internal line,
+		\begin{align*}
+			% https://feynman.srossd.com/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZABgBpiBdUkANwEMAbAVxiRBAF9T1Nd9CUARnJVajFm06iYUAObwioAGYAnCAFskZEDghJhIBljCtEIOAGNGdFSGrqNMMDibqACrzwE2DGEpx2IA7qTi6aZmhSHEA
+\begin{tikzpicture}
+\begin{feynman}
+\vertex (2) at (0, 0);
+\vertex (3) at (2, 0);
+\diagram*{
+	(2) --[scalar,momentum={\(p\)}] (3)
+};
+\end{feynman}
+\end{tikzpicture} &= \int \frac{\Diff 4 p}{(2 \pi)^{4}} \frac{i}{p^2 - \mu^2 + i \eps}, \\
+% https://feynman.srossd.com/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZABgBpiBdUkANwEMAbAVxiRBAF9T1Nd9CUARnJVajFm06iYUAObwioAGYAnCAFskZEDghJhIBljCtEIJTBXr+Iauo0wwOJuoAKvPATYMYSnLZB7dUdnTTM0AIBjAAs6FXl9DgoOIA
+\begin{tikzpicture}
+\begin{feynman}
+\vertex (2) at (0, 0);
+\vertex (3) at (2, 0);
+\diagram*{
+	(2) --[fermion,momentum={\(p\)}] (3)
+};
+\end{feynman}
+\end{tikzpicture} &= \int \frac{\Diff 4 p}{(2 \pi)^{4}} \frac{i(\slashed{p} + m)}{p^2 - m^2 + i \eps}.
+		\end{align*}
+	\item Indices are contracted at each vertex, with other propagators or spinors.
+	\item Add extra minus signs for statistics of fermions.
+\end{enumerate}
+For example, take the free theory, and we want to compute
+\[
+	\braket{\psi_1 \psi_2 \bar \psi_3 \bar \psi_4}.
+\]
+By Schwinger-Dyson,
+\[
+(i \slashed{\partial}_x - m) \braket{T \psi(x) \bar \psi(x_1) \cdots \psi (x_n)}_0 = -i \sum_j \delta(x - x_j) (\text{signed contractions}).
+\]
+Hence we find
+\begin{align*}
+	\braket{\psi_1\psi_2 \bar \psi_3 \bar \psi_4} &= - \int \Diff 4 y i S_F(x_1 - y)(i \overleftarrow{\slashed{\partial}}_y + m) \braket{\psi_y \psi_2 \bar \psi_3 \bar \psi_4} \\
+						      &= \int \Diff 4 y (-i) S_F(x_1 - y) (i \overrightarrow{\slashed{\partial}}_y - m) \braket{\psi_y \psi_2 \bar \psi_3 \bar \psi_4} \\
+						      &= (-i)^2 \int \Diff 4 y S_F(x_1 - y)(- \delta(x_3 - y)S_F(x_2 - x_4) + \delta(x_4 - y)S_F(x_2 - x_3)) \\
+						      &= S_F(x_1 - x_4)S_F(x_2 - x_3) - S_F(x_1 - x_3) S_F(x_2 - x_4).
+\end{align*}
+We see that a minus sign has popped up.
+\begin{exbox}
+	We look at nucleon to meson scattering, so $b_p^{s\dagger} c_q^{r\dagger}$ in to $a_{p'}^{\dagger} a_{q'}^{\dagger}$ out.
+
+	To leading connected order, we have
+	\[
+	% https://feynman.srossd.com/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZABgBpiBdUkANwEMAbAVxiRBAF9T1Nd9CUARlKCqtRizaduIDNjwEiwgExj6zVonZce8-kTIBmNRM3aZcvopTLyJjVJ2zeCgclvHq6yVs5iYUADm8ESgAGYAThAAtkhkIDgQSMIgAMYAFnQRwcnU0TEwYDhM0QAKLvpaEViB6TggeQVFJWxopAhOkTG5CUmItmmZ2Zop+dGFxbFaANbS4VFThtSJSAMZWTmIALSjTZNsAI6kEQ0gDFhgZnCpjFlzIF1TKSuIACzU55ds17cnjePNMoVawgaq1er-CYtLQHADk90eq2WfQArB8Llcbgw7pDAa14RwKBwgA
+		\begin{tikzpicture}[baseline = (7.base)]
+	\begin{feynman}[inline = (7.base)]
+\vertex (0) at (0, 6);
+\vertex (1) at (2, 4);
+\vertex (2) at (2, 2);
+\vertex (4) at (0, 0);
+\vertex (5) at (4, 6);
+\vertex (6) at (4, 0);
+\vertex (7) at (0, 3);
+\diagram*{
+	(0) --[fermion,momentum'={\(p,s\)}] (1),
+	(1) --[fermion,momentum={\(k\)}] (2),
+	(4) --[anti charged scalar,momentum={\(q,r\)}] (2),
+	(1) --[scalar,momentum'={\(q'\)}] (5),
+	(2) --[scalar,momentum={\(p'\)}] (6)
+};
+\end{feynman}
+\end{tikzpicture} +
+% https://feynman.srossd.com/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZABgBpiBdUkANwEMAbAVxiRBAF9T1Nd9CUARlKCqtRizaduIDNjwEiwgExj6zVonZce8-kTIBmNRM3aZcvopTLyJjVJ2zeCgclvHq6yVs5iYUADm8ESgAGYAThAAtkhkIDgQSMIgAMYAFnQRwcnU0TEwYDhM0QAKLvpaEViB6TggeQVFJWxopAhOkTG5CUmItmmZ2Zop+dGFxbFaANbS4VFThtSJSAMZWTmIALSjTZNsAI6kEQ0gDFhgZnCpjFlzIF1TKSuIACzU55ds17cnjePNMoVawgaq1er-CYtLQHADk90eq2WfQArB8Llcbgw7pDAa14RwKBwgA
+\begin{tikzpicture}[baseline = (7.base)]
+\begin{feynman}[inline = (7.base)]
+\vertex (0) at (0, 6);
+\vertex (1) at (2, 4);
+\vertex (2) at (2, 2);
+\vertex (4) at (0, 0);
+\vertex (5) at (4, 6);
+\vertex (6) at (4, 0);
+\vertex (7) at (0, 3);
+\diagram*{
+	(0) --[fermion,momentum'={\(p,s\)}] (1),
+	(1) --[fermion,momentum={\(k\)}] (2),
+	(4) --[anti charged scalar,momentum={\(q,r\)}] (2),
+	(1) --[scalar,momentum'={\(p'\)}] (5),
+	(2) --[scalar,momentum={\(q'\)}] (6)
+};
+\end{feynman}
+\end{tikzpicture}
+	\]
+	Hence
+	\begin{align*}
+		\braket{f|S|i} &= \int \frac{\Diff 4 k}{(2 \pi)^{4}} \bar v_r(q) i(\slashed{k} + m) u_s(p) (-i \lambda) (2 \pi)^{4} \delta(q + k - q')\\
+			       & \qquad\times(-i \lambda) (2\pi)^{4} \delta(p - p' - k) + (p' \leftrightarrow q') \\
+			       &= i (2 \pi)^{4} \delta(p + q - p' - q') \\
+			       & \qquad \times\left( \frac{\bar v^{r}(q)(\slashed{p} - \slashed{p}' + m)u^{s}(p)}{(p - p')^2 - m^2} + \frac{\bar v^{r}(q)(\slashed{p} - \slashed{q}' + m)u^{s}(p)}{(p - q')^2 - m^2} \right).
+	\end{align*}
+\end{exbox}
+
 
 \newpage
 
