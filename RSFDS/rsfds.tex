@@ -1,0 +1,1487 @@
+\documentclass[12pt]{article}
+
+\usepackage{ishn}
+
+\makeindex[intoc]
+
+\begin{document}
+
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+	\begin{center}
+		\vspace*{1em}
+		\Huge
+		\textbf{III Random Structures in Finite Dimensional Space}
+
+		\vspace{1em}
+		\large
+		Ishan Nath, Lent 2024
+
+		\vspace{1.5em}
+
+		\Large
+
+		Based on Lectures by Prof. Wendelin Werner
+
+		\vspace{1em}
+
+		\large
+		\today
+	\end{center}
+	
+\end{titlepage}
+\hypersetup{pageanchor=true}
+
+\tableofcontents
+
+\newpage
+
+%lecture 1
+
+\section{Percolation}%
+\label{sec:p}
+
+We start in $\mathbb{Z}^d$. Let $p \in (0, 1)$. Then define $(\omega(x))_{x \in \mathbb{Z}^d}$ IID, and
+\[
+\mathbb{P}(\omega(x) = 0) = 1 - p, \qquad \mathbb{P}(\omega(x) = 1) = p.
+\]
+Measurability is not obvious in this space. But we can show
+\[
+	A(x) = \{\omega \mid x \text{ is in an infinite open cluster}\}
+\]
+is measurable. Then $A = \bigcup A(x)$ is the event that there is an infinite island.
+
+By translational invariance, $\mathbb{P}(A(x)) = \mathbb{P}(A(0))$. Interestingly $A$ is independent of $(\omega(x))_{x \in B}$ for a finite box; changing the site on a finite amount of elements does not change the event of having an infinite cluster.
+
+So by Kolmogorov 0-1, $\mathbb{P}(A)$ is $0$ or $1$.
+
+% lecture 2
+
+Moreover, we get the following: if our probability space if $P_p$ is the law of $\omega_p$, then
+\[
+P_p(A) = 0 \iff P_p(A(0)) = 0, \qquad P_p(A) = 1 \iff P_p(A(0)) > 0.
+\]
+We will show that
+\begin{itemize}
+	\item $p \mapsto P_p(A) \in \{0, 1\}$ is non-decreasing.
+	\item $p \mapsto P_p(A(0)) \subseteq [0, 1]$ is non-decreasing.
+\end{itemize}
+One simple way to justify this simple fact is by coupling.
+
+\begin{proofbox}
+	Consider the probability space where one has $(U(x),  x\in \mathbb{Z}^d)$, an IID family of uniform random variables on $[0, 1]$. Define for all $p \in [0, 1]$,
+	\[
+	\omega_p(x) = \mathbbm{1}_{U(x) \leq p}.
+	\]
+	Clearly,
+	\begin{itemize}
+		\item The law of $\omega_p$ is $P_p$.
+		\item For all $x \in \mathbb{Z}^d$, $\omega_p(x) \leq \omega_{p'}(x)$ if $p \leq p'$.
+	\end{itemize}
+	Hence
+	\begin{align*}
+		P_p(A) &= P(\omega_p \in A) \leq P(\omega_{p'} \in A) = P_{p'}(A).
+	\end{align*}
+\end{proofbox}
+
+So $p \mapsto P_p(A)$ is non-decreasing, and $P_0(A) = 0$, $P_1(A) = 1$. Define
+\[
+	p_c = \sup\{p \in [0, 1] \mid P_p(A) = 0\}.
+\]
+Then,
+\begin{itemize}
+	\item For all $p < p_c$, $P_p(A) = 0$.
+	\item For all $p > p_c$, $P_p(A) = 1$.
+\end{itemize}
+We have not yet shown that $p_c \neq 0$ or $1$, nor what $P_{p_c}(A)$ is.
+
+\begin{proposition}
+	$p_c > 0$.
+\end{proposition}
+
+\begin{proofbox}
+	We want to show that if $p$ is sufficiently small, $P_p(A) = 0$. It suffices to check that $P_p(A(0)) = 0$, when $p$ is very small but non-zero.
+
+	If $|C(0)| = \infty$, then there exists an infinite self-avoiding nearest neighbour path started at 0, consisting only of open sites. Hence,
+	\begin{align*}
+		P_p(A(0)) \leq P_p(&\text{exists a self-avoiding path of length $n$ starting from 0}, \\
+&\qquad \qquad \text{with all sites open}).
+	\end{align*}
+	Now we can do a union bound. If $\Gamma_n$ is the set of self-avoiding paths of length $n$, then we bound this by
+	\[
+		\sum_{\gamma \in \Gamma_n} P_P(\text{all of the sites of $\gamma$ are open}).
+	\]
+	This is bounded by $|\Gamma_n| p^{n+1} \leq (2d)^{n} p^{n+1}$. If $p < 1/2d$, then this goes to $0$ as $n \to \infty$. Hence for such $p$, $P_p(A(0)) = 0$, so $P_p(A) = 0$.
+\end{proofbox}
+
+\begin{proposition}
+	$p_c < 1$ for $d \geq 2$. In other words, when $p$ is close enough to 1, then almost surely there is an infinite open cluster.
+\end{proposition}
+
+\begin{proofbox}
+	It suffices to show this for $d = 2$, as $\mathbb{Z}^2 \subseteq \mathbb{Z}^{d}$.
+
+	Suppose that $0$ is in a finite cluster. Consider this cluster, and then its boundary. This must consist only of closed sites, which form a closed loop around 0. Consider the probability of such a loop forming, passing through $(n, 0)$. This is at most $8^{n} (1 - p)^{n+1}$, as such a loop must have a self-avoiding path of length at least $n+1$, starting from $(n, 0)$. So we can bound this by
+	\[
+		(1 - p) + \sum_{n \geq 1} 8^{n} (1 - p)^{n+1},
+	\]
+	which is finite when $(1 - p) < 1/8$, and goes to $0$ as $p \to 1$. So for $p$ close enough to $1$,
+\end{proofbox}
+
+% lecture 3
+
+Our goal will be to show the following:
+\begin{proposition}
+	If $P_p(A) = 1$, then $P_p$ almost surely, there is \emph{exactly} one infinite cluster.
+\end{proposition}
+
+\begin{definition}
+	We say that the event $A \in \{0, 1\}^{\mathbb{Z}^{d}}$ is \emph{translation-invariant}\index{translation-invariant} with respect to $e \in \mathbb{Z}^{d} \setminus \{0\}$ if
+	\[
+		(\omega(x))_{x \in \mathbb{Z}^{d}} \in A \iff (\omega(x + e))_{x \in \mathbb{Z}^{d}} \in A.
+	\]
+\end{definition}
+
+\begin{exbox}
+	$A = \{\text{there is an infinite cluster}\}$ is translation invariant.
+
+	So is $A = \{\text{the number of infinite clusters is equal to } k\}$.
+\end{exbox}
+
+\begin{lemma}
+	For all $p$ fixed and $A$ translation invariant,
+	\[
+		P_p(A) \in \{0, 1\}.
+	\]
+\end{lemma}
+
+\begin{proofbox}
+	Let us define
+	\[
+		\Lambda_n = [-n,n]^{d} \cap \mathbb{Z}^{d}.
+	\]
+	Then define
+	\[
+		g_n = \sigma(\{\omega(x) \mid x \in \Lambda_n\}),
+	\]
+	and then $\mathcal{F} = \sigma(\{\omega(x) \mid x \in \mathbb{Z}^{d}\})$. We claim that for all $A \in \mathcal{F}$, there exists $(A_n)$ with $A_n \in g_n$ such that
+	\[
+	\mathbb{P}(A \triangle A_n) \to 0,
+	\]
+	where $A \triangle A_n = (A \setminus A_n) \cup (A_n \setminus A)$. This is because, by martingale theory,
+	\[
+		\mathbb{P}(A | g_n) \overset{n \to \infty}= \mathbb{P}(A| \mathcal{F}) = \mathbbm{1}_{A}.
+	\]
+	Define now $A_n$ as $\{\omega \mid \mathbb{P}(A | g_n) \}$, such that $\mathbb{P}(A | g_n) \geq 1/2$. Then $\mathbb{P}(A \triangle A_n) \to 0$.
+	
+	Suppose now that $A$ is translation invariant. For $p$ fixed, choose $A_n$ such that $P_p(A \triangle A_n) \to 0$. Hence also $P_p(A_n) \to P_p(A)$. Define
+	\[
+		C_n = \{(\omega(x + 3 n e), x \in \mathbb{Z}^{d}) \in A_n\}.
+	\]
+	By translation invariance of the underlying measure, $P_p(C_n) = P_p(A_n)$, and $C_n \indep A_n$. Moreover,
+	\begin{align*}
+		P_p(A \triangle (A_n \cap C_n)) &\leq P_p(A \triangle A_n) + P(A \triangle C_n) \\
+						&\to 0,
+	\end{align*}
+	so $P_p(A_n \cap C_n) \to P_p(A)$, but the former is just $P_p(A_n)^2 \to P_p(A)^2$. Hence for this to be true, $P_p(A) \in \{0, 1\}$.
+\end{proofbox}
+
+\begin{corollary}
+	For all $k$ finite, $k \geq 2$,
+	\[
+		P_p(\text{there are exactly $k$ infinite cluster}) = 0.
+	\]
+\end{corollary}
+
+
+\begin{proofbox}
+	The idea is as follows: assume the probability is $1$. Then, for $n$ large, the probability all the $k$ clusters intersect $\Lambda_n$ will be at least $1/2$.
+	
+	For this fixed $n$, define
+	\[
+	\omega'(x) =
+	\begin{cases}
+		\omega(x) & x \not \in \Lambda_{n}, \\
+		\tilde \omega(x) & x \in \Lambda_n,
+	\end{cases}
+	\]
+	for $\tilde \omega$ an independent percolation. Then
+	\[
+		P_p(\tilde \omega(x) = 1 \text{ for all } x \in \Lambda_n) > 0,
+	\]
+	if $p > 0$. Hence,
+	\[
+		P_p(\text{there is exactly one infinite cluster in } \omega') > 0.
+	\]
+	But this contradicts our assumption.
+\end{proofbox}
+
+Now all that is left is to show that
+\[
+	P_p(\text{there exist infinitely many infinite connected components}) = 0.
+\]
+\begin{proofbox}
+	We say that for a configuration $(\omega(x))$, the point $x_0$ is a \emph{trifurcation point}\index{trifurcation point} if:
+	\begin{itemize}
+		\item $x_0$ is open in an infinite connected component.
+		\item Exactly three neighbours of $x_0$ are open.
+		\item If we close $x_0$, the component that $x_0$ is part of splits into three.
+	\end{itemize}
+	Suppose $N$ the number of infinite components, satisfies $P_p(N \geq 3) = 1$.
+
+	Then for some $\Lambda_n$, there is some $n_0$ such that the probability three infinite connected components intersect $\Lambda_{n_0}$ is at least $1/2$.
+
+	Now, consider resampling within $\Lambda_{n_0}$. There is some positive probability that $0$ is part of some path that leads to the three distinct components. Hence, the probability that $0$ is a trifurcation point is positive.
+
+	The following is a deterministic fact: the number of trifurcations inside $\Lambda_n$ is at most $|\partial \Lambda_n|$. This can be seen by just adding trifurcation points one-by-one, seeing that they have three infinite paths coming out of then.
+
+	Now the size of the cardinality is at most $c n^{d-1}$, for some $c$. But the expected number of trifurcation points is at least $|\Lambda_n| P_p(0 \text{ a trifurcation}) > c' n^{d}$, which gives a contradiction.
+% lecture 4
+
+	We can see that trifurcation points each lead to disjoint paths that lead to infinity, by ordering the trifurcation points; pick an arbitrary trifurcation point, and the three paths leading out of it. If another point lies on one of these paths, then it has another path leading out of it, disjoint from all paths seen previously.
+
+	We can repeat this, until we have exhausted all trifurcation points found in this way. Then for other trifurcation points, consider their paths. Only one can intersect a path found previously, as we have no cycles. Then we can repeat.
+\end{proofbox}
+
+Percolation on regular trees can be thought of as a Galton-Watson process; in these processes we have an infinite number of clusters.
+
+Take percolation in $\mathbb{Z}^{d}$.
+
+\begin{theorem}
+	If $p < p_c(d)$, then there exists $\psi(p) > 0$ and $C(p) > 0$ such that for all $n > 0$,
+	\[
+		P_p(0 \leftrightarrow \partial \Lambda_n) = P_p(\text{there is an open path joining $0$ to $\partial \Lambda_n$}) \leq C e^{-\psi n}.
+	\]
+\end{theorem}
+
+\begin{remark}
+	We cannot do better than exponential: the probability sites $0, 1, 2, \ldots, n$ are all open is $p^{n+1}$, which is exponential.
+\end{remark}
+
+\begin{proofbox}
+	Take $S$ to be a connected set that is finite, contains the origin, and such that $\mathbb{Z}^{d} \setminus S$ is simply connected. Let $\mathcal{O}(S)$ be the neighbours of $S$.
+
+	If I sample percolation only in $S$, define $C_S$ to be the cluster containing the origin, and $U_S$ the set of neighbours of $C_S$ in $\mathcal{O}(S)$. Define
+	\[
+	\vphi_p(S) = \mathbb{E}_p[|U_S|].
+	\]
+	The idea is that being subcritical for percolation is true if and only if
+	\[
+	\inf_S \vphi_p(S) = 0.
+	\]
+	First, we will show that if there is $S_0$ such that $\vphi_p(S_0) < 1$, then we have exponential decay.
+
+
+	Let $D_S$ be the set of points in $C_S$ and the neighbours of $C_S$ that are in $S$. To get from $0$ to $\partial \Lambda_n$, we must cross $S_0$ a lot of times. We can write
+	\[
+	P_p(0 \leftrightarrow \partial \Lambda_n) = \sum_C P(C_S = C) P(0 \leftrightarrow \partial \Lambda_n | C_S = C).
+	\]
+	Say that $S_0 \subseteq \Lambda_{n_0 - 1}$. Consider a path from $0$ to $\infty$. At some point, it exits $C_S$ for the last time, at say a point $y$. The path, continuing from $y$, cannot intersect $D_S$ again, as it was the last time it exited $C_S$, and the neighbours of $C_S$ are closed. Hence,
+	\begin{align*}
+		P(0 \leftrightarrow \partial \Lambda_n | C_S = C) &= \mathbb{E}\left[\sum_{y \in U_S} \mathbbm{1}(y \leftrightarrow \partial \Lambda_n \text{ in } \Lambda_n \setminus D_S) \bigm| C_S = C\right],
+	\end{align*}
+	and the indicator is less that $\mathbbm{1}(y \leftrightarrow \partial \Lambda_n) \leq \mathbbm{1}(0 \leftrightarrow \partial \Lambda_{n - n_0})$. So this is bounded by
+	\[
+	\sum_C P(C_S = C) \mathbb{E}\left[ \sum_{y \in U_S} P(0 \leftrightarrow \partial \Lambda_{n - n_0}) \bigm| C_S = C \right] \leq P(0 \leftrightarrow \partial \Lambda_{n - n_0}) \mathbb{E} |U_S|.
+	\]
+	Hence we find that
+	\[
+	\mathbb{P}(0 \leftrightarrow \partial \Lambda_n) \leq P(0 \leftrightarrow \partial \Lambda_{n - n_0}) \alpha \leq \cdots \leq \alpha^{n / n_0},
+	\]
+	which is exponential.
+% lecture 5
+	Note that if $P_p(0 \leftrightarrow \partial \Lambda_n) \leq C e^{-\psi n}$, then $\vphi_p(\Lambda_n) \to 0$, since
+	\[
+	\vphi_p(\Lambda_n) \leq P_p(0 \leftrightarrow \partial \Lambda_n) |\partial \Lambda_n| \leq C' e^{-\psi n} n^{d} \to 0.
+	\]
+\end{proofbox}
+For the second part, we assume that there is $\alpha > 0$ such that for all $S$,
+\[
+	\vphi_{p_0}(S) > \alpha.
+\]
+Then we will show that for all $p_1 > p_0$, $P_{p_1}(0 \leftrightarrow \infty) > 0$, hence $p_0 \geq p_c$.
+
+Our main tool will be Russo's formula.
+
+\begin{definition}
+	Suppose $A$ is an event measurable with respect to $(\omega(x) \mid x \in \Lambda_n) \in \{0, 1\}^{\Lambda_n}$. We say that the event is \emph{increasing}\index{increasing event} if
+	\[
+		\omega \in A \text{ and } \omega' \geq \omega \implies \omega' \in A.
+	\]
+\end{definition}
+
+\begin{exbox}
+	Recall our proof that if $p' \geq p$, then $P_{p'}(A) \geq P_{p}(A)$. We constructed $(X(x))$ uniform in $[0, 1]$, and
+	\[
+	\omega_{p}(x) = \mathbbm{1}_{X(x) \leq p}, \qquad \omega_{p'}(x) = \mathbbm{1}_{X(x) \leq p'}
+	\]
+	Then $\omega_p \sim P_p$, $\omega_{p'} \sim P_{p'}$ and $\omega_{p'} \geq \omega_p$.
+\end{exbox}
+
+For $A$ increasing, we are interested in looking at
+\[
+P_{p + \eps}(A) - P_p(A) = P(\omega_{p + \eps} \in A, \omega_p \not \in A),
+\]
+with respect to our coupling. But notice that $P(X(x) \in (p, p + \eps]) = \eps$, hence this probability can be written as
+\[
+	\sum_{x \in \Lambda_n} P(\omega_p \not \in A, \omega_{p+\eps} \in A, X(x) \in (p, p + \eps]) + \mathcal{O}(\eps^2).
+\]
+\begin{definition}
+	We say that $x$ is \emph{pivotal}\index{pivotal} for $(\omega, A)$, where $A$ is increasing if:
+	\begin{itemize}
+		\item the same configuration as $\omega$ with $x$ closed is not in $A$,
+		\item the same configuration as $\omega$ with $x$ open is in $A$.
+	\end{itemize}
+\end{definition}
+With this definition, the probability can be written as
+\begin{align*}
+	\sum_{x \in \Lambda_n} &P(x \text{ is pivotal for } (\omega_p, A)) \cdot \eps + \mathcal{O}(\eps^2) \\
+	\implies \frac{\diff}{\diff p} P_p(A) &= \mathbb{E}_p[\text{number of pivotal points for } (\omega_p, A)] \\
+					      &= \sum_{x \in \Lambda_n} P_p(x \text{ is pivotal for } (\omega_p, A)) \\
+					      &= \sum_{x \in \Lambda_n} P_p(x \text{ is pivotal and } \omega_p(x) = 0) \frac{1}{1 - p} \\
+					      &= \frac{1}{1 - p} \mathbb{E}_p[\mathbbm{1}_{A^{c}} |\text{number of pivotal points for $(\omega, A)$}|]
+\end{align*}
+
+% lecture 6
+
+In our case, we will use this tool, called \emph{Russo's identity}\index{Russo's identity}, for the case when $A = (0 \leftrightarrow \partial \Lambda_n)$.
+
+\begin{proofbox}
+	We know that in this case, when $\mathbbm{1}_{A^{c}}$, the cluster containing the origin does not hit $\partial \Lambda_n$, i.e. is finite.
+
+	The pivotals are the closed points on the boundary which, once opened, reveal a path to the boundary.
+
+	Consider rephrasing the problem so that we are looking at percolation from outside: we look at the union of all the clusters that touch the boundary.
+
+	This is a random set, and moreover the event $\{V = U\}$ is measurable with respect to $(\omega(x) \mid x \in \tilde U)$, where $\tilde U$ is $U$, along with its neighbours.
+
+	Define $S(U)$ to be the connected components containing $0$ of $\Lambda_n \setminus U$. Our observation will be that
+	\begin{align*}
+		\mathbb{E}_p[N(0 \leftrightarrow \partial \Lambda_n) \mathbbm{1}_{A^{c}}] &= \sum_{U, 0 \not \in U} \mathbb{E}_p[\mathbbm{1}_{V = U} N(0 \leftrightarrow \partial \Lambda_n)] \\
+											  &= \sum_{U, 0 \not \in U} P_p(V = U) \mathbb{E}\left[ \sum_{y \in \Lambda_n} \mathbbm{1}_{y \text{ pivotal}} \mid V = U \right].
+	\end{align*}
+	But this last expectation, if we let $W = (\tilde U)^{c}$, is simply $\vphi_p(W)$.
+
+	Now suppose that $p_1 > p_0$ and $\vphi_{p_0}(S) > \alpha > 0$. Then for all $p > p_0$, $\vphi_p(S) > \alpha$. Hence for all $p \in (p_0, p_1)$,
+	\begin{align*}
+		\frac{\diff}{\diff p}P_p(0 \leftrightarrow \partial \Lambda_n) &\geq \alpha \sum_{U, 0 \not \in U} P(U = V) \geq \alpha P_p(0 \not \leftrightarrow \partial \Lambda_n) \\
+									       & \geq \alpha (1 - p_1),
+	\end{align*}
+	since $P_p(0 \not \leftrightarrow \partial \Lambda_n) \geq 1 - p_1$. Hence,
+	\begin{align*}
+		P_{p_1}(0 \leftrightarrow \infty) &= \lim_{n \to \infty} P_{p_1}(0 \leftrightarrow \partial \Lambda_n) = \lim_{n \to \infty}u_n(p_1) \\
+						  &\geq \limsup_{n \to \infty} \int_{p_0}^{p_1} \frac{\diff u_n(p)}{\diff p} \diff p \geq \limsup_{n \to \infty} \int_{p_0}^{p-1} \alpha (1 - p_1) \diff p \\
+						  &\geq (p_1 - p_0) \alpha (1 - p_1) > 0.
+	\end{align*}
+\end{proofbox}
+
+\newpage
+
+\section{Percolation on the Triangular Lattice}%
+\label{sec:triangle}
+
+The nice property of triangular lattice vs the square is the following: if we have an open subset of the triangular lattice, then its neighbourhood is a path of closed sites, unlike the square grid.
+
+Consider a large rhombus, in the triangular lattice, and colour each point either red or blue. Then, either we have a left-to-right blue path, or a top-to-bottom red path; clearly we cannot have both, and if we do not have a left-to-right blue path, the boundary of the left side is a top-to-bottom red path.
+
+Hence, consider percolation with probability $1/2$ on the rhombus. Then, with equal probability we get a blue path left-to-right, or a red path top-to-bottom. By symmetry, these both have probability $1/2$.
+
+\begin{proposition}
+	$p_c \leq 1/2$ for percolation on the triangular lattice.
+\end{proposition}
+
+\begin{proofbox}
+	If $1/2 < p_c$, then one would have exponential decay. But then the probability of there being a left-to-right blue path is at most
+	\begin{align*}
+		\sum_{x \text{ on left}} P_{1/2} &(\text{cluster containing $x$ has diameter at least $n$}) \\
+		&\leq (n+1) C(p) e^{-\psi(p) n/2} \to 0,
+	\end{align*}
+	which contradicts the result we have above.
+\end{proofbox}
+
+We will see that $P_{1/2}(0 \leftrightarrow \infty) = 0$.
+
+% lecture 7
+
+The setup is as follows: we have a finite set $S$, and $(\omega(x) \mid x \in S)$ independent Bernoulli random variables with $P(\omega(x) = 1) = p$.
+
+\begin{proposition}
+	If $A$ and $B$ are increasing events, then
+	\[
+	P(A \cap B) \geq P(A) P(B).
+	\]
+\end{proposition}
+
+We saw a proof of this in combinatorics using induction. We will give a more convoluted proof that can be generalised to other models.
+
+\begin{proofbox}
+	We will define a Markov chain on $\{0, 1\}^{S}$, so consider $X_n \in \{0, 1\}^{S}$. To make a time step, we will:
+	\begin{itemize}
+		\item Pick a point of $S$ uniformly at random.
+		\item Forget the value $X_n(x)$ and resample it with probability $p$, and keep the other sites fixed.
+	\end{itemize}
+	For $p \in (0, 1)$, this chain is irreducible - we can always get to the all $1$'s state, and it is aperiodic as we have a positive probability to stay in place.
+
+	Moreover, it has an easy invariant distribution, which is the product $\Ber(p)^{|S|}$. Indeed, this distribution $\mu$ is reversible: if $Q$ is the transition matrix,
+	\[
+	\mu(v)  Q(v, u) = \mu(u) Q(u, v).
+	\]
+	For $v \in \{0, 1\}^{S}$, we let:
+	\begin{itemize}
+		\item $v^{x}$ be the same as $v$ for $y \neq x$, and $v^{x}(x) = 1$.
+		\item $v_x$ be the same as $v$ for $y \neq x$, and $v_x(x) = 0$.
+	\end{itemize}
+	For our measure $P$,
+	\[
+	\frac{P(v^{x})}{P(v_x)} = \frac{p}{1-p} = \frac{Q(v_x, v^{x})}{Q(v^{x},v_x)}.
+	\]
+	Suppose $A$ is an increasing event, with $P(A) > 0$. What is the nice Markov chain on $A$, with stationary distribution $P'(x)= P(x|A)$.
+
+	We can begin with $Y_0 = (1, \ldots, 1) \in A$, as $A$ is increasing. Moreover for each $n$, using the same coins as $X$, i.e. coupling it to $X$,
+	\begin{itemize}
+		\item Choose $x$ uniformly at random.
+		\item Resample $Y_n(x)$ with the $p$-$(1-p)$ coin.
+		\item Choose $Y_{n+1}(x) = 0$ only if the coin was $0$, and the outcome is in $A$. Otherwise keep $Y_{n+1}(x) = 1$.
+	\end{itemize}
+	Because of this coupling, when we close a site in $Y$, we close the same site in $X$, and sometimes when we close a site in $X$ we do not close the same site in $Y$. So $X_n \leq Y_n$ almost-surely.
+
+	Moreover $(Y_n)$ is a Markov chain on $A$. For $Y$, if $v^{x}$ and $v_x$ are both in $A$, then
+	\begin{align*}
+		Q^Y(v^x, v_x) &= Q^X(v^x, v_x) & Q^Y(v_x, v^x) &= Q^X(v_x, v^x).
+	\end{align*}
+	Therefore,
+	\[
+	\frac{Q^Y(v^x, v_x)}{Q^Y(v_x,v^x)} = \frac{1-p}{p} = \frac{P(v_x)}{P(v^x)} = \frac{P(v_x|A)}{P(v^x|A)}.
+	\]
+	Therefore, the stationary distribution is simply the conditional distribution. Therefore for all $B$ increasing,
+	\begin{align*}
+		P(B|A) &= \lim_{n \to \infty} P(Y_n \in B) \geq \lim_{n \to \infty}P(X_n \in B) = P(B).
+	\end{align*}
+\end{proofbox}
+
+\begin{remark}
+	\begin{enumerate}
+		\item[]
+		\item Similarly, if $A$ is increasing and $B$ is decreasing, then
+			\[
+			P(A \cap B) \leq P(A) P(B).
+			\]
+			This is by using the result on the complement of $B$, which is increasing.
+		\item If $A_1, \ldots, A_k$ are all increasing, then
+			\[
+			P(A_1 \cap \cdots \cap A_k) \geq P(A_1) \cdots P(A_k),
+			\]
+			by induction on $k$, using the fact that $A_1 \cap \cdots \cap A_{k-1}$ is increasing.
+		\item This also holds if $S$ is countable and infinite. This can be proven by proving first a generalization of Harris' inequality for random variables, and then use martingale convergence theorem, conditioning on the first $n$ sites.
+	\end{enumerate}
+\end{remark}
+
+We return to percolation at $p = 1/2$ on the triangular lattice.
+
+\begin{proofbox}
+	Assume that at $p = 1/2$, $P_{1/2}(\text{there exists an infinite open cluster}) = 1$. Call $C$ the infinite cluster, and let $\Lambda_N$ be the rhombus of size $N$ around $0$.
+
+	Then, we know that
+	\[
+	P_{1/2}(C \cap \Lambda_N \neq \emptyset) \to 1.
+	\]
+	Hence the probability that there exists an infinite self-avoiding path starting at the boundary of the box goes to $1$, as $N \to \infty$.
+
+	Let $E_N^1$ be the event that an infinite path exists from the topmost edge, $E_N^2$ from the rightmost edge, and $E_N^3$ and $E_N^4$ defined similarly.
+
+	We show that $P(E_N^1) \to 1$ as $N \to \infty$. Indeed, $E_N^{1c}$ and $E_N^{2c}$ are decreasing, so by FKG,
+	\[
+	P(E_N^{1c} \cap \cdots \cap E_n^{4c}) \geq P(E_N^{1c}) \cdots P(E_N^{4c}) = P(E_N^{1c})^{4},
+	\]
+	and the left hand side goes to $0$, so $P(E_N^{1c}) \to 0$, hence $P(E_N^1) \to 1$.
+
+	So for $N_0$ large enough, $P(E_{N_0}^1) > 7/8$. For this $N_0$, consider the probability that the left and right sides have a infinite open path, and the top and bottom paths have infinite closed paths. By our choice of $N_0$, this has probability at least $1/2$ of occurring.
+
+	Now resample everything within the box. There is a non-zero probability that everything is closed, in which case we get a positive probability of two open components, which is a contradiction.
+\end{proofbox}
+
+% lecture 8
+
+\subsection{Critical Percolation on the Triangular Lattice}%
+\label{sub:cptl}
+
+We have some sort of fractal-like behaviour at $p_c = 1/2$ on the triangular lattice; in every symmetric region the probability there is a red path equals the probability there is a blue path.
+
+An interesting way to discover if there is a left-to-right or top-to-bottom crossing is as follows: consider percolation on the dual graph, the honeycomb lattice.
+
+Colour the left and right sides red, and the top and bottom sides blue. Then follow the `beach': the boundary between blue and red cells starting from the top-left.
+
+This gives us a random curve $\upgamma$, which has blue sites on its left and red sites on its right. Then there is a left-to-right boundary if and only if $\upgamma$ hits the right boundary.
+
+Now consider the probability of crossing two rhombi. If there is a red path from left-to-right discovered by $\upgamma$ which turns out to be $g$, then consider $O(g)$, the symmetrized version of $g$, flipped over the boundary.
+
+Then the probability of there being a red to bottom-right crossing in red is at least $1/2$, by symmetry. So, the probability of crossing is at least
+\[
+	\sum_g P(\upgamma = g) P(O(g) \text{ red crossing}) = \frac{1}{4}.
+\]
+But now to get a left-to-right red crossing with only red paths, we use FKG;
+\begin{align*}
+	P&(\text{left-to-right red crossing}) \\
+	&\geq P(\text{left-to-bottom-right red crossing} \cup \text{bottom-left-to-right red crossing}) \\
+					     &\geq P(\text{left-to-bottom-right red crossing}) P(\text{bottom-left-to-right red crossing}) \\
+					     &\geq (1/4)^2 = 1/16.
+\end{align*}
+
+Similarly, we can do this for four rhombi, which gives probability at least $(1/32)^2$.
+
+So iterating, for any amount of rhombi $k$, there exists $a_k > 0$ such that for all $N$, the probability of crossing from left-to-right on $k$ $N$-sided rhombi is at least $a_k$.
+
+These are the \emph{Russo-Seymour-Welsh}\index{Russo-Seymour-Welsh} bounds.
+
+This gives us another proof of there being no infinite clusters: consider hexagons of side length $3^{l}$. What is the probability that within a hexagon, there is a blue loop?
+
+It turn out to be a positive real independent of $l$. Decompose the path into six $k$-rhombi paths, then we can bound the probability by $a_k^{6}$, where $k$ is independent of $l$.
+
+Then the probability that the origin is connected to the boundary of the $3^l$ hexagon is at most
+\[
+	(1 - a_k^{6})^{l} \to 0.
+\]
+This shows that there is no infinite connected component.
+
+\subsection{Weird Conditional Percolation}%
+\label{sub:wcp}
+
+Consider percolation on $3$ sites, with $p = 1/2$. Consider the following: we flip a coin with $1/4$ bias.
+\begin{itemize}
+	\item If it is heads, we reveal all sites, which are the same (either all red or blue with equal probability).
+	\item If it is tails, we reveal two sites which are not equal.
+\end{itemize}
+
+After this coin toss, the remaining site (if it exists) is still percolation.
+
+However there is no way to reveal this random event by conditioning on sites one-by-one.
+
+This is sort of what we want to do: reveal things in a non-linear way so that the remaining sites are still percolation.
+
+% lecture 9
+
+Remember that we proved that if we have a $N \times k N$ rectangle for $N$ fixed, then the probability of a red left-to-right crossing is bounded away from $0$ and $1$. Hence it is not absurd to think that as $N \to \infty$, this converges to some number.
+
+Moreover we claim that there are a lot of pivotal points for left-to-right crossing.
+
+Suppose there is no crossing from left-to-right. We explore using our boundary technique, until we either hit the right or the bottom. The blue points that we hit are reachable by red points.
+
+Next, by RSW if we resample, with positive probability we find a path left-to-right. This means, intersecting the path with our blue boundary, the blue boundary has positive probability if being pivotal.
+
+We can do a similar thing by considering the red-blue boundary starting from the top-right, and considering when it intersects the other boundary.
+
+One thought is as follows: if we sample some probability distribution with some error, then observe whether there is a left-to-right crossing, this event will become independent as $n \to \infty$ of whether there was a crossing without the error.
+
+\subsection{Cardy-Smirnov Bounds}%
+\label{sub:smir}
+
+Consider the triangle lattice, and some giant equilateral triangle of side length $N$, with vertices $A, B, C$. Place a point $X$ on side $BC$. Consider the crossing between $AB$ to $CX$.
+
+We will see the probability there is a crossing will converge as $N \to \infty$, to $XC/BC$.
+
+We introduce some complex analysis.
+
+\begin{definition}
+	A function $f : U \to \mathbb{C}$ for $U$ an open domain is \emph{harmonic}\index{harmonic} if either:
+	\begin{itemize}
+		\item it is twice-differentiable and $\nabla f = 0$.
+		\item it is continuous and $f$ satisfies the mean value property.
+	\end{itemize}
+	A function is \emph{analytic}\index{analytic} if:
+	\begin{itemize}
+		\item it is locally a power series.
+		\item if its contour integrals are zero (if the domain is simply connected).
+	\end{itemize}
+\end{definition}
+
+\begin{theorem}[Riemann Mapping Theorem]
+	If $U$ is a simply-connected open domain that is not $\mathbb{C}$, then there is a conformal map from $U$ onto $D$.
+\end{theorem}
+
+Moreover, this map is unique up to specifying a point to be sent to $0$, and a line to be sent to the $x$-axis.
+
+The way to prove this is by Arzela-Ascol\'i; first mapping the domain $U$ to something bounded, then mapping it to a subset of $D$, then showing a function attains the supremum of $\phi'(0)$, and then this must take the entirety of $D$.
+
+The boundary of simply connected points are not easy to make sense of. If we refer to a nice domain with easy boundary points, we can extend to arbitrary domains and \emph{prime ends}.
+
+Our theorem is now as follows: let $D$ be an open domain, and $a, b, c, x$ be points on the boundary. Consider percolation where $ab$ and $cx$ are red, and the probability of a red path from $ab$ to $cx$.
+
+We claim this probability is equal to $F(a, b, c, x, D)$, where
+\[
+F(a, b, c, x, D) = \frac{CX}{CB},
+\]
+where $X$ is the position of the image from $D$ onto the triangle, and $a \mapsto A$, $b \mapsto B$, $c \mapsto C$.
+
+% lecture 10
+
+The idea of Smirnov is to decouple $X$ from the boundary. For $z$ within the triangle, we let
+\begin{align*}
+	E^{\delta}(z) &= \{\exists \text{ open simple path joining $CA$ to $BC$ that separates $z$ from $CB$ }\}.
+\end{align*}
+Here we want $z$ to be the center of a triangle face within the graph. Then the overall probability is
+\[
+F^{\delta}(z) = P(E^{\delta}(z)).
+\]
+We show that $F^{\delta}(z) \to d(z,CB)/d(A,CB)$ as $\delta \to 0$.
+
+The first step in the proof is utilizing the fact that for an $N \times LN$ rectangle, the crossing probability is supported in $[\eps, 1 - \eps]$, hence there is a subsequence $N_k$ for which the crossing probability converges to $C \in [\eps, 1- \eps]$.
+
+Take two points $z$ and $z'$ of distance $L$, and surround them by hexagons of increasing size $3^{k} L$. Then the probability they are both not surrounded by the same red (or blue) circuit in the hexagon is at most $2 e^{-\lambda k}$.
+
+Applying this for points within the triangle, we realize that $z, z'$ have a path separating them if and only if the red circuit is joined to both sides of the triangle. Similarly, this holds for points close to the boundary, for similar reasons.
+
+This shows that there is $\alpha  > 0$ and $C > 0$, such that for all $z, z'$ in the triangle and $\delta$,
+\[
+|F^{\delta}(z) - F^{\delta}(z')| \leq C |z - z'|^{\alpha}.
+\]
+Here $\alpha$ is our value of $\lambda k$.
+
+For $z_\delta$ in the triangle, let $z + \eta$ be the point above it. We consider the event $E^{\delta}(z + \eta) \setminus E^{\delta}(z)$. Hence $z + \eta$ has a red path below it, but $z$ does not. In particular, the edge separating $z$ and $z + \eta$ must be red, and the two endpoints must be joined to the respective sides. Moreover, the final vertex in the triangle containing $z$ must be yellow, and must also be joined to the bottom by a yellow path.
+
+Consider what happens if we take a `robot path' from the bottom-left vertex of the triangle, where the robot ensures it has red on its left, and yellow on its right. If such a $z$ exists, then the robot can never cross the red and yellow walls, so it must intersect the triangle, constructing a red and yellow path on its journey.
+
+Moreover, the event that the triangle is connected to the left by red, bottom by yellow and right by red has equal probability to the event that the triangle is connected to the left by red, the bottom by yellow and the right by yellow; consider doing the robot process. Then the rest of the triangle is percolation on the unknown. Hence having a red path has equal probability as having a yellow path.
+
+So we can swap colours of arms, and retain the probability of these events occurring. So swapping the bottom and left arms, we find the probability that we have a left red arm, a bottom yellow arm and a right red arm is equal to the probability of a left yellow arm, a bottom red arm and a right red arm. This means that
+\[
+P(E^{\delta}(z+\eta) \setminus E^{\delta}(z)) = P(E^{\delta}(z + \nu) \setminus E^{\delta}(z)).
+\]
+
+% lecture 11
+
+Relabel $A, B, C$ to $A, A_{\tau}, A_{\tau^2}$. Let $H_1(z)$ be the probability there is an open path separating $z$ from $\partial_1$, the boundary between $A_\tau$ and $A_{\tau^2}$, and defined $H_2, H_3$ similarly.
+
+Our goal is to show that $H_1, H_2, H_3$ as functions of $\delta$ converge to the function
+\[
+\frac{d(z, \partial_i)}{d(A_i, \partial_i)}.
+\]
+A priori, our circuit estimates means that $H_1^{\delta}$ is uniformly H\"older, i.e.
+\[
+|H_1^{\delta}(z) - H_1^{\delta}(z')| \leq c|z - z'|^{\alpha}.
+\]
+So for all $\delta_n \to 0$, there is $n_k \to \infty$ such that $H_1^{\delta_{n_k}}, H_2^{\delta_{n_k}}, H_3^{\delta_{n_k}}$ converge uniformly to $(H_1, H_2, H_3)$ (by Arzela-Ascoli), which are also H\"older continuous.
+
+We want to show that there is only one possibly limit using ideas from complex analysis.
+
+Define, for $\eta$ a unit vector in the direction of a neighbour of $z$,
+\[
+	h_j^{\delta}(z, \eta) = P(E_j^{\delta}(z+\eta \delta/2) \setminus E_j^{\delta}(z)).
+\]
+Then we saw
+\[
+h_1^{\delta}(z, \eta) = h_1^{\delta}(z, \eta \tau) = h_1^{\delta}(z, \eta \tau^2).
+\]
+This looks a bit like the discrete derivative of $H$ in the direction $\eta$, which is the same as in the direction $\eta \tau$ and $\eta \tau^2$.
+
+So we are suspicious that some linear combination of the $H_i$, as $\delta \to 0$, is analytic.
+
+\begin{remark}
+	\begin{align*}
+		H_j^{\delta}(z + \eta \delta c) - H_j^{\delta}(z) = h_j^{\delta}(z, \eta) - h^{\delta}(z + \eta \delta c, - \eta).
+	\end{align*}
+	But we have a uniform bound $|h_j^{\delta}(z, \eta)| \leq C \delta^{\alpha}$.
+\end{remark}
+
+By Morera, for $G$ a continuous complex function in the triangle such that for all smaller triangles $t$,
+\[
+\oint_t G(z) \diff z = 0,
+\]
+then $G$ is analytic.
+
+Choose any such $t$. Then summing over all $z$ in downards triangles,
+\begin{align*}
+	\sum_{\substack{z \in t \\ \text{downwards}}} (H_1^{\delta}(z + \eta \delta c) - H_1^{\delta}(z)) &= \sum_{z \in t} (h_1^{\delta}(z, \eta) - h_1(z + \eta \delta c, - \eta)) \\
+													  &= \sum_{z \in t} (h_\tau^{\delta}(z, \eta \tau) - h_\tau^{\delta}(z + \eta \tau \delta c, - \eta \tau)) \\
+													  &= \sum_{z \in t}(h_\tau^{\delta}(z, \eta \tau) - h_\tau^{\delta} (z + \eta \tau \delta c, - \eta \tau)) + \mathcal{O}(\delta^{\eps} \delta^{-1}) \\
+													  &= \sum_{z \in t}(H_\tau^{\delta}(z + \eta \tau, \delta) - H_{\tau}^{\delta}(z)) + \mathcal{O}(\delta^{\eps - 1}).
+\end{align*}
+
+Now consider, writing $\eta = i, i \tau, i \tau^2$,
+\[
+	\sum_{z \in t} [(H_1^{\delta}(z + i \delta) - H_1^{\delta}(z)) + \tau(H_1^{\delta}(z + i \tau) - H_1^{\delta}(t)) + \tau^2(H_1^{\delta}(z + i \tau) - H_1^{\delta}(z))].
+\]
+In this sum, each downwards triangle has contribution $1 + \tau + \tau^2 = 0$, and each interior upwards triangle also has $0$ contribution. The only terms which are left are the boundary triangle.
+
+Depending on which side, the factor is counted different. So this becomes
+\[
+	(\tau + \tau) \sum_{z \text{bottom}} H_1^{\delta}(z') + (1 + \tau^2) \sum_{z \text{right}} H_1^{\delta}(z') + (1 + \tau) \sum_{z \text{left}} H_1^{\delta}(z').
+\]
+As $1 + \tau + \tau^2 = 0$, This becomes a discrete contour integral if we multiply by $\delta$, and as $\delta \to 0$ this becomes
+\[
+A \oint_{\partial t} H_1(z) \diff z.
+\]
+Moreover swapping $H_1$ for $H_\tau, H_\tau^2$ and noting that the error is $\mathcal{O}(\delta^{\eps}) \to 0$, this also equals
+\[
+\frac{A}{\tau} \oint_{\partial t}H_\tau(z) \diff z = \frac{A}{\tau^2} \oint_{\partial t} H_{\tau^2}(z) \diff z.
+\]
+Hence if $H_1, H_\tau, H_{\tau^2}$ are the limits, then for all $t$,
+\[
+\oint_{\partial t} H_1(z) \diff z = \frac{1}{\tau} \oint_{\partial t} H_{\tau}(z) \diff z = \frac{1}{\tau^2} \oint_{\partial t} H_{\tau^2} (z) \diff z.
+\]
+% lecture 12
+
+Therefore,
+\[
+\oint_t (H_1(z) + H_\tau(z) + H_{\tau^2}(z)) \diff z = (1 + \tau + \tau^2)\oint_t H_1(z) \diff z = 0.
+\]
+So $H_1 + H_\tau + H_{\tau^2}$ is analytic, but also real valued, hence constant. Looking at the value at the corner, both $H_\tau = H_{\tau^2} = 0$, and $H_1 = 1$, so the constant must be 1.
+
+Then if we define
+\[
+G(z) = H_1 + \tau H_\tau + \tau^2H_{\tau^2},
+\]
+for all $t$ we get
+\[
+\oint_t G(z) \diff z = \oint H_1(z) \diff z + \tau^2 \oint H_1(z) \diff z + \tau^{4} \oint H_1(z) \diff z = 0,
+\]
+so $G$ must be analytic. If we figure out $G$, then
+\begin{align*}
+	\Re G &= H_1 + \Re (\tau) H_\tau + \Re (\tau^2) H_{\tau^2} \\
+	      &= H_1 - \frac{H_\tau}{2} - \frac{H_{\tau^2}}{2} = H_1 - \frac 12(1 - H_1) \\
+	      &= \frac 32 H_1 - \frac 12.
+\end{align*}
+Similarly,
+\[
+\Re \frac{G}{\tau} = \frac{3}{2} H_\tau - \frac 12, \qquad \Re \frac{G}{\tau^2} = \frac 32 H_{\tau^2} - \frac 12.
+\]
+Considering the directional derivative, it follows
+\[
+\frac{\partial G}{\partial \eta}(z) = \lim_{h \to 0} \frac{G(z + \eta h) - G(z)}{h} = \eta G'(z).
+\]
+Hence,
+\[
+\Re \left( \frac 1\eta \frac{\partial G}{\partial \eta} \right) = \Re (G'(z))
+\]
+does not depend on $\eta$. Hence
+\[
+\frac{\partial \Re(G)}{\partial 1} = \frac{\partial \Re(G/\tau)}{\partial \tau} = \frac{\partial \Re(G/\tau^2)}{\partial \tau^2}.
+\]
+Some properties of $G$:
+\begin{itemize}
+	\item $G$ is continuous on $\bar T$ (by H\"older continuity).
+	\item Analytic in $T$.
+	\item $H_j(A_j) = 1$, $H_j(\partial_j) = 0$.
+\end{itemize}
+
+To find out what $G$ is, notice that $H_1(\partial_1) = 0$, but $\Re(G) = \frac 32 H_1 - \frac 12$, so $G \in - \frac 12 + i \mathbb{R}$.
+
+This means we can extend $G$ to a function defined on a disc $D$ about any point on $\partial_1$. This is by Schwartz extension: for a function whose value on the real axis is real, we can define $g(z) = \overline{f(\bar z)}$.
+
+So we can take derivatives on $\partial_1$. Note that $\partial H_1/\partial \tau = 0$ on $\partial_1$, so we find that $\partial H_{\tau^2}/\partial 1 = 0$.
+
+Suppose that $H_{\tau^2}$ does not take its maximum at $A_{\tau^2}$. Then it takes it on the boundary by properties of harmonic functions. Then, $\partial H_{\tau^2}/\partial \tau = 0$, so the power law expansion of $H_{\tau^2}$ starts with second degree terms. But this cannot be true.
+
+So $H_{\tau^2}$ is uniquely defined by the boundary conditions, since if we had two such solutions, their difference would have the same boundary conditions except take value $0$ at $A_{\tau^2}$, which is the maximum, hence they are the same.
+
+One such candidate is 
+\[
+H_{\tau^2} = \frac{d(z, \partial_{\tau^2})}{\partial(A_{\tau^2}, \partial_{\tau^2})}.
+\]
+To argue for non-triangular domains, consider a conformal map taking $A_1, A_\tau, A_{\tau^2}$ to some specified point on the boundary, and define $\tilde H_j^{\delta}$ in the same way.
+
+We can consider their limits, and similarly
+\[
+\tilde G = \tilde H_1 + \tau \tilde H_\tau + \tau^2 \tilde H_{\tau^2}.
+\]
+Then define $G = \tilde G \circ \phi^{-1}$, where $\phi$ is the conformal mapping from $D$ to $T$.
+
+% lecture 13
+
+\newpage
+
+\section{The Ising Model}%
+\label{sec:im}
+
+Take a finite graph $G$, and let $x, y, \ldots \in V$ be the set of vertices, and $E$ the set of vertices. $x$ and $y$ are neighbours if there is an edge joining them, and we will write $x \sim y$.
+
+For a fixed $\beta > 0$, known as the \emph{inverse temperature}\index{inverse temperature}, we define a probability measure $P_\beta$ on $\{-1, +1\}^{V}$ as follows:
+\[
+P_\beta((\sigma_x) = (s_x)) = \frac{1}{Z_\beta} \exp \left( - \beta \sum_{x \sim y} \mathbbm{1}(s_x \neq s_y) \right),
+\]
+where $Z_\beta$ is chosen so that this is a probability measure. If we write
+\[
+Z_\beta = \sum_{s} \exp \left( - \beta \sum_{x \sim y} \mathbbm{1}(s_x \neq s_y) \right),
+\]
+then
+\[
+\frac{\partial Z_\beta}{Z_\beta \partial \beta} = \sum_s (- H(s)) \frac{\exp(\sum_{x \sim y} \mathbbm{1}(s_x \neq s_y))}{Z_\beta} = \mathbb{E}_{P_\beta}(-H(s)),
+\]
+where $H(s)$ is the \emph{Hamiltonian}\index{Hamiltonian}.
+
+This is equivalent to
+\[
+P_\beta((\sigma_x) = (s_x)) \propto \exp \left( - \frac{\beta}{2} \sum_{x \sim y} s_x s_y \right),
+\]
+up to some constant.
+
+To analyse this model, we construct a Markov chain on $\{-1, 1\}^{V}$ by letting $X_n = (X_n(x)) \in \{-1, 1\}^{V}$. The procedure to get $X_{n+1}$ is:
+\begin{itemize}
+	\item Choose a site $x_n$ uniformly at random.
+	\item Keep $X_{n+1}(y) = X_n(y)$ for all $y \neq x_n$.
+	\item Resample $X_{n+1}(x_n)$ as follows:
+		\begin{align*}
+			P(X_{n+1}(x_{n}) &= +1 | x_n \text{ chosen}) = \frac{\exp(\beta \sum_{y \sim x_n} X_n(y))}{2 \cosh (\beta \sum_{y \sim x_n} X_n(y))},\\
+			P(X_{n+1}(x_{n}) &= -1 | x_n \text{ chosen}) = \frac{\exp(-\beta \sum_{y \sim x_n} X_n(y))}{2 \cosh (\beta \sum_{y \sim x_n} X_n(y))},
+		\end{align*}
+\end{itemize}
+Importantly, $x_n$ is resampled only looking locally.
+
+From this construction, we see that we can only jump between states that differ at exactly one state. Suppose $s = s'$ except at exactly one site $z$ with $s(z) = +1$, $s'(z) = -1$. Then,
+ \[
+\frac{P_\beta(s)}{P_\beta(s')} = \frac{\exp \left( \frac{\beta}{2} \sum_{y \sim z} s(y) \right)}{\exp \left( -\frac{\beta}{2} \sum_{y \sim z} s(y) \right)} = \frac{\pi(s', s)}{\pi(s, s')}.
+\]
+This gives
+\[
+P_\beta(s) \pi(s, s') = P_\beta(s') \pi(s', s),
+\]
+the detailed balance equations. Hence $P_\beta$ is the stationary measure. Moreover it is irreducible and aperiodic, so $P_\beta$ is unique.
+
+% lecture 14
+
+The way we construct the Markov chain is by having a sequence of independent uniform random variables in $[0, 1]$, and
+\[
+U_n \leq \frac{\exp(\beta \ell_n/2)}{2 \cosh (\beta \ell_n/2)} \implies X_{n+1}(x_n) = 1.
+\]
+Now let $B$ be an increasing subset of $\{-1, 1\}^{V}$, and let $Y_n$ follow the same rules as $X_n$, using the same sequence $(x_n)$ and $(U_n)$, except if the outcome for the jump from $Y_n$ to $Y_{n+1}$ would end up outside of $B$, we keep $Y_{n+1} = Y_n$.
+
+Then in law,
+\[
+Y_n \to P_\beta(\cdot | B).
+\]
+\begin{proposition}[Harris/FKG Inequality]
+	For all $A$ and $B$ increasing events,
+	\[
+	P_\beta(A \cap B) \geq P_\beta(A) P_\beta(B).
+	\]
+\end{proposition}
+
+\begin{proofbox}
+	Take the two Markov chains $X_n$ and $Y_n$, and start both from $(+1, \ldots, +1) = X_0 = Y_0 \in B$.
+
+	Then we will show by induction that almost-surely, $X_n \leq Y_n$. This will imply that
+	\[
+	P_\beta(A | B) = \lim_{n \to \infty}P_\beta(Y_n \in A) \geq \limsup_{n \to \infty} P(X_n \in A) = P_\beta(A).
+	\]
+	Assume that $X_n \leq Y_n$, and choose $x_n$. Then
+	\[
+	\sum_{y \sim x_n} X_n(y) \leq \sum_{y \sim x_n} Y_n(y).
+	\]
+	So the probability of $Y_n$ increasing is greater than the probability of $X_n$ increasing, hence $X_n \leq Y_n$. This is unless $Y_n$ is prevented from leaving, which is fine. In any case, $Y_{n+1}(x_n) \geq X_{n+1}(x_n)$.
+	%check all cases
+\end{proofbox}
+
+We will use this in the following setting. Let $\Lambda_N = [-N, N]^{d}$, and $\lambda_N = \Lambda_N \setminus \Lambda_{N-1}$, the boundary. Let $P_N = P_{N, \beta}$ be the probability measure in $\Lambda_N$. Let
+\[
+P_N^{+} = P_{N, \beta}^{+} = P_N(A | \sigma = +1 \text{ on } \Lambda_N),
+\]
+and $P_N^{-}$ similarly. Then for all $A$ increasing, as $\{\sigma = +1 \text{ on } \lambda_N\}$ is increasing,
+\[
+P_N^{+}(A) \geq P_N(A) \geq P_N^{-}(A).
+\]
+\begin{remark}
+	One can view $P_{N-1}^{+}$ as $P_N^{+}(A | \sigma = +1 \text{ on } \lambda_{N-1})$, so by iterating the FKG inequality, for all $A$ increasing in $\Lambda_{N-1}$,
+	\[
+	P_{N-1}^{+}(A) \geq P_N^{+}(A).
+	\]
+\end{remark}
+
+Let us look at
+\[
+m_N^{+} = \mathbb{E}_{P_N^{+}}[\sigma(0)].
+\]
+The above inequalities show that $m_N^{+}$ is decreasing with respect to $N$. Does $m_N^{+} \to 0$ or a positive constant as $N \to \infty$?
+
+We know that $m_N^{+} \downarrow$ is non-negative, so at least one of these statements holds.
+
+A probability measure on $\{-1, 1\}^{F}$ where $F$ is a finite set, is characterized by the values of events
+\[
+P(\omega(x_1) = 1, \ldots, \omega(x_i) = 1).
+\]
+Moreover this is also true if $F$ is finite, as $\{-1, 1\}^{F}$ is generated by finite subsets. Applying this idea, for all $x_{i_1}, \ldots, x_{i_l}$,
+\[
+	P_N^{+}(\sigma(x_{i_1}) = \cdots = \sigma(x_{i_l}) = 1) \downarrow \text{ in } N,
+\]
+and it has a limit denoted by $\pi^{+}(i_1, \ldots, i_l)$. So there exists $P^{+}$ a probability measure in $\{-1, 1\}^{\mathbb{Z}^{d}}$ such that for all $A$ increasing and measurable with respect to $\sigma$ in $\Lambda_{N_0}$,
+\[
+P_{N_0}^{+}(A) \downarrow P^{+}(A).
+\]
+
+% lecture 15
+
+In the Ising model we are not that interested in percolation or existence of clusters; magnetisation is the more physically interpretable quantity.
+
+\subsection{Random Cluster Representation}%
+\label{sub:rcr}
+
+We will couple the Ising model to another model.
+\begin{itemize}
+	\item Assume that $\sigma \sim P_\beta$, the Ising distribution with parameter $\beta$ on $G$.
+	\item Then define a random choice $\omega$ on the edges to $\{0, 1\}$, i.e. choosing whether an edge is open or closed, by, if $e = (x, y)$,
+		\begin{align*}
+			\sigma(x) \neq \sigma(y) &\implies \omega(e) = 0, \\
+		\sigma(x) = \sigma(y) &\implies \omega(e) = \Ber(1 - e^{-\beta}),
+		\end{align*}
+		i.e. for each pair of adjacent similar vertices, we toss a coin with parameter $p = 1 - e^{-\beta}$ to see whether it is open.
+\end{itemize}
+
+We say that a pair of configurations $(s, v)$ is \emph{compatible}\index{compatible configuration} if for all $e = (x, y)$ such that $s(x) \neq s(y)$, then $v(e) = 0$, and we write $(s, v) \in \mathcal{C}$.
+
+The probability
+\begin{align*}
+	P((\sigma, \omega) = (s, v)) &= \mathbbm{1}((s, v) \in \mathcal{C}) \frac{1}{Z_\beta} \exp \left( - \beta \sum_{x \sim y} \mathbbm{1}(s(x) \neq s(y)) \right) \\
+				     & \qquad \times p^{\text{open edges}} (1-p)^{\text{closed edges} - \sum_{x \sim y} \mathbbm{1}(s(x) \neq s(y)} \\
+				     &= \mathbbm{1}((s, v) \in \mathcal{C}) \frac{1}{Z_\beta} p^{\text{open edges}} (1 - p)^{\text{closed edges}}.
+\end{align*}
+
+Continuing our construction,
+\begin{itemize}
+	\item We define a probability measure $P_p^{\mathrm{RC}}$ on $\{0, 1\}^{V}$ with, if $o(v)$ and $c(v)$ are the number of open and closed edges and $k(v)$ is the number of connected components,
+		\[
+		P_p^{\mathrm{RC}}(\omega = v) = \frac{1}{Z_p^{\mathrm{RC}}} p^{o(v)} (1 - p)^{c(v)} 2^{|k(v)|},
+		\]
+		Then we look at $\omega$ and colour each connected component in $+1$ or $-1$ using a fair coin. This gets some random $(\sigma(x))$, with
+		\[
+		P(\omega = v, \sigma = s) = \mathbbm{1}((v, s) \in \mathcal{S}) \frac{1}{Z_\beta^{\mathrm{RC}}} p^{o(v)} (1 - p)^{c(v)}.
+		\]
+\end{itemize}
+
+So these two constructions of the Ising model are the same.
+
+Why is this way of looking at the Ising model useful, where we first construct $\omega$ and then colour the clusters?
+\begin{itemize}
+	\item First, $P_p^{\mathrm{RC}}$ has some nice properties.
+	\item Next,
+		\begin{align*}
+			\mathbb{E}_{\beta}[\sigma(x) \sigma(y)] &= \mathbb{E}[\mathbbm{1}_{x \leftrightarrow y} \sigma(x) \sigma(y)] + \mathbb{E}[\mathbbm{1}_{x \not \leftrightarrow y} \sigma(x) \sigma(y)] \\
+								&= P(x \leftrightarrow y).
+		\end{align*}
+\end{itemize}
+This is the \emph{correlation function}\index{correlation function} for the Ising model. We see that it is simply the probability $x$ and $y$ are connected, under some model with $p = 1 - e^{-\beta}$.
+
+This tells us that it is important to consider the cluster structure, or who is connected to who, in the model.
+
+If we replace $2^{k(v)}$ with $q^{k(v)}$ for positive $q$, we get other probability measures. As $q \downarrow 0$, this goes to the uniform measure on spanning trees, as we penalise heavily configurations with more than 1 component.
+
+Let us return to the model $P_{n, \beta}^{+}$. Consider replacing all of the outer vertices with one vertex, by sort of `folding the paper'. Then from our RC model,
+\[
+	\mathbb{E}_\beta^{+}[\sigma(0)] = P^{\mathrm{RC}}_{\Lambda_N \text{ folded}} (0 \leftrightarrow \partial_N).
+\]
+We can once again analyse the random cluster model by creating a Markov chain on the configuration of $\omega$'s.
+
+Suppose we know $\omega_n$. Then we choose an edge $e_n = (x_n, y_n)$ at random. We keep $\omega_{n+1}(e) = \omega_n(e)$ for all $e \neq e_n$. Then we resample $e_n$.
+\begin{itemize}
+	\item If $x_n \leftrightarrow y_n$ in $\omega_n$ without using $e_n$, then they are already in the same cluster. So we can choose
+		\[
+		\omega_{n_1}(e_n) = \Ber(p).
+		\]
+	\item If $x_n \not \leftrightarrow y_n$ without using $e_n$, then
+		\[
+		\omega_{n+1}(e_n) = \Ber(p/(2 - p)).
+		\]
+\end{itemize}
+These probabilities are chosen because the ratio between the two outcomes is $p / 2(1 - p)$.
+
+Note that $p/(2 - p) < p$, so we can couple these dynamics to Bernoulli percolation with probability $p$ and $p' = p/(2 - p)$.
+
+% lecture 16
+
+We can see that this Markov chain is reversible.
+
+One can couple $P_p^{\mathrm{RC}}$ with $P_p^{\mathrm{perc}}$ and $P_{p'}^{\mathrm{perc}}$ in such a way that
+\[
+P_{p'}^{\mathrm{perc}} \leq P_p^{\mathrm{RC}} \leq P_p^{\mathrm{perc}}.
+\]
+Out of this coupling, we see that $m_\beta^{+}= 0$ if $P_p^{\mathrm{perc}}(0 \leftrightarrow \infty) = 0$, and $m_\beta^{+} \geq P_{p'}^{\mathrm{perc}}(0 \leftrightarrow \infty) > 0$ if $p' > p_c^{\mathrm{perc}}$. Hence $m_\beta^{+} > 0$ when $\beta$ is large.
+
+Suppose that $p_1 < p_2$. We want to compare $P_{p_1}^{\mathrm{RC}}$ and $P_{p_2}^{\mathrm{RC}}$ on $G$.
+
+The idea is to true and couple $(\omega_n^1)$ and $(\omega_n^{2})$, the resampling chains. Suppose what $\omega_n^{1}$ uses the rule for $p_1$ and $\omega_n^{2}$ uses the rule for $p_2$. By induction, we check that $\omega_n^{1} \leq \omega_n^{2}$ almost-surely.
+
+Assume that $\omega_n^{1} \leq \omega_n^{2}$. There are two options: either they choose the same coin $p$ or $p'$, or different coins. But $\omega_n^{1}$ cannot choose $p$ and $\omega_n^{2}$ cannot choose $p'$, otherwise there will be a path $x \to y$ in $\omega_n^{1}$ but not in $\omega_n^{2}$, a contradiction. So by induction, we preserve the ordering.
+
+There are other notable results on the Ising model.
+\begin{itemize}
+	\item In 2D, we have conformal invariance at $\beta_c$, which is well understood for a rather wide collection of lattices.
+	\item It is known at for all $d$, $m_{\beta_c}^{+} = 0$.
+	\item We can also look at constrained Ising models where half of the items are plus, and half are minus.
+\end{itemize}
+
+\newpage
+
+\subsection{Gaussian Free Field}%
+\label{sub:gff}
+
+Let $G$ a finite graph. Assume that each interior verte has exactly $2d$ neighbours. The random object we are looking at is a function $\Gamma$ from the inner vertices to $\mathbb{R}$.
+
+The energy of a configuration $(\gamma_x)_{x \in V_i}$ is
+\[
+\mathcal{E}(\gamma) = \sum_{x \sim y} (\gamma_x - \gamma_y)^2,
+\]
+where by convention $\gamma_x = 0$ outside of $V_i$, the interior vertices.
+
+In the \emph{Gaussian free field}\index{Gaussian free field}, we choose the random function $(\Gamma(x))_{x \in V_i}$ with intensity with respect to $\diff \gamma_{x_1} \ldots \diff \gamma_{x_n}$, equal to
+\[
+	\exp \left( - \frac 12 \frac 1{2d} \mathcal{E}(\gamma) \right).
+\]
+
+% lecture 17
+
+\begin{remark}
+	\begin{itemize}
+		\item[]
+		\item $(\Gamma(x))$ is a centered Gaussian vector, so its law is characterized by its covariance function:
+			\[
+			\Sigma(x, y) = \mathbb{E}[\Gamma(x) \Gamma(y)].
+			\]
+		\item If $F$ is a function $V_i \to \mathbb{R}$, then one can define $\bar F : V_i \to \mathbb{R}$ such that
+			\[
+			\bar F(x) = \frac{1}{2d} \sum_{y \sim x} F(y),
+			\]
+			the average around $x$, and one can also define $\Delta F : V_i \to \mathbb{R}$ by
+			\[
+			\Delta F (x) = \bar F(x) - F(x).
+			\]
+			If $D$ is connected and finite, then $\Delta : \mathbb{R}^{V_i} \to \mathbb{R}^{V_i}$ is invertible, by the maximal principle.
+
+			$\Delta$ can be thought of as a matrix, when $V_i$ is finite, with $-1$ on the diagonals and $\Delta_{ij} = 1/2d$ for $x_i \sim x_j$.
+		\item On $\mathbb{Z}^{d}$ with $F$ and $H$ compact support, we can write
+			\begin{align*}
+				\frac12 \frac1{2d} \sum_{x \sim y} (F(x) - F(y)) (H(x) - H(y)) &= \frac1{2d} \sum_x \sum_{y \sim x} F(x) (H(x) - H(y)) \\
+											       &= - \sum_x F(x) \Delta H(x).
+			\end{align*}
+	\end{itemize}
+\end{remark}
+
+We look at some simple properties of the Gaussian free field.
+
+First, what is the conditional distribution of $(\Gamma(x) | \Gamma(y), y \neq x)$, for some $x$ fixed? If $\Gamma(y) = \gamma_y$ at $y \neq x$, then the distribution is proportional to
+\[
+	\exp \left( \frac 12 \frac 1{2d} \sum_{y \sim x} (\gamma(y) - \gamma(x))^2 \right) \diff \gamma(x) = \exp \left( - \frac 12 (\gamma(x) - \bar \gamma(x)) \right)^2 \diff \gamma(x).
+\]
+The result is just a Gaussian with variance $1$, centred at $\bar \gamma(x)$.
+
+Another way to phrase this is that $\Gamma(x) - \bar \Gamma(x) = N(x)$ is independent of $(\Gamma(y), y \neq x)$, and has law $\mathcal{N}(0, 1)$.
+
+The consequence of this is that, if $z \neq x$, then
+\begin{align*}
+	\mathbb{E}[\Gamma(x) \Gamma(z)] &= \mathbb{E}[(\bar \Gamma(x) + N(x)) \Gamma(z)] = \mathbb{E}[\bar \Gamma(x) \Gamma(z)], \\
+	\Sigma(x, z) &= \frac 1{2d} \sum_{y \sim x} \mathbb{E}[\Gamma(y) \Gamma(z)] = \frac1{2d} \sum_{y \sim x} \Sigma(y, z).
+\end{align*}
+For $z$ fixed, this means that $x \mapsto \Sigma(x, z)$ has discrete Laplacian $0$ at each $x \neq z$. But,
+\begin{align*}
+	\mathbb{E}[\Gamma(x) \bar \Gamma(x)] &= \mathbb{E}[(\bar \Gamma(x) + N(x)) \bar \Gamma(x)] = \mathbb{E}[(\bar \Gamma(x))^2], \\
+	\mathbb{E}[\Gamma(x) \Gamma(x)] &= \mathbb{E}[(\bar \Gamma(x))^2] + 1.
+\end{align*}
+We know that the function $G_z(x)$ satisfying
+\[
+\Delta G_z(x) =
+\begin{cases}
+	0 & x \neq z, \\
+	-1 & x = z,
+\end{cases}
+\]
+satisfies that
+\[
+	G_z(x) = \mathbb{E}[\text{number of visits of $z$ by a random walk started from $x$ before hitting $\partial$}].
+\]
+By the uniqueness principle, we see that
+\[
+\Sigma(x, y) = G(x, y).
+\]
+Another way to see this is that
+\[
+G(x, y) = \sum_{n \geq 0} P^{n}(x, y),
+\]
+hence
+\[
+	- \Delta G = (I - P) G = \left( (I - P) \sum_{n \geq 0} P^{n} \right) (x, y) = I.
+\]
+Next, suppose I choose $A \subseteq V_i$. What is the conditional distribution of 
+\[
+	((\Gamma(x), x \in V_i \setminus A) \mid (\Gamma(x), x \in A)).
+\]
+We condition on $\Gamma(\zeta) = \gamma(\zeta)$ for all $\zeta \in A$. The density of $(\gamma(x))_{x \in V_i \setminus A}$ is then proportional to
+\[
+	\exp \left( - \frac 12 \frac 1{2d} \sum_{x \sim y} (\gamma_x - \gamma_y)^2 \right) \prod_{x_\alpha \in V_i \setminus A} \diff x_\alpha.
+\]
+Let $H$ be the function in $V$ such that:
+\begin{itemize}
+	\item $H = \gamma$ outside of $V_i \setminus A$.
+	\item $H$ is harmonic $(\Delta H = 0)$ in $V_i \setminus A$.
+\end{itemize}
+Then write $\tilde \gamma(x) = \gamma(x) - H(x)$, so $\gamma = H + \tilde \gamma$. One immediately checks that the conditional law of $\tilde \Gamma$ is just a GFF in $V_i \setminus A$.
+
+% lecture 18
+
+\begin{remark}
+	If $(X_1, \ldots, X_n)$ is a centred Gaussian vector with covariance function $\Sigma(x, y)$, Then there is a way to represent
+	\[
+	X_i = \sum_{k = 1}^{n} a_{i, k} N_k,
+	\]
+	with $N_1, \ldots, N_k$ independent $\mathcal{N}(0, 1)$.
+\end{remark}
+
+Suppose we are looking at the Gaussian free field in $D = \{x_1, \ldots, x_n\}$, where there is a boundary $\partial$. We know that $\Gamma(x_1) \sim \mathcal{N}(0, G_D(x_1, x_1))$. Conditional on $\Gamma(x_1) = \gamma_1$,
+\[
+	(\Gamma(x_2), \ldots, \Gamma(x_n)) = (H_{\gamma_1}(x_2), \ldots, H_{\gamma_1}(x_n)) + (\text{GFF in } D \setminus \{x_1\}).
+\]
+Here $H_{\gamma_1}(x)$ is the harmonic function in $D \setminus \{x_1\}$ with boundary values $\gamma_1$ at $x_1$, and $0$ on $\partial$.
+
+\begin{corollary}
+	The product
+	\[
+		\prod_{j = 1}^{n} G_{\{x_j, \ldots, x_m\}} (x_j, x_j)
+	\]
+	does not depend on the chosen order of $D$.
+\end{corollary}
+
+Recall that the density of the GFF in $D$ at $(\gamma_1, \ldots, \gamma_n)$ is proportional to
+\[
+	\exp \left( - \frac 12 \frac1{2d} \sum_{x \sim y}(\gamma_x - \gamma_y)^2 \right).
+\]
+What is the proportionality constant? It can be involved with the determinant of the Laplacian. One way is by rearranging the formula. The other is realising that the constant is exactly the density at $(0, 0, \ldots, 0)$.
+
+So we will estimate
+\[
+	P(\Gamma(x_1), \ldots, \Gamma(x_n) \in [0, \eps]),
+\]
+as $\eps \to 0$. Note
+\begin{align*}
+	P(\Gamma(x_1) \in [0, \eps])&=  \mathbb{P}(\mathcal{N}(0, 1) \times \sqrt{G_{\{x_1, \ldots, x_n\}}(x_1, x_1)} \in [0, \eps]) \\
+				    &\sim \frac{\eps}{\sqrt{2 \pi} \sqrt{G_{\{x_1, \ldots, x_n\}}(x_1, x_1)}}.
+\end{align*}
+Then, since the harmonic function is bounded between its minimum and maximum,
+\begin{align*}
+	P(\Gamma(x_1) \in [0, \eps] &| \Gamma(x_1) = \gamma_1 \in [0, \eps]) \\
+				    &= P(\mathcal{N}(0, 1) \sqrt{G_{\{x_2, \ldots, x_n\}}(x_2, x_2)} \in [- \gamma_1 H_1(x_2), - \gamma_1 H_1(x_2) + \eps]) \\
+				    &\sim \frac{\eps}{\sqrt{2 \pi G_{\{x_2, \ldots, x_n\}}(x_2, x_2)}}.
+\end{align*}
+Continuing this way, we see that the probability is about
+\[
+	\prod_{j = 1}^{n} \frac{\eps}{\sqrt{2 \pi G_{\{x_j, \ldots, x_n\}}(x_j, x_j)}}.
+\]
+So the density at $0$ is this product, which shows that it is independent of the chosen order of the points.
+
+\begin{remark}
+	We can show that
+	\[
+		\prod_{j = 1}^{n} G_{\{x_j, \ldots, x_n\}}(x_j, x_j)
+	\]
+	is just $\det (G(x_i, x_j))$.
+\end{remark}
+
+% lecture 19
+
+\newpage
+
+\section{Spanning Trees}%
+\label{sec:st}
+
+Take a finite graph (with boundary point $\partial$), and assume that each site (expect possibly $\partial$) has $\Delta$ outgoin edges.
+
+We describe a concrete procedure to define at random a spanning tree of $G \cup \{\partial\}$. In a spanning tree, each vertex has a path to $\partial$, possibly intersecting with previous paths.
+
+We construct a recipe to generate the tree. Choose some ordering of $G = \{a_1, \ldots, a_n\}$. Define $x_1 = a_1$. Start a simple random walk at $x_1$, and run it until it hits $\partial$. One chronologically erases each loop; this results in a self-avoiding path $x_1 \to \partial$.
+
+The sites along this path will be $x_1, x_2, \ldots, x_k, \partial$, and let the path be $L_1$.
+
+Then take $a_2$. If it is not on $L_1$, start a random walk from $a_2$ until it hits $L_1$. Take the chronological erasure, and call it $L_2$. We continue for all $a_i$.
+
+After having done this for all $a_n$, one has constructed a random spanning tree $T$. What is the law of this tree $T$? We want to find $P(T = t)$, for each given tree $t$.
+
+Let $t$ be a given possible tree. Then it is always possible to construct this tree. Moreover, since we have a fixed ordering of the $a_1, \ldots, a_n$, we know what $x_1$ is, then from $t$ itself we can find $x_2, \ldots, x_k$, then $x_{k+1}, \ldots, x_l$, and so forth. So this gives us an ordering of the tree.
+
+The probability we find this tree is
+\[
+	\mathbb{P}(T = t) = \sum_{\text{scenarios that produce } t} \mathbb{P}(\text{scenario}).
+\]
+First, take a loop-erased walk $l_1$. What is the probability that
+\[
+\mathbb{P}(L_1 = l_1)?
+\]
+For the loopy walk, we first do a loop from $x_1$ to $x_1$. Then we must jump to $x_2$. After this, we do a loop from $x_2$ to $x_2$, with the constraint that we are not allowed to go back to $x_1$, otherwise we could extend the first loop. Then we must jump to $x_3$, and do another loop, not hitting $x_1$ or $x_2$.
+
+But note that $G_D(x_1, x_1) = \sum P^{n}(x_1, x_1)$, so
+\begin{align*}
+	P(L_1 = l_1) &= G_D(x_1, x_1) \cdot \frac{1}{\Delta} G_{D \setminus \{x_1\}} (x_2, x_2) \cdot \frac{1}{\Delta} G_{D \setminus \{x_1, x_2\}} (x_3, x_3) \cdots G_{D \setminus \{x_1, \ldots, x_{k-1}\}} (x_k, x_k) \cdot \frac{1}{\Delta}.
+\end{align*}
+We also find that
+\begin{align*}
+	P(L_2 = l_2 | L_1 = l_1) &= G_{\Delta \setminus \{x_1, \ldots, x_k\}}(x_{k+1}, x_{k+1}) \cdot \frac{1}{\Delta} \cdots G_{D \setminus \{x_1, \ldots, x_{l - 1}\}} (x_l, x_l) \cdot \frac{1}{\Delta}.
+\end{align*}
+So at the end,
+\[
+	P(T = t) = \left( \frac{1}{\Delta} \right)^{n} \prod_{j = 1}^{n} G_{D \setminus \{x_0, \ldots, x_{j-1}\}}(x_j, x_j),
+\]
+where $x_0 = \partial$. But this product $\Pi$ does not depend on the order $x_1, \ldots, x_n$, hence it does not depend on $t$. So
+\[
+P(T = t) = \frac{1}{\Delta^{n}} \Pi.
+\]
+Hence all $t$'s have the same probability of being chosen. Hence the law of $T$ is that of a uniformly chosen spanning tree. Therefore,
+\[
+	\frac{\Pi}{\Delta^{n}} = \frac{1}{|\text{spanning trees}|}.
+\]
+So we find that
+\[
+	\det( - \Delta) (\deg)^{n} = |\text{spanning trees}|.
+\]
+Loop erased random walks are hard for Brownian motion, due to chronological problems.
+
+We can show that it takes time $\mathcal{O}(n \log n)$ to find this loop.
+
+This proof actually does not depend on the degrees of the vertices. At the end we just get $(\prod \Delta_i)^{-1}$, uniform for all trees.
+
+% lecture 20
+
+\newpage
+
+\section{Loops}%
+\label{sec:loop}
+
+We want a measure on the set $\mathcal{L}$ of all self-avoiding loops surrounding the origin.
+
+First, what is the topology on the set of loops? We can define a distance
+\[
+	d(\gamma, \gamma') = \max (\max(d(x, \gamma') \mid x \in \gamma), \max(d(x, \gamma) \mid x \in \gamma')),
+\]
+which defines a topology, and then consider the Borel sets.
+
+We want a measure $\mu$ on $\mathcal{L}$, with the following property:
+\begin{center}
+	For all $D, D'$ simply connected open bounded sets containing $O$, there exists a $\phi : D \to D'$ such that $\phi(0) = 0$.
+
+	Then for all such $\phi$, the image under $\phi$ of $\mu$ restricted on loops in $D$ is exactly $\mu$ restricted to loops in $D'$.
+\end{center}
+We call this property \emph{conformal restriction}\index{conformal restriction}.
+
+The motivation is that the outer boundary of a cluster in triangle percolation is such a self-avoiding loop, which should be conformally invariant. Hence it should follows such a measure.
+
+\begin{remark}
+	We want $\mu$ to be non-trivial in the sense there exists $\delta > 0$ and $\Delta > 0$ such that the measure of loops with diameter in $(\delta, \Delta)$ is finite and positive.
+
+	Moreover if $\mu$ satisfies this property, then $\mu$ is scale-invariant: choose $D' = \lambda D$ for $\lambda \in \mathbb{R}_+$. So it must be an infinite measure.
+
+	Hence also $c \mu$ satisfies conformal restriction.
+\end{remark}
+
+\begin{theorem}
+	Up to multiplication by constants, there exists exactly one measure $\mu$ satisfying conformal restriction.
+\end{theorem}
+
+\begin{proofbox}
+	We provide an outline.
+
+	\textbf{First step:} Assume that $\mu$ satisfies conformal restriction.
+
+	Define $\mathbb{U}$ to be the unit disc, and for each $U \in \mathbb{U}$ simply connected with $0 \in U$, and let $\vphi_U : U \to \mathbb{U}$ with $\vphi_U(0) = 0$ and $\vphi'(0) = \in \mathbb{R}_+$.
+
+	Then we can show there exists $c  0$ such that for all $U$ as above,
+	\[
+		A_U = \mu \left( \{ \gamma \in \mathcal{L} \text{ such that } \gamma \in \mathbb{U}, \gamma \not \in U \} \right) = c \log (\vphi_U'(0)). \tag{$\ast$}
+	\]
+	\textbf{Second step:} In the spirit of ``any two finite measures with same total mass defined on a $\sigma$-algebra generated by a ring $\Pi$, equal on $\Pi$ are equal'', we check that for all $c$ there exists at most one non-trivial measure $\mu$ satisfying conformal restriction and $(\ast)$.
+
+	\textbf{Third step:} We have shown there is at most one such measure. Now we construct the measure. The simplest is by using Brownian loops in the plane, which are conformally invariant, and taking the outer boundary.
+
+	Other constructions involve SLEs (Schramm-Loewner evolutions). This relates these constructions; they must be the same, by uniqueness. This shows the measure is supported on loops with fractal dimension $4/3$. We also have invariance of the measure under $z \mapsto 1/z$.
+
+	\textbf{Idea of first step:} Consider two cut out unit discs $U$ and $V$, and the maps $\vphi_U$ and $\vphi_V$. Consider $\vphi^{-1}_U(V) = \vphi^{-1}_U \circ \vphi^{-1}_V (\mathbb{U})$. By composing $\vphi_U$ then $\vphi_V$, we see that
+	\[
+	\vphi_{(\vphi_V \circ \vphi_U)^{-1}(\mathbb{U})} = \vphi_V \circ \vphi_U,
+	\]
+	so there is some semigroup action on the sets. Then $A_V$, the mass of loops the go out of $V$, is equal to the mass of loops that stay in $U$, but go out of $\vphi_U^{-1}(V)$. We can extend $A$ to functions. Then
+	\[
+	A(\vphi_V \circ \vphi_U) = A(\vphi_U) + A(\vphi_V).
+	\]
+	We will show that the only such function can be proportional to $\log(\vphi_U'(0))$.
+\end{proofbox}
+
+% lecture 21
+
+% lecture 22
+
+\newpage
+
+\section{Gaussian Processes}%
+\label{sec:gp}
+
+Recall the discrete GFF was the distribution on $\mathbb{Z}^3$ such that
+\[
+	\mathbb{E}[ \Gamma(x) \Gamma(y)] = G(x, y) = \mathbb{E}[\text{visits of $y$ by random walk started at $x$}].
+\]
+Here $y \mapsto g_x(y) = G(x, y)$ is the unique function on $\mathbb{Z}^3$ that:
+\begin{itemize}
+	\item harmonic at each $y \in \mathbb{Z}^3 \setminus \{x\}$.
+	\item $\Delta g_x(x) = -1$.
+	\item $g_x(y) \to 0$ as $y \to \infty$.
+\end{itemize}
+
+How can we replace $\mathbb{Z}^3$ with $\mathbb{R}^3$ in this construction?
+
+Recall the following construction: if one has any space $\mathcal{A}$ and any symmetric function $S : \mathcal{A} \times \mathcal{A} \to \mathbb{R}$ such that for all $\lambda_1, \ldots, \lambda_k \in \mathbb{R}$ and $a_1, \ldots, a_k \in \mathcal{A}$,
+\[
+\sum_{i, j} \lambda_i \lambda_j S(a_i, a_j) \geq 0,
+\]
+then there exists a random process $(X_a)$ which is a centred Gaussian process with covariance function
+\[
+\mathbb{E}[\Gamma(a) \Gamma(b)] = S(a, b).
+\]
+We try to generalize the definition of the Gaussian free field as a Gaussian process with covariance given by the Green's function.
+
+What is the Green's function in $\mathbb{R}^3$?
+\[
+G_{\mathbb{R}^3}(x, y) = c_2 \frac{1}{|x-y|}.
+\]
+Then $y \mapsto G(x, y)$ is harmonic on $\mathbb{R}^3 \setminus \{x\}$, and tends to $0$ as $y \to \infty$.
+
+But we cannot define $\Gamma$ as a Gaussian process with covariance function $G$, as $G(x, x) = +\times$. Let us instead do some formal manipulation. Assume $\Gamma$ exists, and define
+\[
+I = \int_{B(1, 0)} \Gamma(x) \diff \lambda(x).
+\]
+Then note
+\begin{align*}
+	\mathbb{E}[I^2] &= \mathbb{E}\left[ \int \Gamma(x) \diff \lambda(x) \int \Gamma(y) \diff \lambda(y) \right] \\
+			&= \int \diff \lambda(x) \diff \lambda(y) \, \mathbb{E}[\Gamma(x) \Gamma(y)] \\
+			&= \int \frac{c_3}{|x-y|} \diff \lambda(x) \diff \lambda(y) < \infty.
+\end{align*}
+So we can try to define a distribution, instead of a function. Let
+\[
+	\mathcal{M}^{+} = \left\{ \mu \text{ a positive measure on } \mathbb{R}^3 \bigm| \iint \diff \mu(x) \diff \mu(y) \frac{1}{|x - y|} < \infty \right\},
+\]
+and
+\[
+	\mathcal{M} = \{\mu^{+} - \mu^{-} \mid \mu^{+}, \mu^{-} \in \mathcal{M}^{+}\}.
+\]
+We then define $(\Gamma(\mu))_{\mu \in \mathcal{M}}$ to be the centered Gaussian process with covariance function
+\[
+S(\mu, \nu) = \int \diff \mu(x) \diff \nu(y) \, \frac{1}{|x - y|}.
+\]
+We only need to check that for all $k$, $\lambda_1, \ldots, \lambda_k \in \mathbb{R}$, $\mu_1 \ldots, \mu_k \in \mathcal{M}$, then
+\[
+\sum_{i, j} \lambda_i \lambda_j S(\mu_i, \mu_j) \geq 0.
+\]
+This can be done.
+
+We find that:
+\begin{itemize}
+	\item The uniform measure on a ball is in $\mathcal{M}$.
+	\item The uniform measure on a sphere is also in $\mathcal{M}$.
+	\item The uniform measure on an interval is not in $\mathcal{M}$.
+\end{itemize}
+
+For all $z, r$, we can define $\lambda(z, r)$ as the uniform measure on the sphere of radius $r$ around $z$, and then
+\[
+\gamma(z, r) = \Gamma(\lambda(z, r)),
+\]
+the mean value of the GFF on the sphere. Let $y \mapsto G(x, y)$ be harmonic on $\mathbb{R}^3 \setminus \{x\}$. THen
+\[
+\int \diff \lambda_{y_0, r} (y) \, G(x, y) = G(x, y_0)
+\]
+if $r \leq d(x, y_0)$. Note also that, if $r \leq r'$,
+\begin{align*}
+	\mathbb{E}[\gamma(z, r) \gamma(z, r')] &= \int \diff \lambda_{z, r}(y) \diff \lambda_{z, r'}(y') \, G(y, y') \\
+					       &= \int \diff \lambda_{z, r'} (y') \, G(z, y') = \frac{c_3}{r'}.
+\end{align*}
+We get that:
+\begin{align*}
+	\mathbb{E}[(\gamma(z, r)^2] &= \frac{c_3}{r}, \\
+	\mathbb{E}[(\gamma(z, r) - \gamma(z, r'))^2] &= c_3 \left( \frac 1r - \frac{2}{r'} + \frac 1{r'} \right) = c_3 \left( \frac 1r - \frac 1{r'}\right).
+\end{align*}
+Define
+\[
+	b_z(t) = \frac{1}{\sqrt{c_3}} \gamma \left(z, \frac 1t \right).
+\]
+This is a Gaussian process with $\mathbb{E}[b_z(t)^2] = t$ and for $t \geq t'$,
+\[
+\mathbb{E}[(b_z(t) - b_z(t'))^2] = t - t'.
+\]
+This means this is just Brownian motion.
+
+Remember that, if $(X(a))_{a \in \mathcal{A}}$ is a centred Gaussian process, and if for all $a_1 \in \mathcal{A}_1$, $a_2 \in \mathcal{A}_2$ that are subsets of $\mathcal{A}$ satisfy $\mathbb{E}[\Gamma(a_1) \Gamma(a_2)] = 0$, then
+\[
+	(\Gamma(a_1))_{a_1 \in \mathcal{A}_1} \perp (\Gamma(a_2))_{a_2 \in \mathcal{A}_2}.
+\]
+If $\mu$ is any measure supported outside of $B(z, 1)$, then
+\[
+\mathbb{E}[\gamma(z, r) \Gamma(\mu)] = \int \diff \mu(y) \int \diff_{z, r}(x) \, G(x, y)
+\]
+does not depend on $r \leq 1$. So
+\[
+	(\gamma(z, r) - \gamma(z, 1))_{r \leq 1} \perp (\Gamma(\mu))_{\mu \in \mathcal{M}, \mathrm{supp}(\mu) \cap B(z, 1) = \emptyset}.
+\]
+Hence for all $z_1, \ldots, z_k$ with $d(z_i, z_j) > 2$, $(b_{z_i}(t+1) - b_{z_i}(1))_{t \geq 0}$ are independent Brownian motions.
+
+% lecture 23
+
+We do the usual trick to construct `nice versions' of a process $(X_a)_{a \in \mathcal{A}}$ is $\mathcal{A} \subseteq \mathbb{R}^{k}$: if there exists $N \geq 0$, $C \geq 0$ and $\eps > 0$ such that for all $a, a'$:
+\[
+\mathbb{E} |X_a - X_{a'}|^{2N} \leq C |a - a'|^{k + \eps},
+\]
+then Borel-Cantelli will suffice to show there exists a modification $\hat X$ such that, on a set of probability 1, $a \mapsto \hat X_a$ is continuous.
+
+\begin{remark}
+	If $Y$ is a centred Gaussian random variable, then
+	\[
+	\mathbb{E}[Y^{2k}] \propto \sigma^{2k}.
+	\]
+	Hence for a Gaussian process, it suffices to check that
+	\[
+	\mathbb{E} |X_a - X_{a'}|^{2N} \leq C |a - a'|^{\eps},
+	\]
+	because then
+	\[
+	\mathbb{E} |X_a - X_{a'}|^{2NK} \leq C' |a - a'|^{\eps K},
+	\]
+	where we can choose $K$ such that $K \eps > k$.
+\end{remark}
+
+Let us look at the collection
+\[
+	(\Gamma(\lambda_{z, r}))_{z \in \mathbb{R}^3, r > 0}.
+\]
+Then we found
+\[
+	\mathbb{E} (\Gamma(\lambda_{z, r}) - \Gamma(\lambda_{z, r'}))^2 = c_3 \left( \frac 1r - \frac 1{r'} \right),
+\]
+and also we know
+\begin{align*}
+	\mathbb{E} &(\Gamma(\lambda_{z, r}) - \Gamma(\lambda_{z', r}))^2 \\
+	&= \iint \diff (\lambda_{z, r} - \lambda_{z', r})(x) \diff (\lambda_{z, r} - \lambda_{z', r})(y) \cdot \frac{c_3}{|x - y|} \\
+	&= 2 \iint \diff \lambda_{z, r}(x) (\diff \lambda_{z, r}(y) - \diff \lambda_{z', r}(y)) \frac{c_3}{|x - y|}  \\
+	&\leq c|z - z'|,
+\end{align*}
+for all $|z - z'| < 1$ and $r < R$. This lets us apply the given criterion to find that for all $a = (z, r)$, $a' = (z', r')$,
+\[
+\mathbb{E} |X_a - X_{a'}|^{2N} \leq C |a - a'|^2
+\]
+on $[-R, R]^{d} \times (0, R)$. Hence there exists a version of $(z, r) \mapsto \Gamma(\lambda_{z, r})$ that is continuous on $\mathbb{R}^{d} \times (0, \infty)$ on a set of probability $1$.
+
+% lecture 24
+
+\subsection{Spatial Markov Property}%
+\label{sub:smp}
+
+Our heuristic idea is that something like for the discrete GFF should work.
+
+Let $D$ be bounded and open in $\mathbb{R}^{d}$. Suppose we condition our GFF on the outside of $D$.
+
+Inside, the distribution will be equal to the harmonic extension of the values of $\Gamma$ on the boundary, plus a GFF with zero boundary conditions on $D$.
+
+Consider the case when $D$ is a sphere.
+
+\subsection{Addendum}%
+\label{sub:add}
+
+We now construct the measure satisfying conformal rest via Brownian loops.
+
+\begin{remark}
+	If $(Z_t)$ is a 2D Brownian motion started away from $0$, then $\log |Z_t|$ is a Brownian motion.
+\end{remark}
+
+Let $Z$ be a random walk started from $0$, $\sigma_0$ the hitting time of $C_{1/n}$, and $\sigma$ the first time after $\sigma_0$ where $Z$ hits $C_{e^{-n}}$.
+
+\newpage
+
+\printindex
+
+\end{document}

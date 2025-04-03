@@ -987,7 +987,7 @@ Now we prove martingale convergence theorem.
 
 % lecture 7
 
-From conditional Jensen's on $|x|$, we for a martingale $X$,
+From conditional Jensen's on $|x|$, we see that for a martingale $X$,
 \[
 	\mathbb{E}[|X_n| | \mathcal{F}_m] \geq |X_m| \qquad \text{a.s.}
 \]
@@ -1077,7 +1077,7 @@ This can be thought of as a better version of Markov's inequality, that applies 
 		\|X_n - \mathbb{E}[X_\infty|\mathcal{F}_n]\|_p &= \|\mathbb{E}[X_m - X_\infty | \mathcal{F}_n]\|_p \\
 							       &\leq \|X_m - X_\infty\|_p \to 0,
 	\end{align*}
-	hence $X_n = \mathbb{E}[X_\infty | \mathcal{F}_n]$ almost-surel.
+	hence $X_n = \mathbb{E}[X_\infty | \mathcal{F}_n]$ almost-surely.
 
 
 	(iii) $\implies$ (i): Let $X_n = \mathbb{E}[Z | \mathcal{F}_n]$, then
@@ -1216,7 +1216,7 @@ X_T = \sum_{n = 0}^{\infty} X_n \mathbbm{1}(T=n) + X_\infty \mathbbm{1}(T = \inf
 \begin{theorem}[Optional Stopping Theorem for UI Martingales]
 	Let $X$ be a UI martingale, and $S, T$ stopping times with $S \leq T$. Then,
 	\[
-		\mathbb{E}[X_T | \mathcal{F}_S] = X_s \qquad\text{\normalfont{a.s.}}
+		\mathbb{E}[X_T | \mathcal{F}_S] = X_S \qquad\text{\normalfont{a.s.}}
 	\]
 \end{theorem}
 
@@ -1244,8 +1244,8 @@ X_T = \sum_{n = 0}^{\infty} X_n \mathbbm{1}(T=n) + X_\infty \mathbbm{1}(T = \inf
 
 	Suppose that $S \leq T$ are stopping times. Then from the tower property,
 	\begin{align*}
-		\mathbb{E}[X_T |\mathcal{F}_S] &= \mathbb{E}[ \mathbb{E}[X_\infty | \mathcal{F}_T] | \mathcal{F}_s] \\
-					       &= \mathbb{E}[X_\infty | \mathcal{F}_S] = X_s \qquad \text{a.s.}
+		\mathbb{E}[X_T |\mathcal{F}_S] &= \mathbb{E}[ \mathbb{E}[X_\infty | \mathcal{F}_T] | \mathcal{F}_S] \\
+					       &= \mathbb{E}[X_\infty | \mathcal{F}_S] = X_S \qquad \text{a.s.}
 	\end{align*}
 \end{proofbox}
 
@@ -1256,7 +1256,7 @@ Let
 \[
 \cdots \subseteq \mathcal{G}_{-2} \subseteq \mathcal{G}_{-1} \subseteq \mathcal{G}_0
 \]
-be a sequence of $\sigma$-algebras indexed by $\mathbb{Z}_-$. Sa that $X = (X_n)_{n \leq 0}$ is a \emph{backwards martingale}\index{backwards martingale} if it is adapted, $X_n \in \mathcal{L}^1$, and
+be a sequence of $\sigma$-algebras indexed by $\mathbb{Z}_-$. Say that $X = (X_n)_{n \leq 0}$ is a \emph{backwards martingale}\index{backwards martingale} if it is adapted, $X_n \in \mathcal{L}^1$, and
 \[
 	\mathbb{E}[X_{n+1} | \mathcal{G}_n] = X_n \qquad \text{a.s.}
 \]
@@ -1396,7 +1396,7 @@ Here are some nice applications.
 	\[
 	Y = \lim_{n \to \infty} \frac{S_n}{n} = \lim_{n \to \infty} \frac{X_{k+1} + \cdots + X_{k+n}}{n}
 	\]
-	almost-surely, we have that $Y$ is measurable with respect to $\mathcal{T}_k = \sigma(X_{k+1}, X_{k+2}, \ldots)$, hence it is measurable with respect to
+	almost-surely, we have $Y$ is measurable with respect to $\mathcal{T}_k = \sigma(X_{k+1}, X_{k+2}, \ldots)$, hence it is measurable with respect to
 	\[
 	\bigcap_{k} \mathcal{T}_k.
 	\]
@@ -1538,11 +1538,11 @@ is $\mathcal{F} \otimes \mathcal{B}([0, 1])$-measurable, as it is a pointwise li
 
 We will define a few classes of random variables. Let
 \[
-	C(\mathbb{R}_+, E) = \{\text{continuous } x : \mathbb{R}_+ \to E\}
+	C(\mathbb{R}_+, E) = \{\text{continuous } X : \mathbb{R}_+ \to E\}
 \]
 with the smallest $\sigma$-algebra which makes $\Pi_t : X \to X_t$ measurable for all $t$, and let
 \[
-	D(\mathbb{R}_+, E) = \{\text{cadlag functions } x : \mathbb{R}_+ \to E\}
+	D(\mathbb{R}_+, E) = \{\text{cadlag functions } X : \mathbb{R}_+ \to E\}
 \]
 with the same $\sigma$-algebra.
 
@@ -1645,7 +1645,7 @@ The fix is to impose regularity conditions on the process, or the filtration.
 \begin{definition}
 	Let $(\mathcal{F}_t)$ be a filtration. Set
 	\[
-	\mathcal{F}_{t^+} = \bigcap_{s > tj \mathcal{F}_s}.
+	\mathcal{F}_{t^+} = \bigcap_{s > t} \mathcal{F}_s.
 	\]
 	If $\mathcal{F}_{t^+} = \mathcal{F}_t$ for all $t$, then $(\mathcal{F}_t)$ is \emph{right-continuous}\index{right-continuous filtration},
 \end{definition}
@@ -1979,7 +1979,7 @@ We will list the following statements which we have proven for discrete time mar
 
 	From optional stopping theorem in the discrete case, we have $X_{T_n} = \mathbb{E}[X_\infty | \mathcal{F}_{T_n}]$, hence $X_{T_n}$ is UI (as a conditional expectation of the same variable), so convergence $X_{T_n} \to X_T$ happens in $\mathcal{L}^1$. Similarly $X_{S_n} \to X_S$ in $\mathcal{L}^1$.
 
-	From optional stopping theorem in the discrete sense, $X_{S_n} = \mathbb{E}[X_{T_n}] | \mathcal{F}_{S_n}]$. Since $A \in \mathcal{F}_S \subseteq \mathcal{F}_{S_n}$ as $S_n \geq S$, we have
+	From optional stopping theorem in the discrete sense, $X_{S_n} = \mathbb{E}[X_{T_n} | \mathcal{F}_{S_n}]$. Since $A \in \mathcal{F}_S \subseteq \mathcal{F}_{S_n}$ as $S_n \geq S$, we have
 	\[
 	\mathbb{E}[X_{T_n} \mathbbm{1}_{A}] = \mathbb{E}[X_{S_n} \mathbbm{1}_{A}].
 	\]
@@ -2343,7 +2343,7 @@ The characteristic function has the following properties:
 		\item $\mathcal{L}(X_n) \to \mathcal{L}(X)$ as $n \to \infty$ implies $\vphi_{X_n}(\xi) \to \vphi_X(\xi)$ for all $\xi \in \mathbb{R}^d$.
 		\item Assume that $(X_n)$ is a sequence of random variables with values in $\mathbb{R}^d$ such that there is $\psi : \mathbb{R}^d \to \mathbb{C}$ with $\psi(0) = 1$, $\psi$ continuous at $0$, and
 			\[
-			\psi_{X_n}(\xi) = \psi(\xi)
+			\phi_{X_n}(\xi) \to \psi(\xi)
 			\]
 			 for all $\xi \in \mathbb{R}^d$. Then $\psi = \vphi_X$ for some random variables $X$, and hence $\mathcal{L}(X_n) \to \mathcal{L}(X)$.
 	\end{enumerate}
@@ -2605,7 +2605,7 @@ Using this, we can prove Cramer's.
 		\item For all $s < t$, $B_t - B_s \sim N(0, (t - s)I_d)$.
 		\item $B$ has independent increments, i.e. for all $s$,
 			\[
-			B_{t - s} - B_s \indep \sigma(B_u \mid u \leq s).
+			B_{t} - B_s \indep \sigma(B_u \mid u \leq s).
 			\]
 	\end{enumerate}
 \end{definition}
@@ -3600,7 +3600,7 @@ The characteristic function of $P(\lambda)$ is
 \begin{proposition}[Thinning/Splitting]
 	Let $N$ and $Y_n$ be independent random variables with $N \sim P(\lambda)$ for some $\lambda < \infty$, and let $\mathbb{P}(Y_n = j) = p_j$ for $1 \leq j \leq k$.
 
-	If $N_j = \sum_{n = 1}^N \mathbbm{1}_{Y_n = j)}$, then $N_1, \ldots, N_k$ are independent with
+	If $N_j = \sum_{n = 1}^N \mathbbm{1}_{(Y_n = j)}$, then $N_1, \ldots, N_k$ are independent with
 	\[
 	N_j \sim P(\lambda p_j).
 	\]

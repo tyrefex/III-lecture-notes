@@ -1,0 +1,109 @@
+\documentclass[12pt]{article}
+
+\usepackage{ishn}
+
+\makeindex[intoc]
+
+\begin{document}
+
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+	\begin{center}
+		\vspace*{1em}
+		\Huge
+		\textbf{III Causal Inference}
+
+		\vspace{1em}
+		\large
+		Ishan Nath, Lent 2024
+
+		\vspace{1.5em}
+
+		\Large
+
+		Based on Lectures by Dr. Jieru Shi
+
+		\vspace{1em}
+
+		\large
+		\today
+	\end{center}
+	
+\end{titlepage}
+\hypersetup{pageanchor=true}
+
+\tableofcontents
+
+\newpage
+
+%lecture 1
+
+\setcounter{section}{-1}
+
+\subsection{Overview}%
+\label{sub:o}
+
+Why causality?
+\begin{itemize}
+	\item Investigators are often interested in relationships between variables.
+	\item The major part of classic statistics is about association rather than causation.
+	\item Association does not imply causation.
+\end{itemize}
+
+\subsection{Commonly-Used Measures of Association}%
+\label{sub:com_m}
+
+\begin{enumerate}
+	\item Correlation and regression. The Pearson correlation coefficient between random variables $Z$ and $Y$ is
+		\[
+			\rho_{ZY} = \frac{\Cov(Z,Y)}{\sqrt{\Var(Z)\Var(Y)}}.
+		\]
+		This measures the linear dependence of $Z$ and $Y$. Note we may get different $\beta$ with different inputs:
+		\begin{align*}
+			Y &= \alpha + \beta Z + \epsilon, \\
+			Y &= \alpha' + \beta' Z + \gamma X + \eps'.
+		\end{align*}
+	\item Contingency tables. The risk difference of a contingency table is
+		\[
+		\mathrm{RD} = \mathbb{P}(Y = 1|Z=1) - \mathbb{P}(Y = 1|Z = 0) = \frac{\rho_{11}}{\rho_{11} + \rho_{10}} - \frac{\rho_{01}}{\rho_{01} + \rho_{00}}.
+		\]
+		We also have risks ratio, and odds ratio.
+	\item Simpson's paradox.
+\end{enumerate}
+
+\subsection{Basic Terminology}%
+\label{sub:bt}
+
+Consider a study with $n$ experimental units indexed by $i = 1, 2, \ldots, n$.
+\begin{enumerate}
+	\item The intervention is $(Z_i)$. This is what could be changed.
+	\item Potential outcomes and the counterfactual are: $Y_i(1)$ and $Y_i(0)$.
+	\item Observed outcomes: $Y_i = Z_i Y_i(1) + (1 - Z_i)Y_i(0)$.
+	\item Covariates $(X_i)$: variables we observe other than $Z$ and $Y$.
+\end{enumerate}
+
+We have two assumptions together by the \emph{stable unit treatment value assumption}\index{stable unit treatment value assumption}:
+
+\textbf{SUTVA}:
+\begin{enumerate}
+	\item No interference: Unit $i$'s potential outcomes do not depend on other units' treatment.
+	\item Consistency: If $Z_i = z$, then $Y_i(z) = Y_i(Z_i) = Y_i$.
+\end{enumerate}
+
+For a binary treatment, under SUTVA, the \emph{individual causal effect}\index{individual causal effect} or \emph{average causal effect}\index{average causal effect} can be defined as:
+\begin{align*}
+	\tau_i &= Y_i(1) - Y_i(0), \\
+	\tau &= \frac 1n \sum_{i = 1}^n (Y_i(1) - Y_i(0)).
+\end{align*}
+
+The fundamental problem of causal inference is that we can only observe one of the potential outcomes.
+
+Causal data is a missing data problem.
+
+% lecture 2
+
+\newpage
+
+\printindex
+
+\end{document}

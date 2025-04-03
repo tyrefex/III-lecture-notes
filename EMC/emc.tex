@@ -1,0 +1,1772 @@
+\documentclass[12pt]{article}
+
+\usepackage{ishn}
+
+\makeindex[intoc]
+
+\begin{document}
+
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+	\begin{center}
+		\vspace*{1em}
+		\Huge
+		\textbf{III Entropy Methods in Combinatorics}
+
+		\vspace{1em}
+		\large
+		Ishan Nath, Michaelmas 2024
+
+		\vspace{1.5em}
+
+		\Large
+
+		Based on Lectures by Prof. Timothy Gowers
+
+		\vspace{1em}
+
+		\large
+		\today
+	\end{center}
+	
+\end{titlepage}
+\hypersetup{pageanchor=true}
+
+\tableofcontents
+
+\newpage
+
+%lecture 1
+
+\section{The Khinchin (Shannon) Axioms for Entropy}%
+\label{sec:axioms}
+
+The \emph{entropy}\index{entropy} of a discrete random variable $X$ is a quantity $H[X]$ that takes real vales and has the following properties:
+\begin{enumerate}[(i)]
+	\item If $X$ is uniform on $\{0, 1\}$, then $H[X] = 1$ (normalization).
+	\item If $Y = f(X)$ for some bijection $f$, then $H[Y] = H[X]$ (invariance).
+	\item If $X$ takes values in a set $A$, $B$ is disjoint from $A$, $Y$ takes values in $A \cup B$ and for all $a \in A$,
+		\[
+		\mathbb{P}(Y = a) = \mathbb{P}(X = a),
+		\]
+		then $H[X] = H[Y]$ (extendability).
+	\item If $X$ takes values in a finite set $A$ and $Y$ is uniformly distributed in $A$, then $H[X] \leq H[Y]$ (maximality).
+	\item $H$ depends continuously on $X$ with respect to the total variation distance, defined as
+		\[
+		\sup_{E} \left| \mathbb{P}(X \in E) - \mathbb{P}(Y \in E)\right|.
+		\]
+		(continuity)
+\end{enumerate}
+
+For the last axiom we need a definition.
+\begin{definition}
+	Let $X$ and $Y$ be random variables. The \emph{conditional entropy}\index{conditional entropy} $H[X|Y]$ of $X$ given $Y$ is
+	\[
+		\sum_y \mathbb{P}(Y = y) H[X|Y = y].
+	\]
+\end{definition}
+\begin{enumerate}[resume*]
+	\item $H[(X,Y)] = H[X,Y] = H[Y] + H[X|Y]$ (additivity).
+\end{enumerate}
+\begin{lemma}
+	If $X$ and $Y$ are independent, then
+	\[
+		H[X,Y] = H[X] + H[Y].
+	\]
+\end{lemma}
+
+\begin{proofbox}
+	We look at
+	\[
+		H[X|Y] = \sum_{y} \mathbb{P}(Y = y) H[X|Y = y].
+	\]
+	Since $X$ and $Y$ are independent, the distribution of $X$ is unaffected by knowing $Y$, so $H[X|Y = y] = H[X]$ for all $y$, which gives the result.
+\end{proofbox}
+Note we are implicitly using the invariance principle.
+\begin{corollary}
+	If $X_1, \ldots, X_n$ are independent, then
+	\[
+		H[X_1, \ldots, X_n] = H[X_1] + \cdots + H[X_n].
+	\]
+\end{corollary}
+
+\begin{proofbox}
+	Use lemma 1.1, and induction.
+\end{proofbox}
+
+\begin{lemma}[Chain rule]
+	Let $X_1, \ldots, X_n$ be random variables. Then
+	\[
+		H[X_1, \ldots, X_n] = H[X_1] + H[X_2|X_1] + H[X_3|X_1,X_2] + \cdots + H[X_n|X_1,\ldots,X_{n-1}].
+	\]
+\end{lemma}
+
+\begin{proofbox}
+	The case $n = 2$ is additivity. In general,
+	\[
+		H[X_1, \ldots, X_n] = H[X_1, \ldots, X_{n-1}] + [H_n|X_1,\ldots,X_{n-1}].
+	\]
+	We are done by induction.
+\end{proofbox}
+
+\begin{lemma}
+	If $Y = f(X)$, then $H[X, Y] = H[X]$. Also, $H[Z|X,Y] = H[Z|X]$.
+\end{lemma}
+
+\begin{proofbox}
+	The map $g: x \mapsto (x, f(x))$ is a bijection, and $(X, Y) = g(X)$. So the first statement follows by invariance. For the second,
+	\[
+		H[Z|X,Y] = H[Z,X,Y] - H[X,Y] = H[Z,X] - H[X] = H[Z|X],
+	\]
+	using the first part.
+\end{proofbox}
+
+\begin{lemma}
+	If $X$ takes only one value, then $H[X] = 0$.
+\end{lemma}
+
+\begin{proofbox}
+	$X$ and $X$ are independent, therefore by lemma 1.1 and invariance,
+	\[
+		H[X] = H[X,X] = 2H[X].
+	\]
+	So $H[X] = 0$.
+\end{proofbox}
+
+\begin{proposition}
+	If $X$ is uniformly distributed on a set of size $2^{n}$, then $H[X] = n$.
+\end{proposition}
+
+\begin{proofbox}
+	Let $X_1, \ldots, X_n$ be independent random variables uniformly distributed on $\{0, 1\}$. By corollary 1.2 and normalization,
+	\[
+		H[X_1, \ldots, X_n] = H[X_1] + \cdots + H[X_n] = n.
+	\]
+	But $(X_1, \ldots, X_n)$ is uniformly distributed on $\{0, 1\}^{n}$, so by invariance the result follows.
+\end{proofbox}
+
+% lecture 2
+
+\begin{proposition}
+	Let $X$ be uniformly distributed on a set $A$ of size $n$. Then
+	\[
+		H[X] = \log n.
+	\]
+\end{proposition}
+
+\begin{proofbox}
+	Let $r$ be a positive integer, and let $X_1, \ldots, X_r$ be independent copies of $X$. Then $(X_1, \ldots, X_r)$ is uniform on $A^{r}$, and
+	\[
+		H[X_1, \ldots, X_r] = r H[X].
+	\]
+	Now pick $k$ such that $2^{k} \leq n^{r} \leq 2^{k+1}$. Then by invariance and maximality, and the entropy of a random variable on $2^{k}$ elements,
+	\[
+		k \leq r H[X] \leq k+1.
+	\]
+	So, we find that
+	\[
+		\frac{k}{r} \leq \log n \leq \frac{k+1}{r} \implies \frac{k}{r} \leq H[X] \leq \frac{k+1}{r}.
+	\]
+	Since we can approximate $\log n$ as close as possible, we find $H[X] = \log n$.
+\end{proofbox}
+
+\begin{theorem}[Khinchin]
+	If $H$ satisfies the Khinchin axioms, and $X$ takes values in a finite set $A$, then
+	\[
+		H[X] = \sum_{a \in A} p_a \log \left(\frac{1}{p_a} \right),
+	\]
+	where $p_a = \mathbb{P}(X = a)$.
+\end{theorem}
+
+Here we use the convention that if $p_a = 0$, then $p_a \log p_a = 0$.
+
+\begin{proofbox}
+	First we do the case when all $p_a$ are rational. Pick $n \in \mathbb{N}$ such that $p_a = m_a/n$.
+
+	Let $Z$ be uniform on $[n]$, and let $(E_a \mid a \in A)$ be a partition of $[n]$ into sets with $|E_a| = m_a$. By invariance, we may assume that 
+	\[
+	X = a \iff Z \in E_a.
+	\]
+	Then,
+	\begin{align*}
+		\log n &= H[Z] = H[Z, X] = H[X] + H[Z|X] \\
+		       &= H[X] + \sum_{a \in A} p_a H[Z|X = a] \\
+		       &= H[X] + \sum_{a \in A} p_a \log(m_a) \\
+		       &= H[X] = \sum_{a \in A} p_a (\log p_a + \log n) \\
+		\implies H[X] &= - \sum_{a \in A} p_a \log p_a.
+	\end{align*}
+\end{proofbox}
+
+\begin{corollary}
+	Let $X$ and $Y$ be random variables. Then $H[X] \geq 0$ and $H[X|Y] \geq 0$.
+\end{corollary}
+
+This is an immediate consequence of the formula for entropy.
+
+\begin{corollary}
+	If $Y = f(X)$, then
+	\[
+		H[Y] \leq H[X].
+	\]
+\end{corollary}
+
+\begin{proofbox}
+	Use the previous corollary
+	\[
+		H[X] = H[X, Y] = H[Y] + H[X|Y],
+	\]
+	but $H[X|Y] \geq 0$.
+\end{proofbox}
+
+\begin{proposition}[Subadditivity]
+	Let $X$ and $Y$ be random variables. Then
+	\[
+		H[X,Y] \leq H[X] + H[Y].
+	\]
+\end{proposition}
+
+\begin{proofbox}
+	Note that for any two random variables $X$ and $Y$,
+	\begin{align*}
+		H[X,Y] \leq H[X] + H[Y] &\iff H[X|Y] \leq H[X] \\
+					&\iff H[Y|X] \leq H[Y].
+	\end{align*}
+	This ought to be obvious, but it is not quite the case. Observe that $H[X|Y] \leq H[X]$ if $X$ is uniform on a finite set. This is because
+	\begin{align*}
+		H[X|Y] &= \sum_{y} \mathbb{P}(Y = y) H[X|Y = y] \\
+		       &\leq \sum_y \mathbb{P}(Y = y) H[X] \\
+		       &= H[X],
+	\end{align*}
+	where we use maximality. By the equivalence noted above, we also know that $H[X|Y] \leq H[X]$ if $Y$ is uniform.
+
+	Let $p_{ab} = \mathbb{P}((X,Y) = (a, b))$, and assume that all $p_{ab}$ are rational. Pick $n$ such that we can write $p_{ab} = m_{ab}/n$, with each $m_{ab}$ an integer. Partition $[n]$ into sets $E_{ab}$ each of size $m_{ab}$. Let $Z$ be uniform of $[n]$, and without loss of generality write $(X, Y) = (a, b) \iff Z \in E_{ab}$.
+
+	Let $E_b = \bigcup_a E_{ab}$ for each $b$. So $Y = b \iff Z \in E_b$. Define a random variable $W$ as follows: if $Y = b$, then $W \in E_b$ is uniformly distributed in $E_b$ and is independent of $X$.
+
+	So $W$ and $X$ are conditionally independent given $Y$, and $W$ is uniform on $[n]$. Then,
+	\begin{align*}
+		H[X|Y] &= H[X|Y,W] = H[X|W] \leq H[X],
+	\end{align*}
+	as $W$ is uniform. By continuity, we get the result for general probabilities.
+\end{proofbox}
+
+\begin{corollary}
+	$H[X] \geq 0$ for every $X$.
+\end{corollary}
+
+\begin{proofbox}
+	Without using the formula,
+	\[
+		0 = H[X|X] \leq H[X].
+	\]
+\end{proofbox}
+
+\begin{corollary}
+	Let $X_1, \ldots, X_n$ be random variables. Then
+	\[
+		H[X_1, \ldots, X_n] \leq H[X_1] + \cdots + H[X_n].
+	\]
+\end{corollary}
+
+\begin{proposition}[Submodularity]
+	Let $X, Y, Z$ be random variables. Then,
+	\[
+		H[X|Y,Z] \leq H[X|Z].
+	\]
+\end{proposition}
+
+\begin{proofbox}
+	Either use non-negativity of entropy and the fact $(Y, Z)$ determines $Z$ (cannot do this because the proof of this uses submodularity!), or
+	\begin{align*}
+		H[X|Y,Z] &= \sum_z \mathbb{P}(Z = z) H[X|Y,Z = z] \\
+			 &\leq \sum_z \mathbb{P}(Z = z) H[X|Z=z] = H[X|Z].
+	\end{align*}
+\end{proofbox}
+
+Submodularity can be expressed in several equivalent ways. Expanding using subadditivity,
+\[
+	H[X,Y,Z] - H[Y,Z] \leq H[X,Z] - H[Z],
+\]
+or
+\[
+	H[X,Y,Z] \leq H[X,Z] + H[Y,Z] - H[Z],
+\]
+or
+\[
+	H[X,Y,Z] + H[Z] \leq H[X,Z] + H[Y,Z].
+\]
+
+% lecture 3
+
+\begin{lemma}
+	Let $X, Y, Z$ be random variables with $Z = f(Y)$. Then
+	\[
+		H[X|Y] \leq H[X|Z].
+	\]
+\end{lemma}
+
+\begin{proofbox}
+	Use submodularity:
+	\begin{align*}
+		H[X|Y] &= H[X,Y] - H[Y] = H[X,Y,Z] - H[Y,Z] \\
+		       &\leq H[X,Z] - H[Z] = H[X|Z].
+	\end{align*}
+\end{proofbox}
+
+\begin{lemma}
+	Let $X, Y, Z$ be random variables with $Z = f(X) = g(Y)$. Then,
+	\[
+		H[X,Y] + H[Z] \leq H[X] + H[Y].
+	\]
+\end{lemma}
+
+\begin{proofbox}
+	Again, use submodularity:
+	\[
+		H[X,Y,Z] + H[Z] \leq H[X,Z] + H[Y,Z],
+	\]
+	which implies the result since $Z$ depends on $X$ and $Y$.
+\end{proofbox}
+
+\begin{lemma}
+	Let $X$ take values in a finite set $A$, and let $Y$ be uniform on $A$. Then if $H[X] = H[Y]$, then $X$ is uniform.
+\end{lemma}
+
+\begin{proofbox}
+	Let $p_a = \mathbb{P}(X = a)$. Then
+	\[
+		H[X] = \sum p_a \log(1/p_a) = |A| \mathbb{E}_{a \in A} p_a \log(1/p_a).
+	\]
+	The function $x \mapsto x \log(1/x)$ is strictly concave on $[0, 1]$, so by Jensen's inequality, this is at most
+	\[
+		|A| (\mathbb{E}_a p_a) \log (1 / \mathbb{E}_a p_a) = \log(|A|) = H[X].
+	\]
+	Equality holds if and only if $a \mapsto p_a$ is constant, i.e. $X$ is uniform.
+\end{proofbox}
+
+\begin{corollary}
+	If $H[X,Y] = H[X] + H[Y]$, then $X$ and $Y$ are independent.
+\end{corollary}
+
+\begin{proofbox}
+	We will go through the proof of subadditivity, and check when the equality holds.
+
+	Suppose that $X$ is uniform on $A$. Then
+	\begin{align*}
+		H[X|Y] &= \sum_y \mathbb{P}(Y = y) H[X|Y=y] \\ \leq
+		       &\leq \sum_{y} \mathbb{P}(Y = y) H[X] = H[X],
+	\end{align*}
+	with equality if and only if $H[X|Y = y]$ is uniform on $A$ for all $y$ by the previous lemma, which implies that $X$ and $Y$ are independent.
+
+	At the last stage of the proof, we introduced $W$ and said
+	\[
+		H[X|Y] = H[X|Y,W] = H[X|W] \leq H[X].
+	\]
+	Since $W$ is uniform, equality holds if and only if $X$ and $W$ are independent, which implies (since $Y$ depends on $W$) that $X$ and $Y$ are independent.
+\end{proofbox}
+
+\begin{definition}
+	Let $X$ and $Y$ be random variables. The \emph{mutual information}\index{mutual information} $I[X:Y]$ is
+	\[
+		H[X] + H[Y] - H[X,Y].
+	\]
+\end{definition}
+
+This can be rewritten as
+\begin{align*}
+	 H[X] - H[X|Y] = H[Y] - H[Y|X].
+\end{align*}
+Subadditivity is equivalent to the statement that $I[X:Y] \geq 0$, and the previous corollary implies that $I[X:Y] = 0$ if and only if $X$ and $Y$ are independent.
+
+Note that
+\[
+	H[X,Y] = H[X] + H[Y] - I[X:Y].
+\]
+\begin{definition}
+	Let $X, Y$ and $Z$ be random variables. The \emph{conditional mutual information}\index{conditional mutual information} of $X$ and $Y$ given $Z$, denoted by $I[X:Y|Z]$ is
+	\begin{align*}
+		\sum_{z} \mathbb{P}(Z = z) I[X|Z=z:Y|Z=z] &= \sum_z \mathbb{P}(Z = z) (H[X|Z=z] \\[-2.5ex]
+							  & \qquad \qquad+ H[Y|Z=z] - H[X,Y|Z = z]) \\
+							  &= H[X|Z] + H[Y|Z] - H[X,Y|Z] \\
+							  &= H[X,Z] + H[Y,Z] - H[X,Y,Z] - H[Z].
+	\end{align*}
+\end{definition}
+Submodularity is equivalent to the statement that $I[X:Y|Z] \geq 0$.
+
+\newpage
+
+\section{A Special Case of Sidarenko's Conjecture}%
+\label{sec:scsc}
+
+Let $G$ be a bipartite graph with vertex sets $X$ and $Y$ (finite), and density $\alpha$, defined to be $|E(G)|/|X||Y|$. Let $H$ be another (small) bipartite graph with vertex sets $U$ and $V$, and $m$ edges.
+
+Now let $\phi : U \to X$ and $\psi : V \to Y$ be random functions. We say that $(\phi, \psi)$ is a \emph{graph homomorphism}\index{graph homomorphism} if $\phi(x) \psi(y) \in E(G)$, for every $xy \in E(H)$.
+
+Sidarenko conjectured that for every $G, H$,
+\[
+	\mathbb{P}((\phi, \psi) \text{ is a homomorphism}) \geq \alpha^{m}.
+\]
+This is what we expect when $G$ is random, and is not hard to prove when $H$ is $K_{r,s}$.
+
+We are going to prove the theorem when $H = P_3$.
+
+\begin{theorem}
+	Sidarenko's conjecture is true if $H$ is a path of length $3$.
+\end{theorem}
+
+\begin{proofbox}
+	We want to show that if $G$ is a bipartite graph of density $\alpha$ with vertex sets $X, Y$ of size $m$ and $n$, and we choose $x_1, x_2 \in X$, $y_1, y_2 \in Y$ independent and at random, then
+	\[
+		\mathbb{P}(x_1 y_1, x_2y_1, x_2y_2 \in E(G)) \geq \alpha^3.
+	\]
+	It would be enough to let $P$ be a $P_3$ chosen uniformly at random, and show that $H[P] \geq \log (a^3 m^2 n^2)$. This is a trivial rephrasing, and is not useful.
+
+	Instead, we shall define a different random variable, taking values in the set of all $P_3$'s. 
+
+	To do this, let $(X_1, Y_1)$ be a random edge of $G$, with $X_1 \in X, Y_1 \in Y$. Now let $X_2$ be a random neighbour of $Y_1$, and $Y_2$ be a random neighbour of $X_2$.
+
+	It will be enough to prove that $H[X_1, Y_1, X_2, Y_2] \geq \log(a^3 m^2 n^2)$.
+% lecture 4
+	We can choose $X_1 Y_1$ in three equivalent ways:
+	\begin{itemize}
+		\item Pick an edge uniformly at random.
+		\item Pick a vertex $x$ with probability proportional to its degree $d(x)$, and then a random neighbour $y$ of $x$.
+		\item The same with $x$ and $y$ exchanged.
+	\end{itemize}
+	This shows that $Y_1 = y$ with probability proportional to $d(y)$, so $X_2 Y_1$ is a uniform edge. This also means that $X_2 Y_2$ is uniform in $E(G)$. Therefore,
+	\begin{align*}
+		H[X_1, Y_1, X_2, Y_2] &= H[X_1] + H[Y_1|X_1] + H[X_2|X_1,Y_1] + H[Y_2|X_1,Y_1,X_2] \\
+				      &= H[X_1] + H[Y_1|X_1] + H[X_2|Y_1] + H[Y_2|X_2] \\
+				      &= H[X_1] + H[X_1, Y_1] - H[X_1] \\
+				      & \qquad \qquad + H[X_2, Y_1] - H[Y_1] + H[X_2,Y_2] - H[X_2] \\
+				      &= 3 H[U_{E(G)}] - H[Y_1] - H[X_2] \\
+				      &\geq 3H[U_{E(G)}] - H[U_Y] - H[U_X] \\
+				      &= 3 \log (\alpha mn) - \log n - \log m = \log(\alpha^3 m^2 n^2).
+	\end{align*}
+	So we are done by maximality.
+
+	An alternative finish is as follows: let $X', Y'$ be uniform in $X$ and $Y$ and independent of each other, and $X_1, Y_1, X_2, Y_2$. Then
+	\begin{align*}
+		H[X_1,Y_1,X_2,Y_2,X',Y'] &= H[X_1, Y_1, X_2, Y_2] + H[U_X] + H[U_Y] \\
+					 &\geq 3 H[U_{E(G)}].
+	\end{align*}
+	So by maximality,
+	\[
+	|P_3| \times |X| \times |Y| \geq |E(G)|^3.
+	\]
+\end{proofbox}
+
+\newpage
+
+\section{Brigman's Theorem}%
+\label{sec:bt}
+
+Let $A$ be an $n \times n$ matrix over, say $\mathbb{R}$. The \emph{permanent}\index{permanent} of $A$, $\mathrm{per}(A)$ is
+\[
+\sum_{\sigma \in S_n} \prod_{i = 1}^n A_{i \sigma(i)},
+\]
+i.e. the determinant without the sign.
+
+Let $G$ be a bipartite graph with vertex sets $X, Y$ of size $n$. Given $(x, y) \in X \times Y$, let
+\[
+A_{xy} =
+\begin{cases}
+	1 & xy \in E(G), \\
+	0 & xy \not \in E(G),
+\end{cases}
+\]
+i.e. $A$ is the bipartite adjacency matrix of $G$. This is not quite the adjacency matrix as we do not care about the $X$ to $X$ connections.
+
+This matrix is not well-defined as we can reorder the rows and columns, but no matter how we choose an ordering, we find that $\mathrm{per}(A)$ is the number of perfect matchings in $G$.
+
+Brigman's theorem concerns how large $\mathrm{per}(A)$ can be if $A$ is a $01$-matrix and the sum of the entries in the $i$'th row is $d_i$.
+
+Let $G$ be a disjoint union of $K_{a_i a_i}$, for $i = 1, \ldots, k$, with $a_1 + \cdots + a_k = n$. Then the number of perfect matchings in $G$ is
+\[
+\prod_{i = 1}^k a_i !.
+\]
+\begin{theorem}[Brigman]
+	Let $G$ be a bipartite graph with vertex sets $X, Y$ of size $n$. Then the number of perfect matchings in $G$ is at most
+	\[
+	\prod_{x \in X} (d(x)!)^{1/d(x)}.
+	\]
+\end{theorem}
+
+\begin{proofbox}
+	The following is a proof by Radhakrishnan.
+
+	Each matching corresponds to a bijection $\sigma : X \to Y$ such that $x \sigma(x) \in E(G)$ for every $x$.
+
+	Let $\sigma$ be chosen uniformly from all such bijections. Then
+	\begin{align*}
+		H[\sigma] &= H[\sigma(x_1)] + H[\sigma(x_2)|\sigma(x_1)] + \cdots + H[\sigma(x_n)|\sigma(x_1),\ldots,\sigma(x_{n-1})],
+	\end{align*}
+	where $x_1, \ldots, x_n$ is some enumeration of $X$. Then,
+	\begin{align*}
+		H[\sigma(x_1)] & \leq \log d(x_1), \\
+		H[\sigma(x_2)|\sigma(x_1)] &\leq \mathbb{E}_\sigma \log d_{x_1}^{\sigma}(x_2),
+	\end{align*}
+	where we introduce
+	\[
+		d_{x_1}^{\sigma}(x_2) = | N(x_1) \setminus \{ \sigma(x_1)\}|.
+	\]
+	In general, we have
+	\[
+		H[\sigma(x_i)|\sigma(x_1),\ldots,\sigma(x_{i-1})] \leq \mathbb{E}_\sigma \log_{x_1,\ldots,x_{i-1}}^{\sigma}(x_i),
+	\]
+	where
+	\[
+		d_{x_1,\ldots,x_{i-1}}^{\sigma}(x_i) = |N(x_i) \setminus \{\sigma(x_1), \ldots, \sigma(x_{i-1})\}|.
+	\]
+% lecture 5
+	The key idea is to regard $x_1, \ldots, x_n$ as a random enumeration of $X$, and take the average.
+
+	For each $x \in X$, define the \emph{contribution}\index{contribution} of $x$ to be
+	\[
+	\log ( d_{x_1, \ldots, x_{i-1}}^{\sigma} (x_i)),
+	\]
+	where $x_i = x$.
+
+	We shall now fix $\sigma$.
+
+	Let the neighbours of $x$ be $y_1, \ldots, y_k$. Then one of the $y_h$ will be $\sigma(x)$. We can write
+	\[
+		d_{x_1, \ldots, x_{i-1}}^{\sigma}(x_i) = d(x) - \left|\{j \mid \sigma^{-1}(y_j) \text{ comes earlier than $x = \sigma^{-1}(y_h)$}\}\right|.
+	\]
+	When we average, all positions of $\sigma^{-1}(y_h)$ are equally likely, so the average position of $x$ is
+	\[
+	\frac{1}{d(x)} (\log d(x) + \log (d(x) - 1) + \cdots + \log(1)) = \frac{1}{d(x)} \log(d(x)!).
+	\]
+	By linearity of expectation,
+	\[
+		H[\sigma] \leq \sum_{x \in X} \frac{1}{d(x)} \log(d(x)!),
+	\]
+	so the number of matchings is at most
+	\[
+	\prod_{x \in X}(d(x)!)^{1/d(x)}.
+	\]
+\end{proofbox}
+
+\begin{definition}
+	Let $G$ be a graph with $2n$ vertices. A \emph{one-factor}\index{one-factor} in $G$ is a collection of $n$ disjoint edges.
+\end{definition}
+
+\begin{theorem}[Kahn, Lov\'asz]
+	Let $G$ be a graph with $2n$ vertices. Then the number of one-factors in $G$ is at most
+	\[
+	\prod_{x \in V(G)}(d(x)!)^{1/2d(x)}.
+	\]
+\end{theorem}
+
+If the graph happens to be bipartite, this agrees with Brigman's theorem.
+
+\begin{proofbox}
+	Proof by Alon and Friedman.
+
+	Let $\mathcal{M}$ be the set of one-factors of $G$, and let $(M_1, M_2)$ be a uniform random elements of $\mathcal{M}^2$.
+
+	For each $M_1, M_2$, the union $M_1 \cup M_2$ is a collection of disjoint edges and even cycles that covers all the vertices of $G$. Call such a union a \emph{cover} of $G$ by edges and even cycles.
+
+	If we are given such a cover, then the number of pairs $(M_1, M_2)$ that could give rise to it is exactly $2^{k}$, where $k$ is the number of even cycles in the cover.
+
+	Now build a bipartite graph $G_2$ out of $G$. $G_2$ has two vertex sets $V_1, V_2$, both copies of $V(G)$. Join $x \in V_1$ to $y \in V_2$ if $xy \in E(G)$.
+
+	By Brigman's theorem, the number of perfect matchings in $G_2$ is at most
+	\[
+	\prod_{x \in V(G)}(d(x)!)^{1/d(x)}.
+	\]
+	Each matching gives a permutation of $V(G)$, $\sigma$ such that $x \sigma(x) \in E(G)$ for every $x \in V(G)$.
+
+	Each such $\sigma$ has a cycle decomposition, and each cycle gives a cycle in $G$. So $\sigma$ gives a cover of $V(G)$ by isolated vertices, edges and cycles.
+
+	Given such a cover with $k$ cycles, each cycle can be directed in two ways, so the number of $\sigma$ that give rise to it is equal to $2^{k}$, where $k$ is the number of cycles.
+
+	So there is an injection from $\mathcal{M}^2$ to the set of matchings of $G_2$, since every cover by edges and even cycles is a cover by vertices, edges and cycles. So
+	\[
+	|\mathcal{M}|^2 \leq \prod_{x \in V(G)}(d(x)!)^{1/d(x)}.
+	\]
+\end{proofbox}
+
+\newpage
+
+\section{Shearer's Lemma and Applications}%
+\label{sec:sl}
+
+Given a random variable $X = (X_1, \ldots, X_n)$ and a subset $A \subseteq [n]$, say $a = \{a_1, \ldots, a_k\}$ with $a_1 < a_2 < \cdots < a_k$, write $X_A$ for the random variable
+\[
+X_A = (X_{a_1}, X_{a_2}, \ldots, X_{a_k}).
+\]
+\begin{lemma}[Shearer]
+	Let $X = (X_1, \ldots, X_n)$ be a random variable and let $\mathcal{A}$ be a family of subsets of $[n]$ such that every $i \in [n]$ belongs to at least $r$ of the sets $A \in \mathcal{A}$. Then,
+	\[
+		H[X_1, \ldots, X_n] \leq \frac1r \sum_{A \in \mathcal{A}} H[X_A].
+	\]
+\end{lemma}
+
+\begin{proofbox}
+	For each $a \in [n]$, write
+	\[
+	X_{<a} = (X_1, \ldots, X_{a-1}).
+	\]
+	For each $A \in \mathcal{A}$,
+	\begin{align*}
+		H[X_{A}] &= H[X_{a_1}] + H[X_{a_2} | X_{a_1}] + \cdots + H[X_{a_k}|X_{a_1},\ldots,X_{a_{k-1}}] \\
+			 &\geq H[X_{a_1} | X_{<a_1}] + H[X_{a_2}|X_{<a_2}] + \cdots + H[X_{a_k}|X_{<a_k}] \\
+			 &= \sum_{a \in A} H[X_{a}|X_{<a}].
+	\end{align*}
+	Therefore,
+	\begin{align*}
+		\sum_{A \in \mathcal{A}} H[X_A] \geq r \sum_{a = 1}^n H[X_a | X_{<a}] = r H[X].
+	\end{align*}
+\end{proofbox}
+
+% lecture 6
+
+An alternative version:
+\begin{lemma}
+	Let $X = (X_1, \ldots, X_n)$ be a random variable, and let $A \subseteq [n]$ be a random subset of $[n]$ according to some probability distribution.
+
+	Suppose that for each $i \in [n]$,
+	\[
+	\mathbb{P}(i \in A) \geq \mu.
+	\]
+	Then,
+	\[
+		H[X] \leq \mu^{-1} \mathbb{E}_A H[X_A].
+	\]
+\end{lemma}
+
+\begin{proofbox}
+	As before,
+	\begin{align*}
+		H[X_A] \geq \sum_{a \in A} H[X_a | X_{<a}].
+	\end{align*}
+	So,
+	\begin{align*}
+		\mathbb{E}_A H[X_A] &\geq \mathbb{E}_a \sum_{a \in A} H[X_a | X_{<a}] \\
+				    &\geq \mu \sum_{a = 1}^{n} H[X_a|X_{<a}] = \mu H[X].
+	\end{align*}
+\end{proofbox}
+
+Let $E \subseteq \mathbb{Z}^{n}$ and let $A \subseteq [n]$. Then we write $P_A E$ for $A = \{a_1, \ldots, a_k\}$ for the set of all $u \in \mathbb{Z}^{A}$ such that there exists $v \in \mathbb{Z}^{[n] \setminus A}$ such that $[u, v] \in E$, where $[u, v]$ is $u$ suitably intertwined with $v$.
+
+\begin{corollary}
+	Let $E \subseteq \mathbb{Z}^{n}$ and let $\mathcal{A}$ be a family of subsets of $[n]$ such that every $i \in [n]$ is contained in at least $r$ sets $A \in \mathcal{A}$. Then,
+	\[
+	|E| \leq \prod_{A \in \mathcal{A}}|P_A E|^{1/r}.
+	\]
+\end{corollary}
+\begin{proofbox}
+	Let $X$ be a uniform random element of $E$. Then by Shearer's,
+	\[
+		H[X] \leq \frac 1r \sum_{A \in \mathcal{A}} H[X_A].
+	\]
+	But $X_A$ takes values in $P_A E$, so
+	\[
+	H[X_A] \leq \log |P_AE| \implies \log |E| \leq \frac 1r \sum_A \log |P_A E|.
+	\]
+\end{proofbox}
+
+If $\mathcal{A} = \{ [n] \setminus \{i\} \mid i = 1, \ldots, n\}$, we get
+\[
+	|E| \leq \prod_{i=1}^{n} | P_{[n] \setminus \{i\}} E |^{1/n-1}.
+\]
+This is the discrete Loomis-Whitney theorem.
+\begin{theorem}
+	Let $G$ be a graph with $m$ edges. Then $G$ has at most $(2m)^{3/2}/6$ triangles.
+\end{theorem}
+This is basically sharp for complete graphs.
+\begin{proofbox}
+	Let $(X_1, X_2, X_3)$ be a random triple of vertices such that $X_1 X_2$, $X_1 X_3$ and $X_2 X_3$ are all edges. Let $t$ be the number of triangles in $G$.
+
+	By Shearer's,
+	\begin{align*}
+		\log(6t) &= H[X_1, X_2, X_3] \leq \frac12 (H[X_1,X_2] + H[X_1,X_3] + H[X_2,X_3]).
+	\end{align*}
+	Each $H[X_i, X_j]$ is supported in the set of edges of $G$, given a direction. So
+	\[
+		\frac 12 (H[X_1, X_2] + H[X_1, X_3] + H[X_2, X_3]) \leq \frac 32 \log (2m).
+	\]
+\end{proofbox}
+
+\begin{definition}
+	Let $X$ be a set of size $n$, and $\mathcal{G}$ be a set of graphs with vertex set $X$. $\mathcal{G}$ is \emph{triangle-intersecting}\index{triangle-intersecting} if $G_1 \cap G_2$ contains a triangle, for all $G_1, G_2 \in \mathcal{G}$.
+\end{definition}
+
+\begin{theorem}
+	If $|V| = n$, then a triangle-intersecting family of graphs with vertex set $V$ has size at most
+	\[
+	2^{\binom n2 - 2}.
+	\]
+\end{theorem}
+
+\begin{proofbox}
+	Let $ \mathcal{G}$ be triangle-intersecting family and $X$ be chosen uniformly from $\mathcal{G}$.
+
+	We write $V^{(2)}$ for the set of (unordered) pairs of elements of $V$, and we think of any $G \in \mathcal{G}$ as a function from $V^{(2)}$ to $\{0, 1\}$. Define 
+	\[
+	X = (X_e \mid e \in V^{(2)}).
+	\]
+	For each $R \subseteq V$, let $G_R$ be the graph $K_R \cup K_{V \setminus R}$.
+
+	We shall look at the projection $X_{G_R}$, which we can think of as taking values in the set $\{G \cap G_R \mid G \in \mathcal{G}\} = \mathcal{G}_R$.
+
+	Note that if $G_1, G_2 \in \mathcal{G}$ and $R \subseteq [n]$, then $G_1 \cap G_2 \cap G_R \neq \emptyset$, since $G_1 \cap G_2$ contains a triangle, which must intersect $G_R$ by pigeon-hole principle.
+
+	Thus $\mathcal{G}_R$ is an intersecting family, so it has size at most $2^{|E(\mathcal{G}_R)| - 1}$.
+
+	By alternative Shearer, and noticing that if we pick $R$ at random then each $e \in G_R$ with probability $1/2$,
+	\begin{align*}
+		H[X] &\leq 2 \mathbb{E}_R H[X_{G_R}] \leq 2 \mathbb{E}_R (|E(\mathcal{G}_R)| - 1) \\
+		     &= 2 \left( \frac 12 \binom n2 - 1 \right) = \binom n2 - 2,
+	\end{align*}
+	by linearity of expectation (each edge is present in half of the $\mathcal{G}_R$).
+\end{proofbox}
+
+% lecture 7
+
+\newpage
+
+\section{Isoperimetric Inequalities}%
+\label{sec:ii}
+
+\begin{definition}
+	Let $G$ be a graph, and $A \subseteq V(G)$. The \emph{edge boundary}\index{edge boundary} $\partial A$ of $A$ is the set of edges $xy$ such that $x \in A$, $y \not \in A$.
+
+	If $G = \mathbb{Z}^{n}$ or $\{0,1\}^{n}$ and $i \in [n]$, then the $i$'th boundary $\partial_i A$ is the set of edges $xy \in \partial A$ such that $x - y = \pm e_i$.
+\end{definition}
+
+\begin{theorem}[Edge-isoperimetric inequality]
+	Let $A \subseteq \mathbb{Z}^{n}$ be a finite set. Then
+	\[
+	|\partial A| \geq 2n |A|^{(n-1)/n}.
+	\]
+\end{theorem}
+
+\begin{proofbox}
+ 	By the discrete Loomis-Whitney inequality,
+	\begin{align*}
+		|A| &\leq \prod_{i = 1}^{n} |P_{[n] \setminus \{i\}} A|^{1/(n-1)} = \left( \prod_{i= 1}^{n} |P_{[n] \setminus \{i\}} A|^{1/n} \right)^{n/(n-1)} \\
+		    &\leq \left( \frac1n \sum_{i = 1}^{n} |P_{[n]\setminus\{i\}} A| \right)^{n/(n-1)}.
+	\end{align*}
+	But $|\partial_i A| \geq 2 |P_{[n] \setminus \{i\} A}|$ since each fibre contributes at least $2$. So,
+	\[
+	|A| \leq \left( \frac{1}{2n} \sum_{i =1}^{n} |\partial_i A| \right)^{n/(n-1)} = \left( \frac{1}{2n} |\partial A| \right)^{n/(n-1)}.
+	\]
+\end{proofbox}
+
+\begin{theorem}[Edge-isoperimetric inequality in the cube]
+	Let $A \subseteq \{0, 1\}^{n}$. Then
+	\[
+	|\partial A| \geq |A| (n - \log |A|).
+	\]
+\end{theorem}
+
+\begin{proofbox}
+	Let $X$ be a uniformly random element of $A$, and write $X = (X_1, \ldots, X_n)$. Write $X_{\setminus i}$ for $(X_1, \ldots, X_{i-1}, X_{i+1}, \ldots, X_n)$.
+
+	By Shearer's inequality,
+	\begin{align*}
+		H[X] \leq \frac{1}{n-1} \sum_{i = 1}^{n} H[X_{\setminus i}] &= \frac{1}{n-1} \sum_{i = 1}^{n} \left( H[X] - H[X_i|X_{\setminus i}] \right) \\
+		\implies \sum_{i = 1}^{n} H[X_i | X_{\setminus i}] &\leq H[X].
+	\end{align*}
+	But,
+	\[
+		H[X_i | X_{\setminus i} = u] =
+		\begin{cases}
+			1 & |P_{[n]\setminus\{i\}}^{-1}(u)| = 2, \\
+			0 & |P_{[n]\setminus\{i\}}^{-1}(u)| = 1.
+
+		\end{cases}		
+	\]
+	The number of points of the second kind is exactly $|\partial_i A|$. So,
+	\[
+		H[X_i | X_{\setminus i}] = 1 - \frac{|\partial_i A|}{|A|}.
+	\]
+	So,
+	\begin{align*}
+		H[X] &\geq \sum_{i = 1}^{n} \left(1 - \frac{|\partial_i A|}{|A| } \right) = n - \frac{|\partial A|}{|A|}.
+	\end{align*}
+	Also $H[X] = \log |A|$, so we are done.
+	
+\end{proofbox}
+
+\begin{definition}
+	Let $\mathcal{A}$ be a family of sets of size $d$. The \emph{lower shadow}\index{lower shadow} $\partial \mathcal{A}$ is
+	\[
+		\{B \mid |B| = d-1, \, \exists A \in \mathcal{A}, \, B \subseteq A\}.
+	\]
+\end{definition}
+
+\begin{theorem}[Kruskal-Katona]
+	If $|\mathcal{A}| = \binom t d$ for some real number $t$, then $|\partial \mathcal{A}| \geq \binom t{d-1}$.
+\end{theorem}
+
+Here we do not restrict ourselves to integer $t$; $t$ may be any real number
+
+\begin{proofbox}
+	Let $X = (X_1, \ldots, X_d)$ be a random ordering of the elements of a uniformly random $A \in \mathcal{A}$. Then
+	\[
+		H[X] = \log \left( d! \binom t d \right).
+	\]
+	Note that $(X_1, \ldots, X_{d-1})$ is an ordering of the elements of some $B \in \partial \mathcal{A}$, so
+	\[
+		H[X_1, \ldots, X_{d-1}] \leq \log \left( (d-1)! |\partial \mathcal{A}| \right).
+	\]
+	It is enough to show that
+	\[
+		H[X_1, \ldots, X_{d-1}] \geq \log \left( (d-1)! \binom t{d-1} \right).
+	\]
+	Note that
+	\[
+		H[X_1, \ldots, X_{d}] = H[X_1] + H[X_2|X_1] + \cdots + [X_d | X_{1}, \ldots, X_{d-1}].
+	\]
+	We want a lower bound on this entropy. Our strategy will be to obtain a lower bound for $H[X_k | X_{<k}]$ in terms of $H[X_{k+1} | X_{<k+1}]$. We shall prove that
+	\[
+		2^{H[X_k|X_{<k}]} \geq 2^{H[X_{k+1}|X_{<k+1}]} + 1
+	\]
+	for all $k$. Let $T$ be chosen independently of $X_1, \ldots, X_{k-1}$, where $T = \Ber(1-p)$. Given $X_1, \ldots, X_{k-1}$, let
+	\[
+	X^{\ast} =
+	\begin{cases}
+		X_{k+1} & T = 0, \\
+		X_k & T = 1.
+	\end{cases}
+	\]
+	Note that $X_k$ and $X_{k+1}$ have the same distribution given $(X_1, \ldots, X_{k-1})$, so $X^{\ast}$ does as well. Then
+% lecture 8
+	\begin{align*}
+		H[X_k|X_1, \ldots, X_{k-1}] &= H[X^{\ast}|X_1, \ldots, X_{k-1}] \geq H[X^{\ast} | X_1, \ldots, X_k] \\
+					    &= H[X^{\ast}, T | X_1, \ldots, X_k] & \\
+					    &= H[T | X_1, \ldots, X_k] + H[X^{\ast} | T, X_1, \ldots, X_k] \\
+					    &= H[T] + p H[X_{k+1}|X_1,\ldots,X_k] \\
+					    &\qquad + (1-p) H[X_k|X_1,\ldots,X_k] \\
+					    &= h(p) + ps,
+	\end{align*}
+	where $h(x) = -(x \log x + (1-x) \log(1-x))$ is the \emph{binary entropy function}\index{binary entropy function}, and $s = H[X_{k+1}|X_1,\ldots,X_k]$.
+
+	It turns out that this is maximized when $p = 2^{s}/(2^{s}+1)$, whence the bound is
+	\[
+	\frac{2^{s}}{2^{s} + 1} (\log(2^{s} + 1) - \log 2^{s}) + \frac{\log(2^{s}+1)}{2^{s}+1} + \frac{s 2^{s} + 1}{2^{s} + 1} = \log(2^{s} + 1).
+	\]
+	Let $r = 2^{H[X_d|X_1,\ldots, X_{d-1}]}$. Then,
+	\begin{align*}
+		H[X] &= H[X_1] + H[X_2|X_1] + \cdots + H[X_d|X_1,\ldots,X_{d-1}] \\
+		     &\geq \log r + \log(r + 1) + \cdots + \log(r + d - 1) \\
+		     &= \log \left( \frac{(r + d - 1)!}{(r - 1)!} \right) = \log \left( d! \binom{r+d-1}d\right).
+	\end{align*}
+	Since we known $H[X] = \log( d! \binom t d)$, it follows that
+	\[
+	r + d - 1 \leq t \implies r \leq t + 1 - d.
+	\]
+	It follows that
+	\begin{align*}
+		H[X_1, \ldots, X_{d-1}] &= \log \left( d! \binom t d \right) - \log r \\
+					&\geq \log \left( d! \frac{t!}{d! (t - d)! (t + 1 - d)} \right) \\
+					&= \log \left((d-1)! \binom t{d-1} \right).
+	\end{align*}
+\end{proofbox}
+
+\newpage
+
+\section{The Union-Closed Conjecture}%
+\label{sec:ucc}
+
+Let $\mathcal{A}$ be a finite family of sets. We say that $\mathcal{A}$ is \emph{union closed}\index{union closed} if $A \cup B \in \mathcal{A}$ whenever $A \in \mathcal{A}$ and $B \in \mathcal{A}$.
+
+The following is an unproven conjecture.
+\begin{center}
+\textbf{Union-Closed Conjecture:} If $\mathcal{A}$ is a non-empty union-closed family then there exists some $x$ that belongs to at least $\frac 12 |\mathcal{A}|$ sets in $\mathcal{A}$.
+\end{center}
+
+However, the following is proven.
+\begin{theorem}[Gilmer]
+	There exists $c > 0$ such that if $\mathcal{A}$ is a union-closed family, then there exists $x$ that belongs to at least $c |\mathcal{A}|$ of the sets in $\mathcal{A}$.
+\end{theorem}
+
+The constant $c$ given in the original paper was around $1/100$, but the bound could be improved to $(3 - \sqrt 5)/2$, which is the natural barrier to this approach.
+
+In fact this constant is the best if we change our problem to look only at almost-union closed family, i.e. families in which $A \cup B \in \mathcal{A}$ for almost-all $A, B \in \mathcal{A}$. Let
+\[
+	\mathcal{A} = [n]^{(pn)} \cup [n]^{(\geq (2p - p^2 - o(1))n}.
+\]
+With high probability, if $A, B$ are random elements of $[n]^{(pn)}$, then $|A \cup B| \geq (2p - p^2 - o(1))n$. If $1 - (2p - p^2 - o(1)) = p$, then almost all of $\mathcal{A}$ is in $[n]^{(pn)}$, i.e.
+\[
+1 - 3p + p^2 = 0 \implies p = \frac{3 - \sqrt 5}{2}.
+\]
+If we want to prove this theorem, it is natural to let $A, B$ be independent uniformly random elements of $\mathcal{A}$, and to consider $H[A \cup B]$. Since $\mathcal{A}$ is union closed $A \cup B \in \mathcal{A}$, so $H[A \cup B] \leq \log |\mathcal{A}|$.
+
+Now we would like to get a lower bound for $H[A \cup B]$ assuming that no $x$ belongs to more than $p|\mathcal{A}|$ sets in $\mathcal{A}$.
+
+% lecture 9
+
+\begin{lemma}
+	Suppose that $c > 0$ is such that
+	\[
+	h(xy) \geq c (x h(y) + y h(x))
+	\]
+	for every $x, y \in [0, 1]$. Let $\mathcal{A}$ be a family of sets such that every element belongs to fewer than $p|\mathcal{A}|$ members of $\mathcal{A}$. Then
+	\[
+		H[A \cup B] > c(1 - p) (H[A] + H[B]).
+	\]
+\end{lemma}
+
+\begin{proofbox}
+	We think of $A$ and $B$ as characteristic functions, i.e. indicator functions for each element of $|\mathcal{A}|$. Write $A_{<k}$ for $(A_1, \ldots, A_{k-1})$. By the chain rule it is enough to prove that for every $k$ that
+	\[
+		H[(A \cup B)_{k}|(A \cup B)_{< k}] > c(1 - p)[H[A_k|A_{<k} + H[B_k|B_{<k}]).
+	\]
+	By submodularity,
+	\[
+		H[(A \cup B)_k|(A \cup B)_{<k}] \geq H[(A \cup B)_k|A_{<k}, B_{<k}].
+	\]
+	For each $u, v \in \{0, 1\}^{k-1}$, we write
+	\[
+		p(u) = \mathbb{P}[A_k = 0 | A_{<k} = u], \qquad q(v) = \mathbb{P}[B_k = 0 | B_{<k} = v].
+	\]
+	Then,
+	\[
+		H[(A \cup B)_k | A_{<k} = u, B_{<k} = v] = H[A_k \cup B_k | A_{<k}, B_{<k}] = h(p(u) q(v)),
+	\]
+	which by hypothesis is at least
+	\[
+	c(p(u) h(q(v)) + q(v) h(p(u))).
+	\]
+	So,
+	\begin{align*}
+		H[(A \cup B)_k | (A \cup B)_{<k}] &\geq c \sum_{u, v} \mathbb{P}(A_{<k} = u) \mathbb{P}(B_{<k} = v) \\
+						  & \qquad \qquad \qquad \times (p(u) h(q(v)) + q(v) h(p(u))),
+	\end{align*}
+	but
+	\[
+	\sum_{k} \mathbb{P}(A_{<k} = u) \mathbb{P}(A_k = 0 | A_{<k} = u) = \mathbb{P}(A_k = 0) \geq 1 - p,
+	\]
+	and
+	\[
+		\sum_v \mathbb{P}(B_{<k} = v) h(q(v)) = \sum_v \mathbb{P}(B_{<k} = v) H[B_k | B_{<k} = v] = H[B_k | B_{<k}],
+	\]
+	so this expands as
+	\begin{align*}
+		& c(P(A_k = 0) H[B_k | B_{<k}] + P(B_k = 0) H[A_k|A_{<k}]) \\
+		&> c(1-p)(H[A_k|A_{<k}] + H[B_k|B_{<k}]),
+	\end{align*}
+	as required.
+\end{proofbox}
+
+This shows that if $\mathcal{A}$ is union closed, then $c(1-p) \leq 1/2$, so $p \geq 1 - 1/2c$. This is non-trivial as long as $c > 1/2$, and we will obtain $c = 1/(\sqrt 5 - 1)$.
+
+To show this inequality, we start by proving the diagonal case, i.e. when $x = y$.
+
+\begin{lemma}[Boppana]
+	For every $x \in [0, 1]$,
+	\[
+	h(x^2) \geq \phi x h(x),
+	\]
+	for $\phi = (\sqrt 5 + 1)/2$.
+\end{lemma}
+
+\begin{proofbox}
+	Write $\psi$ for $\phi^{-1} = (\sqrt 5 - 1)/2$. Then $\psi^2 = 1 - \psi$, so
+	\[
+	h(\psi^2) = h(1 - \psi) = h(\psi) \implies h(\psi^2) = \phi \psi h(\psi),
+	\]
+	so equality holds when $x = \psi$, and as well when $x = 0$ or $1$.
+
+	Our first fact will be
+	\begin{align*}
+		\ln 2 h(x) &= - x \ln x - (1 - x) \ln (1 - x), \\
+	\ln 2 h'(x) &= - \ln x - 1 + \ln (1 - x) + 1 = \ln(1 - x) - \ln x, \\
+	\ln 2 h''(x) &= - \frac 1x - \frac1{1-x}, \\
+	\ln 2 h'''(x) &= \frac1{x^2} - \frac1{(1-x)^2}.
+	\end{align*}
+	We also introduce
+	\begin{align*}
+		f(x) &= h(x^2) - \phi xh(x), \\
+		f'(x) &= 2 x h'(x^2) - \phi h(x) - \phi x h'(x), \\
+		f''(x) &= 2 h'(x^2) + 4 x^2 h''(x^2) - 2 \phi h'(x) - \phi x h''(x), \\
+		f'''(x) &= 12x h''(x^2) + 8 x^3 h'''(x^2) - 3 \phi h''(x) - \phi x h'''(x) \\
+			&= \frac{- 12 x}{x^2(1 - x^2)} + \frac{8x^3(1 - 2x^2)}{x^{4}(1 - x^2)^2} + \frac{3 \phi}{x(1-x)} - \frac{\phi x(1-2x)}{x^2(1 - x)^2} \\
+			&= \frac{-12}{x(1-x^2)} + \frac{8(1 - 2x^2)}{x(1 - x^2)^2} + \frac{3 \phi}{x(1-x)} - \frac{\phi (1-2x)}{x(1-x)^2} \\
+			&= \frac{-12(1-x^2) + 8(1-2x^2) + 3 \phi(1 - x) (1 + x)^2 - \phi(1 - 2x)(1 + x)^2}{x(1-x)^2(1+x)^2}.
+	\end{align*}
+	This is zero if and only if
+	\begin{align*}
+	&-12 + 12 x^2 + 8 - 16x^2 + 3 \phi(1 + x - x^2 - x^3) - \phi(1 - 3x^2 - 2x^3) \\
+	&\qquad \qquad = -\phi x^3 - 4x^2 + 3 \phi x + (2 \phi - 4) = 0.
+	\end{align*}
+% lecture 10
+
+	The numerator of $f'''(x)$ is a cubic with negative leading coefficient and constant term, so it has at least one negative root. Hence it has at most two roots in $(0, 1)$. It follows (using Rolle's theorem) that $f$ has at most five roots in $[0, 1]$, up to multiplicity.
+
+	But $f'(0) = - \phi h(0) = 0$, so $f$ has a double root at $0$.
+
+	Using $\psi^2 + \psi = 1$, note
+	\begin{align*}
+		f'(\psi) &= 2 \psi(\log \psi - 2 \log \psi) + \phi (\psi \log \psi + 2 (1 - \psi) \log \psi) - (2 \log \psi - \log \psi) \\
+			 &= - 2 \psi \log \psi + \log \psi + 2 \phi \log \psi - 2 \log \psi - \log \psi \\
+			 &= \log \psi(- \psi + \phi - 1) = 0.
+	\end{align*}
+	Moreover $f(1) = 0$. So $f$ is either non-negative on all of $[0, 1]$ or non-positive. If $x$ is small, then
+	\begin{align*}
+		f(x) &= - x^2 \log x^2 - (1 - x^2) \log (1 - x^2) + \phi x (x \log x ( 1- x) \log (1 - x)) \\
+		     &= 2 x^2 \log \frac{1}{x} - \phi x^2 \log \frac{1}{x} + \mathcal{O}(x^2),
+	\end{align*}
+	so there is $x$ with $f(x) > 0$.
+\end{proofbox}
+
+\begin{lemma}
+	The function
+	\[
+	f(x, y) = \frac{h(x, y)}{x h(y) + y h(x)}
+	\]
+	is minimized on $(0, 1)^2$ at a point where $x = y$.
+\end{lemma}
+
+\begin{proofbox}
+	We can extend $f$ continuously to the boundary by setting $f(x, y) = 1$ whenever $x$ or $y$ is $0$ or $1$. To see this, note first that this is easy if neither $x$ nor $y$ is $0$.
+
+	If either $x$ or $y$ is small, then
+	\begin{align*}
+		h(xy) &= - xy (\log x + \log y) + \mathcal{O}(xy), \\
+		xh(y) + yh(x) &= - x(y \log y + \mathcal{O}(y)) - y (x \log x + \mathcal{O}(x)) \\
+			      &= h(xy) + \mathcal{O}(xy),
+	\end{align*}
+	so this also tends to $1$. One can also check that $f(1/2, 1/2) < 1$, so $f$ is minimized somewhere in $(0, 1)^2$.
+
+	Let $(x^{\ast}, y^{\ast})$ be a minimum with $f(x^{\ast}, y^{\ast}) = \alpha$. For convenience, let
+	\[
+	g(x) = \frac{f(x)}{x},
+	\]
+	and note that
+	\[
+	f(x, y) = \frac{g(xy)}{g(x) + g(y)},
+	\]
+	and also that
+	\[
+	g(xy) - \alpha (g(x) + g(y)) \geq 0,
+	\]
+	with equality at $(x^{\ast}, y^{\ast})$. The partial derivatives of the left hand side are both $0$ at $x^{\ast}, y^{\ast}$, so
+	\begin{align*}
+		y^{\ast} g'(x^{\ast} y^{\ast}) - \alpha g'(x^{\ast}) &= 0, \\
+		x^{\ast} g'(x^{\ast} y^{\ast}) - \alpha g'(y^{\ast}) &= 0.
+	\end{align*}
+	So multiplying, we find
+	\[
+	x^{\ast} g'(x^{\ast}) = y^{\ast} g'(y^{\ast}).
+	\]
+	It is enough to prove that $x g'(x)$ is an injection:
+	\begin{align*}
+		g'(x) &= \frac{h'(x)}{x} - \frac{h(x)}{x^2}, \\
+		x g'(x) &= h'(x) - \frac{h(x)}{x} \\
+			&= \log(1 - x) - \log x + \frac{x \log x + (1 - x) \log (1 - x)}{x} \\
+			&= \frac{\log(1 - x)}{x}.
+	\end{align*}
+	This is injective as $\log(1 - x)$ is concave. Or we can differentiate again.
+\end{proofbox}
+
+Combining this with lemma 6.1, we get that
+\[
+h(xy) \geq \frac{\phi}{2} (x h(y) + y h(x)),
+\]
+and so we can take
+\[
+p = 1 - \frac 1 \phi = 1 - \frac{\sqrt 5 - 1}{2} = \frac{3 - \sqrt 5}{2}.
+\]
+\newpage
+
+\section{Entropy in Additive Combinatorics}%
+\label{sec:eac}
+
+We shall need two simple results from additive combinatorics due to Imre Ruzsa.
+
+Let $G$ be an abelian group, and let $A, B \subseteq G$. The \emph{sumset}\index{sumset} $A + B$ is the set
+\[
+	A + B = \{x + y \mid x \in A, y \in B\},
+\]
+and the \emph{difference set}\index{difference set} $A - B$ is the set
+\[
+	A - B = \{x - y\mid x \in A, y \in B\}.
+\]
+We write $2A$ for $A + A$, $3A$ for $A + A + A$, and so on.
+
+The \emph{Ruzsa distance}\index{Ruzsa distance} $d(A, B)$ is defined to be
+\[
+\frac{|A - B|}{|A|^{1/2} |B|^{1/2}}.
+\]
+\begin{lemma}[Ruzsa Triangle Inequality]
+	$d(A, C) \leq d(A, B) d(B, C)$.
+\end{lemma}
+
+\begin{proofbox}
+	This is equivalent to the statement that
+	\[
+	|A - C| |B| \leq |A - B||B - C|.
+	\]
+	For each $x \in A - C$, pick $a(x) \in A$, $c(x) \in C$ such that $a(x) = c(x) = x$. Define a map $\phi : (A - C) \times B \to (A - B, B - C)$ by
+	\[
+	\phi(x, b) = (a(x) - b, b - c(x)).
+	\]
+	Adding the coordinates of $\phi(x, b)$ gives $x$, so we can calculate $a(x)$ and $c(x)$ from $\phi(x, b)$, and hence $b$. So $\phi$ is an injection.
+\end{proofbox}
+
+\begin{lemma}[Ruzsa Covering Lemma]
+	Let $G$ be an abelian group, and let $A$ and $B$ be finite subsets of $G$. Then $A$ can be covered by at most
+	\[
+	\frac{|A + B|}{|B|}
+	\]
+	translates of $B - B$.
+\end{lemma}
+
+\begin{proofbox}
+	Let $\{x_1, \ldots, x_k\}$ be a maximal subset of $A$, such that the sets $x_i + B$ are disjoint. Then if $a \in A$, then there exists $i$ such that
+	\[
+		(a + B) \cap (x_i + B) \neq 0.
+	\]
+	So $a \in x_i + B - B$. So $A$ can be covered by $k$ translated of $B - B$. But
+	\[
+		|B| k = |\{x_1, \ldots, x_k\} + B| \leq |A + B|.
+	\]
+\end{proofbox}
+
+% lecture 11
+
+Let $X, Y$ be discrete random variables taking values in an abelian group. What is $X + Y$, when $X$ and $Y$ are independent? For each $z$, writing $p_x$ and $q_y$ for $\mathbb{P}(X = x)$ and $\mathbb{P}(Y = y)$,
+\begin{align*}
+	\mathbb{P}(X + Y = z) &= \sum_{x + y = z} \mathbb{P}(X = x) \mathbb{P}(Y = y) \\
+			      &= \sum_{x + y = z} p_x q_y = p \ast q(z),
+\end{align*}
+the convolutions of the functions $p(x) = p_x$ and $q(y) = q_y$. So sums of independent random variables correspond to convolutions.
+
+\begin{definition}
+	Let $G$ be an abelian group and let $X, Y$ be $G$-valued random variables. Then the (entropic) \emph{Ruzsa distance}\index{Ruzsa distance} $d[X; Y]$ is
+	\[
+		H[X' - Y'] - \frac 12 H[X] - \frac 12 H[Y],
+	\]
+	where $X'$ and $Y'$ are independent copies of $X$ and $Y$.
+\end{definition}
+
+\begin{lemma}
+	If $A, B$ are finite subsets of $G$ and $X, Y$ are uniform on $A, B$ respectively, then
+	\[
+		d[X; Y] \leq \log d(A, B).
+	\]
+\end{lemma}
+
+\begin{proofbox}
+	Without loss of generality $X$ and $Y$ are independent. Then
+	\begin{align*}
+		d[X, Y] &= H[X - Y] - \frac 12 H[X] - \frac 12 H[Y] \\
+			&\leq \log |A - B| - \frac 12 \log|A| - \frac 12 \log |B| = \log d(A, B).
+	\end{align*}
+\end{proofbox}
+
+\begin{lemma}
+	Let $X, Y$ be $G$-valued random variables. Then
+	\[
+		H[X + Y] \geq \max\{ H[X], H[Y] \} - I[X:Y].
+	\]
+\end{lemma}
+
+\begin{proofbox}
+	By subadditivity,
+	\begin{align*}
+		H[X + Y] &\geq H[X+Y|Y] = H[X + Y, Y] - H[Y] \\
+			 &= H[X, Y] - H[Y] \\
+			 &= H[X] + H[Y] - H[Y] - I[X : Y] \\
+			 &= H[X] - I[X : Y].
+	\end{align*}
+	By symmetry, we get the other inequality, and we an take the maximum.
+\end{proofbox}
+
+\begin{corollary}
+	$H[X - Y] \geq \max\{H[X], H[Y]\} - I[X:Y]$.
+\end{corollary}
+
+
+\begin{corollary}
+	If $X, Y$ are $G$-valued random variables, then
+	\[
+		d[X, Y] \geq 0.
+	\]
+\end{corollary}
+
+\begin{proofbox}
+	Without loss of generality, $X$ and $Y$ are independent. Then $I[X:Y] = 0$, so 
+	\[
+		H[X-Y] \geq \max\{H[X], H[Y]\} \geq \frac 12 (H[X] + H[Y]).
+	\]
+\end{proofbox}
+
+\begin{lemma}
+	If $X$ and $Y$ are $G$-valued random variables, then $d[X; Y] = 0$ if and only if there is some (finite) subgroup $H$ of $G$ such that $X$ and $Y$ are uniform on cosets of $H$.
+\end{lemma}
+
+\begin{proofbox}
+	If $X$ and $Y$ are uniform on $x + H$ and $y + H$, then $X' - Y'$ is uniform on $x - y + H$, so
+	\[
+		H[X' - Y'] = H[X] = H[Y],
+	\]
+	giving $d[X; Y] = 0$.
+
+	Conversely, suppose that $X$ and $Y$ are independent and
+	\[
+		H[X - Y] = \frac 12 (H[X] + H[Y]).
+	\]
+	Since we have equality in the proof of the lemma, it follows that
+	\[
+		H[X - Y|Y] = H[X - Y].
+	\]
+	Therefore, $X - Y$ and $Y$ are independent. So for every $z \in A - B$ and for every $y_1, y_2 \in B$,
+	\begin{align*}
+		\mathbb{P}(X -Y = z | Y = y_1) = \mathbb{P}(X - Y = z | Y = y_2),
+	\end{align*}
+	where $A$ and $B$ are the supports of $X$ and $Y$. So
+	\[
+	\mathbb{P}(X = y_1 + z) = \mathbb{P}(X = y_2 + z),
+	\]
+	for all $y_1, y_2 \in B$. So $p_x$ is constant on $z + B$, and in particular $z + B \subseteq A$. By symmetry, $A - z \subseteq B$, so $A = B + z$ for all $z \in A - B$.
+
+	So for every $x \in A$, $y \in B$, $A = B + x - y$, so $A - x = B - y$. So $A - x$ is the same for every $x \in A$. Therefore $A - x = A - A$ for all $x \in A$. It follows that $A - A + A - A = (A - x) - (A - x) = A - A$, so it a closed subset containing inverses under addition, hence a subgroup.
+
+	Moreover $A = A - A + x$, hence a coset of $A - A$. Since $B = A + x$, $B$ is also a coset.
+\end{proofbox}
+
+Recall that if $Z$ is a function of $X$ and is a function of $Y$, then
+\[
+	H[X, Y] + H[Z] \leq H[X] + H[Y].
+\]
+\begin{lemma}[Entropic Ruzsa Triangle Inequality]
+	Let $X, Y, Z$ be $G$-valued random variables. Then,
+	\[
+		d[X; Z] \leq d[X; Y] + d[Y; Z].
+	\]
+\end{lemma}
+
+\begin{proofbox}
+	We must show that
+	\begin{align*}
+		H[X - Z] - \frac 12 H[X] - \frac 12 H[Z] &\leq H[X - Y] - \frac 12 H[X] - \frac 12 H[Y] \\
+		& \qquad+ H[Y - Z] - \frac12 H[Y] - \frac 12 H[Z],
+	\end{align*}
+	or that
+	\[
+		H[X - Z] + H[Y] \leq H[X - Y] + H[Y - Z].
+	\]
+	Since $X - Z$ depends on $(X-Y, Y - Z)$ and on $(X, Z)$,
+	\[
+		H[X- Y, Y - Z, X, Z] + H[X - Z] \leq H[X - Y, Y - Z] + H[X, Z],
+	\]
+	i.e.
+	\[
+		H[X, Y, Z] + H[X - Z] \leq H[X, Z] + H[X - Y, Y - Z].
+	\]
+	So by independence and subadditivity, we get the lemma.
+\end{proofbox}
+
+\begin{lemma}[Submodularity for Sums]
+	If $X, Y, Z$ are independent $G$-valued random variables, then
+	\[
+		H[X + Y + Z] + H[Z] \leq H[X + Z] + H[Y + Z].
+	\]
+\end{lemma}
+
+\begin{proofbox}
+	$X + Y + Z$ is a function of $(X + Z, Y)$ and of $(X,  + Z)$ so
+	\[
+		H[X + Z, Y, X, Y + Z] + H[X + Y + Z] \leq H[X + Z, Y] + H[Y, X + Z],
+	\]
+	or by rewriting,
+	\begin{align*}
+		H[X, Y, Z] + H[X + Y + Z] \leq H[X + Z] + H[Y] + H[X] + H[Y + Z].
+	\end{align*}
+	By independence and cancellations, we ge the desired inequality.
+\end{proofbox}
+
+% lecture 12
+
+\begin{lemma}
+	Let $G$ be an abelian group, and let $X$ be a $G$-valued random variable. Then
+	\[
+		d[X; -X] \leq 2d [X; X].
+	\]
+\end{lemma}
+
+\begin{proofbox}
+	Let $X_1, X_2, X_3$ be independent copies of $X$. Then
+	\begin{align*}
+		d[X; -X] &= H[X_1 + X_2] - \frac 12 H[X_1] - \frac 12 H[X_2] \leq H[X_1 + X_2 - X_3] - H[X] \\
+			 &\leq H[X_1 - X_3] + H[X_2 - X_3] - H[X_3] - H[X] \\
+			 &= 2 d[X; X],
+	\end{align*}
+	as $X_1, X_2, X_3$ are all copies of $X$.
+\end{proofbox}
+
+\begin{corollary}
+	Let $X$ and $Y$ be $G$-valued random variables. Then
+	\[
+		d[X; -Y] \leq 5 d[X; Y].
+	\]
+\end{corollary}
+
+\begin{proofbox}
+	We have, by using the Ruzsa triangle inequality,
+	\begin{align*}
+		d[X; -Y] &\leq d[X; Y] + d[Y; -Y] \\
+			 &\leq d[X; Y] + 2d[Y; Y] \leq d[X; Y] + 2 (d[Y; X] + d[X; Y]) \\
+			 &= 5 d[X; Y].
+	\end{align*}
+\end{proofbox}
+
+\subsection{Conditional Distances}%
+\label{sub:cds}
+
+\begin{definition}
+	Let $X, Y, U, V$ be $G$-valued random variables. Then the \emph{conditional distance}\index{conditional distance} is
+	\[
+		d[X|U; Y|V] = \sum_{u,v} \mathbb{P}(U = u) \mathbb{P}(V = v) d[X|U = u; Y|V = v].
+	\]
+	The next definition is not completely standard.
+
+	Let $X, Y, U$ be $G$-valued random variables. Then the \emph{simultaneous conditional distance}\index{simultaneous conditional distance} of $X$ to $Y$ given $U$ is
+	\[
+		d[X; Y || U] = \sum_u \mathbb{P}(U = u) d[X|U = u ; Y|U = u].
+	\]
+	We say that $X', Y'$ are \emph{conditionally independent trials}\index{conditionally independent trials} of $X$ and $Y$ given $U$ if $X'$ is distributed like $X$, $Y'$ is distributed like $Y$, and for each $u \in U$, $X'|U = u$ is distributed like $X|U = u$, $Y'|U = u$ is distributed like $Y|U = u$ and $X'|U = u$ and $Y'|U = u$ are independent. Then,
+	\[
+		d[X; Y || U] = H[X' - Y'|U] - \frac 12 H[X'|U] - \frac 12 H[Y'|U],
+	\]
+	as can be seen directly from the formula.
+\end{definition}
+
+\begin{lemma}[Entropic BSG Theorem]
+	Let $A$ and $B$ be $G$-valued random variables. Then
+	\[
+		d[A; B || A + B] \leq 3 I[A:B] + 2 H[A + B] - H[A] - H[B].
+	\]
+\end{lemma}
+
+\begin{proofbox}
+	We have
+	\begin{align*}
+		d[A; B || A + B] &= H[A' - B' | A + B] - \frac 12 H[A' | A + B] - \frac 12 H[B'|A + B],
+	\end{align*}
+	where $A'$ and $B'$ are conditionally independent given $A + B$. Now
+	\begin{align*}
+		H[A'|A+B] &= H[A|A+B] = H[A,A+B] - H[A + B] \\
+			  &= H[A, B] - H[A + B] \\
+			  &= H[A] + H[B] - I[A:B] - H[A + B].
+	\end{align*}
+	Similarly, $H[B'|A+B]$ is the same, so
+	\[
+		\frac 12 H[A'|A+B] + \frac 12 H[B'|A+B]
+	\]
+	is also the same. Also
+	\[
+		H[A' - B'|A + B] \leq H[A' - B'].
+	\]
+	Let $(A_1, B_1)$ and $(A_2, B_2)$ be conditionally independent trials of $(A, B)$, given $A + B$. Then,
+	\[
+		H[A' - B'] = H[A_1 - B_2].
+	\]
+	By submodularity,
+	\begin{align*}
+		H[A_1 - B_2] &= H[A_1 - B_2, A_1] + H[A_1 - B_2, B_1] - H[A_1 - B_2, A_1, B_1]. \\
+		H[A_1 - B_2, A_1] &= H[A_1, B_2] \leq H[A_1] + H[B_2] = H[A] + H[B], \\
+		H[A_1 - B_2, B_1] &= H[A_2 - B_1, B_1] = H[A_2, B_1] \leq H[A] + H[B]. \\
+		H[A_1 - B_2, A_1, B_1] &= H[A_1, B_1, A_2, B_2] \\
+				       &= H[A_1, B_2, A_2, B_2|A+B] + H[A+B] \\
+				       &= 2H[A, B|A+B] + H[A + B] \\
+				       &= 2 H[A, B] - H[A + B] \\
+				       &= 2 H[A] + 2 H[B] - 2 I[A:B] - H[A + B].
+	\end{align*}
+	Adding or subtracting all these terms gives the required inequality.
+\end{proofbox}
+
+% lecture 13
+
+\newpage
+
+\section{A Proof of Marton's Conjecture in \texorpdfstring{$\mathbb{F}_2^{n}$}{F2^n}}%
+\label{sec:apmc}
+
+We shall prove the following theorem.
+
+\begin{theorem}[Green, Manners, Tao, Gi]
+	There is a polynomial $p$ with the following property: If $n \in \mathbb{N}$ and $A \subseteq \mathbb{F}_2^{n}$ is such that $|A + A| \leq C|A|$, then there is a subspace $H \subseteq \mathbb{F}_2^{n}$ of size at most $|A|$ such that $A$ is contained in at most $p(C)$ translates of $H$.
+
+	Equivalently, there exists $K \subseteq \mathbb{F}$, $|K| \leq p(C)$ such that $A \subseteq K + H$.
+\end{theorem}
+
+In fact, we shall prove the following statement.
+
+\begin{theorem}[EPFR]
+	Let $G = \mathbb{F}_2^{n}$ and let $X, Y$ be $G$-valued random variables. Then there exists a subgroup $H$ of $G$ such that
+	\[
+		d[X; U_H] + d[U_H; Y] \leq \alpha d[X, Y],
+	\]
+	where $U_H$ is the uniform distribution on $H$ and $\alpha$ is an absolute constant.
+\end{theorem}
+
+We will show EPFR implies the Marton's conjecture proof.
+
+\begin{lemma}
+	Let $X$ be a discrete random variable, and write $p_x$ for $\mathbb{P}(X = x)$. Then there exists $x$ such that $p_x \geq 2^{-H[X]}$.
+\end{lemma}
+
+\begin{proofbox}
+	If not, then
+	\[
+		H[X] = \sum_x p_x \log \left( \frac{1}{p_x} \right) > H[X] \sum_x p_x = H[X].
+	\]
+\end{proofbox}
+
+\begin{proposition}
+	EPFR implies theorem 8.1.
+\end{proposition}
+
+\begin{proofbox}
+	Let $A \subseteq \mathbb{F}_2^{n}$, and $|A + A| \leq C |A|$. Let $X$ and $Y$ be independent copies of $U_A$. Then by EPFR, there exists a subgroup $H$ such that
+	\[
+		d[X; U_H] + d[U_H; Y] \leq \alpha d[X, Y],
+	\]
+	so
+	\[
+		d[X; U_H] \leq \frac{\alpha}{2} d[X; Y].
+	\]
+	But,
+	\begin{align*}
+		d[X; Y] &= H[U_A + U_A] - H[U_A] \leq \log(C|A|) - \log |A| \\
+			&= \log C.
+	\end{align*}
+	So,
+	\[
+	d[X, U_H] \leq \frac{\alpha \log C}{2},
+	\]
+	hence
+	\begin{align*}
+		H[X + U_H] &\leq \frac12 H[X] + \frac 12 H[U_H] + \frac{\alpha \log C}2 \\
+			   &= \frac 12 \log |A| + \frac 12 \log |H| + \frac{\alpha \log C}2.
+	\end{align*}
+	Therefore, by the previous lemma there exists $z$ such that
+	\[
+	\mathbb{P}(X + U_H = z) \geq |A|^{-1/2} |H|^{-1/2} C^{-\alpha/2}.
+	\]
+	But,
+	\[
+	\mathbb{P}(X + U_H = z) = \frac{|A \cap (z + H)|}{|A| |H|}.
+	\]
+	So there exists $z \in G$ such that
+	\[
+	|A \cap (z + H)| \geq C^{-\alpha/2} |A|^{1/2} |H|^{1/2}.
+	\]
+	Let $B = A \cap (z + H)$. By the Ruzsa covering lemma, we can cover $A$ by at most most $\frac{|A + B|}{|B|}$ translates of $B + B$. Since $B \subseteq z + H$, $B + B \subseteq H + H = H$, so $A$ can be covered by at most $\frac{|A + B|}{|H|}$ translates of $H$.
+
+	But $|A + B| \leq |A + A| \leq C|A|$. So
+	\[
+	\frac{|A + B|}{|B|} \leq \frac{C|A|}{C^{-\alpha/2} |A|^{1/2} |H|^{1/2}} = C^{\alpha/2 + 1} \frac{|A|^{1/2}}{|H|^{1/2}}.
+	\]
+	Since $B$ is contained in $z + H$,
+	\[
+	|H| \geq C^{-\alpha/2} |A|^{1/2} |H|^{1/2} \implies |H| \geq C^{-\alpha} |A|,
+	\]
+	so we find
+	\[
+	C^{\alpha/2 + 1} \frac{|A|^{1/2}}{|H|^{1/2}} \leq C^{\alpha + 1}.
+	\]
+	If $|H| \leq |A|$, then we are done. Otherwise, since $B \subseteq A$,
+	\[
+	|A| \geq C^{-\alpha/2} |A|^{1/2} |H|^{1/2} \implies |H| \leq C^{\alpha}|A|.
+	\]
+	Pick a subgroup $H'$ of $H$ of size between $\frac{|A|}{2}$ and $|A|$. Then $H$ is a union of at most $2C^{\alpha}$ translates of $H'$, and $A$ is a union of at most $2C^{2\alpha + 1}$ translates of $H'$.
+\end{proofbox}
+
+Now we reduce further. We shall prove the following statement.
+
+\begin{theorem}[EPFR']
+	There is a constant $\eta > 0$ such that if $X$ and $Y$ are any two $\mathbb{F}_2^{n}$-valued random variables with $d[X; Y] > 0$, then there exist $\mathbb{F}_2^{n}$-valued random variables $U$ and $V$ such that
+	\[
+		d[U; V] + \eta(d[U; X] + d[V; Y]) < d[X, Y].
+	\]
+\end{theorem}
+
+% lecture 14
+
+\begin{proposition}
+	EPFR' implies EPFR.
+\end{proposition}
+
+\begin{proofbox}
+	By compactness, we can find $U$ and $V$ such that
+	\[
+		\tau_{X, Y}[U; V] = d[U; V] + \eta (d[U; X] + d[V; Y])
+	\]
+	is minimized. If $d[U; V] \neq 0$, then we can apply EPFR', to show there exists $Z$ and $W$ such that
+	\[
+		\tau_{U, V}[Z; W] < d[U; V].
+	\]
+	But then,
+	\begin{align*}
+		\tau_{X, Y}[Z; W] &= d[Z; W] + \eta (d[Z; X] + d[W; Y]) \\
+				  &\leq d[Z; W] + \eta (d[Z; U] + d[W; V]) + \eta(d[U; X] + d[V; Y]) \\
+				  &< d[U; V] + \eta(d[U, X] + d[V; Y]) = \tau_{X, Y}[U; V].
+	\end{align*}
+	It follows that $d[U; V] = 0$. So there exists $H$ such that $U$ and $V$ are uniform on cosets of $H$, so
+	\[
+		\eta(d[U_H, X] + d[U_H, Y]) < d[X, Y],
+	\]
+	which gives EPFR with constant $\alpha = \eta^{-1}$.
+\end{proofbox}
+
+\begin{definition}
+	We write $\tau_{X, Y}[U|Z; V|W]$ for
+	\[
+		\sum_{z, w} \mathbb{P}(Z = z) \mathbb{P}(W = w) \tau_{X,Y}[U|Z = z; V|W = w],
+	\]
+	and $\tau_{X, Y}[U; V||Z]$ for
+	\[
+		\sum_z \mathbb{P}(Z = z) \tau_{X, Y}[U|Z = z; V|Z = z].
+	\]
+\end{definition}
+
+\begin{remark}
+	If we can prove EPFR' for conditioned random variable, then by averaging we get it for some pair of random variables, e.g. of the form $U|Z = z$, $V|W = w$.
+\end{remark}
+
+\begin{lemma}[Fibring Lemma]
+	Let $G$ and $H$ be abelian groups, and let $\phi : G \to H$ be a homomorphism. Let $X$ and $Y$ be $G$-valued random variables. Then
+	\[
+		d[X; Y] = d[\phi(X); \phi(Y)] + d[X|\phi(X); Y|\phi(Y)] + I[X-Y:\phi(X), \phi(Y)|\phi(X)-\phi(Y)].
+	\]
+\end{lemma}
+
+\begin{proofbox}
+	We will follow our noses:
+	\begin{align*}
+		d[X; Y] &- H[X - Y] - \frac 12 H[X] - \frac 12 H[Y] \\
+			&= H[\phi(X) - \phi(Y)] + H[X - Y | \phi(X) - \phi(Y)] - \frac 12 H[\phi(x)] \\
+			& \qquad \qquad - \frac 12 H[X|\phi(X)] - \frac 12 H[\phi(Y)] - \frac 12 H[\phi(Y)|Y] \\
+			&= d[\phi(X); \phi(Y)] + d[X|\phi(X); Y|\phi(Y)] + H[X-Y|\phi(X)-\phi(Y)] \\
+			& \qquad - H[X-Y|\phi(X),\phi(Y)].
+	\end{align*}
+	But this last line of the expression equals
+	\begin{align*}
+		H[X-Y|\phi(X)-\phi(Y)] &- H[X-Y|\phi(X),\phi(Y),\phi(X) - \phi(Y)] \\
+				       &= I[X-Y:\phi(X),\phi(Y)|\phi(X)-\phi(Y)].
+	\end{align*}
+\end{proofbox}
+
+We shall be interested in the following special case.
+
+\begin{corollary}
+	Let $G = \mathbb{F}_2^{n}$, and let $X_1, X_2, X_3$ and $X_4$ be independent $G$-valued random variables. Then,
+	\begin{align*}
+		d[(X_1, X_2)&; (X_3, X_4)] = d[X_1; X_3] + d[X_2; X_4] \\
+					  &= d[X_1 + X_2, X_3 + X_4] + d[X_1|X_1+X_2; X_3|X_3+X_4] \\
+					  & \qquad + I[X_1+X_3,X_2+X4:X_1+X_2,X_3+X_4|X_1+X_2+X_3+X_4].
+	\end{align*}
+\end{corollary}
+
+This is true by applying the fibring lemma with $X = (X_1, X_2)$, $Y = (X_3, X_4)$ and $\phi(x, y) = x + y$.
+
+We shall now set $W = X_1 + X_2 + X_3 + X_4$.
+
+Recall that entropic BSG says that
+\[
+	d[X; Y || X + Y] \leq 3 I[X : Y] + 2 H[X + Y] - H[X] - H[Y].
+\]
+Equivalently,
+\[
+	I[X: Y] \geq \frac 13 \left( d[X, Y || X + Y] + H[X] + H[Y] - 2H[X + Y] \right).
+\]
+Applying this to the information term in this previous corollary, we get that it is at least
+\begin{align*}
+	\frac13 \biggl( &d[X_1 + X_3, X_2 + X_4; X_1 + X_2, X_3 + X_4 || X_2 + X_3, W] \\
+	&+ H[X_1 + X_3, X_2 + X_4 | W] + H[X_1 + X_2, X_3 + X_4|W] \\
+	&\qquad \qquad \qquad \qquad - 2 H[X_2 + X_3, X_2 + X_3|W] \biggr).
+\end{align*}
+This simplifies to
+\begin{align*}
+	\frac 13 \biggl(& d[X_1 + X_3, X_2 + X_4; X_1 + X_2, X_3 + X_4||X_2 + X_3, W] \\
+		  & + H[X_1 + X_3|W] + H[X_1+X_2|W] - 2H[X_2 + X_3|W] \biggr).
+\end{align*}
+
+% lecture 15
+
+We also have the inequality
+\begin{align*}
+	d[X_1; X_3] &+ d[X_2; X_4] \geq d[X_1 + X_2; X_3 + X_4] + d[X_1|X_1+X_2; X_3|X_3+X_4] \\
+		    & + \frac 13 \biggl( d[X_1 + X_2; X_1 + X_3 || X_2 + X_3, W] + H[X_1 + X_2|W] \\
+		    & \qquad + H[X_1+X_3|W] - 2H[X_2+X_3|W] \biggr).
+\end{align*}
+Apply this to $(X_1, X_2, X_3, X_4)$, $(X_1, X_2, X_4, X_3)$ and $(X_1, X_4, X_3, X_2)$ and add. We look at the first entropy terms. We get
+\begin{align*}
+	2H[X_1+X_2|W] &+ H[X_1+X_4|W] + H[X_1+X_3|W] + H[X_1+X_4|W] \\
+		      &+ H[X_1+X_3|W] - 2H[X_2+X_3|W] - 2H[X_2+X_4|W] \\
+		      &- 2H[X_1+X_2|W] = 0,
+\end{align*}
+where we made heavy use of the observation that if $i, j, k, l$ are some permutation of $1, 2, 3, 4$, then
+\[
+	H[X_i + X_j | W] = H[X_k + X_l | W].
+\]
+This allows us to replace, for example
+\[
+	d[X+1+X_2, X_3+X_4; X_1+X_3,X_2+X_4 || X_2+X_3|W]
+\]
+by
+\[
+	d[X_1+X_2;X_1+X_3 ||X_2+X_3, W].
+\]
+Therefore, we get the following inequality as well.
+\begin{lemma}
+	\begin{align*}
+		& d[X_1; X_3] + 2 d[X_2; X_4] + d[X_1; X_4] + d[X_2; X_3] \geq 2d[X_1+X_2; X_3+X_4] \\
+			    & \qquad + d[X_1 + X_4; X_2 + X_3] + 2d[X_1|X_1+X_2; X_3|X_3+X_4] \\
+			    & \qquad + d[X_1|X_1+X_4;X_2|X_2+X_3]  + \frac 13 \biggl( d[X_1+X_2;X_1+X_3||X_2+X_3, W] \\
+			    & \qquad + d[X_1+X_2; X_3 + X_4||X_2 + X_4, W] + d[X_1 + X_4; X_1 + X_3 || X_3 + X_4, W] \biggr).
+	\end{align*}
+\end{lemma}
+
+Now let $X_1, X_2$ be copies of $X$, and $Y_1, Y_2$ copies of $Y$ and apply the previous lemma to $(X_1, X_2, Y_1, Y_2)$ to get the following.
+
+\begin{lemma}
+	Let $X_1, X_2, Y_1, Y_2$ be as above. Then,
+	\begin{align*}
+		6 d[X, Y] &\geq 2 d[X_1 + X_2; Y_1 + Y_2] + d[X_1 + Y_2; X_2 + Y_1] + 2 d[X_1|X_1+X_2; Y_1|Y_1+Y_2] \\
+			  & \qquad + d[X_1|X_1+Y_1; X_2|X_2+Y_2] + \frac 23 d[X_1 + X_2; X_1 + Y_1 || X_2 + Y_1, X_1 + Y_2] \\
+			  & \qquad + \frac 13 d[X_1 + Y_1; X_1 + Y_2 || X_1 + X_2, Y_1 + Y_2].
+	\end{align*}
+\end{lemma}
+
+Recall that we want $(U, V)$ such that
+\[
+T_{X, Y}(U, V) = d[U; V] + \eta (d[U; X] + d[V; Y]) < d[X; Y].
+\]
+This lemma gives us a collections of distances (some conditional), at least one of which is at most $\frac 67 d[X; Y]$. So it will be enough to show that for all of them, we get
+\[
+	d[U; X] + d[V; Y] \leq C d[X; Y]
+\]
+for some absolute constant $C$. Then we can take $\eta \leq \frac 1 {7C}$.
+
+\begin{definition}
+	We say that $(U, V)$ is \emph{$C$-relevant}\index{$C$-relevant} to $(X, Y)$ if
+	\[
+		d[U; X] + d[V; Y] \leq Cd[X; Y].
+	\]
+\end{definition}
+
+\begin{lemma}
+	$(Y, X)$ is 2-relevant to $(X, Y)$.
+\end{lemma}
+
+\begin{proofbox}
+	Trivial.
+	\[
+		d[Y; X] + d[X; Y] = 2 d[X; Y].
+	\]
+\end{proofbox}
+
+\begin{lemma}
+	Let $U, V, X$ be independent $\mathbb{F}_2^{n}$-valued random values. Then,
+	\[
+		d[U + V, X] \leq \frac 12 \left( d[U; X] + d[V; X] + d[U; V] \right).
+	\]
+\end{lemma}
+
+\begin{proofbox}
+	Apply submodularity at $(\ast)$:
+	\begin{align*}
+		d[U + V; X] &= H[U + V; X] - \frac 12 H[U + V] - \frac 12 H[X] \\
+			    &= H[U + V + X] - H[U + V] + \frac 12 H[U + V] - \frac 12 H[X] \\
+			    &\overset{(\ast)}\leq \frac 12 H[U + X] - \frac 12 H[U] + \frac 12 H[V + X] - \frac 12 H[V] \\
+			    & \qquad + \frac 12 H[U + V] - \frac 12 H[X] \\
+			    &= \frac 12 (d[U; X] + d[V: X] + d[U; V]).
+	\end{align*}
+\end{proofbox}
+
+\begin{corollary}
+	If $(U, V)$ is $C$-relevant to $(X, Y)$ and $U_1, U_2, V_1, V_2$ are copies of $U, V$, then $(U_1 + U_2, V_1 + V_2)$ is $2C$-relevant to $(X, Y)$.
+\end{corollary}
+
+\begin{proofbox}
+	We have
+	\begin{align*}
+		d[U_1+U_2;X] + d[V_1+V_2;Y] &\overset{\text{LIO}}\leq \frac 12 (2d[U; X] + d[U; U] + 2d[V; Y] + d[V; V]) \\
+					    & \overset{\triangle}\leq 2 (d[U; X] + d[V; Y]) \leq 2 C d[X: Y].
+	\end{align*}
+\end{proofbox}
+
+\begin{corollary}
+	$(X_1 + X_2, Y_1 + Y_2)$ is $4$-relevant to $(Y, X)$.
+\end{corollary}
+
+\begin{proofbox}
+	$(X, Y)$ is 2-relevant to $(Y, X)$, and we can use the previous corollary.
+\end{proofbox}
+
+\begin{corollary}
+	If $(U, V)$ is $C$-relevant to $(X, Y)$, then $(U + V, U + V)$ is $(2C+1)$-relevant to $(X, Y)$.
+\end{corollary}
+
+\begin{proofbox}
+	By the lemma on $d[U + V; X]$,
+	\begin{align*}
+		d[U + V; X] &\leq \frac 12 \biggl( d[U; X] + d[V; X] + d [U; V] \biggr) \\
+			    &\leq \frac 12 \biggl( d[U; X] + d[V; Y] + d[X; Y] + d[U; X] + d[X; Y] + d[V; Y] \biggr) \\
+			    &= d[U; X] + d[V; Y] + d[X; Y].
+	\end{align*}
+	The same holds for $d[U + V; Y]$.
+\end{proofbox}
+
+% lecture 16
+
+\begin{lemma}
+	Let $U, V, X$ be independent $\mathbb{F}_2^{n}$-valued random variables. Then
+	\[
+		d[U|U+V; X] \leq \frac 12 \left( d[U; X] + d[V; X] + d[U; V] \right).
+	\]
+\end{lemma}
+
+\begin{proofbox}
+	\begin{align*}
+		d[U|U+V;X] &= H[U+X|U+V] - \frac 12 H[U|U+V] - \frac 12 H[X] \\
+			   &\leq H[U+X] - \frac 12 H[U] - \frac 12 H[V] + \frac 12 H[U + V] - \frac 12 H[X].
+	\end{align*}
+	This comes from $H[A|B] \leq H[A]$ and from the definition of conditional entropy of $H[U|U+V]$, using $U, V$ are independent.
+
+	But, $d[U|U+V; X] = d[V|U+V;X]$, so it is also at most
+	\[
+		H[V + X] - \frac 12 H[U] - \frac 12 H[V] + \frac 12 H[U + V] - \frac 12 H[X].
+	\]
+	Arranging the two inequalities gives the result.
+\end{proofbox}
+
+\begin{corollary}
+	Let $U, V$ be independent random variables and suppose that $(U, V)$ is $C$-relevant to $(X, Y)$. Then,
+	\begin{enumerate}[\normalfont(i)]
+		\item $(U_1|U_1+U_2, V_1|V_1+V_2)$ is $2C$-relevant to $(X, Y)$.
+		\item $(U|U_1+V_1, U_2|U_2+V_2)$ is $2(C+1)$-relevant to $(X, Y)$.
+	\end{enumerate}
+\end{corollary}
+
+\begin{proofbox}
+	Use the previous lemma. Then as soon as it is used, we are in exactly the situation when we were bounding the relevance of $(U_1 + U_2, V_1 + V_2)$ and $(U_1 + V_1, U_2 + V_2)$.
+\end{proofbox}
+
+It remains to tackle the last two terms in the big lemma. For the penultimate term, we need to bound
+\[
+	d[X_1 + X_2 | X_2 + Y_1 , X_1 + Y_2; X] + d[X_1 + Y_1 | X_2 + Y_1, X_1 + Y_2 ; Y].
+\]
+But the first term of this is at most (by lemma 8.6):
+\begin{align*}
+	\frac 12 \biggl( &d[X_1|X_2 + Y_1, X_1 + Y_2; X] \\
+	&+ d[X_2|X_2 + Y_1, X_1 + Y_2; X] + d[X_1; X_2 || X_2 + Y_1, X_1 + Y_2] \biggr) \\
+	& \leq d[X_1| X_1 + Y_2; X] + d[X_2| X_2 + Y_1; X] \\
+	&= 2d[X|X+Y; X].
+\end{align*}
+Then we can use lemma 8.7 and similarly for the other term.
+
+\newpage
+
+\printindex
+
+\end{document}

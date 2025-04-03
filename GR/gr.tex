@@ -1019,7 +1019,7 @@ Hence expanding the LHS,
 \]
 after symmetrizing. Thus,
 \[
-	\frac{\Diff2 x^\mu}{\diff \tau^2} + \Gamma\indices{_\mu^\nu_\rho} \frac{\diff x^\mu}{\diff \tau} \frac{\diff x^\rho}{\diff \tau} = 0, \tag{$\ast$}
+	\frac{\Diff2 x^\nu}{\diff \tau^2} + \Gamma\indices{_\mu^\nu_\rho} \frac{\diff x^\mu}{\diff \tau} \frac{\diff x^\rho}{\diff \tau} = 0, \tag{$\ast$}
 \]
 where
 \[
@@ -1512,7 +1512,7 @@ This is the \emph{Ricci identity}\index{Ricci identity}. We can generalise this 
 We can construct a new tensor from $R\indices{^{a}_{bcd}}$ by contraction.
 
 \begin{definition}
-	The \emph{Ricci tensor}\index{Ricci tensor} is the $(0, 2$-tensor defined by
+	The \emph{Ricci tensor}\index{Ricci tensor} is the $(0, 2)$-tensor defined by
 	\[
 	R_{ab} = R\indices{^{c}_{ac b}}.
 	\]
@@ -1849,9 +1849,9 @@ in these coordinates. For a vector field $Y$, we observe that
 \[
 	\frac{\partial Y^\mu}{\partial t} =  X^\sigma \frac{\partial}{\partial x^\sigma} (Y^\mu) - Y^\sigma \frac{\partial}{\partial x^\sigma} X^\mu = [X, Y]^\mu.
 \]
-So $\mathcal{L}_X Y = [X, Y]$. For a covector field, we can show
+This is because in the basis $(t, x^i)$, $X = \partial/\partial t$, hence $X^t = 1$ is constant so has derivative 0. So $\mathcal{L}_X Y = [X, Y]$. For a covector field, we can show
 \[
-	(\mathcal{L}_X \omega)_\mu = X^\sigma \partial_\sigma w_\mu + w_\sigma \partial_\mu X^\sigma.
+	(\mathcal{L}_X \omega)_\mu = X^\sigma \partial_\sigma \omega_\mu + \omega_\sigma \partial_\mu X^\sigma.
 \]
 If $\nabla$ is torsion-free, then
 \[
@@ -1924,7 +1924,7 @@ We set $c = 1$.
 		\]
 		Making this covariant,
 		\[
-			\nabla_a F\indices{^{a}_{c}} = 4 \pi 4c, \qquad \nabla_{[a} F_{bc]} = 0.
+			\nabla_a F\indices{^{a}_{c}} = 4 \pi j_c, \qquad \nabla_{[a} F_{bc]} = 0.
 		\]
 		Associated to this is the energy-momentum tensor
 		\[
@@ -1937,7 +1937,7 @@ We set $c = 1$.
 		We can check that $T_{ab} = T_{ba}$ and $\nabla_a T\indices{^{a}_{b}} = 0$ for the source-free Maxwell equation.
 	\item A perfect fluid is described by a local velocity field $U^{\mu}$ satisfying $U^\mu U_\mu = -1$, together with a pressure $p$ and density $\rho$. They satisfy the first law of thermodynamics,
 		\[
-		U{\mu} \partial_\mu \rho + (\rho + p) \partial_\mu U^\mu = 0 \implies U^a \nabla_a \rho + (\rho + p)\nabla_a U^a = 0,
+		U^{\mu} \partial_\mu \rho + (\rho + p) \partial_\mu U^\mu = 0 \implies U^a \nabla_a \rho + (\rho + p)\nabla_a U^a = 0,
 		\]
 		and Euler's equations
 		\[
@@ -2013,7 +2013,7 @@ If we solve the wave equation $\square A_\nu = 0$ such that $\partial_\mu A^\mu$
 \subsection{Gauge Freedom for Einstein}%
 \label{sub:gfe}
 
-If $(M, g)$ solves the Einstein equation with EM tensor $T$, and $\vphi : M \to M$ is a diffeomorphism, then $\vphi^{\ast} g$ also solves the Einsten equation with EM tensor $\vphi^{\ast} T$. At the local level, this arises as the coordinate independence of Einstein's equations.
+If $(M, g)$ solves the Einstein equation with EM tensor $T$, and $\vphi : M \to M$ is a diffeomorphism, then $\vphi^{\ast} g$ also solves the Einstein equation with EM tensor $\vphi^{\ast} T$. At the local level, this arises as the coordinate independence of Einstein's equations.
 
 In order to solve the Einstein equations, we need to find a way to fix the coordinates. There are several approaches, we consider wave or harmonic gauge.
 \begin{lemma}
@@ -2077,7 +2077,7 @@ Then to order $\eps$ in the Einstein equation,
 	\implies \square \hbar_{\mu\nu} &= -16 \pi G T_{\mu\nu}, \\
 	\partial_\mu \hbar\indices{^{\mu}_{\nu}} &= 0,
 \end{align*}
-where $\eta_{\mu\nu} = h_{\mu\nu} - \frac{1}{2} h \eta_{\mu\nu}$, so $h_{\mu\nu} = \hbar_{\mu\nu} - \frac{1}{2} \hbar_{\mu\nu}$.
+where $\hbar_{\mu\nu} = h_{\mu\nu} - \frac{1}{2} h \eta_{\mu\nu}$, so $h_{\mu\nu} = \hbar_{\mu\nu} - \frac{1}{2} \hbar_{\mu\nu}$.
 
 These are the linearised Einstein equations in wave (harmonic, Lorenz, de Donder) gauge. We can solve these given initial data at $\{t = 0\} = \Sigma$. If the data satisfies
 \[
@@ -2108,12 +2108,12 @@ Substituting in $h_{\mu\nu} = \partial_\mu \xi_\nu - \partial_\nu \xi_\mu$, then
 
 We can show that (exercise!) if $h'_{\mu\nu} = h_{\mu\nu} + \partial_\mu \xi_\nu + \partial_\nu \xi_\mu$, then
 \[
-\partial_\mu \hbar h\indices{^{'\mu}_{\nu}} = \partial_\mu \hbar\indices{^{\mu}_{\nu}} + \partial_\mu \partial^\mu \xi_\nu.
+\partial_\mu \hbar\indices{^{'\mu}_{\nu}} = \partial_\mu \hbar\indices{^{\mu}_{\nu}} + \partial_\mu \partial^\mu \xi_\nu.
 \]
 We deduce that:
 \begin{itemize}
 	\item Any linearized perturbation can be put into wave gauge by a suitable gauge transformation.
-	\item Any pure gauge solution of the wave gauge fixe equations with $\xi_\mu = 0$ and $\partial_t \xi_\mu = 0$ at $t = 0$, vanishes everywhere.
+	\item Any pure gauge solution of the wave gauge fixed equations with $\xi_\mu = 0$ and $\partial_t \xi_\mu = 0$ at $t = 0$, vanishes everywhere.
 \end{itemize}
 
 \subsection{The Newtonian Limit}%
@@ -2143,7 +2143,7 @@ T_{00} = \rho, \qquad T_{0i} = T_{i0} = 0.
 \]
 We deduce that
 \[
-\Delta \hbar_{00} = - \partial \pi \rho,
+\Delta \hbar_{00} = - 16 \pi \rho,
 \]
 and $\hbar_{0i}, \hbar_{ii}$ at $\mathcal{O}(\eps)$. Since $h_{00} = \hbar_{00} - \frac{1}{2} \eta_{\mu\nu} \hbar$, we get $h_{00} = \frac{1}{2} \hbar_{00}$. Hence
 \[
@@ -2179,9 +2179,9 @@ Near the source, the field is not weak, but by the time we detect the waves the 
 
 We seek a propagating wave solution to the vacuum linearized Einstein equation in the wave gauge:
 \[
-\square \hbar_{\mu\nu} = 0, \partial_\mu \hbar\indices{^{\mu}_{\nu}}= 0.
+\square \hbar_{\mu\nu} = 0, \qquad \partial_\mu \hbar\indices{^{\mu}_{\nu}}= 0.
 \]
-Making the ersatz
+Making the ansatz
 \[
 \hbar_{\mu\nu} = \Re \left( H_{\mu\nu} e^{ik^\mu x_\mu} \right),
 \]
@@ -2191,7 +2191,7 @@ where $H$ is symmetric and $R$ are constants. We see that this is a solution if:
 \]
 The first equation says that $k^\mu$ is null, so waves travel at the speed of light. By gauge freedom, we can take $k^\mu = \omega(1, 0, 0, 1)$.
 
-There is still some residual gauge freedom. Recall that the diffeomorphism generated by $\psi$ act son $\partial^\mu \hbar_{\mu\nu}$ by
+There is still some residual gauge freedom. Recall that the diffeomorphism generated by $\xi$ acts on $\partial^\mu \hbar_{\mu\nu}$ by
 \[
 \partial^{\mu} \hbar_{\mu\nu} \to \partial^{\mu} \hbar_{\mu\nu} + \partial_\mu \partial^\mu \xi_\nu.
 \]
@@ -2261,7 +2261,7 @@ h_{\mu\nu} = \Re (H_{\mu\nu} e^{i k^\mu x_\mu}) = |H_+|(\delta_{12} + \delta_{21
 \]
 Along $\lambda$, the 3 and 0 equations are
 \[
-	\frac{\Diff 2 Y_0}{\diff t^2} = \frac{\Diff 2 Y^3}{\diff t^2} = 0,
+	\frac{\Diff 2 Y_0}{\diff t^2} = \frac{\Diff 2 Y_3}{\diff t^2} = 0,
 \]
 so no relative acceleration in the direction in the wave. The other equations are
 \begin{align*}
@@ -2332,7 +2332,7 @@ Noting that $T_{00} = T^{00}$ and $T_{ij} = T^{ij}$, we deduce that
 \]
 Now we need to reconstruct the remaining components using the gauge condition:
 \[
-\partial_0 \eta_{0i} = \partial_j \hbar_{ji} = \partial_j \left( \frac{2}{r} \ddot I_{ij}(t - r) \right),
+\partial_0 \hbar_{0i} = \partial_j \hbar_{ji} = \partial_j \left( \frac{2}{r} \ddot I_{ij}(t - r) \right),
 \]
 so integrating
 \[
@@ -2361,7 +2361,7 @@ plus terms in $\tau/r$. To fix the constants of integration, return to
 \]
 and observe that to leading order in $d/\tau$,
 \[
-\eta_{00} \approx \frac{4E}{r}, \qquad \hbar_{0i} = - \frac{4P_i}{r},
+\hbar_{00} \approx \frac{4E}{r}, \qquad \hbar_{0i} = - \frac{4P_i}{r},
 \]
 where
 \[
@@ -2419,14 +2419,13 @@ and the quadratic terms are
 \end{align*}
 This implies that
 \[
-	R_{\mu\nu}(\eta_{\mu\nu} + \eps h_{\mu\nu}^{(1)} + \eps^2 h_{\mu\nu}^{(2)}) = \eps R_{\mu\nu}^{(1)} [h^{(1)}] + \eps^2 (R_{\mu\nu}^{(2)} [h^{(1)}] + R_{\mu\nu}^{(2)} [h^{(1)}] ).
+	R_{\mu\nu}(\eta_{\mu\nu} + \eps h_{\mu\nu}^{(1)} + \eps^2 h_{\mu\nu}^{(2)}) = \eps R_{\mu\nu}^{(1)} [h^{(1)}] + \eps^2 (R_{\mu\nu}^{(2)} [h^{(1)}] + R_{\mu\nu}^{(1)} [h^{(2)}] ).
 \]
 Thus,
 \begin{align*}
-	G_{\mu\nu}[\eta + \eps h^{(1)} + \eps^2 h^{(2)}] &= \eps G_{\mu\nu}^{(1)} [h^{(1)}] + \eps^2 (G_{\mu\nu}^{(1)}[h^{(2)}] + R_{\mu\nu}^{(2)}[h^{(1)}] - \frac 12 \eta_{\mu\nu} \eta^{\sigma\tau} R_{\sigma\tau}^{(2)} h^{(1)}]  \\
+	G_{\mu\nu}[\eta + \eps h^{(1)} + \eps^2 h^{(2)}] &= \eps G_{\mu\nu}^{(1)} [h^{(1)}] + \eps^2 (G_{\mu\nu}^{(1)}[h^{(2)}] + R_{\mu\nu}^{(2)}[h^{(1)}] - \frac 12 \eta_{\mu\nu} \eta^{\sigma\tau} R_{\sigma\tau}^{(2)}[h^{(1)}]  \\
 							 & \qquad + \frac 12 \eta_{\mu\nu} h^{(1) \sigma \tau} R^{(1)}_{\sigma\tau} [h^{(2)}] - \frac 12 h_{\mu\nu} \eta^{\sigma\tau} R_{\sigma\tau}^{(1)} [h^{(2)}]).
 \end{align*}
-
 Here,
 \[
 	G_{\mu\nu}^{(1)}[h] = R_{\mu\nu}^{(1)}[h] - \frac 12 \eta_{\mu\nu} \eta^{\sigma\tau} R_{\sigma\tau}^{(1)}[h].
@@ -2446,7 +2445,7 @@ where $t$ is what we had in the previous equation. Considering
 looking at the equation order by order we deduce that
 \begin{align*}
 	G_{\mu\nu}^{(1)}[h^{(1)}] &= 0, \\
-	G_{\mu\nu}^{(1)} [h^{(2)}] &= - R_{\mu\nu}^{(2)} [h^{(1)}] + \frac 12 \eta_{\mu\nu} \eta^{\sigma\tau} R_{\sigma\tau}^{(2)} [h^{(2)}] = 8 \pi t_{\mu\nu} [h^{(1)}].
+	G_{\mu\nu}^{(1)} [h^{(2)}] &= - R_{\mu\nu}^{(2)} [h^{(1)}] + \frac 12 \eta_{\mu\nu} \eta^{\sigma\tau} R_{\sigma\tau}^{(2)} [h^{(1)}] = 8 \pi t_{\mu\nu} [h^{(1)}].
 \end{align*}
 Thus $h^{(2)}$ solves the linearized Einstein equations sourced by an `energy momentum tensor':
 \[
@@ -2474,11 +2473,11 @@ We can get approximate gauge invariance by averaging. Let $W$ be smooth, and van
 \]
 We define the \emph{average}\index{average} of a tensor in almost-inertial coordinates by setting
 \[
-\langle x_{\mu\nu}(\mathbf{x})\rangle = \int W(y - x) X_{\mu\nu}(y) \Diff 4 y.
+\langle X_{\mu\nu}(\mathbf{x})\rangle = \int W(y - x) X_{\mu\nu}(y) \Diff 4 y.
 \]
 Suppose we are in the far-field regime, with radiation of wavelength $\lambda$, and we average over a region of size $a \gg \lambda$. Since $W$ is supported on the ball of size $a$, roughly speaking $\partial_\mu W \sim W/a$, and so if we compute the average of a derivative of a tensor field, by IBP,
-\begin{align*}
-	\langle \partial_\mu X_{\rho\sigma} \rangle &= \int_{\mathbb{R}^4} \partial_\mu W (y - x) X_{\rho\xi} () \Diff 4 y \sim \frac{\langle X_{\rho\sigma}\rangle }{a} \sim \frac{\lambda}{a} \langle \partial_\mu X_{\rho\sigma}\rangle,
+\begin{align*} % fix this
+	\langle \partial_\mu X_{\rho\sigma} \rangle &= \int_{\mathbb{R}^4} \partial_\mu W (y - x) X_{\rho\sigma} (y) \Diff 4 y \sim \frac{\langle X_{\rho\sigma}\rangle }{a} \sim \frac{\lambda}{a} \langle \partial_\mu X_{\rho\sigma}\rangle,
 \end{align*}
 so we can ignore total derivatives inside averages, and hence
 \[
@@ -2593,7 +2592,7 @@ Note that being exact implies being closed, but the converse is only true locall
 	X = \diff Y.
 	\]
 \end{lemma}
-The extent to which closed not equals exact captures topological properties of $M$.
+The extent to which closed does not equal exact captures topological properties of $M$.
 \begin{exbox}
 	On $S^1$, the form $\diff \theta$ is closed, but not exact, despite confusing notation.
 \end{exbox}
@@ -2613,7 +2612,7 @@ Note that Greek indices denote which of the vector fields we are taking, and Rom
 
 We claim that
 \[
-f^{\mu}_a = g^{\mu\sigma} g_{ab} e^{b}_\sigma.
+f^{\mu}_a = \eta^{\mu\sigma} g_{ab} e^{b}_\sigma.
 \]
 
 \begin{proofbox}
@@ -2725,7 +2724,7 @@ We can determine $\omega\indices{^{\mu}_{\nu}}$ and hence $\Gamma$ by computing 
 \begin{exbox}
 	The Schwarzschild metric has an obvious tetrad:
 	\begin{align*}
-		e^0 &= f \diff t, & e^1 &= \frac 1 \diff t, \\
+		e^0 &= f \diff t, & e^1 &= \frac 1f \diff r, \\
 		e^2 &= r \diff \theta & e^3 &= r \sin \theta \diff \phi,
 	\end{align*}
 	where $f = \sqrt{1 - 2M/r}$. Then
@@ -2737,9 +2736,9 @@ We can determine $\omega\indices{^{\mu}_{\nu}}$ and hence $\Gamma$ by computing 
 	\end{align*}
 	Note $\diff e^i = -\omega\indices{^{i}_{\mu}} \wedge e^\mu$, so we can work out the components of $\omega$.
 
-	This lets us compute that $\omega$ is. Note $\omega\indices{^{0}_{0}} = 0$ by antisymmetry, so the first equation implies
+	This lets us compute what $\omega$ is. Note $\omega\indices{^{0}_{0}} = 0$ by antisymmetry, so the first equation implies
 	\[
-	\omega\indices{^{0}_{1}} = f' e^0, \qquad \omega\indices{^{0}_{2}} \propto e^2, \qquad \omega\indices{^{0}_{2}} \propto e_3.
+	\omega\indices{^{0}_{1}} = f' e^0, \qquad \omega\indices{^{0}_{2}} \propto e^2, \qquad \omega\indices{^{0}_{3}} \propto e^3.
 	\]
 	Similarly we get
 	\[
@@ -2876,7 +2875,7 @@ From the previous results, we can show:
 	\begin{itemize}
 		\item[]
 		\item $\ast (\ast X) = \pm (-1)^{p(n-p)}X$.
-		\item $(\ast d \ast X)_{a_1 \ldots a_{p-1}} = \pm (-1)^{p(n-p)} \nabla^b X_{a_1 \ldots a_{p-1} b}$.
+		\item $(\ast \!\diff \, \bigl. \ast X)_{a_1 \ldots a_{p-1}} = \pm (-1)^{p(n-p)} \nabla^b X_{a_1 \ldots a_{p-1} b}$.
 	\end{itemize}
 \end{lemma}
 
@@ -2884,11 +2883,11 @@ From the previous results, we can show:
 	\begin{enumerate}
 		\item In Euclidean space, identifying a vector field $X^a$ with the one form $X_a$, the usual operations of vector calculus become
 			\[
-			\nabla f = \diff f, \qquad \mathrm{div} X = \ast \diff \ast X, \qquad \mathrm{curl} X = \ast \diff X.
+			\nabla f = \diff f, \qquad \mathrm{div} X = \ast \!\diff \,\bigl. \ast X, \qquad \mathrm{curl} X = \ast \! \diff X.
 			\]
 			Note that $\diff ^2 = 0$ means
 			\[
-			\mathrm{curl} \nabla f = 0, \qquad \mathrm{div} \mathrm{curl} X = 0.
+			\mathrm{curl} \, \nabla f = 0, \qquad \mathrm{div} \, \mathrm{curl} \, X = 0.
 			\]
 		\item Maxwell's equations are
 			\[
@@ -2896,7 +2895,7 @@ From the previous results, we can show:
 			\]
 			This can be written as
 			\[
-			\diff \ast F = - 4 \pi \ast j, \qquad \diff F = 0.
+			\diff \,\bigl. \ast F = - 4 \pi \,\bigl.\ast j, \qquad \diff F = 0.
 			\]
 			From Poincar\'e's lemma, we can locally write $F = \diff A$ for some one-form $A$.
 	\end{enumerate}
@@ -2909,7 +2908,7 @@ Suppose on a manifold $M$ we have a right-handed coordinate chart $\phi : \mathc
 \[
 X = X_{1 \ldots n} \diff x^1 \wedge \ldots \wedge \diff x^n.
 \]
-If $\psi : O \to U$ is another right-handed coordinate chart with coordinates $\{y^\mu\}$ then
+If $\psi : \mathcal{O} \to U$ is another right-handed coordinate chart with coordinates $\{y^\mu\}$ then
 \begin{align*}
 	X &= \tilde X_{1 \ldots n} \diff y^1 \wedge \ldots \wedge \diff y^n = \tilde X_{1 \ldots n} \frac{\partial y^1}{\partial x^{\mu_1}} \cdots \frac{\partial y^n}{\partial x^{\mu_n}} \diff x^{\mu_1} \wedge \cdots \wedge \diff x^{\mu_n} \\
 	  &= \tilde X_{1 \ldots n} \det \left( \frac{\partial y^\mu}{\partial x^\nu} \right) \diff x^1 \wedge \ldots \wedge \diff x^n.
@@ -2920,7 +2919,7 @@ X_{1 \ldots n} = \tilde X_{1 \ldots n} \det \left( \frac{\partial y^\mu}{\partia
 \]
 As a result,
 \[
-\int_{U} X_{1 \ldots n} \diff x^1 \ldots \diff x^n = \int_U \tilde X_{1\ldots n} \diff y^1 \ldots y^n.
+\int_{U} X_{1 \ldots n} \diff x^1 \ldots \diff x^n = \int_U \tilde X_{1\ldots n} \diff y^1 \ldots \diff y^n.
 \]
 We can define
 \[
@@ -2960,9 +2959,9 @@ This does not depend on a choice of $\chi_i$.
 \begin{definition}
 	Suppose $S, M$ are manifolds and $\dim S = m < n = \dim M$. A smooth map $\iota : S \to M$ is an \emph{embedding}\index{embedding} if it is an injection, i.e. $\iota_\ast : T_p S \to T_{\iota(p)}M$ is injective, and if $\iota$ is injective.
 
-	If $\iota$ is an embedding, then $\iota(S)$ is an embedded \emph{submanifold}\index{submanifold}. If $m = n - 1$, we call it a hupersurface.
+	If $\iota$ is an embedding, then $\iota(S)$ is an embedded \emph{submanifold}\index{submanifold}. If $m = n - 1$, we call it a hypersurface.
 
-	If $S, M$ are orientable, and $\iota(S)$ is an embedded submanifold of $M$, we define the intergral of an $m$-form $X$ over $\iota(S)$ by
+	If $S, M$ are orientable, and $\iota(S)$ is an embedded submanifold of $M$, we define the integral of an $m$-form $X$ over $\iota(S)$ by
 	\[
 	\int_{\iota(S)} X = \int_S \iota^{\ast}(X).
 	\]
@@ -2983,7 +2982,7 @@ This does not depend on a choice of $\chi_i$.
 	\[
 		\mathbb{R}^n_{\leq 0} = \{(x^1, \ldots, x^n) \mid x^1 \leq 0\}.
 	\]
-	The boundary of $M$, $\partial M$, is the set of points mapped in any chart to $\{x^1 = 0\}$. It is naturally an $n-1$ dimensional manifold with embedding $\iota : \partial M \to M$.
+	The \emph{boundary}\index{boundary} of $M$, $\partial M$, is the set of points mapped in any chart to $\{x^1 = 0\}$. It is naturally an $n-1$ dimensional manifold with embedding $\iota : \partial M \to M$.
 
 	If $M$ is oriented, then $\partial M$ inherits an orientation by requiring that $(x^2, \ldots, x^n)$ is a right-handed chart on $\partial M$ when $(x^1, \ldots, x^n)$ is right-handed on $M$.
 \end{definition}
@@ -3002,7 +3001,7 @@ Stokes' theorem is the basis of all `integration by parts' arguments. If $N$ car
 
 If $V$ is a vector field on $N$, then we define the \emph{interior product}\index{interior product} or \emph{interior derivative}\index{interior derivative} or \emph{hook product}\index{hook product}
 \[
-	(V \lrcorner \eps)_{a_2 \ldots a_n} = V^a \eps_{a a_2 \ldots a_n}.
+	(V \lrcorner \, \eps)_{a_2 \ldots a_n} = V^a \eps_{a a_2 \ldots a_n}.
 \]
 We can check that
 \[
@@ -3025,34 +3024,34 @@ In these cases we can relate $\iota^{\ast}(V \lrcorner\, \eps_g)$ to the volume 
 
 Pick $b_2, \ldots, b_n$ a right-handed orthonormal basis on $S$ with respect to $h$. Then $\iota_\ast b_2, \ldots, \iota_\ast b_n$ are orthonormal with respect to $N$.
 
-The \emph{unit normal}\index{unit normal} to $S$ is the unique unit vector $\overrightarrow n$ orthogonal to $\iota_\ast b_2, \ldots, \iota_\ast b_n$ with
+The \emph{unit normal}\index{unit normal} to $S$ is the unique unit vector $\vec n$ orthogonal to $\iota_\ast b_2, \ldots, \iota_\ast b_n$ with
 \[
-\eps(\overrightarrow n, \iota_\ast b_2, \ldots, \iota_\ast b_n) = g(\overrightarrow n, \overrightarrow n).
+\eps(\vec n, \iota_\ast b_2, \ldots, \iota_\ast b_n) = g(\vec n, \vec n).
 \]
-Then if $\iota(S)$ is spacelike, then $\overrightarrow n$ is timelike, and id $\iota(S)$ is timelike, $\overrightarrow n$ is spacelike.
+Then if $\iota(S)$ is spacelike, then $\vec n$ is timelike, and if $\iota(S)$ is timelike, $\vec n$ is spacelike.
 
 With this definition,
 \[
-V\lrcorner\,\eps(\iota_\ast b_2, \ldots,\iota_\ast b_n)=V^a\overrightarrow n_a.
+V\lrcorner\,\eps(\iota_\ast b_2, \ldots,\iota_\ast b_n)=V^a\vec n_a.
 \]
 Thus,
 \[
-\iota^{\ast}(V\lrcorner\,\eps_g)=\iota^\ast(V^a\overrightarrow n_a)\eps_b,
+\iota^{\ast}(V\lrcorner\,\eps_g)=\iota^\ast(V^a\vec n_a)\eps_h,
 \]
 which means
 \[
-\int_S V\cdot\diff S=\int_SV^a\overrightarrow n_a\diff\mathrm{vol}_g.
+\int_S V\cdot\diff S=\int_SV^a\vec n_a\diff\mathrm{vol}_h.
 \]
 We have shown that
 \[
-\int_{\partial N}V^a\overrightarrow n_a\diff\mathrm{vol}_h=\int_N\nabla_aV^a\diff\mathrm{vol}_g.
+\int_{\partial N}V^a\vec n_a\diff\mathrm{vol}_h=\int_N\nabla_aV^a\diff\mathrm{vol}_g.
 \]
-Checking the definition, $\overrightarrow n$ points out of $N$ for $\partial N$ timelike, and into $N$ for $\partial N$ spacelike.
+Checking the definition, $\vec n$ points out of $N$ for $\partial N$ timelike, and into $N$ for $\partial N$ spacelike.
 
 \subsection{The Einstein Hilbert Action}%
 \label{sub:eha}
 
-We want to derive Einstein's equations rom an action principle. We expect an action of the form
+We want to derive Einstein's equations from an action principle. We expect an action of the form
 \[
 	S[g,\mathrm{matter}] = \int_M L(g, \mathrm{matter}) \diff \mathrm{vol}_g,
 \]
@@ -3078,7 +3077,7 @@ Hence $\Delta^{\mu\nu}$ is independent of $g_{\mu\nu}$, and moreover
 \[
 \Delta^{\mu\nu} = g g^{\mu\nu}.
 \]
-Hence under $g_{\mu\nu} \o g_{\mu\nu} + \delta g_{\mu\nu}$,
+Hence under $g_{\mu\nu} \to g_{\mu\nu} + \delta g_{\mu\nu}$,
 \[
 \delta g = \frac{\partial g}{\partial g_{\mu\nu}} \delta g_{\mu\nu} = \Delta^{\mu\nu} \delta g_{\mu\nu} = g g^{\mu\nu} \delta g_{\mu\nu},
 \]
@@ -3124,7 +3123,7 @@ X^c = g^{ab} \delta \Gamma\indices{_a^c_b} - g^{c b} \delta \Gamma\indices{_b^a_
 
 We deduce from the formulae for $\delta R_g$ and $\delta \diff \mathrm{vol}_g$ that
 \[
-\delta S_{\mathrm{EH}} = \frac{1}{16\pi} \int_m \left( \frac 12 g^{ab} R - R^{ab} \right) \delta g_{ab} + \nabla_c X^c \diff \mathrm{vol}_g.
+\delta S_{\mathrm{EH}} = \frac{1}{16\pi} \int_M \left( \frac 12 g^{ab} R - R^{ab} \right) \delta g_{ab} + \nabla_c X^c \diff \mathrm{vol}_g.
 \]
 Since $g$ vanishes outside some region, using Stokes' theorem on the last part, it vanishes. Hence this is
 \[
@@ -3158,7 +3157,7 @@ which in other words are Einstein's equations.
 	then under $g \to g + \delta g$,
 	\begin{align*}
 		\delta S_{\mathrm{MATTER}} &= - \int_M \left[ \frac 12 \delta(g^{ab}) \nabla_a \psi \nabla_b \psi \diff \mathrm{vol}-g + \frac 12 g^{ab} \nabla_a \psi \nabla_b \psi \delta(\diff \mathrm{vol}_g) \right] \\
-					   &= \frac 12 \int_M \left( g^{ac} g^{bd} \nabla_c \psi \nabla_d \psi \delta g_{ab} - \frac 12 (g^{cd} \nabla_\psi \nabla_d \psi) g^{ab} \delta g_{ab} \right) \diff \mathrm{vol}_g \\
+					   &= \frac 12 \int_M \left( g^{ac} g^{bd} \nabla_c \psi \nabla_d \psi \delta g_{ab} - \frac 12 (g^{cd} \nabla_c \psi \nabla_d \psi) g^{ab} \delta g_{ab} \right) \diff \mathrm{vol}_g \\
 					   &= \frac 12 \int_M T^{ab} \delta g_{ab} \diff \mathrm{vol}_g,
 	\end{align*}
 	where
@@ -3169,7 +3168,7 @@ which in other words are Einstein's equations.
 
 We can show that varying $\psi \to \psi + \delta \psi$ in the above that
 \[
-\nabla_c \nabla^ \psi.
+\nabla_c \nabla^c \psi = 0.
 \]
 It can be shown that diffeomorphism of the matter action implies that $\nabla_a T^{ab} = 0$.
 
@@ -3178,7 +3177,7 @@ It can be shown that diffeomorphism of the matter action implies that $\nabla_a 
 
 We expect that Einstein's equation can be solved given data on a spacelike hypersurface. What is the right data?
 
-Suppose that $\iota : \Sigma \to M$ 	s an embedding, such that $\iota(\Sigma)$ is spacelike. This means that $h= \iota^{\ast}(g)$ is Riemannian.
+Suppose that $\iota : \Sigma \to M$ is an embedding, such that $\iota(\Sigma)$ is spacelike. This means that $h= \iota^{\ast}(g)$ is Riemannian.
 
 Let $n$ be a choice of unit normal to $\iota(\Sigma)$. We define, for $X, Y$ vector fields on $\Sigma$,
 \[
@@ -3199,7 +3198,7 @@ Take
 Then,
 \begin{align*}
 	k(X, Y) &= g_{\mu\nu} n^\mu \tilde X^\sigma \nabla_\sigma \tilde Y^\nu \\
-		&= \alpha \delta\indices{^{0}_{\nu}} \tilde X^\sigma (\partial_\sigma \tilde Y^\nu + \Gamma\indices{_\sigma^\nu_\tau} \tilde Y^\tau) - \alpha \Gamma\indices{_i^0_j} X^i Y^j.
+		&= \alpha \delta\indices{^{0}_{\nu}} \tilde X^\sigma (\partial_\sigma \tilde Y^\nu + \Gamma\indices{_\sigma^\nu_\tau} \tilde Y^\tau) = \alpha \Gamma\indices{_i^0_j} X^i Y^j.
 \end{align*}
 Hence $k$ is a symmetric 2-tensor on $\Sigma$. We can show that if $(M, g)$ solves the vacuum Einstein equations, then the Einstein constraint equations hold:
 \[

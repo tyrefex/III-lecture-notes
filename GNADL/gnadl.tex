@@ -1,0 +1,1857 @@
+\documentclass[12pt]{article}
+
+\usepackage{ishn}
+
+\makeindex[intoc]
+
+\begin{document}
+
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+	\begin{center}
+		\vspace*{1em}
+		\Huge
+		\textbf{III Geometric Numerical Analysis and Deep Learning}
+
+		\vspace{1em}
+		\large
+		Ishan Nath, Lent 2024
+
+		\vspace{1.5em}
+
+		\Large
+
+		Based on Lectures by Dr. Davide Murari
+
+		\vspace{1em}
+
+		\large
+		\today
+	\end{center}
+	
+\end{titlepage}
+\hypersetup{pageanchor=true}
+
+\tableofcontents
+
+\newpage
+
+%lecture 1
+
+\section{One-step Methods}%
+\label{sub:o}
+
+The problem we are studying is the initial-value ODE
+\[
+\dot x(t) = F(x(t)), \qquad x(0) = x_0.
+\]
+We can make $F$ autonomous, by adding $t$ as a dimension and stating $\dot t = 1$. $F : \mathbb{R}^{d} \to \mathbb{R}^{d}$ is a `smooth' vector field.
+
+Our goal is, given $T > 0$ and times $0 = t_0 < t_1 < t_2 < \cdots < T$, find values $x_i$ where $x_i \approx x(t_i)$. We assume a uniform grid: $h = t_{i+1} - t_i$.
+
+A \emph{one-step method}\index{one-step method} is a map $\vphi_{F}^{h} : \mathbb{R}^{d} \to \mathbb{R}^{d}$. Then $x_{i+1} = \vphi_{F}^{h}(x_i)$.
+
+The \emph{flow}\index{flow} is $\phi_F : \mathbb{R} \times \mathbb{R}^{d} \to \mathbb{R}^d$, given by $(t, x_0) \mapsto x(t)$, the solution to the IVP at time $t$. We also write this as $\phi_F^t(x_0)$. So $\phi_F^h(x(t)) = x(t + h)$.
+
+\begin{definition}[Order of a one-step method]
+	A one-step method $\phi_F^h : \mathbb{R}^{d} \to \mathbb{R}^{d}$ applied to a `smooth' vector field $F : \mathbb{R}^{d} \times \mathbb{R}^{d}$ is of order $p \in \mathbb{N}$ if
+	\[
+	\vphi_F^h = \phi_F^h + \mathcal{O}(h^{p+1}).
+	\]
+\end{definition}
+
+\begin{exbox}[Explicit Euler Method]
+	We take
+	\[
+	\vphi_F^h(x) = x + h F(x).
+	\]
+	By Taylor expansion,
+	\[
+	\phi_F^h(x) = x + h F(x) + \mathcal{O}(h^2).
+	\]
+	Hence $\vphi_F$ has order $p = 1$.
+\end{exbox}
+
+\subsection{Runge-Kutta Methods}%
+\label{sub:rkm}
+
+These methods are characterized by a \emph{tableaux}\index{tableaux}: a triple $(A, b, c)$ where $A \in \mathbb{R}^{s \times s}$, $b, c \in \mathbb{R}^{s}$.
+
+\begin{definition}[Runge-Kutta Method]
+	Consider a non-autonomous ODE $x'(t) = F(t, x(t))$. A \emph{Runge-Kutta method}\index{Runge-Kutta method} of $s$-stages based on tableaux $(A, b, c)$ is a one-step method defined as
+	\[
+	\phi_F^{h}(x_n) = x_n + h \sum_{i = 1}^n b_i F(t_n + c_i h, K_i),
+	\]
+	where
+	\[
+	K_i = x_n + h \sum_{j=1}^s A_{ij} F(t_n + c_j h, K_j).
+	\]
+\end{definition}
+The $K_i$ are defined implicitly; to solve we need to solve $d \times s$ non-linear equations, which may be costly. Making $A$ lower triangular may fix this by making the problem explicit.
+
+The Euler method is a $(0, 1, 0)$ Runge-Kutta method.
+
+\subsection{Colocation Methods}%
+\label{sub:cm}
+
+For these class of methods, we will assume that between two time steps $t_n$ and $t_{n+1}$, the solution $x(t)$ behaves like $\tilde x(t)$, where $\tilde x$ is a real polynomial of degree $s$. To find suitable $\tilde x$, we must supply some conditions.
+\begin{enumerate}
+	\item $\tilde x(t_n) = x_n$.
+	\item At times $t_{n,i}$, which are between $t_n$ and $t_{n+1}$, $\dot{\tilde x}(t_{n,i}) = F(\tilde x(t_{n,i}))$.
+\end{enumerate}
+The last enforced condition is similar to the loss term in a PINN.
+
+We typically take $t_{n,i} = t_n + c_i h$, for some $0 \leq c_1 < c_2 < \cdots < c_s \leq 1$.
+
+It turns out that these methods are Runge-Kutta methods.
+\begin{proofbox}
+	Since $\dot{\tilde x}$ is degree $s-1$, it is characterized by $s$ points. In particular, its values at times $t_{n,i}$ are enough. This means that
+	\[
+		\dot{\tilde x}(t) = \sum_{i = 1}^s F(\tilde x(t_n + c_i h)) \ell_i \left(\frac{t - t_n}{h} \right),
+	\]
+	where $\ell_i$ are the elementary Lagrange polynomials,
+	\[
+		\ell_i(t) = \prod_{\substack{j=1\\j \neq i}}^s \frac{t - c_j}{c_i - c_j}.
+	\]
+	We can show $\ell_i(c_j) = \delta_{ij}$.
+% lecture 2
+	To find the values, we integrate the above expression from $t_n$ to $t_n + c_i h$:
+	\[
+		\int_{t_n}^{t_n + c_I h} \dot{\tilde x}(t) \diff t = \sum_{j = 1}^s F(\tilde x (t_n + c_j h)) \int_{t_n}^{t_n + c_i h} \ell_j \left( \frac{t - t_n}{h} \right) \diff t,
+	\]
+	or
+	\[
+	\tilde x(t_n + c_i h) = \tilde x(t_n) + h \sum_{j = 1}^s F(\tilde x(t_n + c_j h)) \int_0^{c_i} \ell_j(s) \diff s.
+	\]
+	This reminds us of the Runge-Kutta methods, where
+	\[
+	K_i = x_n + h \sum_{j = 1}^s a_{ij} F(K_j),
+	\]
+	where $a_{ij}$ is our integral, and
+	\[
+	x_{n+1} = \tilde x(t_n + h) = x_n + h \sum_{j = 1}^s b_i F(K_i),
+	\]
+	where
+	\[
+	b_i = \int_0^{1} \ell_j(s) \diff s
+	\]
+\end{proofbox}
+
+\subsection{Gauss-Legendre Colocation Methods}%
+\label{sub:glcm}
+
+These are colocation methods where $c_1, \ldots, c_s \in [0, 1]$ are the zeroes of the degree $s$ Legendre polynomial $P_s$,
+\[
+P_0(x) = 1, \qquad P_1(x) = x, \qquad P_2(x) = \frac 12 (3x^2 - 1),
+\]
+and in general
+\[
+P_n(x) = \frac{1}{2^{n}n!} \frac{\Diff n}{\diff x^{n}} (x^2 - 1)^{n}.
+\]
+Importantly, they are orthogonal in $L^2(-1, 1)$. Remember quadrature rules:
+\[
+\int_a^b f(x) \diff x = \sum_{i=1}^s w_i f(x_i) + \mathrm{err}(f).
+\]
+If we pick $c_i$ to be the zeroes of the Legendre polynomial,
+\[
+\int_{t_n}^{t_n + h} f(t) \diff t = h \sum_{i = 1}^s w_i f(t_n + c_i h) + \mathrm{err}(f),
+\]
+where
+\[
+	|\mathrm{err}(f)| \leq c h^{2s+1} \max_{t \in [t_0, t_0 + h]} |f^{(2s)}(t)|.
+\]
+
+\begin{proposition}[Grobern-Alekseev Formula]
+	Let us consider two initial value problems:
+	\begin{align*}
+		\begin{dcases}
+			\dot x(t) = F(x(t)), \\
+			x(0) = x_0,
+		\end{dcases}
+		\qquad \qquad \qquad
+		\begin{dcases}
+			\dot y(t) = F(y(t)) + G(y(t)), \\
+			y(0) = x_0,
+		\end{dcases}
+	\end{align*}
+	with $F \in C^1(\mathbb{R}^d, \mathbb{R}^d)$, and supposing these admit a unique solution, then for all $t \geq 0$,
+	\[
+	y(t) - x(t) = \int_0^t \frac{\partial \phi_F^{t - z}(z_0)}{\partial z_0} \biggr|_{z_0 = y(z)}  G(y(z)) \diff z.
+	\]
+\end{proposition}
+
+\begin{theorem}
+	The Gauss-Legendre collocation methods based on $s$ collocation points are of order $2s$.
+\end{theorem}
+
+\begin{proofbox}
+	Notice that $x, \tilde x$ satisfy
+	\begin{align*}
+		\begin{dcases}
+			\dot{\tilde x}(t) = F(\tilde x(t)) + (\dot{\tilde x}(t) - F(\tilde x(t))), \\
+			\tilde x(t_n) = x_n,
+		\end{dcases}
+		\qquad \qquad
+		\begin{dcases}
+			\dot x(t) = F(x(t)), \\
+			x(t_n) = x_n,
+		\end{dcases}
+	\end{align*}
+	then we can use the GA formula to see
+	\begin{align*}
+		\tilde x(t_{n+1}) - x(t_{n+1}) &= \int_{t_n}^{t_{n+1}} \frac{\partial \phi_{F}^{t_{n+1} - z}(z_0)}{\partial z_0} \biggr|_{z_0 = \tilde x(z)} (\dot{\tilde x}(z) - F(\tilde x(z))) \diff z \\
+					       &= h \sum_{i = 1}^s w_i \frac{\partial \phi_F^{t_{n+1} - t_{n,i}}(z_0)}{\partial z_0} \biggr|_{z_0 = \tilde x(t_{n,i})} (\dot{\tilde x}(t_{n,i}) - F (\tilde x(t_{n,i}))) + \mathrm{err},
+	\end{align*}
+	but the defect terms are $0$, so we are left with the error terms, which for the zeroes of the Legendre polynomials are $\mathcal{O}(h^{2s+1})$. This gives an order $2s$ method.
+\end{proofbox}
+
+\begin{exbox}
+	Consider the implicit midpoint equation:
+	\[
+	x_{n+1} = x_n + h F \left( \frac{x_n + x_{n+1}}{2} \right).
+	\]
+	This does not look like a Runge-Kutta method, but if we check $A = [1/2]$, $c = [1/2]$ and $b = 1$, we get
+	\[
+	K_1 = x_n + \frac h2 F(K_1), \qquad x_{n+1} = x_n + h F(K_1).
+	\]
+	Now notice that
+	\begin{align*}
+		\frac{x_n + x_{n+1}}{2} &= \frac{x_n}{2} + \frac{x_n + h F(K_1)}{2} = x_n + \frac h2 F(K_1) = K_1.
+	\end{align*}
+\end{exbox}
+
+\subsection{A-Stability or Linear Stability}%
+\label{sub:stabs}
+
+Consider the linear DE $\dot x = \lambda x$, $x(0) = 1$ for $\lambda \in \mathbb{C}$. We have analytic solution $x(t) = e^{\lambda t}$.
+
+Consider discretizing this problem, for $\Re(\lambda) < 0$. Then
+\[
+x_{n+1} = x_n + h \lambda x_n = (1 + h \lambda) x_n.
+\]
+So $x_n = (1 + h \lambda)^n x_0$. If $\Re \lambda < 0$, we expect $x_n \to 0$, but this is only the case if $|1 + h \lambda| < 1$, which bounds our step size $h$.
+
+% lecture 3
+
+\begin{lemma}[Stability Function]
+	Let us consider the linear test equation $\dot x = \lambda x$. If we apply an $s$-stage Runge-Kutta method with tableaux $(A, b, c)$, then the update map is $\phi^{h}(x_n) = R(h \lambda) x_n$, where
+	\[
+	R(z) = 1 + z b^{T} (I_s - z A)^{-1} 1_s.
+	\]
+	$R(z)$ is called the \emph{stability function}\index{stability function} of the Runge-Kutta method, and it is a rational function.
+\end{lemma}
+
+\begin{proofbox}
+	Recall that
+	\[
+	K_i = x_n h \lambda \sum_{j = 1}^s a_{ij} K_j,
+	\]
+	and
+	\[
+	x_{n+1} = x_n + h \lambda \sum_{i = 1}^s K_i.
+	\]
+	Now $a_{ij} K_j = (A K)_i$, where $K = (K_1, \ldots, K_s)$. This lets us write
+	\[
+	K = x_n 1_s + h \lambda A K \implies K = (I - h \lambda A)^{-1} x_n 1_s
+	\]
+	Applying this to $x_{n+1}$, we see
+	\begin{align*}
+		x_{n+1} &= x_n + h \lambda b^{T} ((I - h \lambda A)^{-1} x_n 1_s) \\
+			&= [1 + h \lambda b^{T}(I - h \lambda A)^{-1} 1_s] x_n = R(h \lambda) x_n.
+	\end{align*}
+	Now we want to show this is a rational function:
+	\begin{align*}
+		R(z) &= 1 + z b^{T}(I_s - zA)^{-1} 1_s = \det(I_s + z(I_s - zA)^{-1} 1_S b^{T}) \\
+		     &= \det((I_s - zA)^{-1} (I_s - zA) + z(I_s - zA)^{-1} 1_s b^{T}) \\
+		     &= \frac{\det(I_s - z A + z 1_s b^{T})}{\det(I_s - z A)}.
+	\end{align*}
+	Hence $R$ is rational. If $A$ is explicit, so it is lower-triangular, then $\det(I_s - zA) = 1$, so $R$ is a polynomial of degree $s$.
+\end{proofbox}
+
+\begin{exbox}
+	Consider the implicit method
+	\[
+	x_{n+1} = x_n + h F(x_{n+1}) = x_n + \lambda x_{n+1}.
+	\]
+	Solving this,
+	\[
+	x_{n+1} = \frac{1}{1 - h \lambda} x_n = R(h \lambda) x_n,
+	\]
+	so $R(z) = 1/(1 - z)$.
+\end{exbox}
+
+\begin{definition}[A-stable Runge-Kutta Method]
+	A Runge-Kutta method $\phi^{h}$ of tableaux $(A, b, c)$ and stability function $R(z)  1 + zb^{T}(I_s - z A)^{-1} 1_s$ is \emph{A-stable}\index{A-stable} or \emph{linearly stable}\index{linear stability} if
+	\[
+		\mathbb{C}^{-} = \{z \in \mathbb{C} \mid \Re(z) < 0\} \subseteq S = \{z \in \mathbb{C} \mid |R(z)| < 1\}.
+	\]
+\end{definition}
+
+\begin{exbox}
+	Recall that for explicit Euler, $R(z) = 1 + z$, and for implicit Euler $R(z) = 1/(1-z)$.
+
+	For explicit Euler,
+	\[
+	|R(z)| < 1 \iff |z + 1 | < 1,
+	\]
+	which corresponds to a circle around $-1$ of radius $1$. This does not cover the entirety of $\mathbb{C}^{-}$, so this method is not stable.
+
+	On the other hand, for implicit Euler,
+	\[
+	|R(z)| < 1 \iff |z - 1| > 1.
+	\]
+	This is the exterior of the circle around $1$ of radius $1$, which contains all of $\mathbb{C}^{-}$, hence this method is stable.
+\end{exbox}
+
+We can generalize this observation about the explicit Euler method to all explicit methods. If $\phi^{h}$ is an explicit Runge-Kutta method, then $R(z)$ is a polynomial, hence $|R(z)| < 1$ is bounded So these are never A-stable.
+
+In fact we can say a bit more about $R$ for explicit schemes. Recall $x(h) = e^{\lambda h} x_0$. So if $x_1 = R(\lambda h) x_0 + \mathcal{O}(h^{p+1})$, $R(\lambda h)$ must coincide with $e^{\lambda h}$ up to the order $p$ terms.
+
+\newpage
+
+\section{Energy-Preserving Numerical Methods}%
+\label{sec:epnm}
+
+Consider the linear dynamical system
+\[
+\dot q = p, \qquad \dot p = - q.
+\]
+This can model a spring system, and is the first-order linearization of $\ddot q = -q$. Letting $x = (q, p)$, we can rewrite this as
+\[
+\dot x= J \nabla H(x),
+\]
+where
+\[
+J =
+\begin{pmatrix}
+	0 & 1 \\ -1 & 0
+\end{pmatrix}, \qquad H(x) = \frac{\|x\|^2}{2} = \frac{p^2 + q^2}{2}.
+\]
+The Lie derivative of $H$ is
+\[
+\frac{\diff}{\diff t} H(x(t)) = \partial_q H \cdot \dot q + \partial_p H \cdot \dot p = q \cdot p - p \cdot q = 0.
+\]
+So $H$ is constant along the curves of $x$. Using explicit Euler,
+\begin{align*}
+	x_{n+1} &= x_n + h J \nabla H (x_n) = [I + h J]x_n, \\
+	H(x_{n+1}) &= \frac 12 x_n^{T}(I + h J)^T (I + h J) x_n \\
+		   &= \frac 12 x_n^{T}(I + h J + h J^{T} + h^2 J^{T} J)x_n.
+\end{align*}
+We want $H$ to be conserved. Note that $J$ satisfies the following properties:
+\[
+J^{T} = -J, \qquad J^{T}J = - J^2 = I.
+\]
+Hence this gives
+\[
+H(x_{n+1}) = \frac 12 x_n^{T} ( 1 + h^2) I x_n = (1 + h^2) \frac{\|x_n\|_2^2}{2} = (1 + h^2)H(x_n).
+\]
+So the energy is not conserved, but has an error term of size $h^2$. If we take non-zero step size, this means the energy of our approximation will increase gradually, and we will `spiral out'.
+
+\begin{proposition}
+	Consider $\dot x = f(x)$ such that there exists $H \in C^{\infty}(\mathbb{R}^{d}, \mathbb{R})$ with $H(x(t)) = H(x_0)$. Then a one-step method $\phi_F^{h} : \mathbb{R}^{d} \to \mathbb{R}^{d}$ of order $p$ will satisfy
+	\[
+	H(\phi_F^{h}(x_0)) = H(x_0) + \mathcal{O}(h^{p+1}).
+	\]
+\end{proposition}
+
+\begin{exbox}
+	We can check that for the implicit midpoint method
+	\[
+	x_{n+1} = x_n + h F \left( \frac{x_n + x_{n+1}}{2} \right) = x_n + h J (x_n + x_{n+1}),
+	\]
+	the energy is exactly conserved.
+\end{exbox}
+
+% lecture 4
+
+\subsection{Neural Networks}%
+\label{sub:nns}
+
+Mathematically, \emph{neural networks}\index{neural network} are just a parametric map $\mathcal{N}_\theta : \mathbb{R}^{c} \to \mathbb{R}^{d}$, defined by composing $L$ functions, called \emph{layers}\index{layer}:
+\[
+\mathcal{N}_\theta = F_{\theta_L} \circ \cdot F_{\theta_1},
+\]
+where $F_{\theta_i} : \mathbb{R}^{c_i} \to \mathbb{R}^{c_{i+1}}$.
+
+Usually we have alternating linear maps with non-linear functions entrywise $\sigma$.
+
+$\sigma$ is the \emph{activation function}\index{activation function}, e.g. $\mathrm{RELU}$, or $\tanh$ or sigmoid.
+
+Choosing $L_i(\mathbf{x}) = A_i \mathbf{x} + \mathbf{b}_i$, the layer is $F_{\theta_i}(\mathbf{x}) = \sigma(A_i \mathbf{x} + \mathbf{b}_i)$, a \emph{fully-connected neural network}\index{fully-connected neural network}.
+
+If $\mathbf{L}_i(\mathbf{x}) = k_i \ast \mathbf{x} + \mathbf{b}_i$, we have a \emph{convolutional neural network}\index{convolutional neural network}.
+
+The weights $\theta$ of the neural network $\mathcal{N}_\theta$ are usually found by solving an optimisation problem; the process is called \emph{network training}\index{network training}.
+
+The \emph{loss function}\index{loss function} is the function to be minimized, as a result of the data or properties we want the network to satisfy. A typical loss function is the \emph{mean-squared error}
+\[
+\mathcal{L}(\theta) = \frac 1N \sum_{i = 1}^N \|\mathcal{N}_\theta (\mathbf{x}_i) - \mathbf{y}_i\|_2^2.
+\]
+A fundamental result is the universal approximation theorem: a one-layer neural network can represent any function on a compact set up to error $\eps$, as long as $\sigma$ is not a polynomial.
+
+
+A particularly interesting architecture is given by \emph{residual networks}\index{residual networks}, where
+\[
+F_{\theta_i}(\mathbf{x}) = \mathbf{x} + \mathcal{F}_{\theta_i}(\mathbf{x}).
+\]
+Here e.g. $\mathcal{F}$ could be a fully-connected layer, then a non-linearity. These were introduced as they are easier to train when the network has a high number of layers.
+
+Consider a classification problem, where $\mathbf{x}_i$ is say an image, and $y_i$ is a classification. We say $\mathcal{N}_\theta(\mathbf{x}) \in [0, 1]$, and classify $y_i = 1$ if $\mathcal{N}_{\theta}(\mathbf{x}_i) > 0.5$.
+
+Typically one uses binary cross entropy. To minimize $\mathcal{L}(\theta)$, we typically use gradient descent:
+\[
+\theta_{k+1} = \theta_k - \tau \nabla \mathcal{L}(\theta_k).
+\]
+If the gradient entries are too large or small, we struggle to find a meaningful set of weights.
+
+For a ResNet, the layer
+\[
+F_{\theta_i}(\mathbf{x}) = \mathbf{x} + B_i^{T} \sigma(A_i \mathbf{x} + \mathbf{b}_i) = \mathbf{x} + \mathcal{F}_{\theta_i}(\mathbf{x})
+\]
+is an explicit Euler step of size 1 for the initial value problem
+\[
+\mathbf{y}(0) = \mathbf{x}, \qquad \mathbf{\dot y}(t) = B_i^{T}\sigma(A_i \mathbf{y}(t) + \mathbf{b}_i) = \mathcal{F}_{\theta_i}(\mathbf{y}(t)).
+\]
+We can define \emph{ResNet-like neural networks}\index{ResNet-like neural networks} by choosing parametric functions $\mathcal{S}_\sigma$ and a numerical method $\vphi_{\mathcal{F}}^h$, like explicit Euler, and set
+\[
+\mathcal{N}_\theta(\mathbf{x}) = \vphi_{\mathcal{F}_{\theta_L}}^{h_L} \circ \cdot \circ \vphi_{\mathcal{F}_{\theta_1}}^{h_1}(\mathbf{x}).
+\]
+We can combine these with lifting and projection layers, as for usual neural networks.
+
+We can also use neural networks to discover differential equations. If we for example say
+\[
+\mathbf{\dot x} = \mathcal{N}_{\theta}(\mathbf{x}),
+\]
+and solve with numerical methods we can discover the equations governed by the system. If we let
+\[
+\mathbf{\dot x} = J \nabla H_{\theta}(\mathbf{x}),
+\]
+this gives a network with a Hamiltonian. We can also use this to solve differential equations: say we want a network $\mathcal{N}_\theta : [0, \Delta t] \times \mathbb{R}^{d} \to \mathbb{R}^{d}$ that generates time evolution. We can then train with a suitable loss function.
+
+% lecture 5
+
+\newpage
+
+\section{ODEs with a First Integral}%
+\label{sec:fi}
+
+Let us consider the ODE
+\[
+	\dot x = F(x), \tag{$\dagger$}
+\]
+for $F : \mathbb{R}^{d} \to \mathbb{R}^{d}$. A scalar valued function $I : \mathbb{R}^{d} \to \mathbb{R}$ is a \emph{first integral}\index{first integral} if it is constant along the solutions of $(\dagger)$.
+
+In the case $I$ is continuously differentiable, we can equivalently say
+\[
+\frac{\diff}{\diff t} I (\phi_F^{t}(x_0)) = 0 \iff \nabla I(\phi_F^{t}(x_0)) \cdot F(\phi_F^{t}(x_0)),
+\]
+or removing the dependence on $x_0$,
+\[
+\nabla I(x) \cdot F(x) = 0,
+\]
+for all $x \in \mathbb{R}^{d}$.
+
+A vector field $F : \mathbb{R}^{d} \to \mathbb{R}^{d}$ admits a first integral $I : \mathbb{R}^{d} \to \mathbb{R}$ which is $C^1$, if and only if it can be written as
+\[
+F(x) = S(x) \nabla I(x),
+\]
+where $S$ is skew symmetric, i.e. $S(x)^{T} = -S(x) = A(x) - A(x)^{T}$.
+
+\begin{proofbox}
+	If $F$ is of this form, then
+	\[
+	\nabla I(x)^{T} S(x) \nabla I(x) = 0.
+	\]
+	On the other hand, if $I$ is a first integral, let
+	\[
+	S(x) = \frac{F(x) \nabla I(x)^{T} - \nabla I(x) F(x)^{T}}{\|\nabla I(x)\|^2}.
+	\]
+	Then $S$ is clearly skew symmetric, and
+	\begin{align*}
+		S(x) \nabla I(x) &= \frac{F(x) \nabla I(x)^{T} \nabla I(x) - \nabla I(x) F(x)^{T} \nabla I(x)}{\|\nabla I(x)\|^2} \\
+				 &= F(x).
+	\end{align*}
+\end{proofbox}
+
+\subsection{Runge-Kutta for Linear First Integrals}%
+\label{sub:rkl}
+
+\begin{definition}
+	A one-step method $\vphi_F^{h} : \mathbb{R}^{d} \to \mathbb{R}^{d}$ applied to $\dot x = F(x)$, with $\nabla I(x)^{T} F(x) = 0$, is said to preserve the first integral $I : \mathbb{R}^{d} \to \mathbb{R}$ if for all $x_0 \in \mathbb{R}^{d}$,
+	\[
+	I(\vphi_F^{h}(x_0)) = I(x_0).
+	\]
+\end{definition}
+
+In particular, if $I(x_0) = c$, then $\phi_F^{t}(x_0)$ is tangent to the submanifold
+\[
+	\{z \in \mathbb{R}^{d} \mid I(z) = c\} = I_c,
+\]
+the \emph{level set}\index{level set} of $c$.
+
+\begin{theorem}
+	Let $\vphi^{h} : \mathbb{R}^{d} \to \mathbb{R}^{d}$ be an arbitrary explicit or implicit Runge-Kutta scheme. Let $\dot x = F(x)$ be such that $v^{T} F(x) = 0$ for some $v \in \mathbb{R}^{d}$. Then
+	\[
+	I(\vphi_F^{h}(x)) = I(x)
+	\]
+	for all $x \in \mathbb{R}^{d}$, with $I(x) = v^{T}x$.
+\end{theorem}
+
+\begin{proofbox}
+	Let $\vphi^{h}$ be a Runge-Kutta method with tableaux $(A, b, c)$, so
+	\begin{align*}
+		x_{n+1} &= \vphi_F^{h}(x_n) = x_n + h \sum_{i = 1}^s b_i F(K_i), \\
+		K_i &= x_n + h \sum_{j = 1}^s a_{ij} F(K_j).
+	\end{align*}
+	Then we find
+	\begin{align*}
+		I(x_{n+1}) &= v^{T}x_{n+1} = v^{T}x_n + h \sum_{i = 1}^s b_i v^{T} F(K_i) \\
+			   &= v^{T} x_n = I(x_n).
+	\end{align*}
+\end{proofbox}
+
+\begin{exbox}[SIR Model]
+	Consider the SIR model of population dynamics: the population $P = S + I + R$, where $S$ is susceptible, $I$ is infected and $R$ is recovered. So we can consider the phase space $X = (S, I, R) \in \mathbb{R}^3$.
+
+	We assume no one dies, so $\dot P = 0$. Hence $1^{T} X$ = 0.
+\end{exbox}
+
+\subsection{Quadratic Invariants}%
+\label{sub:qi}
+
+We consider first integrals of the form
+\[
+Q(x) = x^{T} C x,
+\]
+for some $C^{T} = C$.
+
+\begin{theorem}
+	Consider the Runge-Kutta method $\vphi^{h}$ of tableaux $(A, b, c)$, and a vector field $F : \mathbb{R}^{d} \to \mathbb{R}^{d}$ such that $x^{T} C F(x) = 0$, i.e. $\nabla Q(x) \cdot F(x) = 0$ with $Q(x) = x^{T} C x$.
+
+	Define the matrices
+	\[
+	B = \mathrm{diag}(b), \qquad M = BA + A^{T}B - b b^{T}.
+	\]
+	If we have $M = 0$, it holds that
+	\[
+	Q(\vphi_F^{h}(x)) = Q(x)
+	\]
+	for all $x \in \mathbb{R}^{d}$.
+\end{theorem}
+
+Looking at $M$, the general term is
+\[
+m_{ij} = b_i a_{ij} + a_{ji} b_j - b_i b_j.
+\]
+
+\begin{exbox}
+	The diagonal term is $2b_i a_{ii} - b_i^2$. If the method is explicit, $a_{ii} = 0$, so $m_{ii} = -b_i^2$. Hence for $M = 0$, we need $b = 0$, i.e. our method is the identity. Hence no non-trivial explicit method can preserve the quadratic first integral.
+
+	However, for the midpoint method, $A = 1/2$, $c = 1/2$ and $b = 1$, and we can verify
+	\[
+	M = \frac 12 + \frac 12 - 1 = 0.
+	\]
+\end{exbox}
+
+\begin{proofbox}
+	Recall our definitions for $x_{n+1}$ and $K_i$. We will use the following rewriting:
+	\[
+	K_i = x_n + h \sum_{j = 1}^{s} a_{ij} F(K_j) \implies x_n = K_i - h \sum_{j = 1}^{s} a_{ij} F(K_j).
+	\]
+	Then note that
+	\begin{align*}
+		Q(x_{n+1}) &= x_{n+1}^{T}Cx_{n+1} = \left( x_n + h \sum_{i = 1}^s b_i F(K_i) \right)^{T} C \left( x_n + h \sum_{j = 1}^{s} b_j F(K_j) \right) \\
+			   &= x_n^{T} C x_n + 2h \sum_{i = 1}^{s} b_i x_n^{T} C F(K_i) + h^2 \sum_{i,j = 1}^{s} b_i b_j F(K_i)^{T} C F(K_j)
+	\end{align*}
+% lecture 6
+	Replacing $x_n^{T}$ with our formula involving $K_i$, we find this is
+	\begin{align*}
+			   &= Q(x_n) + 2 h \sum_{i = 1}^{s} b_i \underbrace{K_i^{T} C F(K_i)}_{0} - 2h^2 \sum_{i, j = 1}^{s} b_i a_{ij} F(K_i)^{T} C F(K_j) \\
+			   & \qquad \qquad + h^2 \sum_{i, j = 1}^{s} b_i b_j F(K_i)^{T} C F(K_j) \\
+			   &= Q(x_n) + h^2 \sum_{i, j = 1}^{s} (b_i b_j - b_i a_{ij} - b_j a_{ji}) F(K_i)^{T} C F(K_j) \\
+			   &= Q(x_n) - h^2 \sum_{i,j = 1}^{s} m_{ij} F(K_i)^{T} C F(K_j),
+	\end{align*}
+	which equals to $Q(x_n)$ if $M = 0$.
+\end{proofbox}
+
+\begin{proposition}
+	All Gauss-Legendre collocation methods preserve quadratic first integrals.
+\end{proposition}
+
+\begin{proofbox}
+	Recall the collocation methods: we have a polynomial $u$ such that $x_{n+1} = u(t_n + h)$, where
+	\[
+	\dot u(t_n + c_ih) = F(u(t_n + c_ih)),
+	\]
+	for $0 \leq c_1 < c_2 < \cdots < c_s \leq 1$.
+
+	Define a function $q(t) = Q(u(t))$, where $Q(x) = x^{T}C x$. To be energy preserving, we need $q(t_n) = q(t_{n+1})$, i.e.
+	\[
+	\int_{t_n}^{t_{n+1}} \dot q(t) \diff t = \int_{t_n}^{t_{n+1}} 2 \dot u(t)^{T} C u(t) \diff t = 0.
+	\]
+	But we can evaluate this using a quadrature rule: it is a polynomial of degree at most $2s-1$, hence the quadrature rule is exact, so
+	\[
+	L = h \int_0^{1} \dot q(t_n + sh) \diff s = h \sum_{i = 1}^{s} \dot q(t_n + c_i h) \cdot p_i.
+	\]
+	But note that
+	\begin{align*}
+		\dot q(t_n + c_i h) &= 2 \dot u (t_n + c_i h)^{T} C u(t_n + c_i h) = 2 F(u(t_n + c_i h))^{T} C u(t_n + c_i h) = 0.
+	\end{align*}
+\end{proofbox}
+
+\begin{exbox}[Rigid-Body]
+	Consider $x \in \mathbb{R}^3$, with
+	\[
+	\dot x = 
+	\begin{pmatrix}
+		0 & x_3/I_3 & -x_2/I_2 \\
+		x_3/I_3 & 0 & x_1/I_1 \\
+		x_2/I_2 & - x_1/I_1 & 0
+	\end{pmatrix}
+	x, \qquad I = \mathrm{diag}(I_1, I_2, I_3).
+	\]
+	Then we can find two first integrals
+	\[
+	H_1(x) = \frac{\|x\|_2^2}{2}, \qquad H_2(x) = \frac12 x^{T} I^{-1} x.
+	\]
+\end{exbox}
+
+\subsection{Higher-order First Integrals}%
+\label{sub:hof}
+
+We aim to show the following.
+
+\begin{proposition}
+	For $n \geq 3$, there is no Runge-Kutta method that can preserve all polynomial first integrals of degree $n$.
+\end{proposition}
+
+\begin{lemma}
+	Let $B : \mathbb{R}^{d \times d} \to \mathbb{R}^{d \times d}$ be a matrix-valued function with
+	\[
+	\tr (B(Y)) = 0
+	\]
+	for all $y \in \mathbb{R}^{d \times d}$. Then $g(Y) = \det Y$ is a first integral of the differential equation
+	\[
+	\dot Y = B(Y) Y.
+	\]
+\end{lemma}
+
+\begin{proofbox}
+	Note that
+	\[
+	Y(t + h) = Y(t) + h B(Y(t)) Y(t) + \mathcal{O}(h^2),
+	\]
+	and
+	\[
+	\det (Y + h B Y) = \det(I + h B) \det Y = \det Y (1 + h \tr B + \mathcal{O}(h^2)),
+	\]
+	so we find
+	\[
+	g'(Y) = \lim_{h \to 0} \frac{\det Y(1 + h \tr B) - \det Y}{h} = \det Y \tr B = 0.
+	\]
+	In general we find the result that $g'(Y) = g(Y) \tr B$.
+\end{proofbox}
+
+\begin{lemma}
+	Let $R(z)$ be a differentiable function defined in a neighbourhood of $z = 0$, with $R(0) = R'(0) = 1$. Then for $d \geq 3$, $\det R(B) = 1$ for all $B \in \mathbb{R}^{d\times d}$ with $\tr B = 0$ if and only if $R(z) = e^{z}$.
+\end{lemma}
+
+\begin{proofbox}
+	If $R$ is exponential, then $R(tB) = \exp(tB) = Y(t)$, where
+	\[
+	\dot Y(t) = B Y(t), \qquad Y(0) = I.
+	\]
+	Then from the previous theorem, $\det Y(t) = \det Y(0) = 1$.
+
+	For the forward direction, suppose for all $B$ with $\tr B = 0$, $\det R(B) = 1$. Let
+	\[
+	B = \mathrm{diag}(\mu, \nu, -(\mu + \nu), 0, \ldots, 0),
+	\]
+	for $\mu, \nu$ small enough. Then
+	\[
+	R(B) = \mathrm{diag} (R(\mu), R(\nu), R(-(\mu+\nu)), R(0), \ldots, R(0)).
+	\]
+	As $R(0) = 0$, $\det R(B) = 1 = R(\mu) R(\nu) R(-(\mu+\nu))$. Setting $\mu = -\nu$, we find $R(\mu) R(-\mu) = 1$, and hence $R(\mu)R(\nu) = R(\mu + \nu)$, so now
+	\[
+	\frac{R(\mu + h) - R(\mu)}{h} = R(\mu) \frac{R(h) - 1}{h} \to R(\mu) R'(0) = R(\mu).
+	\]
+	So $R'(\mu) = R(\mu)$, i.e. $R$ is exponential.
+\end{proofbox}
+
+% lecture 7
+
+In general, if we apply Runge-Kutta method $(A, b, c)$ to $\dot x = B x$, then we can show that
+\[
+\vphi^{h}(x_n) = x_{n+1} = R(h B)x_n.
+\]
+
+\begin{theorem}
+	For $d \geq 3$, no Runge-Kutta method can preserve all polynomial first integrals of degree $d$.
+\end{theorem}
+
+\begin{proofbox}
+	Let us consider a generic matrix $B \in \mathbb{R}^{d \times d}$, with $\tr B = 0$, and define the matrix ODE $\dot Y = B Y$.
+
+	We know that $g(Y) = \det Y$ is invariant, and that $Y_{n+1} = R(h B) Y_n$. Hence
+	\[
+	\det (Y_{n+1}) = \det (R (hB)) \det (Y_n).
+	\]
+	To preserve $\det Y$, we must have $\det(R(hB)) = 1$ for all $B$. But the only $R$ that satisfies this is $R(Z) = \exp Z$.
+
+	Since we know that $R$ is a rational function, this can never be the case.
+\end{proofbox}
+
+What happens for specific higher-degree polynomials, or non-polynomial first integrals?
+
+\newpage
+
+\section{Projection Methods}%
+\label{sec:pm}
+
+\begin{exbox}[Simple Pendulum]
+	Consider the ODE
+	\[
+	\dot x = p, \qquad \dot p =- \sin x.
+	\]
+	In this case, the system is generated by Hamiltonian
+	\[
+	H(x, p) = \frac{p^2}{2} - \cos x.
+	\]
+	This is not a polynomial. Can we design a procedure that preserves this?
+
+	The idea is as follows. Consider the set $\{(q, p) \in \mathbb{R}^2 \mid H(q, p) = H(q_0, p_0)\}$, the level set obtained by starting at $(q_0, p_0)$. To stay in the level set, we can start by doing our one-step method, and then `projecting' back onto the level set.
+\end{exbox}
+
+Consider $\dot x = f(x)$, which is known to preserve $I : \mathbb{R}^{d} \to \mathbb{R}$, with $I(\phi_F^{t}(x_00)) = I(x_0)$ for all $x_0 \in \mathbb{R}^{d}$, and $t \geq 0$. This means that
+\[
+	\phi_F^{t}(x_0) \in \mathcal{M}_{x_0} = \{x \in \mathbb{R}^{d} \mid I(x) = I(x_0) \} \subseteq \mathbb{R}^{d},
+\]
+with dimension $d-1$. A \emph{projection method}\index{projection method} $\vphi_F^{h} : \mathbb{R}^{d} \to \mathbb{R}^{d}$ is defined as
+\[
+\vphi_F^{h}(x_0) = \Pi_{\mathcal{M}_{x_0}} \circ \tilde \vphi_F^{h}(x_0),
+\]
+where $\tilde \vphi_F^{h}(x_0)$ is our base method. To realise the projection $\Pi_{\mathcal{M}_{x_0}}$, we usually solve
+\[
+	\Pi_{M_{x_0}}(x) = \underset{y}{\mathrm{argmin}} \|y - x\|_2^2.
+\]
+In practice, we define
+\[
+\tilde x_1 = \tilde \vphi_F^{h}(x_0), \qquad x_1(\lambda) = \tilde x_1 + \lambda \nabla I(\tilde x_1),
+\]
+and then solve for $\lambda \in \mathbb{R}$ such that $I(x_1(\lambda)) = I(x_0)$.
+
+\begin{exbox}
+	Consider $I(x) = \|x\|_2^2/2$, for $x \in \mathbb{R}^{d}$, and $\dot x = (S - S^{T})x$.
+
+	Let $\tilde \vphi^{h} : \mathbb{R}^{d} \to \mathbb{R}^{d}$ be an arbitrary one-step method, and
+	\[
+	\tilde x_1 = \tilde \vphi^{h}(x_0), \qquad x_1(\lambda) = \tilde x_1 + \lambda \nabla I(\tilde x_1) = (1 + \lambda)\tilde x_1.
+	\]
+	Then,
+	\[
+	I(x_0) = \frac{\|x_0\|^2}{2} = I(x_1(\lambda)) = \frac{\|x(\lambda)\|^2}{2} = \frac{(1 + \lambda)^2}{2} \|\tilde x_1\|^2,
+	\]
+	so we can choose
+	\[
+	\lambda = -1 \pm \frac{\|x_0\|}{\|\tilde \vphi^{h}(x_0)\|} \implies \lambda = -1 + \frac{\|x_0\|}{\|\tilde \vphi^{h}(x_0)\|},
+	\]
+	since when $h = 0$, we should have the identity map, and $\lambda = 0$. Hence, simplifying we get
+	\[
+	x_1(\lambda) = \frac{\tilde \vphi^{h}(x_0)}{\|\tilde \vphi^{h}(x_0)\|} \|x_0\|.
+	\]
+	This can be generalized to $I(x) = (x^{T} C x)/2$.
+\end{exbox}
+
+We saw that if $\vphi^{h}_F: \mathbb{R}^{d} \to \mathbb{R}^{d}$ is of order $p$, then
+\[
+I(\vphi_F^{h}(x_0)) = I(x_0) + \mathcal{O}(h^{p+1}).
+\]
+
+Let's consider $F : \mathbb{R}^{d}\to \mathbb{R}^{d}$ that preserves $n < d$ functionally independent first integrals $I = (I_1, \ldots, I_n) : \mathbb{R}^{d} \to \mathbb{R}^{n}$.
+
+\emph{Functionally independent}\index{functionally independent} means that the level set of $c$ has codimension $n$, for every $c$ in the range of $I$, or $\rank (\partial_x I(x)) = n$.
+
+We consider 
+\[
+\tilde x_1 = \tilde \vphi_F^{h}(x_0), \qquad x_1(\vec \lambda) = \tilde x_1 + (\partial_x I(\tilde x_1))^{T} \vec \lambda = \tilde x_1 + \sum_{i = 1}^{n} \lambda_i \nabla_i I_i(\tilde x_1).
+\]
+We want to find $\vec \lambda \in \mathbb{R}^{n}$ such that
+\[
+I(x_1(\vec \lambda)) = I(x_0).
+\]
+
+% lecture 8
+
+\begin{lemma}
+	Let $F : \mathbb{R}^{d} \to \mathbb{R}^{d}$ be as above. Consider the projection method defined by
+	\[
+	\tilde x_1 = \tilde \vphi_F^{h}(x_0), \qquad x_1(\vec \lambda) = \tilde x_1 + \partial_x I(\tilde x_1)^{T} \vec \lambda.
+	\]
+	Then there exists $\bar h > 0$ such that $\vec \lambda = \vec \lambda(h)$ is a well defined function $\vec \lambda : [0, \bar h] \to \mathbb{R}^{n}$ with $\vec \lambda(0) = \vec 0$, and $g(x_1(\vec \lambda(h))) = 0$ for all $h \in [0, \bar h]$.
+\end{lemma}
+
+\begin{proofbox}
+	We define a function
+	\begin{align*}
+		G(h, \vec \lambda) &= g(x_1(\vec \lambda)) = I(\tilde \vphi^{h}(x) + \partial_x I(\tilde \vphi^{h}(x))^{T} \vec \lambda) - I(x).
+	\end{align*}
+	We note that $G(0, \vec 0) = 0$. Moreover,
+	\[
+	\partial_{\vec \lambda} G(h, \vec \lambda)\biggr|_{(h, \vec \lambda) = (0, 0)} = \partial_{x} I(x)^{T} \partial_{x} I(x),
+	\]
+	which is non-singular. So the implicit function theorem ensures that there is $\bar h$ such that $\vec \lambda = \vec \lambda(h)$ satisfies
+	\[
+	G(h, \vec \lambda(h)) = 0, \qquad \vec \lambda(0) = \vec 0.
+	\]
+\end{proofbox}
+
+Do these methods preserve the accuracy of our base method? The answer is yes.
+
+\begin{lemma}[Order of Projection Methods]
+	Let $F, I$ be as above, and assume that $\tilde \vphi_F^{h}$ is of order $p$. Let $h$ be small enough so that the previous lemma applies. Then the projection method $x_1(\vec \lambda(h))$ is still of order $p$.
+\end{lemma}
+
+\begin{proofbox}
+	We Taylor expand:
+	\begin{align*}
+		G(h, \vec \lambda) &= I(\tilde \vphi^{h}(x_0) + \partial_x I(\tilde \vphi^{h}(x_0))^{T} \vec \lambda) - I(x_0), \\
+		G(h, \vec \lambda) &= G(h, \vec 0) + (\partial_{\vec \lambda} G(h, \vec 0)) \vec \lambda + \mathcal{O}(\|\vec \lambda\|^2), \\
+		G(h, \vec 0) &= I(\tilde \vphi^{h}(x_0)) - I(x_0) = \mathcal{O}(h^{p+1}).
+	\end{align*}
+	So,
+	\begin{align*}
+		\tilde \vphi_{F}^{h}(x_0) &= \phi_F^{h}(x_0) + \mathcal{O}(h^{p+1}), \\
+		\implies I(\tilde \vphi_F^{h}(x_0)) &= I(x_0) + \mathcal{O}(h^{p+1}).
+	\end{align*}
+	Therefore,
+	\[
+	\partial_{\vec \lambda}G(h, \vec \lambda)\biggr|_{\vec \lambda = 0} = \partial_{\vec \lambda} G(0, \vec \lambda)\biggr|_{\vec \lambda = \vec 0} + \mathcal{O}(h).
+	\]
+	This gives
+	\begin{align*}
+		0 &= G(h, \vec \lambda(h)) = \mathcal{O}(h^{p+1}) + \vec \lambda(h) \mathcal{O}(h) + \partial_{x} I(x) \partial_x I(x)^{T} \vec \lambda(h) + \mathcal{O}(\|\vec \lambda\|^2).
+	\end{align*}
+	This shows that $\vec \lambda(h) \in \mathcal{O}(h^{p+1})$. Hence,
+	\[
+	x_1(\vec \lambda(h)) = \tilde \vphi^{h}(x_0) + \partial_x I(\tilde \vphi^{h}(x_0))^{T} \vec \lambda(h) = \phi_F^{h}(x_0) + \mathcal{O}(h^{p+1}).
+	\]
+\end{proofbox}
+
+Some downsides of projection methods: suppose we want to preserve $Q(x) = \|x\|^2/2$. Then our projection method
+\[
+\vphi^{h}(x) = \frac{\tilde \vphi^{h}(x)}{\|\tilde \vphi^{h}(x)\|_2} \|x\|_2.
+\]
+This works great; a general Runge-Kutta method does not preserve this in general. However what a general RK method does preserve is any linear invariant. Hence if we want a solution that preserves $Q$ as well as a linear energy, it is hard to do so with a projection-based method.
+
+\newpage
+
+\section{Discrete Gradient Methods}%
+\label{sec:dgm}
+
+Suppose we want to solve the ODE
+\[
+\dot x = F(x) = S(X) \nabla I(X),
+\]
+where $I : \mathbb{R}^{d} \to \mathbb{R}$ is smooth, and $S$ is as before, such that $S(x) \nabla I(x) = F(x)$. We can also consider
+\[
+F(x) = J \nabla H(x),
+\]
+where $J$ is symplectic.
+
+\begin{definition}
+	Let $I : \mathbb{R}^{d} \to \mathbb{R}$ be a smooth function. A \emph{discrete gradient}\index{discrete gradient} of $I$ is a function $\bar \nabla I : \mathbb{R}^{d} \times \mathbb{R}^{d} \to \mathbb{R}^{d}$ such that:
+	\begin{itemize}
+		\item $\lim_{y \to x} \bar \nabla I(x, y) = \nabla I(x)$.
+		\item $\bar \nabla I(x, y)^{T}(y - x) = I(y) - I(x)$.
+	\end{itemize}	
+\end{definition}
+
+We have several different choices of discrete gradients.
+
+\begin{exbox}[Examples of Discrete Gradient]
+	\begin{enumerate}[1.]
+		\item The average vector field:
+			\[
+			\bar \nabla I(x, y) = \int_0^{1}\nabla I((1-s) x + s y) \diff y.
+			\]
+		\item The Gonzalez discrete gradient:
+			\[
+			\bar \nabla I(x, y) = \nabla I \left( \frac{x + y}{2} \right) + \frac{I(y) - I(x) - (y - x)^{T} \nabla \left(\frac{x+y}{2}\right)}{\|y - x\|^2} (y - x).
+			\]
+		\item Itoh-Abe: coordinate-wise, it is given as
+			\[
+			\bar \nabla I(x, y)_i = \frac{I(y_1, \ldots, y_i, x_{i+1}, \ldots, x_d) - I(y_1, \ldots, y_{i-1}, x_i, \ldots, x_d)}{y_i - x_i}.
+			\]
+	\end{enumerate}
+\end{exbox}
+
+We define a \emph{discrete gradient method}\index{discrete gradient method} based on the discrete gradient $\bar \nabla I$ by utilizing update
+\[
+x_{n+1} = x_n + h \bar S(x_n, x_{n+1}) \bar \nabla I(x_n, x_{n+1}),
+\]
+where $\bar S : \mathbb{R}^{d}\times \mathbb{R}^{d} \to \mathbb{R}^{d}$ is such that:
+\begin{itemize}
+	\item $\lim_{y \to x} \bar S(x, y) = S(x)$,
+	\item $\bar S(x, y)^{T} = - \bar S(y, x)$.
+\end{itemize}
+
+\begin{proposition}
+	The discrete gradient method conserves $I$.
+\end{proposition}
+
+\begin{proofbox}
+	We have
+	\begin{align*}
+		I(x_{n+1}) - I(x_n) &= \bar \nabla I(x_n, x_{n+1})^{T}(x_{n+1} - x_n) \\
+				    &= \frac 1h \bar \nabla I(x_n, x_{n+1})^{T} \bar S(x_n, x_{n+1}) \bar \nabla I(x_n, x_{n+1}) = 0,
+	\end{align*}
+	by skew-symmetry of $S$.
+\end{proofbox}
+
+% lecture 9
+
+We show that the average vector field is a disctete gradient.
+
+\begin{proposition}
+	Let $I : \mathbb{R}^{d} \to \mathbb{R}$ be smooth. Then the average vector field discrete gradient defined as
+	\[
+	\bar \nabla I(x, y) = \int_0^{1} \nabla I((1 - s) x + s y) \diff s
+	\]
+	is a discrete gradient.
+\end{proposition}
+
+\begin{proofbox}
+	First, it is consistent as
+	\[
+	\bar \nabla I(x, x) = \nabla I(x) \int_0^{1} \diff s = \nabla I(x).
+	\]
+	Moreover,
+	\begin{align*}
+		I(y) - I(x) &= \int_0^{1} \frac{\diff}{\diff s} I((1 - s)x + s y)\diff s \\
+			    &= \int_0^{1} \nabla I((1 - s)x + s y)^{T} (y - x) \diff s \\
+			    &= \bar I(x, y)^{T}(y - x).
+	\end{align*}
+\end{proofbox}
+
+We showed that there is no RK method that preserves any polynomial first integral of degree $d \geq 3$. We will now show that for a specific polynomial, this is possible.
+
+Let us consider $\dot x = S \nabla I(x)$, where $S \in \mathbb{R}^{d \times d}$, $S^{T} = -S$ and $I \in P^{m}(\mathbb{R})$, a polynomial.
+
+\begin{proposition}
+	Let $b_1, \ldots, b_s, c_1, \ldots, c_s$ define a quadrature rule of polynomial order $m-1$. Consider $\dot x = S \nabla I(x)$. Then the $s$-stage RK method
+	\[
+	x_{n+1} = x_n + h \sum_{i = 1}^{s} b_i F(x_n + c_i(x_{n+1} - x_n))
+	\]
+	preserves $I$.
+\end{proposition}
+
+\begin{proofbox}
+	We have that $F = S \nabla I(x) \in P^{m-1}(\mathbb{R})$, so
+	\begin{align*}
+		\int_0^{1} F((1 - s) x_n + s x_{n+1}) \diff s &= \sum_{i = 1}^{s} b_i F(x_n + c_i(x_{n+1} - x_n))\\
+							      &= S\int_0^{1} \nabla I((1 - s) x_n + s x_{n+1}) \diff s \\
+							      &= S \bar \nabla I(x_n, x_{n+1}),
+	\end{align*}
+	hence
+	\[
+	x_{n+1} = x_n + h S \bar \nabla I(x_n, x_{n+1}) \implies I(x_{n+1}) = I(x_n).
+	\]
+\end{proofbox}
+
+\subsection{Dispersive Systems}%
+\label{sub:ds}
+
+Sometimes there is not a fixed energy; a system may disperse or decrease an energy. Examples include
+\[
+\dot x = - \nabla V(x),
+\]
+for $V : \mathbb{R}^{d} \to \mathbb{R}$ convex and $C^{1}$, or
+\[
+\dot x = P \nabla V(x),
+\]
+for $P^{T} = P$ and $P \leq 0$.
+
+Can we adapt the methods we have before? We can take
+\[
+x_{n+1} = x_n + h P \bar \nabla V(x_n, x_{n+1}).
+\]
+Then,
+\begin{align*}
+	V(x_{n+1}) - V(x_n) &= \bar \nabla V(x_n, x_{n+1}) (x_{n+1} - x)n) \\
+			    &= \frac{1}{h} \bar \nabla V(x_n, x_{n+1})^{T} P \bar \nabla V(x_n, x_{n+1}) \\
+			    & \leq 0,
+\end{align*}
+by non-positivity of $P$.
+
+% lecture 10
+
+\newpage
+
+\section{ML Detour}%
+\label{sec:mld}
+
+Recall ResNets: the layers
+\[
+F_{\theta_i}(\mathbf{x}) = \mathbf{x} + B_i^{T} \sigma(A_i \mathbf{x} + \mathbf{b}_i) = \mathbf{x} + \mathcal{F}_{\theta_i}(\mathbf{x})
+\]
+are explicit Euler steps of size 1 for the initial value problem
+\begin{align*}
+	\mathbf{\dot y}(t) &= B_i^{T} \sigma(A_i \mathbf{y}(t) + \mathbf{b}_i) = \mathcal{F}_{\theta_i}(\mathbf{y}(t)), \\
+	\mathbf{y}(0) &= \mathbf{x}.
+\end{align*}
+We can define \emph{ResNet-like neural networks}\index{ResNet-like neural network} by choosing a family of parametric functions $\mathcal{S}_{\Theta}$ and a numerical method $\vphi_{\mathcal{F}}^{h}$, like explicit Euler, and set
+\[
+\mathcal{N}_{\theta}(\mathbf{x}) = \vphi_{\mathcal{F}_{\theta_L}}^{h_L} \circ \cdots \circ \vphi_{\mathcal{F}_{\theta_1}}^{h_1}(\mathbf{x}).
+\]
+We could also combine these blocks with lifting and projection layers.
+
+Neural networks ca find accurate solutions, but tend not to be interpretable or reproduce desired properties. We can try tackling some of these issues by applying the theory of dynamical systems and geometric integration.
+
+To build networks satisfying the property, we can either restrict the parametrisation $\mathcal{N}_{\theta}$ or modify the loss function. For example,
+\[
+	\mathcal{N}_{\theta}(\mathbf{x}) = \frac{\tilde{\mathcal{N}}_{\theta}(\mathbf{x})}{\| \tilde{\mathcal{N}}_\theta(\mathbf{x})\|_2} \|\mathbf{x}\|_2.
+\]
+Or we can add a regulariser:
+\[
+	\tilde{\mathcal{L}}(\theta) = \frac 1N \sum_{i = 1}^{N} \|\mathcal{N}_\theta(\mathbf{x}_i) - \mathbf{y}_i\|_2^2 + \frac 1N \sum_{i = 1}^{N} ( \|\mathbf{x}_i\|_2 - \|\mathcal{N}_\theta(\mathbf{x}_i)\|_2)^2.
+\]
+Note all restrictions are as effective: $\mathcal{N}_R(\mathbf{x}) = R^{T}x$ where $R$ is orthogonal is norm-preserving, but probably not expressive enough.
+
+For our case, we:
+\begin{itemize}
+	\item Choose a property $\mathcal{P}$ that the network has to satisfy, e.g. norm conservation.
+	\item Choose a family of parametric vector fields $\mathcal{S}_{\Theta}$ whose solutions satisfy $\mathcal{P}$, for example
+		\[
+		\mathbf{\dot x}(t) = \mathcal{F}_{\theta}(\mathbf{x}(t)) = \mathcal{S}_{\theta}(\mathbf{x}(t)) \mathbf{x}(t).
+		\]
+		
+	\item Chose a numerical method $\Psi_{\mathcal{F}_\theta}^{h}$ that preserves $\mathcal{P}$ at a discrete level, for example a projection method.
+	\item The resulting network
+		\[
+		\mathcal{N}_{\theta} = \Psi_{\mathcal{F}_{\theta_L}}^{h_L} \circ \cdots \circ \Psi_{\mathcal{F}_{\theta_1}}^{h_1}
+		\]
+		will preserve $\mathcal{P}$.
+\end{itemize}
+
+\begin{exbox}
+	For the SIR model with linear first integral $I(x, y, z) = x + y + z = 1^{T} x$, we can define our network as a ResNet with
+	\[
+	\mathbf{x} \mapsto \mathbf{x} + h S_{\theta_i}(\mathbf{x}) \mathbf{1}.
+	\]
+
+	For the PDE
+	\[
+	\partial_t u = \partial_x u + \partial_y u,
+	\]
+	this conserves the $\ell^2$ norm of the solution, so we can use a ResNet with layers based on the projection method.
+\end{exbox}
+
+\begin{exbox}
+	Consider approximating the unknown Hamiltonian
+	\[
+	H(q, p) = 2 mg l (1 - \cos q) + \frac{l^2}{2m}p^2,
+	\]
+	based on trajectory data.
+
+	In this case one can define a network $\mathcal{N}_\theta : \mathbb{R}^2 \to \mathbb{R}$ which should resemble $H$. To find the approximation, we can optimise the loss function
+	\[
+	\mathcal{L}(\theta) = \frac 1N \sum_{n = 1}^{N} \bigl\|\vphi_{X_{\mathcal{N}_\theta}}^{h}(\mathbf{x}_0^{n}) - \mathbf{x}_1^{n}\bigr\|^2,
+	\]
+	where $\mathbf{x}_1^{n} \approx \phi_{X_H}^{h}(\mathbf{x}_0^{n})$.
+\end{exbox}
+
+% back to lecture 9
+
+\newpage
+
+\section{Hamiltonian Systems}%
+\label{sec:hams}
+
+When we refer to Hamiltonian systems, we are looking at
+\[
+\dot x = J \nabla H(x),
+\]
+where $H : \mathbb{R}^{2d} \to \mathbb{R}$ is the \emph{Hamiltonian energy matrix}\index{Hamiltonian energy matrix}, and
+\[
+J =
+\begin{pmatrix}
+	0 & \id \\
+	-\id & 0
+\end{pmatrix} \in \mathbb{R}^{2d \times 2d},
+\]
+the \emph{symplectic matrix}\index{symplectic matrix}. Often times, we have $x = (q, p) \in \mathbb{R}^{d} \times \mathbb{R}^{d}$, and
+\[
+H(p, q) = \frac 12 p^{T}M(q)^{-1} p + U(q),
+\]
+a kinetic term plus a potential.
+
+Examples include four particles in $\mathbb{R}^3$, living in $d = 12$, where there is some potential terms between pairs of particles and kinetic terms. Then we get
+\[
+H(q, p) = \frac 12 \sum_{i = 1}^{N} \frac{\|p_i\|^2}{m_i} + \sum_{i, j = 1}^{N} \phi(\|q_i - q_j\|).
+\]
+In general, we care a lot about Hamiltonians of the form
+\[
+H(q, p) = K(p) + U(q).
+\]
+$J$ induces a \emph{symplectic form}\index{symplectic form} $\Omega$ given by
+\[
+\Omega(u, v) = u^{T} J v.
+\]
+\begin{definition}
+	A map $F : \mathbb{R}^{2d} \to \mathbb{R}^{2d}$ is \emph{symplectic}\index{symplectic} if it preserves $\Omega$.
+\end{definition}
+
+\begin{exbox}
+	If $F(x) = Ax$, then for this to be symplectic we must have
+	\[
+		(A u)^{T} J A v = u^{T} A^{T} J A v = u^{T} J v \implies A^{T} J A = J.
+	\]
+	Such an $A$ is a \emph{symplectic matrix}\index{symplectic matrix}.
+\end{exbox}
+
+\begin{proposition}
+	Let $F : \mathbb{R}^{2d} \times \mathbb{R}^{2d}$ be $C^{d}$. Then it is symplectic if and only if:
+	\begin{itemize}
+		\item $\Omega(F'(x) u, F'(x) v) = \Omega(u, v)$ for all $u, v \in \mathbb{R}^{2d}$ 
+		\item $F(x)^{'T} J F'(x) = J$ for all $x \in \mathbb{R}^{2d}$.
+	\end{itemize}	
+\end{proposition}
+
+\begin{proposition}
+	Let $H$ be a twice continuously differentiable function on $U \subseteq \mathbb{R}^{2d}$ open. Then for each fixed $t \in \mathbb{R}$, the time $t$ flow map $\phi_{X_H}^{t}$ is symplectic.
+\end{proposition}
+
+Here $X_H$ is the vector field with energy $H$.
+
+\begin{proofbox}
+	The map $\phi_{X_H}^{t}(x_0)$ solves the initial value problem
+	\begin{align*}
+		\dot x(t) &= X_H(x(t)) = J \nabla H(x(t)), & x(0) &= x_0.
+	\end{align*}
+	We need that for all $t \in \mathbb{R}$,
+	\[
+	\left( \frac{\partial \phi_{X_H}^{t}(x_0)}{\partial x_0}\right)^{T} J \left( \frac{\partial \phi_{X_H}^{t}(x_0)}{\partial x_0} \right) = J.
+	\]
+	From now on, write
+	\[
+	S_{x_0}(t) = \frac{\partial \phi_{X_H}^{t}(x_0)}{\partial x_0}.
+	\]
+	Our proof will do the following:
+	\begin{itemize}
+		\item Show it is true at $t = 0$.
+		\item Show that
+			\[
+			\frac{\diff}{\diff t} \left( S_{x_0}^{T} J S_{x_0} \right) = 0.
+			\]
+	\end{itemize}
+	Differentiating with respect to $x_0$ the equations of $\phi_{X_H}^{t}$, we have that
+	\begin{align*}
+		\frac{\diff}{\diff t} S_{x_0}(t) &= J \nabla^2 H(\phi_{X_H}^{t}(x_0)) S_{x_0}(t), & S_{x_0}(0) &= \id.
+	\end{align*}
+	The $t = 0$ is true as at $t = 0$, $S_{x_0} = I$ which is clearly symplectic. The second point is true as
+	\begin{align*}
+		\frac{\diff}{\diff t}(S_{x_0}^{T} J S_{x_0}) &= \dot S_{x_0}^{T} J S_{x_0} + S_{x_0}^{T} J \dot S_{x_0} = (J \nabla^2 H S_{x_0})^{T} J S_{x_0} + S_{x_0}^{T} J (J\nabla^2 H S_{x_0}) \\
+							     &= S_{x_0}^{T} \nabla^2 H J^{T} J S_{x_0} + S_{x_0}^{T} J J \nabla^2 H S_{x_0} = 0,
+	\end{align*}
+	from properties of the symplectic matrix, since
+	\[
+	-J = J^{T}, \qquad J^2 = -J J^{T}.
+	\]
+\end{proofbox}
+
+% back to lecture 10
+
+\begin{lemma}[Volume Preservation]
+	Let $F : \mathbb{R}^{2d} \to \mathbb{R}^{2d}$ be a symplectic diffeomorphism. Then $F$ also preserves the \emph{canonical volume form}\index{canonical volume form} of $\mathbb{R}^{2d}$:
+	\[
+	\mathrm{vol}(F(\Omega)) = \int_{F(\Omega)} \diff x_1 \ldots \diff x_{2d} = \mathrm{vol}(\Omega) = \int_{\Omega} \diff x_1 \ldots \diff x_{2d},
+	\]
+	for any $\Omega \subseteq \mathbb{R}^{2d}$ open.
+\end{lemma}
+
+\begin{proofbox}
+	We can apply a change of basis:
+	\[
+	\int_{F(\Omega)} \diff x_1 \ldots \diff x_{2d} = \int_{\Omega} |\det F'(x)| \diff x_1 \ldots \diff x_{2d},
+	\]
+	so we just need to show $|\det F'(x)| = 1$. This is true as $F' J F'^{T} = J$, so taking the determinant shows this. We can show the determinant is exactly 1 by looking at the Pfaffian.
+\end{proofbox}
+
+\begin{lemma}
+	Let $F : \mathbb{R}^{2d} \to \mathbb{R}^{2d}$ be a $C^{1}$ vector field with flow at time $t$, $\phi_F^{t}$. Then $\phi_F^{t}$ is symplectic for all $t$ if and only if $F$ is a Hamiltonian system of the form
+	\[
+	F(x) =  J \nabla H(x)
+	\]
+	with $H \in C^2(\mathbb{R}^{2d}, \mathbb{R})$.
+\end{lemma}
+
+\begin{proofbox}
+	Suppose that $\phi_F^{t}$ is symplectic and let $S_F(t)$ be its \emph{sensitivity matrix}\index{sensitivity matrix}:
+	\[
+	S_F(t) = \frac{\partial \phi_F^{t}(x_0)}{\partial x_0}.
+	\]
+	Then we know the evolution of $S$. If $\phi_F^{t}$ is symplectic, then for all $t \in \mathbb{R}$,
+	\begin{align*}
+		0 &= \frac{\diff}{\diff t} \left( S_F^{T}(t) J S_F(t) \right) = \dot S_F^{T} J S_F + S_F^{T} J \dot S_F \\
+		  &= S_F^{T}(F')^{T} J S_F + S_F^{T} J F' S_F \\
+		  &= S_F^{T}[(F')^{T}J + J F']S_F.
+	\end{align*}
+	This means that $(F')^{T} J = - J F' = J^{T} F' = (F')^{T} J^{T}$. The Jacobian of $JF$ is $JF'$. So $JF'$ is symmetric. Hence there exists $H \in C^2$ such that
+	\[
+	J^{T}J F = - J \nabla H(x),
+	\]
+	or
+	\[
+	F = J \nabla H(x).
+	\]
+	Check notes.
+\end{proofbox}
+
+% lecture 11
+
+\begin{definition}[Symplectic One-Step Method]
+	A one-step method $\vphi^{h} : \mathbb{R}^{2d} \to \mathbb{R}^{2d}$ is \emph{symplectic}\index{symplectic method} if the map $\vphi^{h}$ is symplectic whenever applied to a Hamiltonian system.
+\end{definition}
+
+\subsection{Symplectic Splitting Fields}%
+\label{sub:ssf}
+
+Consider the equation $\dot x = F(x)$, for $F : \mathbb{R}^{n} \to \mathbb{R}^{n}$ where $F(x) = F_1(x) + F_2(x)$, where we know $\phi_{F_1}^{t}$ and $\phi_{F_2}^{t}$.
+
+Is is true that $\phi_F^{t} = \phi_{F_1}^{t} \circ \phi_{F_2}^{t}$? Suppose that
+\[
+F(x) = Ax + Bx.
+\]
+Then
+\[
+\phi_{F_1}^{t} = e^{At}x, \qquad \phi_{F_2}^{t} = e^{Bt}x, \qquad \phi_{F}^{t} = e^{(A + B)t}x.
+\]
+This condition holds if and only if $[A, B] = 0$.
+
+\begin{exbox}
+Consider a Hamiltonian system with $x = (q, p) \in \mathbb{R}^2$, and
+\[
+H(q, p) = \frac12(q^2 + p^2).
+\]
+This has dynamics $\dot q= p$, $\dot p = -q$. We can split it into
+\[
+\dot x =
+\begin{pmatrix}
+	p \\ 0
+\end{pmatrix}
++
+\begin{pmatrix}
+	0 \\ q
+\end{pmatrix},
+\]
+where the first function is $F_1$, and the second is $F_2$. Then if $\dot x = F_1(x)$, we must have $p(t) = p(0)$, and $q(t) = q(0) + t p(0)$. Similarly, $\dot x = F_2(x)$ has solution $(q_0, p_0 - tq_0)$.
+
+The combination of these two maps does not lead to the overall solution $\ddot q = -q$, which is what we want. This is because we do not have $[F_1, F_2] = 0$, in the Lie derivative sense.
+\end{exbox}
+
+However for our purposes, we can approximate
+\[
+\phi_F^{h} \approx \phi_{F_1}^{h} \circ \phi_{F_2}^{h}.
+\]
+In this way, we an let
+\[
+\vphi_F^{h} = \phi_{F_1}^{h} \circ \phi_{F_2}^{h},
+\]
+or swapped. This is known as the \emph{Lie-Trotter splitting method}\index{Lie-Trotter splitting method}. There is also \emph{Strang splitting}\index{Strang splitting method}, where
+\[
+\vphi_F^{h} = \phi_{F_2}^{h/2} \circ \phi_{F_1}^{h} \circ \phi_{F_2}^{h/2}.
+\]
+We can show that Strang splitting is a second order method.
+
+\begin{proposition}
+	Lie-Trotter has order 1.
+\end{proposition}
+
+\begin{proofbox}
+	We have $\phi_F^{h}(x) = x + h F(x) + \mathcal{O}(h^2)$. Now,
+	\begin{align*}
+		\vphi_F^{h}(x) &= \phi_{F_1}^{h}( \phi_{F_2}^{h}(x)) = \phi_{F_1}^{h}(x + h F_2(x) + \mathcal{O}(h^2)) \\
+			       &= x + h F_1(x) + h F_2(x) (x + h F_1(x)) + \mathcal{O}(h^2) \\
+			       &= x + h (F_1(x) + F_2(x)) + \mathcal{O}(h^2) = \phi_F^{h}(x) + \mathcal{O}(h^2).
+	\end{align*}
+\end{proofbox}
+
+\begin{lemma}
+	Let $F, G : \mathbb{R}^{2d} \to \mathbb{R}^{2d}$ be symplectic. Then $H_1 = F \circ G$, $H_2 = G \circ F$ are symplectic.
+\end{lemma}
+
+\begin{proofbox}
+	This is an application of the chain rule. Note that
+	\[
+	H_1'(x) = F'(G(x)) G'(x),
+	\]
+	so
+	\[
+	H_1'(x)^{T} J H_1'(x) = G'(x)^{T} F'(G(x))^{T} J F'(G(x)) G'(x) = G'(x)^{T} J G'(x) = J.
+	\]
+\end{proofbox}
+
+\subsection{Separable Hamiltonian Systems}%
+\label{sub:shs}
+
+Consider Hamiltonians of the form
+\[
+H(p, q) = K(p) + U(q).
+\]
+Then we find that
+\[
+J \nabla H(x) =
+\begin{pmatrix}
+	0 & I \\ -I & 0
+\end{pmatrix}
+\begin{pmatrix}
+	\nabla U(q) \\ \nabla K(p)
+\end{pmatrix}
+\]
+Often times we have $K(p) = \frac 12 p^{T} M p$, and $U(q) = \sum V(\|q_i - q_j\|)$.
+
+We can write
+\[
+X_H(q, p) =
+\begin{pmatrix}
+	\nabla K(p) \\ 0
+\end{pmatrix}
++
+\begin{pmatrix}
+	0 \\ - \nabla U(q)
+\end{pmatrix}
+= X_K(q, p) + X_U(q, p).
+\]
+From this we can use splitting methods, as we know that
+\begin{align*}
+	\phi_{X_K}^{t}(q_0, p_0) &= (q_0 + t \nabla K(p_0), p_0), \\
+	\phi_{X_U}^{t}(q_0, p_0) &= (q_0, p_0 - t \nabla U(q_0)).
+\end{align*}
+Then, we know
+\[
+\vphi_{X_H}^{h}(q_0, p_0) = \phi_{X_K}^{h} \circ \phi_{X_U}^{h}(q_0, p_0)
+\]
+is a symplectic method of order 1. This is known as \emph{symplectic Euler}\index{symplectic Euler}. Similarly,
+\[
+\vphi_{X_H}^{h} = \phi_{X_H}^{h/2} \circ \phi_{X_U}^{h} \circ \phi_{X_H}^{h/2}
+\]
+is symplectic and of order 2. This is the \emph{leapfrog}\index{leapfrog method} or \emph{St\"order-Verlet}\index{St\"order-Verlet method} method.
+
+\subsection{Symplectic Runge-Kutta Schemes}%
+\label{sub:srks}
+
+\begin{proposition}
+	Let $F : \mathbb{R}^{n} \to \mathbb{R}^{n}$ be a vector field, and $\vphi^{h} : \mathbb{R}^{n} \to \mathbb{R}^{n}$ be a RK method. Then the following diagram commutes:
+	\[
+	\begin{tikzcd}
+		\begin{cases}
+			\dot x = F(x) \\
+			x(0) = x_0
+		\end{cases}
+		\arrow[r, "{\partial x_n}"] \arrow[d, "{\vphi^{h}}"]&
+		\begin{cases}
+			\dot x = F(x), \, \dot S = F'(x) S \\
+			x(0) = x_0, \, S(0) = I_n
+		\end{cases}
+		\arrow[d] \\
+		x_1 = \vphi^{h}(x_0) \arrow[r] &
+		\begin{cases}
+			x_1 = \vphi_F^{h}(x_0), \\
+			S_1 = \vphi_{F_1}^{h}(S_0).
+		\end{cases}
+	\end{tikzcd}
+	\]
+\end{proposition}
+
+% lecture 12
+
+We can increase the order of methods arbitrarily. Suppose $\phi^{h}$ is a method of order $p$. Consider
+\[
+\psi^{h} = \phi^{\gamma_s h} \circ \cdots \circ \phi^{\gamma_1 h}.
+\]
+\begin{theorem}
+	If $\gamma_1 + \cdots + \gamma_s = 1$, and $\gamma_1^{p+1} + \cdots + \gamma_s^{p+1} = 0$, then $\psi^{h}$ has order $p + 1$.
+\end{theorem}
+This is the \emph{Yoshida trick}\index{Yoshida trick}.
+
+We return to the proof of the proposition above.
+
+\begin{proofbox}
+	Let $\vphi_F^{h} : \mathbb{R}^{n} \to \mathbb{R}^{n}$, with tableaux $(A, b, c)$ for $A \in \mathbb{R}^{s \times s}$, $b, c \in \mathbb{R}^{s}$. Note
+	\begin{align*}
+		x_1 &= x_0 + h \sum_{i = 1}^{s} b_i F(K_i), \\
+		K_i &= x_0 + h \sum_{j = 1}^{s} a_{ij} F(K_j).
+	\end{align*}
+	Differentiating both of these with respect to $x_0$, we find
+	\begin{align*}
+		\frac{\partial x_1}{\partial x_0} &= I_n + h \sum_{i = 1}^{s} b_i \frac{\partial F(K_i)}{\partial x_0} \\
+						  &= I_n + h \sum_{i = 1}^{s} b_i F'(K_i) \frac{\partial K_i}{\partial x_0}, \\
+		\frac{\partial K_i}{\partial x_0} &= I_n + h \sum_{j = 1}^{s} a_{ij} F'(K_j) \frac{\partial K_j}{\partial x_0}.
+	\end{align*}
+	This is from going down and right in the diagram. Consider instead going right then down. Then we get $x_1 = \vphi^{h}(x_0)$, and
+	\begin{align*}
+		S_1 &= S_0 + h \sum_{i = 1}^{s} b_i F'(K_i) K_i, \\
+		K_i &= S_0 + h \sum_{j = 1}^{s} a_{ij} F'(K_j) K_j.
+	\end{align*}
+	This is enough to show the two paths commute.
+\end{proofbox}
+
+We know that, in a Hamiltonian system,
+\[
+\dot x = J \nabla H(x), \qquad dot S = J \nabla^2 H(x) S.
+\]
+If $x(t) = \phi_{X_H}^{t}(x_0)$, then $S^{T}JS = J$ for all $t$.
+
+\begin{theorem}[Sympl-RK Schemes]
+	Let $\vphi^{h}$ be the Runge-Kutta method defined by a tableaux $(A, b, c)$ with $M = BA + A^{T}b - b b^{T} = 0$, where $B = \mathrm{diag}(b)$.
+
+	Then $\vphi^{h}$ is a symplectic method.
+\end{theorem}
+
+\begin{proofbox}
+	$\vphi^{h} : \mathbb{R}^{2d} \to \mathbb{R}^{2d}$ is symplectic if
+	\[
+	\left( \frac{\partial \vphi^{h}(0)}{\partial x} \right)^{T} J \left( \frac{\partial \vphi^{h}(x)}{\partial x} \right) = J.
+	\]
+	But, from the commutation of the diagram,
+	\[
+	S_1 = \vphi^{h}_y(S_0) \implies S_1^{T} J S_1 = J,
+	\]
+	since $\vphi^{h}$ preserves quadratic first integrals.
+\end{proofbox}
+
+We have seen previously that we can preserve the energy. Can we preserve the energy and the symplectic form?
+
+\subsection{Energy Preservation and Long-Term Simulations}%
+\label{sub:eplts}
+
+\begin{theorem}
+	Let $\dot x = J \nabla H(x)$ be a Hamiltonian system with Hamiltonian $H$, and assume that it has no other conserved quantity. Let $\vphi^{h}$ be a symplectic and energy-preserving method for the system. Then $\vphi^{h}$ reproduces the exact solution up to a time reparametrisation.
+\end{theorem}
+
+\newpage
+
+\section{Backward Error Analysis}%
+\label{sec:bam}
+
+In regular error analysis, we let $x_1 = \vphi^{h}(x_0)$, $x(h) = \phi_F^{h}(x_0)$, and if $\|x_1 - x(h)\| \in \mathcal{O}(h^{p+1})$, then $\vphi^{h}$ is of order $p$.
+
+Another way of doing error analysis is as follows. Let us find the vector field $F_h : \mathbb{R}^{d} \to \mathbb{R}^{d}$ such that $\dot y = F_h(y)$, with $y(h) = \vphi^{h}(y(0))$, and
+\[
+y(n h) = \vphi^{h} \circ \cdots \circ \vphi^{h}(y(0)).
+\]
+To do this, we use a series expansion:
+\[
+F_h(x) = F(x) + h F_2(x) + h^2 F_3(x) + \cdots
+\]
+Then since $\dot y = F_h(y)$, expanding we see
+\begin{align*}
+	y(t + h) &= y(t) + h(F(y) + h F_2(y) + \cdots) \\
+		 & \qquad + \frac{h^2}{2} (F'(y) + h F_2'(y) + \cdots) + \cdots
+\end{align*}
+Suppose that
+\[
+y(t + h) = \vphi^{h}(y(t)) = \phi_F^{h}(y(t)) + \mathcal{O}(h^{p+1}).
+\]
+If $\vphi^{h}$ is a method of order $p$, then
+\[
+F_h(y) = F(y) + h^{p} F_{p+1}(y) + h^{p+1} F_{p+2}(y) + \mathcal{O}(h^{p+2}).
+\]
+\begin{theorem}
+	Let $\vphi^{h}$ be a symplectic method of order $p$ applied to the Hamiltonian system $\dot x = J \nabla H(x)$, with $H : \mathbb{R}^{2d} \to \mathbb{R}$. Then the modified equation $\dot y = F_h(y)$ is also Hamiltonian.
+
+	So if $H$ is a smooth function, then there exist smooth functions $H_{p+1}, H_{p+2}, \ldots : \mathbb{R}^{2d} \to \mathbb{R}$ such that
+	\[
+	F_h(x) = J (\nabla H(x) + h^{p} \nabla H_{p+1}(x) + h^{p+1} \nabla H_{p+2}(x) + \mathcal{O}(h^{p+2})).
+	\]
+\end{theorem}
+
+% lecture 13
+
+\begin{proofbox}
+	Assume that $F_i(y) = J \nabla H_i(y)$ for $i = p+1, \ldots, R$. We now show that $F_{R+1}(y) = J \nabla H_{R + 1}(y)$. We define the \emph{truncated modified vector field}\index{truncated modified vector field} as
+	\[
+	F_{h, R}(x) = F(x) + h^{p} F_{p+1}(x) + h^{p+1} F_{p+2}(x) + \cdots + h^{R-1} F_R(x).
+	\]
+	By the assumption, $F_{h, R}$ is Hamiltonian. We call $\phi_R^{t}$ the flow at time $t$ of $F_{h, R}$. We can say that
+	\[
+	\phi_{F_h}^{h}(x) = \phi_{R}^{h}(x) + h^{R+1} F_{R+1}(x) + \mathcal{O}(h^{R+2}).
+	\]
+	Then note that
+	\[
+	\phi_{F_h}'(x) = (\phi_R^{h})'(x) + h^{R+1} F_{R+1}'(x) + \mathcal{O}(h^{R+2}),
+	\]
+	and since $\phi_{F_h}$ is symplectic,
+	\begin{align*}
+		J &= (\phi'_{F_h}(x))^{T} J (\phi_{F_h}'(x)) = (\phi_R^{h'}(x))^{T} J (\phi_{R}^{h'}(x))^{T} + h^{R+1} (\phi_R^{h'}(x))^{T} J F_{R+1}'(x) \\
+		  & \qquad \qquad + h^{R+1} F_{R+1}'(x)^{T} J (\phi_R^{h'}(x)) + \mathcal{O}(h^{R+2}). \tag{$\ast$}
+	\end{align*}
+	Note that
+	\[
+	\phi_R^{h}(x) = x + h F_{h, R}(x) + \mathcal{O}(h^2) \implies \phi_R^{h'} = I + \mathcal{O}(h),
+	\]
+	so $(\ast)$ becomes
+	\begin{align*}
+		J + h^{R+1}( JF_{R+1}'(x) + F_{R+1}'(x)^{T} J) + \mathcal{O}(h^{R+2}).
+	\end{align*}
+	Looking at the order $R+1$ terms,
+	\[
+	J F'_{R+1}(x) = - F_{R+1}'(x)^{T} J = F_{R+1}'(x) J^{T},
+	\]
+	since $J^{T} = - J$. Hence $J F_{R+1}(x) = - \nabla H_{R+1}(x)$ for some energy function $H_{R+1}$, and
+	\[
+	F_{R+1}(x) = - J^{T} \nabla H_{R+1}(x) = J \nabla H_{R+1}(x).
+	\]
+	So $F_{R+1}$ is Hamiltonian, as desired.
+\end{proofbox}
+
+We let
+\[
+\tilde H_N(x) = H(x) + h^{p} H_{p+1}(x) + \cdots + h^{N-1}H_N(x)
+\]
+be the truncated modified Hamiltonian for a symplectic integration $\vphi^{h}$ of order $p$ applied to $\dot x = J \nabla H(x)$.
+
+\begin{theorem}
+	Consider a Hamiltonian system with analytic $H : D \to \mathbb{R}$, for $D \subseteq \mathbb{R}^{2d}$, and apply a symplectic method $\vphi^{h}$ with stepsize $h > 0$. If the numerical solution stays in a compact subset $K \subseteq D$, then there exists $h_0 > 0$ and an $N = N(h)$ such that:
+	\begin{itemize}
+		\item $\tilde H_n(y_n) = \tilde H_n(x_0) + \mathcal{O}(e^{-h_0/2h})$, where $y_N = \vphi^{h} \circ \cdots \circ \vphi^{h}(x_0)$.
+		\item $H(y_n) = H(x_0) + \mathcal{O}(h^{p})$, where $n h \leq e^{h_0/2h}$.
+	\end{itemize}
+\end{theorem}
+
+\newpage
+
+\section{Non-expansive and Deep Learning Theory}%
+\label{sec:nedlt}
+
+Let $N_\theta : \mathbb{R}^{d} \to \mathbb{R}^{c}$, for $\theta \in \Theta \subseteq \mathbb{R}^{p}$. Suppose our dataset is $\mathcal{T} = \{(x_i, y_i)\}$, and we would like to have $N_\theta(x_i) = y_i$. The simplest loss is
+\[
+L(\theta) = \frac 1N \sum_{i = 1}^{N} \|N_\theta(x_i) - y_i\|^2.
+\]
+Suppose that
+\[
+N_\theta = F_{\theta_L} \circ \cdots \circ F_{\theta_1},
+\]
+where $L$ is the number of layers. Let $\theta = (\theta_1, \ldots, \theta_L)$. We call $\theta_{ij}$ the $i$'th component of $\theta_j$. Then we let
+\[
+\theta_{ij}^{K+1} = \theta_{ij}^{K} = \frac{\tau_K}{N} \sum_{n = 1}^{N} \partial_{\theta_{ij}} L_n(\theta^{K}),
+\]
+where
+\[
+L_n(\theta) = \|N(x_n) - y_n\|^2.
+\]
+We set $x^{j+1} = F_{\theta_j(x^j)}$, and $x^1 = x$. So, $N_{\theta}(x^1) = x^{L+1}$. Note that
+\[
+\partial_{\theta_{ij}} L_n = \langle \partial_{x_n^{j+1}} L_n, \partial_{\theta_{ij}} x_n^{j+1} \rangle = \left\langle  \left( \prod_{l = j+1}^{L} \partial_{x_n^{l}} x_n^{l+1} \right) \partial_{x_n^{l+1}} L_n, \partial_{\theta_{ij}} x_n^{j+1} \right\rangle.
+\]
+But by CS, we can bound this norm: it is at most
+\[
+\biggl\|\prod_{l = j+1}^{L} \partial_{x_n^{l}} x_n^{l+1}\biggr\|_2 \leq \prod_{l = j+1}^{L} \|\partial_{x_n^{l}} x_n^{l+1}\|_2 \to 0.
+\]
+This is the \emph{vanishing gradient problem}\index{vanishing gradient problem}.
+
+% lecture 14
+
+We know that
+\[
+\partial_{x^{l}_n} x_n^{l+1} = \partial_{x_n^{l}} F_{\theta_l}(x_n^{l}).
+\]
+Suppose $F$ is some symplectic map, say $\vphi_{X_{\theta_l}}^{h_l}$. Then we know
+\[
+\|J\|_2 = \|F'(x)^{T} J F'(x)\|_2 \leq \|F'(x)\|_2^2 \cdot \|J\|_2,
+\]
+hence $\|F'(x)\|_2 \geq 1$. So we do not have a vanishing gradient. Suppose the $l$'th layer has Hamiltonian
+\[
+H_{\theta_l}(x) = \langle 1, \gamma(A_x + b) \rangle.
+\]
+Then note
+\[
+\nabla H_{\theta_l}(x) = A^{T} \sigma(Ax + b),
+\]
+where $\sigma = \gamma'$. This is like a single hidden-layer network, but which is forced to have zero Jacobian. Then we can let
+\[
+F_{\theta_l}(x) = \vphi_{X_{H_{\theta_l}}}^{h_l}(x).
+\]
+Note that if $F_{\theta_l}(x) = x + h_l J \nabla H_l(x)$, this is not necessarily symplectic, as we have integrated with a non-symplectic integrator.
+
+So we would like to integrate with a symplectic integrator. This is possible if $H(q, p) = K(p) + U(q)$, in which case we can use symplectic Euler:
+\[
+\vphi_{X_H}^{h} = \phi_{X_K}^{h} \circ \phi_{X_u}^{h}.
+\]
+This is possible if we constrain the weights $A$ to be block-diagonal, i.e.
+\[
+A =
+\begin{pmatrix}
+	A_1 & 0 \\ 0 & A_2
+\end{pmatrix}.
+\]
+Then we get
+\[
+H_{\theta_l}(x) = \langle 1, \gamma(A_1 q + b_1) \rangle + \langle 1, \gamma(A_2 q + b_2) \rangle.
+\]
+In this case,
+\[
+X_{H_{\theta_l}}(x) =
+\begin{pmatrix}
+	A_2^{T} \sigma(A_2 p + b_2) \\ -A_1^{T} \sigma(A_1 q + b_1)
+\end{pmatrix}.
+\]
+
+\newpage
+
+\section{Non-expansive Dynamical Systems}%
+\label{sec:neds}
+
+Consider a system $\dot x = F(x)$, such that for some norm $\|\cdot\|$ and all $t \geq 0$,
+\[
+\|\phi_F^{t}(x) - \phi_F^{t}(y)\| \leq \|x - y\|.
+\]
+Such a system is called \emph{non-expansive}\index{non-expansive}. This norm does not need to be the Euclidean norm. For $0 < h \ll 1$, we have
+\begin{align*}
+	\phi_F^{t + h}(x) &= \phi_F^{t}(x) + h F (\phi_F^{t}(x)) + \mathcal{O}(h^2), \\
+	\phi_F^{t + h}(y) &= \phi_F^{t}(y) + h F(\phi_F^{t}(y)) + \mathcal{O}(h^2).
+\end{align*}
+We consider the norm $\|\cdot\|$ defined by the inner product. Then, the difference in the norms are
+\[
+2h \langle F(\phi_F^{t}(y)) - F(\phi_F^{t}(x)), \phi_F^{t}(x) - \phi_F^{t}(y) \rangle + \mathcal{O}(h^2).
+\]
+For this to always be non-positive for $h > 0$, we need that this object is negative. Set $g(t) = \|\phi_F^{t}(y) - \phi_F^{t}(x)\|^2$, and
+\begin{align*}
+	\frac{\diff}{\diff t} (e^{-2\nu t}g(t)) &= e^{-2 \nu t}\dot g(t) - 2 \nu e^{-2 \nu t}g(t) \\
+						&= e^{-2 \nu t}(\dot g(t) - 2 \nu g(t)).
+\end{align*}
+Suppose that there is $\nu \in \mathbb{R}$ such that
+\[
+\langle F(y) - F(x), y - x \rangle \leq \nu \|y - x\|^2.
+\]
+% lecture 15
+
+Then we find
+\[
+\frac{\diff}{\diff t} g(t)^2 \leq 2 \nu g(t)^2 \implies \frac{\diff}{\diff t} (e^{-2 \nu t} g(t)) \leq 0.
+\]
+Therefore, $e^{-2 \nu t} g(t) \leq g(0)$, so
+\[
+\|\phi_F^{t}(y) - \phi_F^{t}(x)\| \leq e^{\nu t} \|y - x\|.
+\]
+
+\begin{definition}
+	The vector field $F : \mathbb{R}^{d} \to \mathbb{R}^{d}$ is \emph{one-sided Lipschitz continuous}\index{one-sided Lipschitz continuous} if it satisfies
+	\[
+	\langle F(u) - F(v), u - v \rangle \leq \nu \|u - v\|^2
+	\]
+	for all $u, v \in \mathbb{R}^{d}$ for a scalar $\nu \in \mathbb{R}$. $F$ is \emph{non-expansive}\index{non-expansive} if $\nu \leq 0$, and \emph{contractive}\index{contractive} if $\nu < 0$.
+\end{definition}
+
+\begin{lemma}
+	An $L$-Lipschitz continuous vector field $F : \mathbb{R}^{d} \to \mathbb{R}^{d}$ is also one-sided Lipschitz continuous.
+\end{lemma}
+
+\begin{proofbox}
+	We have
+	\[
+	\langle F(u) - F(v), u - v \rangle \leq \|F(u) - F(v)\| \cdot \|u - v\| \leq \mathrm{Lip}(F) \|u - v\|^2.
+	\]
+\end{proofbox}
+
+If $F : \mathbb{R}^{d} \to \mathbb{R}^{d}$ is $C^1$, then for all $x, y$ by MVT we know  there is $z = s x + (1 - s) y$ such that $F(y) - F(x) = F'(z)(y - x)$. Hence
+\[
+\langle F(y) - F(x), y - x \rangle = \langle F'(z)(y - x), y - x\rangle.
+\]
+Suppose that we know that
+\[
+	\sup_{\substack{x \in \mathbb{R}^{d} \\ v \in \mathbb{R}^{d} \setminus \{0\}}}\frac{\langle F'(x) v, v \rangle}{\|v\|^2} \leq \nu.
+\]
+If this is the regular inner product, this is equivalent to
+\[
+\sup_{x \in \mathbb{R}^{d}} \lambda_{max} \left( \frac{F'(x) + F'(x)^{T}}{2} \right) \leq \nu.
+\]
+For $d = 1$, this corresponds to $F'(x) \leq \nu$. For example, $F(x) = - x^3$ is one-sided Lipschitz continuous, but not Lipschitz continuous.
+
+Suppose our norm is generated by an inner product.
+
+\begin{definition}
+	A numerical method $\vphi^{h} : \mathbb{R}^{d} \to \mathbb{R}^{d}$ is \emph{B-stable}\index{B-stable} if, when applied to any vector field $F : \mathbb{R}^{d} \to \mathbb{R}^{d}$ which satisfies
+	\[
+	\|\phi_F^{t}(y) - \phi_F^{t}(x)\| \leq \|y - x\|
+	\]
+	for all $t \geq 0$ and $x, y$, then for all $h \geq 0$,
+	\[
+	\|\vphi_F^{h}(y) - \vphi_F^{h}(x)\| \leq \|y - x\|.
+	\]
+\end{definition}
+
+\begin{remark}
+	Recall our equation $\dot x = \lambda x$, for $\lambda = \alpha + i \beta$ with $\Re(\lambda) = \alpha$. This is equivalent to
+	\[
+	\dot u =
+	\begin{pmatrix}
+		\alpha & - \beta \\ \beta & \alpha
+	\end{pmatrix}
+	u = F(u),
+	\]
+	with
+	\[
+	F'(u) = 
+	\begin{pmatrix}
+		\alpha & - \beta \\ \beta & \alpha
+	\end{pmatrix}, \qquad \frac{F'(u) + F'(u)^{T}}{2} = \alpha I.
+	\]
+	This is contractive. Hence we see that since no explicit RK method is A-stable, the same is true for B-stability.
+\end{remark}
+
+\begin{proposition}
+	A RK method $\vphi^{h}$ of tableaux $(A, b, c)$ is B-stable if, when we write $B = \mathrm{diag}(b)$ and $M = BA + A^{T}B - b b^{T}$, they are both symmetric and positive semi-definite.
+\end{proposition}
+
+\begin{proofbox}
+	Let
+	\begin{align*}
+		x_1 &= \vphi^{h} (x_0) + h \sum_{i = 1}^{s} b_i F(K_i), \\
+		K_i &= x_0 + h \sum_{j = 1}^{s} a_{ij} F(K_j).
+	\end{align*}
+	Then we can write similarly for $y_1$ and $L_i$. We write $\delta x_R = y_R - x_R$, $\delta F_i = F(K_i) - F(L_i)$ and $\delta K_i = K_i - L_1$. Then
+	\begin{align*}
+		\|\delta x_1\|^2 &= \langle \delta x_1, \delta x_1 \rangle = \|\delta x_0\|^2 + h^2 \sum_{i, j = 1}^{s} b_i b_j \langle \delta F_i, \delta F_j \rangle + 2 h \sum_{i = 1}^{s} b_i \langle \delta x_0, \delta F_i \rangle.
+	\end{align*}
+	We can write, by linearity,
+	\[
+	\delta x_0 = \delta K_i - h \sum_{j = 1}^{s} a_{ij} \delta F_j.
+	\]
+	This can be plugged in to get
+	\begin{align*}
+		\|\delta x_1\|^2 &= \|\delta x_0\|^2 + h^2 \sum_{i, j = 1}^{s} b_i b_j \langle \delta F_i, \delta F_j \rangle + 2 h \sum_{i = 1}^{s} b_i \langle \delta K_i, \delta F_i \rangle \\
+				 & \qquad - 2 h^2 \sum_{i, j = 1}^{s} b_i a_{ij} \langle \delta F_i, \delta F_j \rangle, \\
+		\implies \|\delta x_1\|^2 &\leq \|\delta x_0\|^2 - h^2 \sum_{i, j = 1}^{s} m_{ij} \langle \delta F_i, \delta F_j \rangle,
+	\end{align*}
+	using the fact that $\langle \delta K_i, \delta F_i \rangle \leq 0$.
+
+	Note that $M \geq 0$, and rewriting this we get
+	\[
+	\|\delta x_1\|^2 - \|\delta x_0\|^2 = -h^2 \delta F^{T} M \delta F \leq 0.
+	\]
+	So this method is B-stable.
+\end{proofbox}
+
+% lecture 16
+
+\subsection{Conditionally Non-linearly Stable Methods}%
+\label{sub:cnsm}
+
+Consider $V(x) = \|x\|_2^2/2$. Then $\dot x = - \nabla V(x) = - x$ gives $x(t) = e^{-t}x(0)$. Hence
+\[
+\|x(t) - y(t)\|_2 = e^{-t} \|x(0) - y(0)\| < \|x(0) - y(0)\|_2.
+\]
+So if we let
+\[
+x_{n+1} = \vphi^{h}(x_n) = x_n - h \nabla V(x_n) = (1 - h) x_n,
+\]
+then
+\[
+\|y_{n+1} - x_{n+1}\|_2 = |1 - h| \|y_n - x_n\|.
+\]
+If $h \in [0, 2]$, then $\vphi^{h}$ is non-expansive, and 1-Lipschitz as well. See circle contractivity for more.
+
+\begin{definition}
+	A convex and continuously differentiable function $V : \mathbb{R}^{d} \to \mathbb{R}$ is \emph{$L$-smooth}\index{$L$-smooth} if its gradient is $L$-Lipschitz, i.e.
+	\[
+	\|\nabla V(y) - \nabla V(x)\| \leq L \|y - x\|.
+	\]
+\end{definition}
+
+\begin{theorem}[Baillon-Haddad]
+	$V$ is $L$-smooth if and only if
+	\[
+	\langle \nabla V(x) - \nabla V(y), x - y \rangle \geq \frac 1 L \|\nabla V(x) - \nabla V(y)\|_2^2.
+	\]
+\end{theorem}
+
+We now consider $V : \mathbb{R}^{d} \to \mathbb{R}$ $L$-smooth, and the dynamics $\dot x = - \nabla V(x) = F(x)$. Then
+\[
+\langle F(x) - F(y), x - y \rangle \leq -\frac{1}{L} \|F(x) - F(y)\|_2^2.
+\]
+Consider again $x_{n+1} = x_n - h \nabla V(x_n)$, $y_{n+1} = y_n - h \nabla V(y_n)$. Then
+\begin{align*}
+	\|y_{n+1} - x_{n+1}\|_2^2 &= \|y_n - x_n\|_2^2 + h^2 \|\nabla V(y_n) - \nabla V(x_n)\|_2^2 - 2 h \langle \nabla V(y_n) - \nabla V(x_n), y_n - x_n \rangle \\
+				  & \leq \|y_n - x_n\|_2^2 + h \left( h - \frac{2}{L} \right) \|\nabla V(y_n) - \nabla V(x_n)\|.
+\end{align*}
+If $h \leq 2/L$, then $\|x_{n+1} - y_{n+1}\| \leq \|x_n - y_n\|$, and hence exponential Euler is non-expansive when applied to $\dot x = - \nabla V(x)$ for $V$ $L$-smooth.
+
+If $x^{\ast}$ is the fixed point of the flow, i.e. it is the minimum of $V(x)$, then
+\[
+\|x(t) - x^{\ast}\|_2 \leq \|x(0) - x^{\ast}\|_2.
+\]
+Returning to our example $V(x) = \|x\|^2/2$, then this is $L$-smooth with $L = 1$, hence $h \leq 2/ L = 2$ is non-expansive.
+
+\subsection{1-Lipschitz and Non-expansive Neural Networks}%
+\label{sub:lnnn}
+
+Consider the setting of an inverse problem, where one wants to build denoising algorithms with convergent behaviour.
+
+Suppose we want to reconstruct $X$. Then we want to find
+\[
+\min_Y \|X - Y\|^2 + R(Y),
+\]
+where $R$ is a regularization term. $R$ can be learnt using a neural network. We can learn $Y$ using gradient descent. If $V = V_1 + V_2$, then
+\[
+\dot X = - \nabla V_1(X) - \nabla V_2(X),
+\]
+and so we can step
+\[
+X_{n+1} = \vphi^{2} \circ \vphi^{1} \circ (X_n).
+\]
+Instead of learning $V_2$ or $R$, we can learn $\vphi^{2}$ directly. If $\vphi^{2}$ has non-expansive guarantees, then this will be convergent.
+
+Another setting is robust classification. Suppose we have a bunch of images, and we want to learn a classifier associating each image to a label. We want the network to be not too sensitive to perturbations.
+
+We have $\Omega \subseteq \mathbb{R}^{d}$, and $\ell : \Omega \to \{1, \ldots, C\}$, where $C$ is the number of classes of the set. If $\Omega_i = \ell^{-1}(i)$, then
+\[
+\Omega = \bigcup_{i = 1}^{C} \Omega_i, \qquad \Omega_i \cap \Omega_j = \emptyset.
+\]
+Define a network $N_\theta : \mathbb{R}^{d} \to \mathbb{R}^{C}$, where $\hat K(x)$ is the prediction of $N_\theta$ for $x \in \Omega$. So
+\[
+\hat K(x) = \mathrm{argmax} N_\theta(x)^{T} e_k.
+\]
+Typically we do softmax, i.e. $N_\theta(x) \to y \in \mathbb{R}^{C}$ with
+\[
+y_k = \frac{\exp (N_\theta(x)_k)}{\sum \exp (N_\theta(x)_i)}.
+\]
+Suppose we have a Lipschitz constant of $N_\theta$, so
+\[
+\|N_\theta(y) - N_\theta(x)\|_2 \leq l \|y - x\|_2
+\]
+for all $x, y \in \mathbb{R}^{d}$. This is not too good of a robustness measure. Instead, we desire a good \emph{margin of classification}\index{margin of classification}:
+\[
+m(x) = N_\theta(x)_{\hat K(x)} - \max_{K \neq \hat K} N_\theta(x)_K.
+\]
+\begin{proposition}
+	Let us consider an $l$-Lipschitz neural network $N_\theta : \mathbb{R}^{d} \to \mathbb{R}^{C}$. Then for every $y \in \mathbb{R}^{d}$ such that
+	\[
+	\|x - y\|_2 \leq \frac{m(x)}{\sqrt 2 l},
+	\]
+	the prediction $\hat K(y)$ will coincide with $\hat K(x)$.
+\end{proposition}
+
+\subsection{1-Lipschitz Neural Networks based on Gradient Flows}%
+\label{sub:1lnngf}
+
+Consider $N_\theta = F_{\theta_L} \circ \cdots \circ F_{\theta_1}$, where $F_{\theta_i}(x) = B_i \sigma(A_i x + b_i)$, with $\|B_1\|2 = \|A_i\|_2$ and $\mathrm{Lip}(\sigma) \leq 1$.
+
+If instead we have a ResNet $F_{\theta_i}(x) = x + B_i \sigma(A_i x + b_i)$, then
+\[
+\|F_{\theta_i}(x) - F_{\theta_i}(y)\| \leq (1 + \|B_i\|_2 \|A_2\|_2 \mathrm{Lip}(\sigma))\|x - y\|.
+\]
+We call $F_{\theta_i} = \vphi^{h}_{X_i}$, where $X_i(x) = - \nabla V_i(x)$. If $V_i(x) = \mathbf{1}^{T} \gamma(A_i x + b_i)$ where $\gamma' = \sigma$, then $\nabla V_i(x) = A_i^{T} \sigma(A_i x + b_i)$.
+
+Two commons forms of $\sigma$ are
+\begin{align*}
+	\sigma(x) &= \mathrm{ReLu}(x) = \max(0, x) = x^{+}, \\
+	\sigma(x) &- \mathrm{LeakyReLu}(x) = \max(ax, x) \qquad a \in (0, 1).
+\end{align*}
+We can then set $\gamma = \int \sigma$.
+
+\newpage
+
+\printindex
+
+\end{document}

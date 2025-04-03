@@ -1,0 +1,436 @@
+\documentclass[12pt]{article}
+
+\usepackage{ishn}
+
+\makeindex[intoc]
+
+\begin{document}
+
+\hypersetup{pageanchor=false}
+\begin{titlepage}
+	\begin{center}
+		\vspace*{1em}
+		\Huge
+		\textbf{III Black Holes}
+
+		\vspace{1em}
+		\large
+		Ishan Nath, Lent 2024
+
+		\vspace{1.5em}
+
+		\Large
+
+		Based on Lectures by Prof. Jorge Santos
+
+		\vspace{1em}
+
+		\large
+		\today
+	\end{center}
+	
+\end{titlepage}
+\hypersetup{pageanchor=true}
+
+\tableofcontents
+
+\newpage
+
+%lecture 1
+
+\setcounter{section}{-1}
+
+\section{Introduction}%
+\label{sec:int}
+
+Our conventions are:
+\begin{itemize}
+	\item $c = G = 1$.
+	\item The signature is $(-, +, \ldots, +)$.
+	\item $\Lambda > 0$ corresponds to de-Sitter, $\Lambda < 0$ corresponds to anti de-Sitter.
+	\item Specific coordinate systems correspond to Greek indices.
+	\item Things true in any coordinate system are written in latin indices.
+	\item $R(X,Y)Z = \nabla_X \nabla_Y Z - \nabla_Y \nabla_X Z - \nabla_{[X,Y]}Z$.
+\end{itemize}
+
+\newpage
+
+\section{Spherical Stars}%
+\label{sec:ss}
+
+Gravitational attraction wins when there is no fuel. Eventually, the Pauli exclusion principle takes over, leading to degeneracy pressure.
+
+We have some scales of star.
+\begin{itemize}
+	\item If a star has mass less than around $1.4 M_0$, then we believe it will form a white dwarf.
+	\item If it has mass less than $M_0$, it will form a neutron star due to neutron degeneracy pressure.
+	\item For larger mass, it will form a black hole.
+\end{itemize}
+
+In general, the set of isometries of a manifold with a metric forms a group. A normal two sphere is invariant under $\mathsf{SO}(3)$:
+\[
+\diff \Omega_2^2 = \diff \theta^2 + \sin^2 \theta \diff \phi^2.
+\]
+It is also invariant under reflections: $\theta \to \pi - \theta$, giving $\mathsf{O}(3)$.
+
+\begin{definition}
+	A spacetime is \emph{spherically symmetric}\index{spherically symmetric} if it has the same group of isometries as a normal sphere. More precisely, a spacetime $s$ is spherically symmetric if its isometry group contains a $\mathsf{SO}(3)$ subgroup whose orbits are two-spheres.
+\end{definition}
+
+In a spherically symmetric spacetime, we can define an area radius: $r : \mathcal{M} \to \mathbb{R}^2$ by 
+\[
+	r(p) = \sqrt{\frac{A(p)}{4 \pi},}
+\]
+where $A(p)$ is the area of the orbit through $p$.
+
+\subsection{Time Independence}%
+\label{sub:ti}
+
+\begin{definition}
+	A spacetime is \emph{stationary}\index{stationary} if it admits a Killing vector field $K^\mu$ which is everywhere timelike:
+	\[
+	K^{a} g_{ab} K^{b} < 0.
+	\]
+\end{definition}
+
+We pick a hypersurface $\Sigma$ nowhere tangent to $K$. We assign a coordinate $(t, x^i)$ to the point parametrized at distance $t$ along the integral curves of $K$ that start on $\Sigma$ at $x^{i}$.
+
+In this coordinate system,
+\[
+K^a = \left( \frac{\partial}{\partial t}\right)^{a}.
+\]
+In these nice coordinate,
+\[
+\mathcal{L}_Kg = 0 \implies \diff s^2 = g_{tt} (x^k) \diff t^2 + 2 g_{ti} (x^k) \diff t \diff x^i + g_{ij}(x^k) \diff x^i \diff x^j.
+\]
+This is still too complicated. We need another simplification.
+
+\subsection{Hypersurface Orthogonality}%
+\label{sub:ho}
+
+Let $\Sigma$ be defined by $f(x) = 0$. Then the one form $\diff f$ is orthogonal to $Z$. Let $Z^{a}$ be tangent to $\Sigma$. Then,
+\[
+	(\diff f)(Z) = Z(f) = Z^\mu \partial_\mu f = 0,
+\]
+as the derivatives of $f$ on $\Sigma$ are 0.
+
+Take a generic normal
+\[
+m = g \diff f + f m',
+\]
+where $m'$ is a smooth one form. Then
+\[
+\diff m = \diff g \wedge \diff f + \diff f \wedge m' + f \diff m' \implies \diff m|_{\Sigma} = (\diff g - m') \wedge \diff f|_{\Sigma}.
+\]
+And so, $(m \wedge \diff m)_\Sigma = 0$.
+
+Conversely, if $n$ is a non-zero one-form such that $n \wedge \diff n = 0$ everywhere, then
+\[
+n = g \diff f.
+\]
+\begin{definition}
+	A spacetime is \emph{static}\index{static} if it admits a hypersurface orthogonal timelike Killing vector field.
+\end{definition}
+
+Since the spacetime is hypersurface orthogonal, choose $\Sigma$ to be orthogonal to $K$. Take for instance $\Sigma$ to be $t = t_0$. Then $K_\mu \propto (1, 0, 0, 0)$. Indeed, $n = g\diff f = g \diff t$.
+
+Hence $K_i = 0$, and $K^a = (\partial/\partial t)^a$. This implies $g_{ti} = 0$. Hence for a static metric,
+\[
+\diff s^2 = g_{tt}(x^k) \diff t^2 + g_{ij}(x^k) \diff x^i \diff x^j.
+\]
+\subsection{Static and Spherical Symmetry}%
+\label{sub:sss}
+
+Since the spacetime is static, we have a Killing vector field $K^a$, and we can facilitate our spacetime with surfaces $\Sigma_t$, orthogonal to $K$.
+
+Any $\mathsf{SO}(3)$ orbits of $p \in \Sigma_t$ will lie in $\Sigma_t$. Define polar coordinates $(\theta, \phi)$ on this $S^2$ orbit.
+
+Extend this definition to the rest of $\Sigma_t$ by defining them to be constant along spacelike geodesics orthogonal to $S^2(p)$. We then use the area radius $r$:
+\[
+\diff s^2_{\Sigma_t} = e^{2 \psi(r)} \diff r^2 + r^2 \diff \Omega^2_2.
+\]
+We extend this definition:
+\[
+\diff s^2 = - e^{2 \Phi(r)} \diff t^2 + e^{2 \psi(r)} \diff r^2 + r^2 \diff \Omega^2_2.
+\]
+Our stars will be modelled by fluids:
+\[
+T_{ab}= (\rho + p)u_a u_b + p g_{ab},
+\]
+and $u_a u^a = -1$. Because the spacetime is spherically symmetric, so are $p$ and $\rho$. As $(\mathcal{M}, g)$ it is static, we can immediately say that
+\[
+u^a = e^{-\Phi} \left( \frac{\partial}{\partial t} \right)^{a}.
+\]
+We had a quadratic constraint, so we could have picked a negative sign. We did not; from general relativity, we should have that $u$ is in the same direction as $\partial/\partial t$, so particles flow in a timelike manner. Our convention results in a negative inner product, which want we want.
+
+If the star has radius $R$, then
+\[
+\rho(r) = p(r) = 0, \qquad r > R.
+\]
+
+% lecture 2
+
+The equation $\nabla_a T^{ab} = 0$ corresponds to the fluid equation of motion. Einstein's equations say
+\[
+R_{ab} - \frac{R}{2} g_{ab} = 8 \pi T_{ab}.
+\]
+Because of spherical symmetry and staticity, we only care about the $tt$, $rr$, $\theta\theta$ and $\phi\phi$ components, with $R_{\phi\phi} = \sin^2\theta R_{\theta\theta}$. We can show, on example sheet 1, that
+\begin{align*}
+	G_{tt} &= \frac{e^{2(\Phi - \psi)}}{r^2} (e^{2 \psi} - 2 r \psi' - 1), \\
+	G_{rr} &= \frac{1}{r^2} (1 - e^{2 \psi} + 2 r \Phi'), \\
+	G_{\theta\theta} &= e^{-2 \psi} r [ r \Phi'^2 + \psi' + \Phi'(1 - r \psi') + r \Phi''].
+\end{align*}
+To make this equation a bit nicer, write
+\[
+e^{2\psi} = \frac{1}{1 - \frac{2m(r)}{r}} \implies \psi(r) = \frac{1}{2} \log \left(1 - \frac{2m(r)}{r} \right).
+\]
+Recall that
+\[
+	T_{tt} = e^{2 \Phi}\rho, \qquad T_{rr} = e^{2\psi} \rho, \qquad T_{\theta\theta} = r^2 p.
+\]
+So the equations boil down to:
+\begin{align*}
+	tt: \qquad m'(r) &= 4 \pi r^2 \rho(r), \\
+	rr: \qquad \Phi'(r) &= \frac{m(r) + 4 \pi r^3 p(r)}{r(r - 2m(r))}, \\
+	\theta\theta: \qquad p'(r) &= - [p(r) + \rho(r)] \frac{m(r) + 4 \pi r^3 p(r)}{r(r - 2m(r))}.
+\end{align*}
+This is three equations for four unknown variables: $(\rho, m, p, \Phi)$, hence we cannot solve.
+
+What we are missing is the \emph{equation of state}, which comes from chemistry:
+\[
+p = p(\rho, T).
+\]
+We want ultra-cold stars, so $T = 0$, and $p = p(\rho)$, and $\rho, p > 0$ as we are sensible. This is known as the TOV relation.
+
+Outisde the star of radius $R$, $\rho = p = 0$. So $m'(r) = 0$, and hence $m(r) = M$, which gives
+\[
+\psi(r) = - \frac 12 \log \left(1 - \frac{2M}{r} \right) = - \Phi(r),
+\]
+where we took $\lim \Phi(r) = 0$. So we get
+\[
+\diff s^2 = - \left( 1 - \frac{2M}{r} \right) \diff t^2 + \frac{\diff r^2}{1 - \frac{2M}{r}} + r^2\left(\diff \theta^2 + \sin^2 \theta \diff \phi^2 \right),
+\]
+where $M$ is the total mass of the star. This is the \emph{Schwarzschild metric}\index{Schwarzschild metric}. This has far-reaching observations.
+\begin{itemize}
+	\item The Schwarzschild solution appears singular at $r = 2M$.
+	\item For stars, the solution is only meaningful for $r > 2M$.
+	\item So we have a bound
+		\[
+		R > R_s = 2M.
+		\]
+		Reinstating units, we find
+		\[
+		\frac{GM}{c^2 R} < \frac{1}{2},
+		\]
+		which in the Newtonian limit gives $0 < 1/2$. Hence there is no analog in the Newtonian theory. Is this bound any good? For our sun,
+		\[
+			R_{0} \simeq \qty{7e5}{\kilo\meter} \gg 2 M_0 \simeq \qty{3}{\kilo\meter}.
+		\]
+\end{itemize}
+
+What about the solution inside of the star? From our equation for $m$,
+\[
+m(r) = 4 \pi \int_0^r \rho(r') {r'}^2 \diff r' + m_\ast,
+\]
+for $m_\ast$ some constant. We need $m_\ast = 0$, so that we have a start that leads to smooth spacetime at $r = 0$. At the surface $r = R$,
+\[
+m(R) = 4 \pi \int_0^R \rho(r) r^2 \diff r = M,
+\]
+by continuity with the solution at $r > R$. If we assume that the speed of sound is well-defined, so
+\[
+\frac{\diff p}{\diff \rho} = C_S^2 > 0.
+\]
+then from the $\theta\theta$ component of the Einstein equation, $\rho' < 0$, and thus the condition means
+\[
+	\frac{m(r)}{r} < \frac{2}{9} \left[ 1 - 6 \pi^2 r^2 p + (1 _ 6 \pi r^2 p)^{1/2} \right].
+\]
+At the surface, we get
+\[
+R > \frac 94 M.
+\]
+This is the \emph{Buchdahl limit}.
+
+A \emph{one-parameter family of stars}\index{one-parameter family of stars} is given by
+\begin{align*}
+	m'(r) &= 4 \pi r^2 \rho(r), \\
+	p' &= - [p(r) + \rho(r)] \frac{m(r) + 4 \pi r^3 p(r)}{r(r - 2m(r))}.
+\end{align*}
+We can integrate these equation to $[m(r), p(r)]$. Recall that $m(0) = 0$, and specify $p(0) = \rho_C$. We integrate this outwards from $r = 0$.
+
+As we integrate outwards, we find a value of $R$ such that $p(R) = 0$: this is the radius of the star, hence $R = R(\rho_C)$. Recall that
+\[
+M = 4 \pi \int_0^R \rho(r) r^2 \diff r \implies \Phi(R) = \frac 12 \log \left( 1 - \frac{2M}{R} \right).
+\]
+Finally, we can integrate this equation of $R$ inwards, using
+\[
+\Phi'(r) = \frac{m(r) + 4 \pi r^3 p(r)}{r(r - 2m(r))}.
+\]
+
+\subsection{Maximum Mass of a Cold Star}%
+\label{sub:mmcs}
+
+The maximum ought to depend on the equation of state. If $\rho$ gets close to nuclear density, then that is bad. Remarkably, GR knows best, and shows the existence of such a bound.
+
+Since $\rho(r)$ is a monotonically decreasing function of $r$, we can define a region $0 < r < r_0$, where $p(\rho)$ is not known. From this,
+\[
+m'(r) = 4\pi r^2 \rho(r).
+\]
+Assuming the right-hand side is constant,
+\[
+m_0 \geq \frac 43 \pi r_0^3 \rho_0.
+\]
+But we also know that
+\[
+	\frac{m_0}{r_0} < \frac 29 \left[ 1 - 6 \pi r_0^2 p_0 + (1 + 6 \pi r_0^2 p)^{1/2} \right],
+\]
+evaluated at $r = r_0$. The right hand side is decreasing in $p_0$, so we can set $p_0 = 0$ to find
+\[
+\frac{m_0}{r_0} < \frac 49.
+\]
+This gives us both an upper and lower bound for $m_0/r_0$, giving
+\[
+	m_0 < m_0^{\ast} = \sqrt{\frac{16}{244 \pi \rho_0}} \leq 5 M_0.
+\]
+We use atomic nuclei density, $\rho_0 \approx \qty{5e14}{\gram\per\centi\meter\cubed}$.
+
+This just gives a bound on the ``core'' mass $m_0$. We can do the numerics to find that $M < 5 M_0$.
+
+If we impose that $C_S < c$, then $M \leq 3 M_0$. More assumptions give better constraints. For instance, if the core is an ideal Fermi gas, then $M \leq 1.4 M_0$, the Chandrasekhar limit.
+
+% lecture 3
+
+Recall our stars form a one-parameter family of solutions parametrized by $M$. We will see that $M$ is the energy of the black hole, and we take $M > 0$. If $M < 0$, we see pathologies.
+
+There is a special radius, the \emph{Schwarzschild radius}\index{Schwarzschild radius} given by $r = 2M$.
+
+We derived the Schwarzschild solution assuming that it was static and spherically symmetric. But we actually only need one of these assumptions:
+\begin{theorem}[Birkhoff]
+	Any spherically symmetric solution of the vacuum Einstein equation is isometric to the Schwarzschild solution.
+\end{theorem}
+The proof is not long, but not enlightening either. See Hawking for a proof.
+\begin{remark}
+	\begin{itemize}
+		\item[]
+		\item The theorem only assumes spherical symmetry, and then we are given $K = \partial/\partial t$.
+		\item This Killing field $K$ is timelike for $r > 2M$, and spacelike for $r < 2M$.
+	\end{itemize}
+\end{remark}
+
+\subsection{Gravitational Redshift}%
+\label{sub:grs}
+
+Consider two observers Alice (A), and Bob (B). The remain at fixed $\theta, \phi$ in the Schwarzschild geometry, but with different radial positions $2M < r_a < r_B$.
+
+Suppose that Alice carries a flashlight, which she turns on and off at intervals $\Delta t$ in Shcwarzschild coordinate. Since $\partial/ \partial t$ is a Killing vector field, each photon will follow the same trajectory, but there will be a delay.
+
+From the perspective of the proper time $\tau$ between photons by Alice (or Bob) and measured by Bob (or Alice), we have
+\[
+	\Delta \tau_A = \sqrt{1 - \frac{2M}{r_a}} \Delta t,
+\]
+and thus
+\[
+\frac{\Delta \tau_B}{\Delta \tau_A} > 1,
+\]
+for $r_B > r_A$. These two photons can be used as a proxy for two successive wavecrests of a light wave. Hence $\lambda_B > \lambda_A$, the wavelength of a light wave. So light undergoes a redshift when it climbs out of a gravitational field. Write
+\[
+1 + z = \frac{\lambda_B}{\lambda_A} = \left(1 - \frac{2M}{r_a} \right)^{-1/2},
+\]
+which is the limit as $r_B \to \infty$. If Alice goes to $2M$, then $z \to +\infty$. However, if $R = 9M/4$, the Buchdal limit, then $z = 2$.
+
+\subsection{Geodesics of the Schwarzschild Geometry}%
+\label{sub:gds}
+
+Take an affinely parametrized geodesic with tangent $U^a = \diff X^a/\diff \tau$, and a spacetime $(\mathcal{M}, g)$ with Killing vector field $K$. Then $K \cdot U$ is conserved along the integral curves of $U$.
+
+Indeed, since $K$ is a Killing vector field and $U$ is affinely parametrized,
+\[
+\nabla K_b + \nabla_b K_a = 0, \qquad U^a \nabla_b U_b = 0.
+\]
+Then we can check that $U^{c} \nabla_c (U^a K_a) = 0$.
+
+For the Schwarzschild geometry, take $K = \partial/\partial t$, then
+\[
+E = - K \cdot U = \left(1 - \frac{2M}{r} \right) \frac{\diff t}{ \diff \tau},
+\]
+and we can also take
+\[
+h = m \cdot U = r^2 \sin^2 \theta \frac{\diff \phi}{\diff \tau},
+\]
+where $m = \partial/\partial \phi$. For a timelike geodesic, $E$ and $h$ are interpreted as the energy and the angular momentum per unit mass, and $\tau$ is the proper time.
+
+For null geodesics, $\tau$ is an affine parameter. So $E$ and $h$ have no absolute meaning for null geodesics. However, $h^2/E^2 = b^2$ is invariant, where $b$ is the impact parameter of the trajectory.
+
+The action for a geodesic is
+\begin{align*}
+	S &= \int \diff \tau \, L = \int \diff \tau \, \dot x^a \dot x^b g_{ab} \\
+	  &= \int \diff \tau \, (g_{tt} \dot t^2 + g_{rr} \dot r^2 + \dot \theta^2 r^2 + r^2 \sin^2 \theta \dot \phi^2).
+\end{align*}
+Use the principle of least action to derive the Euler-Lagrange equations. We will only need one:
+\[
+0 = \frac{\diff}{\diff \tau} \left( \frac{\partial L}{\partial \dot \theta} \right) - \frac{\partial L}{\partial \theta} = r^{4} \ddot \theta + 2 t^3 \dot r \dot \theta - h^2 \frac{\cos \theta}{\sin^3 \theta}.
+\]
+Because of $\mathsf{O}(3)$, we can always choose axes so that $\theta(0) = \pi/2$, $\dot \theta(0) = 0$.
+
+From this, we see that $\ddot \theta(0) = 0$, so $\theta(\tau) = \pi/2$. Recall that from GR,
+\[
+\dot x^a \dot x^b g_{ab} = - \sigma,
+\]
+for $\sigma = 1, 0, -1$ depending on whether the geodesic is timelike, null or spacelike. Evaluating this at $\theta = \pi/2$,
+\[
+\frac{\dot r^2}{2} + V(r) = \frac{E^2}{2},
+\]
+where
+\[
+V(r) = \frac 12 \left( \sigma + \frac{h^2}{r^2} \right) \left(1 - \frac{2M}{r} \right).
+\]
+
+\subsection{Eddington-Finkelstein Coordinates}%
+\label{sub:efc}
+
+Consider the Schwarzschild metric with $r > 2M$, and the radial, null geodesics; $\dot \theta = \dot \phi = 0$, so $h = 0$, and choose a time parameter so that $E = 1$. With a bit of work, we find
+\[
+\dot t = \left( 1 - \frac{2M}{r} \right)^{-1}, \qquad \dot r = \pm 1.
+\]
+There are two possible signs: if $\dot r/ \dot t > 0$, we have outgoing null geodesics, otherwise these are ingoing.
+
+Note that for $\dot r = -1$, we will reach $r = 2M$ in a finite affine parameter, and
+\[
+\frac{\diff t}{\diff r} = \frac{\dot t}{\dot r} = \pm \left(1 - \frac{2M}{r} \right)^{-1}.
+\]
+We introduce the \emph{tortoise coordinate}\index{tortoise coordinate} $r_\ast$ as
+\[
+\diff r_\ast = \frac{\diff r}{1 - \frac{2M}{r}} \implies r_\ast = r + 2M \log \left| \frac{r}{2M} - 1 \right|.
+\]
+At large $r$, $r_\ast \sim r$, but as $r \to 2M^{+}$, $r_\ast \to -\infty$. A radial null geodesic has
+\[
+\frac{\diff t}{\diff r_\ast} = \pm 1 \implies t = \pm r_\ast + \tilde c,
+\]
+some constant.
+
+The previous considerations suggest that we define
+\[
+v = t + r_\ast,
+\]
+so that $v$ is constant along ingoing null radial geodesics. Moreover
+\[
+\diff t = \diff v - \frac{\diff r}{1 - \frac{2M}{r}}.
+\]
+Putting this into the metric,
+\[
+\diff s^2 = - \left(1 - \frac{2M}{r} \right) \diff v^2 + 2 \diff v \diff r + r^2 \diff \Omega_2^2.
+\]
+This is amazing, as it is non-singular at $r = 2M$.
+
+This metric is all good, until $r = 0$. At $r = 0$, you are stuck. We can compute
+\[
+R^{abcd} R_{abcd} = \frac{48 M^2}{r^6}.
+\]
+Note that at $r = 0$, the spacetime is not well-defined. $r = 0$ does not belong to the spacetime.
+
+% lecture 4
+
+\newpage
+
+\printindex
+
+\end{document}
